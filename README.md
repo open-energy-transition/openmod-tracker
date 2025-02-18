@@ -15,9 +15,8 @@ Funders and users alike need to distinguish between active, well-maintained tool
 The table below highlights key statistics for several leading OS energy planning tools, offering a snapshot of their development activity, usage, and maintenance.
 
 **Table 1: Open-Source Energy Planning Tools - Key Data Indicators**
-+----------------------+---------+---------+-----------+-------+--------------+-------+-------+------------+--------------+-----------+
 | Project Name         | Created | Updated | Citations | Stars | Contributors | DDS   | Forks | Dependents | PM Downloads | PY Issues | 
-+----------------------+---------+---------+-----------+-------+--------------+-------+-------+------------+--------------+-----------+
+| -------------------- | ------- | ------- | --------- | ----- | ------------ | ----- | ----- | ---------- | ------------ | --------- |
 | Antares Simulator    | 2018/07 | 2024/10 |         0 |    58 |           32 | 0.511 |    24 |          0 |            0 |        83 | 
 | AnyMOD.jl            | 2019/09 | 2024/09 |         0 |    70 |            4 | 0.190 |    21 |          0 |            6 |         0 | 
 | Calliope             | 2013/09 | 2024/10 |       123 |   299 |           22 | 0.393 |    93 |          5 |          672 |        93 | 
@@ -38,7 +37,6 @@ The table below highlights key statistics for several leading OS energy planning
 | Temoa                | 2015/01 | 2024/09 |         0 |    81 |           25 | 0.710 |    49 |          0 |            0 |         2 | 
 | times_model          | 1990/07 | 2025/01 |         0 |   116 |            3 | 0     |    40 |          0 |            0 |         0 | 
 | TulipaEnergyModel.jl | 2023/08 | 2024/11 |         0 |    27 |           15 | 0.641 |    20 |          0 |           16 |       340 | 
-+----------------------+---------+---------+-----------+-------+--------------+-------+-------+------------+--------------+-----------+
 *(Citations: Papers referencing the tool; Created: first repository commit; Updated: last repository commit; Citations: identified publications; Stars: GitHub bookmarks; Contributors: active developers; DDS: development distribution score (the smaller the number the better; but 0 means no data available); Forks: number of Git forks; Dependents: packages dependent on this project; PM Downloads: package installs; PY Issues: bugs reported in the past year.)*
 
 ## Key Takeaways from the Data

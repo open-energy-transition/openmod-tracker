@@ -1,6 +1,6 @@
-# open-esd-analysis
 
 Repository to support analyzing Energy System Design (ESD) models based on git data and other publicilly available data (e.g., ecosyste.ms and opensustain.tech).
+
 
 
 # Smarter Investments in Open Energy Planning: How Data Can Guide Decision-Makers

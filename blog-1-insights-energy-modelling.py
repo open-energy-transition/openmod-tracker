@@ -9,66 +9,12 @@ import os.path
 import json
 import io
 from datetime import datetime, timedelta
-
-from IPython.display import HTML, display
-
-try:
-    import requests
-except:
-    !pip install request
-    import requests
-
-try:
-    import pandas as pd
-except:
-    !pip install pandas
-    import pandas as pd
-
-try:
-    import itables
-    from itables import init_notebook_mode
-    from itables import to_html_datatable
-except:
-    !pip install itables
-    import itables
-    from itables import init_notebook_mode
-    from itables import to_html_datatable
-
-try:
-    import plotly.graph_objects as go
-except:
-    !pip install plotly
-    import plotly.graph_objects as go
-
-try:
-    import numpy as np
-except:
-    !pip install numpy
-    import numpy as np
-
-try:
-    import openpyxl
-except:
-    !pip install openpyxl
-    import openpyxl
-
-try:
-    import pyarrow
-except:
-    !pip install pyarrow
-    import pyarrow
-
-try:
-    from dash import Dash, dash_table, dcc, html, Input, Output, callback
-except:
-    !pip install dash
-    from dash import Dash, dash_table, dcc, html, Input, Output, callback
-
-pd.set_option('display.max_rows', 500)
-pd.set_option('display.max_columns', 500)
-pd.set_option('display.width', 1000)
-
-init_notebook_mode(all_interactive=False)
+import requests
+import pandas as pd
+import plotly.graph_objects as go
+import numpy as np
+import openpyxl
+import pyarrow
 
 # define necessary pathes towards ecosyste.ms
 URL_projects = "https://ost.ecosyste.ms/api/v1/projects"
@@ -201,10 +147,6 @@ past_year_issues_count = []
 created = []
 updated = []
 
-# df_projects.columns
-# df_packages.columns
-# df_projects.iloc[5]['issues_stats']
-
 for index, row in df_packages.iterrows():
     name = row['name']
     if row['packages'][0]['namespace'] != None:
@@ -272,8 +214,6 @@ df_extract['Dependents'] = total_dependent_repos_count
 df_extract['PM Downloads'] = download_counts
 df_extract['PY Issues']= past_year_issues_count
 
-df_extract
-
 # This project are lost between OpenSustain.tech and this script: OSeMOSYS, times_model, SpineOpt.jl
 df_extract = df_extract[df_extract['Project Name'].isin(
     ['Antares Simulator', 'AnyMOD.jl', 'balmorel', 'Calliope', 'FINE', 'GenX', 'GridPath', 'NemoMod.jl',
@@ -294,8 +234,6 @@ for index, row in df_extract[df_extract['Language'] == 'Julia'].iterrows():
                 int(get_julia_pkg_downloads(row['Project Name'])['monthly_downloads'])
     except:
         df_extract.loc[df_extract["Project Name"] == row['Project Name'], "PM Downloads"] = 0
-
-# df_extract
 
 ## The following projects can not be evaluated since two different API from ecosyste.ms are needed.
 ## This is simpilfied in future versions. For now the data is hardcoded here for the 17.01.2025
@@ -359,6 +297,7 @@ df_extract.loc[df_extract.index[df_extract['Project Name'] == 'Temoa'].values[0]
 df_extract.loc[df_extract.index[df_extract['Project Name'] == 'PyPowSyBl'].values[0], 'Language'] = 'Python'
 
 df_extract.drop(columns=['Category', 'License', 'Sub Category', 'Owner', 'Repository', 'Language'], axis=1, errors='ignore', inplace=True)
+
 df_extract.style.format({
     'Citations':'{:,.0f}',
     'Stars':'{:,.0f}',
@@ -366,39 +305,5 @@ df_extract.style.format({
     'PM Downloads':'{:,.0f}',
     'PY Issues':'{:,.0f}'
 })
-itables.show(
-    # df_extract.loc[:, df_extract.columns != 'Repository'],
-    df_extract,
-    layout={"top1": "searchBuilder"},
-    buttons=["copyHtml5", "csvHtml5", "excelHtml5"],
-    searchBuilder={},
-    lengthMenu=[25, 50],
-    order=[[0, "asc"]]
-)
 
-# Remark:
-#   DDS ... development distribution score (the smaller the number the better; but 0 means no data available)
-#   PM .. previous month (0 means either no downloads or not tracked/shared from the repository owner)
-#   PY .. previous year (0 means either no issues or not tracked/shared from the repository owner)
-
-# prepared to create the HTML table
-#
-# html = to_html_datatable(df_extract, display_logo_when_loading=False)
-# with open('Blog #1 insights-energy-modelling.html', 'w', encoding='utf-8') as f:
-#    f.write(html)
-#
-# try:
-#     import gupload
-#     from pydrive.auth import GoogleAuth
-#     from google.colab import auth
-# except:
-#     !pip install gupload
-#     !pip install pydrive
-#     !pip install google
-#     import gupload
-#     from pydrive.auth import GoogleAuth
-#     from google.colab import auth
-#
-# auth.authenticate_user() # Authenticate and create the PyDrive client.
-# !gupload --to '1kded1hVoYRYyyhWibraw9DTW7cL3Qcfd' 'blog-1-insights-energy-modelling.html'
-
+print (df_extract)

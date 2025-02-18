@@ -5,7 +5,7 @@ Repository to support analyzing Energy System Design (ESD) models based on git d
 
 # Smarter Investments in Open Energy Planning: How Data Can Guide Decision-Makers
 
-The global energy transition is moving fast, but so are the challenges in directing time and resources effectively. Achieving international climate goals will require around **4.5 trillion in annual investments** by the early 2030s. To optimize infrastructure investments, grid operations and policy decisions, open-source tools are becoming the “goat” in the room with increasing adoption across all sectors (ref to [ENTSO-E](https://www.linkedin.com/posts/entso-e_energytransition-opensource-innovation-activity-7293296246813851649-2ynL?utm_source=share&utm_medium=member_desktop&rcm=ACoAAB8VqvQBiD-xO3KcGAhxNnzGWGUnox2Mxb8).
+The global energy transition is moving fast, but so are the challenges in directing time and resources effectively. Achieving international climate goals will require around **4.5 trillion in annual investments** by the early 2030s. To optimize infrastructure investments, grid operations and policy decisions, open-source tools are becoming the “goat” in the room with increasing adoption across all sectors (ref to [ENTSO-E](https://www.linkedin.com/posts/entso-e_energytransition-opensource-innovation-activity-7293296246813851649-2ynL?utm_source=share&utm_medium=member_desktop&rcm=ACoAAB8VqvQBiD-xO3KcGAhxNnzGWGUnox2Mxb8)).
 
 But with an ever-growing number of open-source (OS) energy tools, the question remains: **How do decision-makers—whether researchers, funders, or grid operators—select the right tools for their needs?** The answer lies in data combined with experience.
 

@@ -38,6 +38,7 @@ The table below highlights key statistics for several leading OS energy planning
 | times_model          | 1990/07 | 2025/01 |         0 |   116 |            3 | 0     |    40 |          0 |            0 |         0 | 
 | TulipaEnergyModel.jl | 2023/08 | 2024/11 |         0 |    27 |           15 | 0.641 |    20 |          0 |           16 |       340 | 
 
+*(Last udpate:. 18. Feb. 2025)*
 *(Citations: Papers referencing the tool; Created: first repository commit; Updated: last repository commit; Citations: identified publications; Stars: GitHub bookmarks; Contributors: active developers; DDS: development distribution score (the smaller the number the better; but 0 means no data available); Forks: number of Git forks; Dependents: packages dependent on this project; PM Downloads: package installs; PY Issues: bugs reported in the past year.)*
 
 ## Key Takeaways from the Data

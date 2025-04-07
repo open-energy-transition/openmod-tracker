@@ -1,18 +1,19 @@
 project_name,project_url
-pandapower,https://ost.ecosyste.ms/api/v1/projects/78241
-PyPSA,https://ost.ecosyste.ms/api/v1/projects/19933
-PyPowSyBl,https://ost.ecosyste.ms/api/v1/projects/30272
+Antares Simulator,https://ost.ecosyste.ms/api/v1/projects/76782
+AnyMOD.jl,https://ost.ecosyste.ms/api/v1/projects/19926
+Calliope,https://ost.ecosyste.ms/api/v1/projects/19896
+FINE,https://ost.ecosyste.ms/api/v1/projects/19900
+GenX,https://ost.ecosyste.ms/api/v1/projects/189766
+GridPath,https://ost.ecosyste.ms/api/v1/projects/208
+Minpower,https://ost.ecosyste.ms/api/v1/projects/19964
 oemof-solph,https://ost.ecosyste.ms/api/v1/projects/19911
 openTEPES,https://ost.ecosyste.ms/api/v1/projects/19890
-FINE,https://ost.ecosyste.ms/api/v1/projects/19900
-Minpower,https://ost.ecosyste.ms/api/v1/projects/19964
-Calliope,https://ost.ecosyste.ms/api/v1/projects/19896
-GridPath,https://ost.ecosyste.ms/api/v1/projects/208
+pandapower,https://ost.ecosyste.ms/api/v1/projects/78241
+PyPowSyBl,https://ost.ecosyste.ms/api/v1/projects/30272
+PyPSA,https://ost.ecosyste.ms/api/v1/projects/19933
 PowerSystems.jl,https://ost.ecosyste.ms/api/v1/projects/76442
-GenX,https://ost.ecosyste.ms/api/v1/projects/189766
 SpineOpt.jl,https://ost.ecosyste.ms/api/v1/projects/3022
-TulipaEnergyModel.jl,https://ost.ecosyste.ms/api/v1/projects/168861
 switch-model,https://ost.ecosyste.ms/api/v1/projects/19925
-Antares Simulator,https://ost.ecosyste.ms/api/v1/projects/76782
 Temoa,https://ost.ecosyste.ms/api/v1/projects/19916
-AnyMOD.jl,https://ost.ecosyste.ms/api/v1/projects/19926
+TIMES_model,https://ost.ecosyste.ms/api/v1/projects/51079
+TulipaEnergyModel.jl,https://ost.ecosyste.ms/api/v1/projects/168861

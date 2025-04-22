@@ -1,4 +1,4 @@
-# OET's ESD analysis app
+# OET's ESM analysis app
 
 Repository to support analyzing Energy System Modelling (ESM) tools based on git data and other publicilly available data (e.g., ecosyste.ms and opensustain.tech).
 

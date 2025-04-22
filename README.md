@@ -1,5 +1,5 @@
 
-Repository to support analyzing Energy System Design (ESD) models based on git data and other publicilly available data (e.g., ecosyste.ms and opensustain.tech).
+Repository to support analyzing Energy System Modelling (ESM) tools based on git data and other publicilly available data (e.g., ecosyste.ms and opensustain.tech).
 
 
 

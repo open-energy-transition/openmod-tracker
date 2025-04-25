@@ -5,14 +5,14 @@ Repository to support analyzing Energy System Modelling (ESM) tools based on git
 
 # Smarter Investments in Open Energy Planning: How Data Can Guide Decision-Makers
 
-The global energy transition is moving fast, but so are the challenges in directing time and resources effectively. Achieving international climate goals will require around **4.5 trillion in annual investments** by the early 2030s. To optimize infrastructure investments, grid operations and policy decisions, open-source tools are becoming the “goat” in the room with increasing adoption across all sectors (ref to [ENTSO-E](https://www.linkedin.com/posts/entso-e_energytransition-opensource-innovation-activity-7293296246813851649-2ynL?utm_source=share&utm_medium=member_desktop&rcm=ACoAAB8VqvQBiD-xO3KcGAhxNnzGWGUnox2Mxb8)).
+The global energy transition is moving fast, but so are the challenges in directing time and resources effectively. Achieving international climate goals will require around **4.5 trillion in annual investments** by the early 2030s. To optimize infrastructure investments, grid operations and policy decisions, open-source tools are becoming the “goat” in the room with increasing adoption across all sectors (ref to [ENTSO-E post on LinkedIn](https://www.linkedin.com/posts/entso-e_energytransition-opensource-innovation-activity-7293296246813851649-2ynL?utm_source=share&utm_medium=member_desktop&rcm=ACoAAB8VqvQBiD-xO3KcGAhxNnzGWGUnox2Mxb8)).
 
 But with an ever-growing number of open-source (OS) energy tools, the question remains: **How do decision-makers—whether researchers, funders, or grid operators—select the right tools for their needs?** The answer lies in data combined with experience.
 
 ## The Challenge: Identifying Reliable and Impactful Tools
 Funders and users alike need to distinguish between active, well-maintained tools and those that might no longer be viable. While qualitative reviews (user feedback, case studies, etc.) are valuable, **quantitative metrics** offer critical signals about a tool’s reliability, sustainability, and adoption.
 
-The table below highlights key statistics for several leading OS energy planning tools, offering a snapshot of their development activity, usage, and maintenance.
+**Table 1** highlights key statistics for several leading OS energy planning tools, offering a snapshot of their development activity, usage, and maintenance. A recent and update version of this table is available via [streamlit.app](https://open-esm-analysis.streamlit.app/).
 
 **Table 1: Open-Source Energy Planning Tools - Key Data Indicators**
 | Project Name         | Created | Updated | Citations | Stars | Contributors | DDS   | Forks | Dependents | PM Downloads | PY Issues | 

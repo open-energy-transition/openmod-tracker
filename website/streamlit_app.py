@@ -117,7 +117,7 @@ df.drop(columns=[
 ], axis=1, errors='ignore', inplace=True)
 
 # start the output
-title ("OET's ESD analysis app")
+title ("OET's open-source tool adaption tracker")
 write ()
 write ("Repository to support analyzing Energy System Modelling (ESM) tools based on git data and other publicilly available data (e.g., <a href='https://ecosyste.ms/' target='_new'>ecosyste.ms</a> and <a href='https://opensustain.tech/' target='_new'>opensustain.tech</a>.", unsafe_allow_html=True)
 write ("The whole analysis is available at OET's GitHub repository <a href='https://github.com/open-energy-transition/open-esm-analysis/' target='_new'>open-esm-analysis</a>.", unsafe_allow_html=True)

@@ -6,18 +6,16 @@ Update package history based on latest available statistics from ecosyste.ms and
 License: MIT / CC0 1.0
 """
 
-""" import required packages """
+# import required packages
 import requests
 from datetime import datetime, timedelta
 from pandas import DataFrame
 from streamlit import html, title, write, set_page_config, subheader, page_link, markdown
 from itables.streamlit import interactive_table
 
-# set_page_config(layout="wide")
-
 
 def update_esm_analysis(url_api):
-    """ define variables """
+    # define variables
     names = []
     urls = []
     descriptions = []
@@ -36,12 +34,12 @@ def update_esm_analysis(url_api):
     creates = []
     updates = []
 
-    """ get the JSON file from the ost.ecosyste.ms """
+    # get the JSON file from the ost.ecosyste.ms
     json_url = url_api
     r = requests.get(json_url)
     all_data = r.json()
 
-    """ loop through the JSON file just received """
+    # loop through the JSON file just received
     for i in range(len(all_data)):
         json_data = all_data[i]
         package_downloads = 0
@@ -63,7 +61,7 @@ def update_esm_analysis(url_api):
         else:
             download_counts.append(0)
 
-        """ store necessary details """
+        # store necessary details
         names.append(json_data['name'])
         urls.append(json_data['url'])
         descriptions.append(json_data['description'])
@@ -81,7 +79,7 @@ def update_esm_analysis(url_api):
         creates.append(datetime.strptime(json_data['repository']['created_at'], '%Y-%m-%dT%H:%M:%S.%fZ').strftime('%Y/%m'))
         updates.append(datetime.strptime(latest_release_published_at, '%Y-%m-%dT%H:%M:%S.%fZ').strftime('%Y/%m'))
 
-    """ create a dataframe containing all collected data """
+    # create a dataframe containing all collected data
     df = DataFrame()
     df['Project Name'] = names
     df['Project Name'] = names
@@ -100,7 +98,7 @@ def update_esm_analysis(url_api):
     df['PM Downloads'] = download_counts
     df['PY Issues']= past_year_issues_counts
 
-    """ adjust some license details """
+    # adjust some license details
     df.loc[df['Project Name'] == 'Antares Simulator', 'License'] = 'mpl-2.0'
     df.loc[df['Project Name'] == 'FINE', 'License'] = 'mit'
     df.loc[df['Project Name'] == 'Minpower', 'License'] = 'mit'
@@ -109,12 +107,12 @@ def update_esm_analysis(url_api):
     df.loc[df['Project Name'] == 'Temoa', 'Language'] = 'Python'
     df.loc[df['Project Name'] == 'PyPowSyBl', 'Language'] = 'Python'
 
-    """ delete some columns not needed yet """
+    # delete some columns not needed yet
     df.drop(columns=[
         'Category', 'Sub Category', 'Language', 'License', 'Citations'
     ], axis=1, errors='ignore', inplace=True)
 
-    """ add some text before the interactive table """
+    # add some text before the interactive table
     title ("Smarter Investments in Open Energy Planning: How Data Can Guide Decision-Makers")
     write ("This analysis is available at OET's GitHub repository <a href='https://github.com/open-energy-transition/open-esm-analysis/' target='_new'>open-esm-analysis</a>.", unsafe_allow_html=True)
     markdown ("The global energy transition is moving fast, but so are the challenges in directing time and resources effectively. Achieving international climate goals will require around **4.5 trillion in annual investments** by the early 2030s. To optimize infrastructure investments, grid operations and policy decisions, open-source tools are becoming the 'goat' in the room with increasing adoption across all sectors (see e.g. <a href='https://www.linkedin.com/posts/entso-e_energytransition-opensource-innovation-activity-7293296246813851649-2ynL?utm_source=share&utm_medium=member_desktop&rcm=ACoAAB8VqvQBiD-xO3KcGAhxNnzGWGUnox2Mxb8'>ENTSO-E post on LinkedIn</a>).", unsafe_allow_html=True)
@@ -125,7 +123,7 @@ def update_esm_analysis(url_api):
     write ("")
     markdown ("**Table 1: Selected Open-Source ESM Tools - Key Data Indicators** (Data: ecosystem.ms; Last Update: " + datetime.now().strftime("%d. %b. %Y") + ")")
 
-    """ add the interactive table """
+    # add the interactive table
     interactive_table(
         df,
         lengthMenu=[25, 50],
@@ -133,7 +131,7 @@ def update_esm_analysis(url_api):
         order=[[0, "asc"]]
     )
 
-    """ add some comments below the interactive tabl """
+    # add some comments below the interactive table
     write ("")
     markdown ("*(Citations: Papers referencing the tool; Created: first repository commit; Updated: last repository commit; Citations: identified publications; Stars: GitHub bookmarks; Contributors: active developers; DDS: development distribution score (the smaller the number the better; but 0 means no data available); Forks: number of Git forks; Dependents: packages dependent on this project; PM Downloads: package installs; PY Issues: bugs reported in the past year.)*")
     write ("")
@@ -169,8 +167,9 @@ def update_esm_analysis(url_api):
 
 
 if __name__ == "__main__":
-    """ define the path of the CSV file listing the packages to assess """
+    # define the path of the CSV file listing the packages to assess
     url_api = 'https://ost.ecosyste.ms/api/v1/projects/esd'
 
+    set_page_config(layout="wide")
     update_esm_analysis(url_api)
 

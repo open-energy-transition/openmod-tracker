@@ -113,7 +113,7 @@ df.loc[df['Project Name'] == 'PyPowSyBl', 'Language'] = 'Python'
 
 # delete some columns not needed yet
 df.drop(columns=[
-    'Category', 'Sub Category', 'Language', 'License'
+    'Category', 'Sub Category', 'Language', 'License', 'Citations'
 ], axis=1, errors='ignore', inplace=True)
 
 # start the output

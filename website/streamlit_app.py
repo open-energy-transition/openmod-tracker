@@ -51,11 +51,11 @@ for i in range(len(all_data)):
     latest_release_published_at = None
     for package_manager in range(len(json_data['packages'])):
         if json_data['packages'][package_manager]['downloads']:
-                if json_data['packages'][package_manager]['downloads_period'] == "last-month":
-                    package_downloads += json_data['packages'][package_manager]['downloads']
+            if json_data['packages'][package_manager]['downloads_period'] == "last-month":
+                package_downloads += json_data['packages'][package_manager]['downloads']
 
         if json_data['packages'][package_manager]['dependent_repos_count']:
-                dependent_repos_count += json_data['packages'][package_manager]['dependent_repos_count']
+            dependent_repos_count += json_data['packages'][package_manager]['dependent_repos_count']
 
         if latest_release_published_at is None or latest_release_published_at < json_data['packages'][package_manager]['latest_release_published_at']:
             latest_release_published_at = json_data['packages'][package_manager]['latest_release_published_at']
@@ -130,8 +130,6 @@ markdown ("**Table 1: Selected Open-Source ESM Tools - Key Data Indicators** (Da
 # add the interactive table
 interactive_table(
     df,
-    # caption='Countries',
-    #select=True,
     lengthMenu=[25, 50],
     buttons=['copyHtml5', 'csvHtml5', 'excelHtml5', 'colvis'],
     order=[[0, "asc"]]

@@ -35,12 +35,12 @@ def update_esm_analysis(url_api):
     past_year_issues_counts = []
     creates = []
     updates = []
-    
+
     """ get the JSON file from the ost.ecosyste.ms """
     json_url = url_api
     r = requests.get(json_url)
     all_data = r.json()
-    
+
     """ loop through the JSON file just received """
     for i in range(len(all_data)):
         json_data = all_data[i]
@@ -51,18 +51,18 @@ def update_esm_analysis(url_api):
             if json_data['packages'][package_manager]['downloads']:
                 if json_data['packages'][package_manager]['downloads_period'] == "last-month":
                     package_downloads += json_data['packages'][package_manager]['downloads']
-    
+
             if json_data['packages'][package_manager]['dependent_repos_count']:
                 dependent_repos_count += json_data['packages'][package_manager]['dependent_repos_count']
-    
+
             if latest_release_published_at is None or latest_release_published_at < json_data['packages'][package_manager]['latest_release_published_at']:
                 latest_release_published_at = json_data['packages'][package_manager]['latest_release_published_at']
-    
+
         if package_downloads:
             download_counts.append(package_downloads)
         else:
             download_counts.append(0)
-    
+
         """ store necessary details """
         names.append(json_data['name'])
         urls.append(json_data['url'])
@@ -80,7 +80,7 @@ def update_esm_analysis(url_api):
         past_year_issues_counts.append(json_data['issues_stats']['past_year_issues_count'])
         creates.append(datetime.strptime(json_data['repository']['created_at'], '%Y-%m-%dT%H:%M:%S.%fZ').strftime('%Y/%m'))
         updates.append(datetime.strptime(latest_release_published_at, '%Y-%m-%dT%H:%M:%S.%fZ').strftime('%Y/%m'))
-    
+
     """ create a dataframe containing all collected data """
     df = DataFrame()
     df['Project Name'] = names
@@ -99,7 +99,7 @@ def update_esm_analysis(url_api):
     df['Dependents'] = total_dependent_repos_counts
     df['PM Downloads'] = download_counts
     df['PY Issues']= past_year_issues_counts
-    
+
     """ adjust some license details """
     df.loc[df['Project Name'] == 'Antares Simulator', 'License'] = 'mpl-2.0'
     df.loc[df['Project Name'] == 'FINE', 'License'] = 'mit'
@@ -108,12 +108,12 @@ def update_esm_analysis(url_api):
     df.loc[df['Project Name'] == 'switch-model', 'License'] = 'apache-2.0'
     df.loc[df['Project Name'] == 'Temoa', 'Language'] = 'Python'
     df.loc[df['Project Name'] == 'PyPowSyBl', 'Language'] = 'Python'
-    
+
     """ delete some columns not needed yet """
     df.drop(columns=[
         'Category', 'Sub Category', 'Language', 'License', 'Citations'
     ], axis=1, errors='ignore', inplace=True)
-    
+
     """ add some text before the interactive table """
     title ("Smarter Investments in Open Energy Planning: How Data Can Guide Decision-Makers")
     write ("This analysis is available at OET's GitHub repository <a href='https://github.com/open-energy-transition/open-esm-analysis/' target='_new'>open-esm-analysis</a>.", unsafe_allow_html=True)
@@ -124,7 +124,7 @@ def update_esm_analysis(url_api):
     markdown ("The table below highlights key statistics for several leading OS energy planning tools, offering a snapshot of their development activity, usage, and maintenance.")
     write ("")
     markdown ("**Table 1: Selected Open-Source ESM Tools - Key Data Indicators** (Data: ecosystem.ms; Last Update: " + datetime.now().strftime("%d. %b. %Y") + ")")
-    
+
     """ add the interactive table """
     interactive_table(
         df,
@@ -132,7 +132,7 @@ def update_esm_analysis(url_api):
         buttons=['copyHtml5', 'csvHtml5', 'excelHtml5', 'colvis'],
         order=[[0, "asc"]]
     )
-    
+
     """ add some comments below the interactive tabl """
     write ("")
     markdown ("*(Citations: Papers referencing the tool; Created: first repository commit; Updated: last repository commit; Citations: identified publications; Stars: GitHub bookmarks; Contributors: active developers; DDS: development distribution score (the smaller the number the better; but 0 means no data available); Forks: number of Git forks; Dependents: packages dependent on this project; PM Downloads: package installs; PY Issues: bugs reported in the past year.)*")
@@ -157,7 +157,7 @@ def update_esm_analysis(url_api):
     markdown ("- **Adoption rates** (downloads, citations, user engagement)")
     markdown ("- **Tool interoperability** (compatibility testing with other OS models)")
     markdown ("- **Funding needs** (identifying tools at risk due to lack of maintainers)")
-    
+
     write ("")
     write ("Such a platform would empower funders to invest wisely, helping direct resources to projects with the highest impact potential.")
     write ("")
@@ -171,7 +171,6 @@ def update_esm_analysis(url_api):
 if __name__ == "__main__":
     """ define the path of the CSV file listing the packages to assess """
     url_api = 'https://ost.ecosyste.ms/api/v1/projects/esd'
-    
-    set_page_config(layout="wide")
+
     update_esm_analysis(url_api)
 

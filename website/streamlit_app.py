@@ -14,7 +14,7 @@ from streamlit import html, title, write, set_page_config, subheader, page_link,
 from itables.streamlit import interactive_table
 
 
-def update_esm_analysis(url_api)
+def update_esm_analysis(url_api):
     """ define variables """
     names = []
     urls = []

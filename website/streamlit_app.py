@@ -13,7 +13,7 @@ from pandas import DataFrame
 from streamlit import html, title, write, set_page_config, subheader, page_link, markdown
 from itables.streamlit import interactive_table
 
-set_page_config(layout="wide")
+# set_page_config(layout="wide")
 
 
 def update_esm_analysis(url_api):

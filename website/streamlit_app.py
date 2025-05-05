@@ -119,7 +119,7 @@ df.drop(columns=[
 # start the output
 title ("OET's open-source tool adaption tracker")
 write ()
-write ("Repository to support analyzing Energy System Modelling (ESM) tools based on git data and other publicilly available data (e.g., <a href='https://ecosyste.ms/' target='_new'>ecosyste.ms</a> and <a href='https://opensustain.tech/' target='_new'>opensustain.tech</a>.", unsafe_allow_html=True)
+write ("Repository for analyzing Energy System Modelling (ESM) tools using Git data and other publicly available sources (e.g., <a href='https://ecosyste.ms/' target='_new'>ecosyste.ms</a> and <a href='https://opensustain.tech/' target='_new'>opensustain.tech</a>.", unsafe_allow_html=True)
 write ("The whole analysis is available at OET's GitHub repository <a href='https://github.com/open-energy-transition/open-esm-analysis/' target='_new'>open-esm-analysis</a>.", unsafe_allow_html=True)
 subheader ("Smarter Investments in Open Energy Planning: How Data Can Guide Decision-Makers")
 markdown ("The global energy transition is moving fast, but so are the challenges in directing time and resources effectively. Achieving international climate goals will require around **4.5 trillion in annual investments** by the early 2030s. To optimize infrastructure investments, grid operations and policy decisions, open-source tools are becoming the 'goat' in the room with increasing adoption across all sectors (see e.g. <a href='https://www.linkedin.com/posts/entso-e_energytransition-opensource-innovation-activity-7293296246813851649-2ynL?utm_source=share&utm_medium=member_desktop&rcm=ACoAAB8VqvQBiD-xO3KcGAhxNnzGWGUnox2Mxb8'>ENTSO-E post on LinkedIn</a>).", unsafe_allow_html=True)

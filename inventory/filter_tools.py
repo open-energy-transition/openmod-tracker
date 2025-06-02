@@ -1,7 +1,10 @@
 import logging
+from pathlib import Path
 from urllib.parse import urlparse
 
+import click
 import pandas as pd
+from get_tools import TOOL_TYPES
 
 LOGGER = logging.getLogger(__file__)
 
@@ -54,3 +57,32 @@ def drop_no_git(df: pd.DataFrame) -> pd.DataFrame:
         lambda x: pd.notnull(x) and "git" in urlparse(x).netloc.lower()
     )
     return df[git_filter]
+
+
+@click.command()
+@click.argument("infile", type=click.Path(exists=True, dir_okay=False, file_okay=True))
+@click.argument(
+    "outfile", type=click.Path(exists=False, dir_okay=False, file_okay=True)
+)
+@click.option(
+    "--ignore",
+    type=click.Choice(TOOL_TYPES),
+    multiple=True,
+    required=False,
+    help="Ignore source of data as part of the filtering process.",
+)
+def cli(infile: Path, outfile: Path, ignore: tuple[str]):
+    """Filter collated tool list."""
+    entries = pd.read_csv(infile)
+    entries_ignore_sources = entries.where(~entries["source"].isin(ignore)).dropna(
+        how="all"
+    )
+    filtered_entries = drop_duplicates(entries_ignore_sources, on="id")
+    filtered_entries = drop_duplicates(filtered_entries, on="url")
+    filtered_entries = drop_no_git(filtered_entries)
+
+    filtered_entries.to_csv(outfile, index=False)
+
+
+if __name__ == "__main__":
+    cli()

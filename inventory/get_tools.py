@@ -1,10 +1,14 @@
 """Scripts to grab data from different sources and process them to a common format."""
 
 import logging
+import re
 from pathlib import Path
 
+import click
 import pandas as pd
+import requests
 import util
+from bs4 import BeautifulSoup
 from tqdm import tqdm
 
 TOOL_TYPES = ["production-cost", "capacity-expansion", "power-flow", "other"]
@@ -14,6 +18,7 @@ G_PST_URL = "https://api.github.com/repos/G-PST/opentools/contents/data/software
 OST_URL = (
     "https://docs.getgrist.com/api/docs/gSscJkc5Rb1Rw45gh1o1Yc/tables/Projects/data"
 )
+OPENMOD_URL = "https://wiki.openmod-initiative.org/wiki/Open_Models"
 
 LOGGER = logging.getLogger(__file__)
 
@@ -121,25 +126,92 @@ def get_opensustaintech() -> pd.DataFrame:
     ).assign(source="opensustain-tech")
 
 
-def load_manual_list(current_urls: list[str]) -> pd.DataFrame:
-    """Load manual list stored within this repository, derived from https://doi.org/10.1016/j.rser.2018.11.020 and subsequent searches.
+def get_openmod() -> pd.DataFrame:
+    """Get Open Energy Modelling Initiative wiki Open Models list.
 
-    Args:
-        current_urls (list[str]): List of URLs already collected from other repositories.
-        These will be taken as valid repos, to reduce the number of required calls to ecosyste.ms.
     Returns:
-        pd.DataFrame: List filtered to those that have corresponding ecosyste.ms entries.
+        pd.DataFrame: Openmod wiki list entries and their associated Source Download URL.
+    """
+
+    content = requests.get(OPENMOD_URL).content
+    soup = BeautifulSoup(content, "html.parser")
+    list_of_models_start = soup.find("span", {"id": "List_of_models"})
+    if list_of_models_start is None:
+        LOGGER.warning("Could not find list of openmod models")
+        return pd.DataFrame()
+
+    for elem in list_of_models_start.next_elements:
+        if hasattr(elem, "li"):
+            list_of_models = elem.find_all("a")
+            break
+    urls = []
+    for i in tqdm(list_of_models):
+        response_child = requests.get(
+            "https://wiki.openmod-initiative.org" + i.attrs["href"]
+        )
+        soup_child = BeautifulSoup(
+            response_child.content.decode("utf-8"), "html.parser"
+        )
+        url_info = soup_child.find(
+            "a", {"title": "Property:Source download"}, recursive=True
+        )
+        if url_info is not None and url_info.next.next.text != "":
+            url = url_info.next.next.next.attrs["href"]
+        else:
+            LOGGER.warning(f"No URL found for openmod entry: {i.attrs['title']}")
+            url = None
+        urls.append({"name": i.attrs["title"], "url": url})
+    df = pd.DataFrame(urls)
+    return df.assign(source="openmod")
+
+
+def load_manual_list() -> pd.DataFrame:
+    """Load manual URL list stored within this repository, derived from https://doi.org/10.1016/j.rser.2018.11.020 and subsequent searches.
+
+    Returns:
+        pd.DataFrame: Manual list with tool names based on URL content.
     """
 
     manual_list = pd.read_csv(Path(__file__).parent / "manual_esm_list.csv")
-    filtered_df = pd.DataFrame()
-    for entry in tqdm(manual_list["source_url"].str.strip("/").str.lower()):
-        if not entry.startswith("http"):
-            entry = "https://" + entry
-        if entry in current_urls or util.get_ecosystems_repo_data(entry).ok:
-            entry_name = entry.split("/")[-1]
-            filtered_df = pd.concat(
-                [filtered_df, pd.DataFrame({"url": [entry], "name": [entry_name]})]
-            )
+    names = manual_list.source_url.apply(lambda x: Path(x.strip("/")).stem)
+    df = pd.DataFrame({"url": manual_list.source_url, "name": names})
 
-    return filtered_df.assign(source="manual")
+    return df.assign(source="manual")
+
+
+@click.command()
+@click.argument(
+    "outfile", type=click.Path(exists=False, dir_okay=False, file_okay=True)
+)
+def cli(outfile: Path):
+    """Get latest ESM list from various sources."""
+
+    automatic_entries = pd.concat(
+        [
+            get_lf_energy_landscape(),
+            get_opensustaintech(),
+            get_g_pst_opentools(),
+            get_openmod(),
+        ]
+    )
+
+    manual_entries = load_manual_list()
+
+    entries = pd.concat([automatic_entries, manual_entries])
+    # Clean up URLs
+    entries["url"] = (
+        entries["url"]
+        .astype(str)
+        .apply(lambda x: x.strip("/").lower())
+        .apply(lambda x: "https://" + x if not x.startswith("http") else x)
+        .where(entries["url"].notnull())
+    )
+
+    entries["id"] = entries.name.map(
+        lambda x: re.sub(r"\s|\-|\.", "_", str(x).strip().lower())
+    )
+    entries.to_csv(outfile, index=False)
+
+
+if __name__ == "__main__":
+    cli()

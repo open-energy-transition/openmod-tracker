@@ -2,8 +2,10 @@
 
 import logging
 from datetime import datetime
+from pathlib import Path
 from typing import Iterable
 
+import click
 import pandas as pd
 import util
 import yaml
@@ -152,3 +154,19 @@ def _get_package_data(url: str) -> dict:
         LOGGER.warning(f"Could not find ecosyste.ms package entry for {url}")
         filtered_package_data = {}
     return filtered_package_data
+
+
+@click.command()
+@click.argument("infile", type=click.Path(exists=True, dir_okay=False, file_okay=True))
+@click.argument(
+    "outfile", type=click.Path(exists=False, dir_okay=False, file_okay=True)
+)
+def cli(infile: Path, outfile: Path):
+    """Get ecosyste.ms stats for all entries."""
+    entries = pd.read_csv(infile)
+    stats_df = get_ecosystems_entry_data(entries.url)
+    stats_df.to_csv(outfile)
+
+
+if __name__ == "__main__":
+    cli()

@@ -41,4 +41,6 @@ This application is showing selected data from already collected data from [ecos
 
 ## Refreshing Data
 
-No updates are required as [ecosyste.ms](https://ecosyste.ms) is updating their data once a day.
+The model inventory and associated statistics can be updated by calling `pixi run get-stats`.
+If nothing has changed in the source code files or CSVs, nothing will run.
+To force an update, delete the CSVs in `inventory/output` and _then_ call `pixi run get-stats`.

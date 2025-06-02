@@ -28,8 +28,9 @@ def drop_duplicates(df: pd.DataFrame, on: str = "url") -> pd.DataFrame:
     )
 
     df_unique = df[~duplicates].set_index(on)
+
     for idx in df_duplicates[on].unique():
-        dup_df = df_duplicates[df_duplicates[on] == idx]
+        dup_df = df[df[on] == idx]
         sources = ",".join(set(dup_df.source.values))
         names = ",".join(set(dup_df.name.values))
         filled = df_unique.loc[[idx]]

@@ -41,7 +41,7 @@ def get_lf_energy_landscape() -> pd.DataFrame:
     lf_energy_esm_dict = [
         i
         for i in lf_energy_es_dict["subcategories"]
-        if i["name"] == "Modeling and Optimization"
+        if i["name"] in ["Modeling and Optimization", "Power System Calculation"]
     ][0]["items"]
     inventory_entries = []
     for entry in lf_energy_esm_dict:

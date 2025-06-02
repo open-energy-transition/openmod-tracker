@@ -1,5 +1,0 @@
-   streamlit
-   pandas
-   itables
-   datetime
-   requests

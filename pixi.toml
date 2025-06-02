@@ -6,15 +6,24 @@ platforms = ["win-64", "linux-64", "osx-64", "osx-arm64"]
 version = "0.1.0"
 
 [tasks]
+get-tools = "python $PIXI_PROJECT_ROOT/inventory/cli.py get-esm-list"
+filter-tools = "python $PIXI_PROJECT_ROOT/inventory/cli.py filter-esm-list"
+get-stats = "python $PIXI_PROJECT_ROOT/inventory/cli.py get-ecosystems-data"
 
 [dependencies]
 pandas = ">=2.2.3,<3"
 requests = ">=2.32.3,<3"
 ipython = ">=9.2.0,<10"
-tabulate = ">=0.9.0,<0.10"
 pandas-stubs = ">=2.2.3.250308,<3"
+click = ">=8.2.1,<9"
+yaml = ">=0.2.5,<0.3"
+pyyaml = ">=6.0.2,<7"
+tqdm = ">=4.67.1,<5"
+ipdb = ">=0.13.13,<0.14"
+pyarrow = ">=20.0.0,<21"
 
 [feature.app.dependencies]
+tabulate = ">=0.9.0,<0.10"
 itables = "*"
 streamlit = "*"
 

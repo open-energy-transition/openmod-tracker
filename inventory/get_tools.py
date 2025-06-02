@@ -1,10 +1,11 @@
 """Scripts to grab data from different sources and process them to a common format."""
 
 import logging
+from pathlib import Path
 
 import pandas as pd
-import requests
-import yaml
+import util
+from tqdm import tqdm
 
 TOOL_TYPES = ["production-cost", "capacity-expansion", "power-flow", "other"]
 SOURCES = ["lf-energy-landscape", "g-pst", "opensustain-tech"]
@@ -34,7 +35,7 @@ def get_lf_energy_landscape() -> pd.DataFrame:
     Returns:
         pd.DataFrame: "Energy Systems / Modeling and Optimization" tools, filtered to just [name, description, repo_url/homepage_url].
     """
-    lf_energy_dict = _get_url_content(LF_ENERGY_URL)["landscape"]
+    lf_energy_dict = util.get_url_json_content(LF_ENERGY_URL)["landscape"]
 
     lf_energy_es_dict = [i for i in lf_energy_dict if i["name"] == "Energy Systems"][0]
     lf_energy_esm_dict = [
@@ -71,10 +72,10 @@ def get_g_pst_opentools():
         pd.DataFrame: Any tools with which have been categorised as a capacity expansion, production cost, or power flow model.
                       data is filtered to just [name, description, url_sourcecode, categories].
     """
-    tools = _get_url_content(G_PST_URL)
+    tools = util.get_url_json_content(G_PST_URL)
     tools_data = []
     for tool in tools:
-        tool_data = _get_url_content(tool["download_url"])
+        tool_data = util.get_url_json_content(tool["download_url"])
         if not any(i in TOOL_TYPES for i in tool_data.get("categories", [])):
             continue
         tools_data.append(
@@ -105,7 +106,7 @@ def get_opensustaintech() -> pd.DataFrame:
     Returns:
         pd.DataFrame: "Energy Systems / Energy System Modeling Frameworks" and "Energy Systems / Grid Analysis and Planning" tools, filtered to just [name, description, git_url]
     """
-    opensustaintech_df = pd.DataFrame(_get_url_content(OST_URL))
+    opensustaintech_df = pd.DataFrame(util.get_url_json_content(OST_URL))
     filtered_df = opensustaintech_df.loc[
         opensustaintech_df["sub_category"]
         # Data is stored in lists of the form `['L', 'Grid Analysis and Planning']`, we only want the second one.
@@ -120,15 +121,25 @@ def get_opensustaintech() -> pd.DataFrame:
     ).assign(source="opensustain-tech")
 
 
-def _get_url_content(url: str) -> dict:
-    """Stream content of a URL containing YAML/JSON data to a dictionary.
+def load_manual_list(current_urls: list[str]) -> pd.DataFrame:
+    """Load manual list stored within this repository, derived from https://doi.org/10.1016/j.rser.2018.11.020 and subsequent searches.
 
     Args:
-        url (str): Database / file URL.
-
+        current_urls (list[str]): List of URLs already collected from other repositories.
+        These will be taken as valid repos, to reduce the number of required calls to ecosyste.ms.
     Returns:
-        dict: Content of data at `url`.
+        pd.DataFrame: List filtered to those that have corresponding ecosyste.ms entries.
     """
-    response = requests.get(url)
-    content = response.content.decode("utf-8")
-    return yaml.safe_load(content)
+
+    manual_list = pd.read_csv(Path(__file__).parent / "manual_esm_list.csv")
+    filtered_df = pd.DataFrame()
+    for entry in tqdm(manual_list["source_url"].str.strip("/").str.lower()):
+        if not entry.startswith("http"):
+            entry = "https://" + entry
+        if entry in current_urls or util.get_ecosystems_repo_data(entry).ok:
+            entry_name = entry.split("/")[-1]
+            filtered_df = pd.concat(
+                [filtered_df, pd.DataFrame({"url": [entry], "name": [entry_name]})]
+            )
+
+    return filtered_df.assign(source="manual")

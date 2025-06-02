@@ -5,7 +5,7 @@
 
 ## Features
 - Fetches GitHub information via an API from ecosyste.ms
-- Colects maturiy and activity scores from GitHub, e.g.,
+- Collects maturity and activity scores from GitHub, e.g.,
   - Repository creation
   - Repository last change
   - Stars and Forks
@@ -29,7 +29,7 @@
    ```
    conda activate open-esm-analysis
    ```
-4. Install dpendencies
+4. Install dependencies
    ```
    pip install streamlit pandas itables datetime request
    ```

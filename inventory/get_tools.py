@@ -12,7 +12,6 @@ from bs4 import BeautifulSoup
 from tqdm import tqdm
 
 TOOL_TYPES = ["production-cost", "capacity-expansion", "power-flow", "other"]
-SOURCES = ["lf-energy-landscape", "g-pst", "opensustain-tech"]
 LF_ENERGY_URL = "https://raw.githubusercontent.com/lf-energy/lfenergy-landscape/refs/heads/main/landscape.yml"
 G_PST_URL = "https://api.github.com/repos/G-PST/opentools/contents/data/software"
 OST_URL = (

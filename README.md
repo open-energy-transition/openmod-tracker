@@ -4,6 +4,7 @@
 *Repository for analyzing Energy System Modelling (ESM) tools using Git data and other publicly available sources (e.g., ecosyste.ms and opensustain.tech). It is online at [Streamlit](https://open-esm-analysis.streamlit.app/).*
 
 ## Features
+
 - Fetches GitHub information via an API from ecosyste.ms
 - Collects maturity and activity scores from GitHub, e.g.,
   - Repository creation
@@ -16,10 +17,12 @@
 - Calculates the development distribution score (DDS)
 
 ## Requirements
+
 - Python 3.8+
 - no GitHub API token required as data from ecosyste.ms are taken
 
 ## Installation
+
 1. Clone this repository
 2. Create a virtual environment:
    ```
@@ -29,17 +32,21 @@
    ```
    conda activate open-esm-analysis
    ```
-4. Install dependencies
+4. Install [pixi](https://pixi.sh/latest/).
+5. Install dependencies
    ```
-   pip install streamlit pandas itables datetime request
+   pixi install
    ```
-   or create a requirements.txt file with these packages and run:
-   ```
-   pip install -r requirements.txt
-   ```
+  
+
+## Serve app
+
+To serve the streamlit app, call `pixi run serve` from the command line.
 
 ## Architecture
+
 This application is showing selected data from already collected data from [ecosyste.ms](https://ecosyste.ms) via [Streamlit](https://open-esm-analysis.streamlit.app/).
 
 ## Refreshing Data
+
 No updates are required as [ecosyste.ms](https://ecosyste.ms) is updating their data once a day.

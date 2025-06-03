@@ -6,7 +6,7 @@
 ## Features
 
 - Fetches GitHub information via an API from ecosyste.ms
-- Colects maturiy and activity scores from GitHub, e.g.,
+- Collects maturity and activity scores from GitHub, e.g.,
   - Repository creation
   - Repository last change
   - Stars and Forks
@@ -24,12 +24,20 @@
 ## Installation
 
 1. Clone this repository
-1. Install [pixi](https://pixi.sh/latest/).
-1. Install all project dependencies:
-
-   ```sh
+2. Create a virtual environment:
+   ```
+   conda create --name open-esm-analysis
+   ```
+3. Activate virtual environment:
+   ```
+   conda activate open-esm-analysis
+   ```
+4. Install [pixi](https://pixi.sh/latest/).
+5. Install dependencies
+   ```
    pixi install
    ```
+  
 
 ## Serve app
 

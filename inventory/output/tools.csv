@@ -606,7 +606,7 @@ Spine-Toolbox,,https://github.com/spine-tools/spine-toolbox,manual,,spine_toolbo
 BRIDGES,,https://github.com/stanford-eao/bridges,manual,,bridges
 switch,,https://github.com/switch-model/switch,manual,,switch
 temoa,,https://github.com/temoaproject/temoa,manual,,temoa
-TransiEnt-official,,https://github.com/transient-official,manual,,transient_official
+transient-lib,,https://github.com/transient-official/transient-lib,manual,,transient_lib
 TulipaEnergyModel,,https://github.com/tulipaenergy/tulipaenergymodel.jl,manual,,tulipaenergymodel
 rivus,,https://github.com/tum-ens/rivus,manual,,rivus
 urbs,,https://github.com/tum-ens/urbs,manual,,urbs

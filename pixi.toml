@@ -1,0 +1,22 @@
+[project]
+authors = ["Bryn Pickering <17178478+brynpickering@users.noreply.github.com>", "Markus Groissböck <markus.groissbock@openenergytransition.org>"]
+channels = ["conda-forge"]
+name = "open-esm-analysis"
+platforms = ["win-64", "linux-64", "osx-64", "osx-arm64"]
+version = "0.1.0"
+
+[dependencies]
+pandas = ">=2.2.3,<3"
+pandas-stubs = ">=2.2.3.250308,<3"
+requests = ">=2.32.3,<3"
+
+[feature.app.dependencies]
+itables = "*"
+streamlit = "*"
+
+
+[feature.app.tasks]
+serve = "streamlit run $PIXI_PROJECT_ROOT/website/streamlit_app.py"
+
+[environments]
+app = ["app"]

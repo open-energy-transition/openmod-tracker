@@ -1,0 +1,171 @@
+source_url,note
+diw.de/documents/dokumentenarchiv/17/diw_01.c.528469.de/elmod-de_v1.zip,
+git.rwth-aachen.de/acs/public/simulation/DistAIXFramework/distaixweb,
+git.rwth-aachen.de/acs/public/simulation/pvgenerator,
+git.rwth-aachen.de/acs/public/simulation/pycity_scheduling,
+git.rwth-aachen.de/acs/public/simulation/ssmd,
+git.tu-berlin.de/etus/public/aristopy,
+git.tu-berlin.de/genesysmod/genesys-mod-public,
+git-ce.rwth-aachen.de/ltt/secmod,
+github.com/adamgreenhall/minpower,
+github.com/ait-energy/IESopt.jl,
+github.com/AntaresSimulatorTeam/Antares_Simulator,
+github.com/Autarky-Power/Minigrid-JCC,
+github.com/balmorelcommunity/Balmorel,
+github.com/BehrangShirizadeh/EOLES_mv,
+github.com/blue-marble/gridpath,
+github.com/Breakthrough-Energy/REISE.jl,
+github.com/BTU-EnerEcon/EM.POWER-INVEST,
+github.com/caaficus/BeWhere-model,
+github.com/calliope-project/calliope,
+github.com/Critical-Infrastructure-Systems-Lab/PowNet,
+github.com/dynawo/dynawo,
+github.com/e2nIEE/pandapower,
+github.com/e3-/resolve,
+github.com/EIAgov/BlueSky,
+github.com/Electa-Git/FlexPlan.jl,
+github.com/ElisNycander/nordic_model,
+github.com/ElsevierSoftwareX/SOFTX_2020_61,
+github.com/emma-model/EMMA,
+github.com/energy-modelling-toolkit/Dispa-SET,
+github.com/EnergyModelsX/EnergyModelsBase.jl,
+github.com/EPGOxford/OPEN,
+github.com/flixOpt/flixOpt,
+github.com/fraukewiese/renpass,
+github.com/frkunz/stELMOD,
+github.com/Future-Power-Networks/Simplus-Grid-Tool,
+github.com/FZJ-IEK3-VSA/FINE,
+github.com/gamma-opt/EnergySystemModelling.jl,
+github.com/GenXProject/GenX.jl,
+github.com/GMLC-TDC/HELICS,
+github.com/G-PST/inertia,
+github.com/grid-parity-exchange/Egret,
+github.com/highRES-model/highRES-Europe,
+github.com/HOPE-Model-Project/HOPE,
+github.com/IDAES/idaes-pse,
+github.com/idaholab/HERON,
+github.com/idaholab/HYBRID,
+github.com/IEE-TUGraz/LEGO,
+github.com/IESA-Opt/IESA-Opt-NM,
+github.com/IIT-EnergySystemModels/openMASTER,
+github.com/IIT-EnergySystemModels/openSDUC,
+github.com/IIT-EnergySystemModels/openTEPES,
+github.com/IIT-EnergySystemModels/StarLite,
+github.com/IPESE/REHO,
+github.com/IRPsim/IRPopt,
+github.com/JuliaEnergy/Joulia.jl,
+github.com/lanl-ansi/PowerModels.jl,
+github.com/leonardgoeke/AnyMOD.jl,
+github.com/LukasBarner/HydrOGEnMod.jl,
+github.com/macroenergy/MacroEnergy.jl,
+github.com/magpiemodel/magpie,
+github.com/MATPOWER/matpower,
+github.com/MATPOWER/most,
+github.com/mesmo-dev/mesmo,
+github.com/MicroGridsPy/MicroGridsPy,
+github.com/ModPowerSystems/ModPowerSystems,
+github.com/niclasmattsson/Supergrid,
+github.com/NREL/EMeRGE,
+github.com/NREL/HOPP,
+github.com/NREL/ParaEMT_public,
+github.com/NREL/PRAS,
+github.com/NREL/ReEDS-2.0,
+github.com/NREL/REopt.jl,
+github.com/NREL/RODeO,
+github.com/NREL/SAM,
+github.com/NREL/ssc,
+github.com/NREL-Distribution-Suites/erad,
+github.com/NREL-Sienna/PowerSimulations.jl,
+github.com/NREL-Sienna/PowerSimulationsDynamics.jl,
+github.com/NREL-Sienna/PowerSystems.jl,
+github.com/NREL-Sienna/PowerSystemsInvestments.jl,
+github.com/oemof/oemof-solph,
+github.com/openCEMorg/openCEM,
+github.com/openego/eGo,
+github.com/OSeMOSYS/OSeMOSYS,
+github.com/pencleanenergy/MATCH-model,
+github.com/philipphaertel/EMPRISE,
+github.com/pnnl/ExaGO,
+github.com/powsybl,
+github.com/PyPSA/PyPSA,
+github.com/quintel/etengine,
+github.com/RahmanKhorramfar91/JPoNG,
+github.com/rebase-energy/enflow,
+github.com/robbiemorrison/deeco,
+github.com/sei-international/NemoMod.jl,
+github.com/simjunky/Leelo,
+github.com/sogno-platform/dpsim,
+github.com/sogno-platform/libcimpp,
+github.com/SPF-OST/optihood,
+github.com/spine-tools/SpineOpt.jl,
+github.com/spine-tools/Spine-Toolbox,
+github.com/Stanford-EAO/BRIDGES,
+github.com/switch-model/switch,
+github.com/TemoaProject/temoa/,
+github.com/TransiEnt-official,
+github.com/TulipaEnergy/TulipaEnergyModel.jl,
+github.com/tum-ens/rivus,
+github.com/tum-ens/urbs,
+github.com/tum-ewk/ficus,
+github.com/tum-ewk/OpenTUMFlex,
+github.com/UNSW-CEEM/nempy,
+github.com/UU-ER/AdOpT-NET0,
+github.com/VILLASframework,
+github.com/YoungFaithful/CapacityExpansion.jl,
+github.com/ZEN-universe/ZEN-garden,
+gitlab.com/diw-evu/dieter_public/dietergms,
+gitlab.com/diw-evu/dieter_public/DIETER.jl,
+gitlab.com/dlr-ve/esy/remix,
+gitlab.com/energyincities/python-ehub,
+gitlab.com/sesit/copper,
+gitlab.com/sesit/idea,deprecated
+gitlab.com/sesit/silver,
+gitlab.pnnl.gov/exasgd/frameworks/exago,access denied
+gitlab.tubit.tu-berlin.de/wip/dynelmod_public,access denied
+gitlab.uliege.be/smart_grids/public/gboml,
+gitlab.vtt.fi/backbone/backbone,
+gricad-gitlab.univ-grenoble-alpes.fr/omegalpes/omegalpes,
+jugit.fz-juelich.de/iek-10/public/optimization/comando,
+github.com/ahalev/python-microgrid,simulation model
+github.com/ames-market/psst,simulation model
+github.com/andrewlyden/PyLESA,simulation model
+github.com/BioSTEAMDevelopmentGroup/Bioindustrial-Park,simulation model
+github.com/BioSTEAMDevelopmentGroup/biosteam,simulation model
+github.com/BioSTEAMDevelopmentGroup/thermosteam,simulation model
+github.com/bje-/NEMO,simulation model
+github.com/changgang/steps,simulation model
+github.com/chengts95/rustpower,simulation model
+github.com/CSenkpiel/Inve2st,simulation model
+github.com/dgusain1/energysim,simulation model
+github.com/dss-extensions/dss_capi,simulation model
+github.com/e2nIEE/pandapipes,simulation model
+github.com/e2nIEE/pandapower,simulation model
+github.com/epri-dev/OpenDER,simulation model
+github.com/epri-dev/OpenDSS-C,simulation model
+github.com/fabmid/Open-Energy-Cell-Simulation,simulation model
+github.com/Grid2op/chronix2grid,simulation model
+github.com/Grid2op/grid2op,simulation model
+github.com/gridlab-d/gridlab-d ,simulation model
+github.com/JuliaEnergy/PowerDynamics.jl,simulation model
+github.com/kiedanski/pymarket,simulation model
+github.com/KTH-dESA/OnSSET-2016,simulation model
+github.com/lvorspel/DiGriPy,simulation model
+github.com/MarvinLer/pypownet,simulation model
+github.com/MATPOWER/matpower,simulation model
+github.com/Microgrids-X/Microgrids.py,simulation model
+github.com/NREL-Sienna/PowerSimulations.jl,simulation model
+github.com/oemof/tespy,simulation model
+github.com/OpenIPSL/OpenIPSL,simulation model
+github.com/pielube/MESSpy,simulation model
+github.com/pnnl/tesp,simulation model
+github.com/PowerGridModel/power-grid-model,simulation model
+github.com/powsybl,simulation model
+github.com/psrenergy/SDDPDSO.jl,simulation model
+github.com/rebase-energy/enflow,simulation model
+github.com/rwl/PYPOWER,simulation model
+github.com/SanPen/GridCal,simulation model
+github.com/sogno-platform/pymfm,simulation model
+github.com/soheilmohseni/pyMicrogridControl,simulation model
+github.com/sp-etx/friendlysam,simulation model
+github.com/susantoj/PYPOWER-Dynamics,simulation model
+github.com/yanzhaochang/PSATools-Python,simulation model

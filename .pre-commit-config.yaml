@@ -13,6 +13,7 @@ repos:
     rev: v2.4.1
     hooks:
       - id: codespell
+        args: ["--exclude-file=pixi.lock", "--skip=*.csv"]
 
 ci: # https://pre-commit.ci/
   autofix_prs: false

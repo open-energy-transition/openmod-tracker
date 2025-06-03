@@ -5,8 +5,12 @@
 
 ## Features
 
-- Fetches GitHub information via an API from ecosyste.ms
-- Collects maturity and activity scores from GitHub, e.g.,
+- Merges and filters ESM tools from various inventories:
+  - [LF Energy Landscape](https://github.com/lf-energy/lfenergy-landscape)
+  - [G-PST OpenTools](https://api.github.com/repos/G-PST/opentools)
+  - [Open Sustainable Technology](https://github.com/protontypes/open-sustainable-technology)
+  - [Open Energy Modelling Initiative](https://wiki.openmod-initiative.org/wiki/Open_Models)
+- Fetches source code repository and package statistics for each tool via the [ecosyste.ms](https://ecosyste.ms) API:
   - Repository creation
   - Repository last change
   - Stars and Forks
@@ -14,39 +18,25 @@
   - Dependent repositories
   - Downloads
   - Issues
-- Calculates the development distribution score (DDS)
-
-## Requirements
-
-- Python 3.8+
-- no GitHub API token required as data from ecosyste.ms are taken
+  - development distribution score (DDS)
+- Visualises ESM tool statistics using in a [Streamlit](https://streamlit.io/) application: <https://open-esm-analysis.streamlit.app/>
 
 ## Installation
 
 1. Clone this repository
-2. Create a virtual environment:
-   ```
-   conda create --name open-esm-analysis
-   ```
-3. Activate virtual environment:
-   ```
-   conda activate open-esm-analysis
-   ```
-4. Install [pixi](https://pixi.sh/latest/).
-5. Install dependencies
-   ```
+1. Install [pixi](https://pixi.sh/latest/).
+1. Install all project dependencies:
+
+   ```sh
    pixi install
    ```
-  
 
-## Serve app
+## Serve app locally
 
 To serve the streamlit app, call `pixi run serve` from the command line.
 
-## Architecture
+## Refreshing data
 
-This application is showing selected data from already collected data from [ecosyste.ms](https://ecosyste.ms) via [Streamlit](https://open-esm-analysis.streamlit.app/).
-
-## Refreshing Data
-
-No updates are required as [ecosyste.ms](https://ecosyste.ms) is updating their data once a day.
+The model inventory and associated statistics can be updated by calling `pixi run get-stats`.
+If nothing has changed in the source code files or CSVs, nothing will run.
+To force an update, delete the CSVs in `inventory/output` and _then_ call `pixi run get-stats`.

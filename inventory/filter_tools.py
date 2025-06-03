@@ -58,7 +58,31 @@ def drop_no_git(df: pd.DataFrame) -> pd.DataFrame:
     git_filter = df.url.apply(
         lambda x: pd.notnull(x) and "git" in urlparse(x).netloc.lower()
     )
-    return df[git_filter]
+    new_df = df[git_filter]
+
+    LOGGER.warning(
+        f"Found {len(df) - len(new_df):d} entries without valid git repo URLs."
+    )
+    return new_df
+
+
+def drop_exclusions(df: pd.DataFrame) -> pd.DataFrame:
+    """Remove manually-derived exclusions from the tool list.
+
+    Args:
+        df (pd.DataFrame): ESM tool list.
+
+    Returns:
+        pd.DataFrame: Filtered `df`.
+    """
+    exclusions = pd.read_csv(Path(__file__).parent / "exclusions.csv")
+    exclusion_filter = ~df.id.isin(exclusions.id)
+    new_df = df[exclusion_filter]
+
+    LOGGER.warning(
+        f"Excluding {len(df) - len(new_df):d} entries following manual assessment."
+    )
+    return new_df
 
 
 @click.command()
@@ -82,6 +106,7 @@ def cli(infile: Path, outfile: Path, ignore: tuple[str]):
     filtered_entries = drop_duplicates(entries_ignore_sources, on="id")
     filtered_entries = drop_duplicates(filtered_entries, on="url")
     filtered_entries = drop_no_git(filtered_entries)
+    filtered_entries = drop_exclusions(filtered_entries)
 
     filtered_entries.to_csv(outfile, index=False)
 

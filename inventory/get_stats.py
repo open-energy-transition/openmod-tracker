@@ -23,7 +23,7 @@ ENTRIES_TO_KEEP = [
     "created_at",
     "updated_at",
     "commit_stats.dds",
-    "issues_stats.past_year_issues_count",
+    "commit_stats.total_committers",
 ]
 # HACK: the previous month's Anaconda data doesn't get compiled and uploaded to S3 until sometime into the following month.
 # Guessing 7 days in here but don't know for sure.
@@ -35,6 +35,7 @@ else:
 CONDA_DOWNLOAD_DF = pd.read_parquet(
     f"s3://anaconda-package-data/conda/monthly/{NOW.year}/{NOW.year}-{LAST_MONTH:02d}.parquet"
 )
+JULIA_STATS_API = "https://juliapkgstats.com/api/v1/monthly_downloads/"
 
 
 def get_ecosystems_entry_data(urls: Iterable) -> pd.DataFrame:
@@ -117,10 +118,16 @@ def _get_package_data(url: str) -> dict:
         dependent_repos_count_all = 0
         for package_source in package_data:
             if package_source["ecosystem"] == "conda":
-                # hack as the (last month) download count doesn't seem to exist in ecosyste.ms
+                # HACK: last month download count doesn't seem to exist in ecosyste.ms
                 download_count_all += CONDA_DOWNLOAD_DF[
                     CONDA_DOWNLOAD_DF.pkg_name == package_source["name"]
                 ].counts.sum()
+            elif package_source["ecosystem"] == "julia":
+                # Julia download stats don't seem to exist in ecosyste.ms (always returning null)
+                julia_downloads = util.get_url_json_content(
+                    JULIA_STATS_API + package_source["name"]
+                )["total_requests"]
+                download_count_all += int(julia_downloads)
             elif (
                 pd.notnull(package_source["downloads"])
                 and package_source["downloads_period"] == "last-month"

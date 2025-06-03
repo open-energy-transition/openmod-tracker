@@ -23,7 +23,7 @@ ENTRIES_TO_KEEP = [
     "created_at",
     "updated_at",
     "commit_stats.dds",
-    "issues_stats.past_year_issues_count",
+    "commit_stats.total_committers",
 ]
 # HACK: the previous month's Anaconda data doesn't get compiled and uploaded to S3 until sometime into the following month.
 # Guessing 7 days in here but don't know for sure.

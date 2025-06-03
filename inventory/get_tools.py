@@ -129,8 +129,8 @@ def get_openmod() -> pd.DataFrame:
     Returns:
         pd.DataFrame: Openmod wiki list entries and their associated Source Download URL.
     """
-    content = requests.get(OPENMOD_URL).content
-    soup = BeautifulSoup(content, "html.parser")
+    response = requests.get(OPENMOD_URL)
+    soup = BeautifulSoup(response.content, "html.parser")
     list_of_models_start = soup.find("span", {"id": "List_of_models"})
     if list_of_models_start is None:
         LOGGER.warning("Could not find list of openmod models")
@@ -141,6 +141,7 @@ def get_openmod() -> pd.DataFrame:
             list_of_models = elem.find_all("a")
             break
     urls = []
+    not_found = []
     for i in tqdm(list_of_models):
         response_child = requests.get(
             "https://wiki.openmod-initiative.org" + i.attrs["href"]
@@ -148,28 +149,56 @@ def get_openmod() -> pd.DataFrame:
         soup_child = BeautifulSoup(
             response_child.content.decode("utf-8"), "html.parser"
         )
-        url_info = soup_child.find(
-            "a", {"title": "Property:Source download"}, recursive=True
+        url = _get_openmod_model_property(soup_child, "Source download")
+        if url is None:
+            not_found.append(i.attrs["title"])
+        if url is not None:
+            # HACK: there are known URLs that are _almost_ valid Git URLs, so we clean them up here.
+            if "/-/" in url:
+                url = url.split("/-/")[0]
+            elif "codeload.github" in url:
+                url = url.replace("codeload.", "").split("/zip/")[0]
+
+        description = _get_openmod_model_property(soup_child, "Text description")
+        urls.append({"name": i.attrs["title"], "url": url, "description": description})
+    if not_found:
+        LOGGER.warning(
+            f"No source code URL found for the following openmod models: {'\n'.join(not_found)}"
         )
-        if url_info is not None and url_info.next.next.text != "":
-            url = url_info.next.next.next.attrs["href"]
-        else:
-            LOGGER.warning(f"No URL found for openmod entry: {i.attrs['title']}")
-            url = None
-        urls.append({"name": i.attrs["title"], "url": url})
+
     df = pd.DataFrame(urls)
     return df.assign(source="openmod")
 
 
-def load_manual_list() -> pd.DataFrame:
-    """Load manual URL list stored within this repository, derived from https://doi.org/10.1016/j.rser.2018.11.020 and subsequent searches.
+def _get_openmod_model_property(soup: BeautifulSoup, prop_name: str) -> str | None:
+    """Get content for a named property in an openmod model "factsheet".
+
+    Args:
+        soup (BeautifulSoup): Parsed model page HTML.
+        prop_name (str): Property name to return content for (if available)
 
     Returns:
-        pd.DataFrame: Manual list with tool names based on URL content.
+        str | None: Content of model factsheet `prop_name`.
     """
-    manual_list = pd.read_csv(Path(__file__).parent / "manual_esm_list.csv")
-    names = manual_list.source_url.apply(lambda x: Path(x.strip("/")).stem)
-    df = pd.DataFrame({"url": manual_list.source_url, "name": names})
+    prop_elem = soup.find("a", {"title": f"Property:{prop_name}"})
+    if prop_elem is not None and prop_elem.next.next.text != "":
+        prop = prop_elem.next.next.text.removesuffix(" +")
+        if " … " in prop:
+            prop = prop.split(" … ")[1]
+    else:
+        prop = None
+    return prop
+
+
+def load_pre_compiled_list() -> pd.DataFrame:
+    """Load pre-compiled URL list stored within this repository, derived from https://doi.org/10.1016/j.rser.2018.11.020 and subsequent searches.
+
+    Returns:
+        pd.DataFrame: Pre-compiled list with tool names based on URL content.
+    """
+    pre_compiled_list = pd.read_csv(Path(__file__).parent / "pre_compiled_esm_list.csv")
+    names = pre_compiled_list.source_url.apply(lambda x: Path(x.strip("/")).stem)
+    df = pd.DataFrame({"url": pre_compiled_list.source_url, "name": names})
 
     return df.assign(source="manual")
 
@@ -189,7 +218,7 @@ def cli(outfile: Path):
         ]
     )
 
-    manual_entries = load_manual_list()
+    manual_entries = load_pre_compiled_list()
 
     entries = pd.concat([automatic_entries, manual_entries])
     # Clean up URLs

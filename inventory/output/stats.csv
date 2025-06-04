@@ -70,7 +70,6 @@ https://github.com/nrel/sam,NREL,False,388,189,C++,bsd-3-clause,2013-01-10T02:52
 https://github.com/temoaproject/temoa,TemoaProject,False,87,49,Python,gpl-2.0,2015-01-10T19:22:06.000Z,2025-04-12T09:50:44.000Z,0.7467608951707891,25,0,0,2020-06-17
 https://github.com/idaes/idaes-pse,IDAES,False,250,263,Python,other,2019-02-01T01:12:51.000Z,2025-05-28T21:49:27.000Z,0.7555807182141702,81,18496,8,2025-03-06
 https://github.com/slacgismo/tess,slacgismo,False,13,2,Python,gpl-3.0,2019-07-16T13:50:17.000Z,2024-05-27T16:42:07.000Z,0.7341772151898734,15,0,0,
-https://github.com/fzj-iek3-vsa/tsam,FZJ-IEK3-VSA,False,162,35,Python,mit,2017-05-15T08:36:11.000Z,2025-05-29T12:07:10.000Z,0.5732484076433121,20,11664,29,2025-05-29
 https://github.com/tum-ens/urbs,tum-ens,False,193,135,Python,gpl-3.0,2014-07-19T13:40:41.000Z,2025-05-06T12:58:35.000Z,0.6681887366818874,25,0,0,
 https://github.com/villasframework/node,VILLASframework,False,14,12,C++,apache-2.0,2022-12-02T09:11:02.000Z,2025-05-23T10:43:49.000Z,0.22899615834307663,37,192,3,2024-04-04
 https://github.com/nrel/wpgnn,NREL,False,20,9,Python,apache-2.0,2021-12-22T16:35:31.000Z,2025-05-16T09:10:48.000Z,,,0,0,
@@ -129,7 +128,6 @@ https://github.com/tum-ewk/lemlab,tum-ewk,False,26,19,Python,gpl-3.0,2021-05-28T
 https://github.com/inwe-boku/medea,inwe-boku,False,4,5,GAMS,mit,2019-04-03T11:04:11.000Z,2024-05-17T06:43:52.000Z,,,0,0,
 https://github.com/tum-ewk/opentumflex,tum-ewk,False,26,15,Python,gpl-3.0,2019-10-04T13:00:54.000Z,2025-01-14T03:00:49.000Z,,,0,0,
 https://github.com/e2niee/pandapipes,e2nIEE,False,176,70,Python,other,2020-02-03T15:04:57.000Z,2025-06-02T04:54:45.000Z,0.6909803921568627,23,3962,2,2024-11-07
-https://github.com/nrel-siip/powersimulationsdynamics.jl,NREL-Sienna,False,199,51,Julia,bsd-3-clause,2020-07-16T19:36:16.000Z,2025-05-26T00:46:18.000Z,0.33123312331233123,16,0,0,
 https://github.com/andrewlyden/pylesa,andrewlyden,False,16,11,Python,mit,2020-05-04T10:45:30.000Z,2025-05-13T10:12:00.000Z,,,0,0,
 https://github.com/nrel/reopt_lite_api,NREL,False,104,57,Python,other,2018-12-17T21:24:59.000Z,2025-05-23T15:05:54.000Z,0.7556686719111523,22,0,0,2024-11-22
 https://github.com/rheia-framework/rheia,rheia-framework,False,21,8,Python,mit,2021-04-27T14:06:40.000Z,2025-05-14T13:51:58.000Z,0.3647798742138365,7,207,1,2024-12-19

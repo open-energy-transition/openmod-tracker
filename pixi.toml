@@ -5,10 +5,22 @@ name = "open-esm-analysis"
 platforms = ["win-64", "linux-64", "osx-64", "osx-arm64"]
 version = "0.1.0"
 
-[tasks]
-get-tools = {cmd = "python $PIXI_PROJECT_ROOT/inventory/get_tools.py inventory/output/tools.csv",inputs = ["inventory/get_tools.py"], outputs = ["inventory/output/tools.csv"]}
-filter-tools = {cmd = "python $PIXI_PROJECT_ROOT/inventory/filter_tools.py inventory/output/tools.csv inventory/output/filtered.csv", inputs = ["inventory/output/tools.csv", "inventory/filter_tools.py"], outputs = ["inventory/output/filtered.csv"], depends-on = ["get-tools"]}
-get-stats = {cmd = "python $PIXI_PROJECT_ROOT/inventory/get_stats.py inventory/output/filtered.csv inventory/output/stats.csv", inputs = ["inventory/output/filtered.csv", "inventory/get_stats.py"], outputs = ["inventory/output/stats.csv"], depends-on = ["filter-tools"]}
+[tasks.get-tools]
+cmd = "python $PIXI_PROJECT_ROOT/inventory/get_tools.py inventory/output/tools.csv"
+inputs = ["inventory/get_tools.py", "pre_compiled_esm_list.csv"]
+outputs = ["inventory/output/tools.csv"]
+
+[tasks.filter-tools]
+cmd = "python $PIXI_PROJECT_ROOT/inventory/filter_tools.py inventory/output/tools.csv inventory/output/filtered.csv"
+inputs = ["inventory/output/tools.csv", "inventory/exclusions.csv", "inventory/filter_tools.py"]
+outputs = ["inventory/output/filtered.csv"]
+depends-on = ["get-tools"]
+
+[tasks.get-stats]
+cmd = "python $PIXI_PROJECT_ROOT/inventory/get_stats.py inventory/output/filtered.csv inventory/output/stats.csv"
+inputs = ["inventory/output/filtered.csv", "inventory/get_stats.py"]
+outputs = ["inventory/output/stats.csv"]
+depends-on = ["filter-tools"]
 
 [dependencies]
 pandas = ">=2.2.3,<3"

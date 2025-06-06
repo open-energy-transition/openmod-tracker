@@ -111,8 +111,9 @@ def _get_nested_dict_entry(
 
 def _get_package_data(url: str) -> dict:
     package_response = util.get_ecosystems_package_data(url)
-    if package_response.ok:
-        package_data = yaml.safe_load(package_response.content.decode("utf-8"))
+    if package_response.ok and (
+        package_data := yaml.safe_load(package_response.content.decode("utf-8"))
+    ):
         download_count_all = 0
         latest_release_all = None
         dependent_repos_count_all = 0
@@ -143,9 +144,8 @@ def _get_package_data(url: str) -> dict:
             if latest_release_all is None or latest_release > latest_release_all:
                 latest_release_all = latest_release
             dependent_repos_count = package_source["dependent_repos_count"]
-            if (
-                pd.notnull(dependent_repos_count)
-                and dependent_repos_count > dependent_repos_count_all
+            if pd.notnull(dependent_repos_count) and (
+                dependent_repos_count > dependent_repos_count_all
             ):
                 dependent_repos_count_all = dependent_repos_count
 

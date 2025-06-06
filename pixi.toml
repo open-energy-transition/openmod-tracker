@@ -38,7 +38,6 @@ bs4 = ">=4.13.4,<5"
 pre-commit = ">=4.2.0,<5"
 
 [feature.app.dependencies]
-itables = "*"
 streamlit = "*"
 
 

@@ -1,4 +1,9 @@
-# import required packages
+"""Create Streamlit web app to visualise tool inventory data.
+
+(C) Open Energy Transition (OET)
+License: MIT / CC0 1.0
+"""
+
 from collections.abc import Callable, Iterable
 from datetime import datetime
 from pathlib import Path

@@ -209,7 +209,7 @@ def slider(
         min_value (float | np.datetime64): Minimum slider value.
         max_value (float | np.datetime64): Maximum slider value.
         col (str): Column name.
-        reset_mode (bool): Whether to reset slider to initial values
+        reset_mode (bool): Whether to reset slider to initial values.
 
     Returns:
         tuple[float | np.datetime64, float | np.datetime64]:
@@ -232,6 +232,31 @@ def slider(
     )
 
     return selected_range
+
+
+def multiselect(unique_values: list[str], col: str, reset_mode: bool) -> list[str]:
+    """Generate a multiselect box for categorical table data.
+
+    Args:
+        unique_values (list[str]): Unique categorical values.
+        col (str): Column name.
+        reset_mode (bool): Whether to reset multiselect to initial values.
+
+    Returns:
+        list[str]: values given by multiselect to use in data table filtering.
+    """
+    current_selected = (
+        unique_values
+        if reset_mode
+        else st.session_state.get(f"multiselect_{col}", unique_values)
+    )
+    selected_values = st.sidebar.multiselect(
+        f"Select {col} values",
+        options=unique_values,
+        default=current_selected,
+        key=f"multiselect_{col}",
+    )
+    return selected_values
 
 
 def paginate(df: pd.DataFrame, rows_per_page: int) -> pd.DataFrame:
@@ -410,12 +435,7 @@ def main(df: pd.DataFrame):
         elif is_categorical_column(df[col]):
             # Categorical multiselect
             unique_values = sorted(df[col].dropna().unique().tolist())
-            selected_values = st.sidebar.multiselect(
-                f"Select {col} values",
-                options=unique_values,
-                default=unique_values,
-                key=f"multiselect_{col}",
-            )
+            selected_values = multiselect(unique_values, col, reset_mode)
             df_filtered = df_filtered[
                 categorical_filter(df_filtered[col], selected_values)
             ]
@@ -424,12 +444,7 @@ def main(df: pd.DataFrame):
         elif is_list_column(df[col]):
             # Categorical multiselect with list column entry
             unique_values = list(set(i for j in df[col].dropna().values for i in j))
-            selected_values = st.sidebar.multiselect(
-                f"Select {col} values",
-                options=unique_values,
-                default=unique_values,
-                key=f"multiselect_{col}",
-            )
+            selected_values = multiselect(unique_values, col, reset_mode)
             df_filtered = df_filtered[list_filter(df_filtered[col], selected_values)]
             col_config[col] = st.column_config.ListColumn(col, help=COLUMN_HELP[col])
 

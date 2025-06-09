@@ -142,6 +142,7 @@ def get_openmod() -> pd.DataFrame:
             break
     urls = []
     not_found = []
+    LOGGER.warning("Scraping openmod entries.")
     for i in tqdm(list_of_models):
         response_child = requests.get(
             "https://wiki.openmod-initiative.org" + i.attrs["href"]
@@ -203,6 +204,23 @@ def load_pre_compiled_list() -> pd.DataFrame:
     return df.assign(source="manual")
 
 
+def add_categories(df: pd.DataFrame) -> pd.DataFrame:
+    """Add manually derived tool categories.
+
+    Args:
+        df (pd.DataFrame): Tools table.
+
+    Returns:
+        pd.DataFrame: Updated `df` with `category` column filled with manual categories.
+    """
+    categories = pd.read_csv(
+        Path(__file__).parent / "categories.csv", index_col="id"
+    ).category
+    df = df.set_index("id")
+    df["category"] = df["category"].fillna(categories.reindex(df.index))
+    return df.reset_index()
+
+
 @click.command()
 @click.argument(
     "outfile", type=click.Path(exists=False, dir_okay=False, file_okay=True)
@@ -233,6 +251,9 @@ def cli(outfile: Path):
     entries["id"] = entries.name.map(
         lambda x: re.sub(r"\s|\-|\.", "_", str(x).strip().lower())
     )
+
+    entries = add_categories(entries)
+
     entries.to_csv(outfile, index=False)
 
 

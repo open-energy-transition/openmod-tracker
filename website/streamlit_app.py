@@ -22,6 +22,7 @@ COLUMN_NAME_MAPPING: dict[str, str] = {
     "forks_count": "Forks",
     "dependent_repos_count": "Dependents",
     "last_month_downloads": "Last Month Downloads",
+    "category": "Category",
 }
 
 COLUMN_DTYPES: dict[str, Callable] = {
@@ -33,6 +34,7 @@ COLUMN_DTYPES: dict[str, Callable] = {
     "forks_count": pd.to_numeric,
     "dependent_repos_count": pd.to_numeric,
     "last_month_downloads": pd.to_numeric,
+    "category": lambda x: x.str.split(","),
 }
 
 COLUMN_HELP: dict[str, str] = {
@@ -44,9 +46,11 @@ COLUMN_HELP: dict[str, str] = {
     "Forks": "Number of Git forks",
     "Dependents": "Packages dependent on this project (only available if the project is indexed on a package repository)",
     "Last Month Downloads": "Package installs last month (only available if the project is indexed on a package repository)",
+    "Category": "Category of energy system planning / operation problem for which this tool could be used. This is based on [G-PST entries](https://api.github.com/repos/G-PST/opentools) and our own manual assignment applied to a subset of tools.",
 }
 
 DEFAULT_ORDER = "Stars"
+NOT_OPEN_SOURCE_LANGUAGES = ["GAMS", "MATLAB", "JetBrains MPS", "PowerBuilder", "AMPL"]
 
 
 def create_vis_table(tool_data_dir: Path) -> pd.DataFrame:
@@ -60,14 +64,17 @@ def create_vis_table(tool_data_dir: Path) -> pd.DataFrame:
     """
     stats_df = pd.read_csv(tool_data_dir / "stats.csv", index_col=0)
     tools_df = pd.read_csv(tool_data_dir / "filtered.csv", index_col="url")
+
     df = (
         pd.merge(left=stats_df, right=tools_df, right_index=True, left_index=True)
         .rename_axis(index="url")
         .reset_index()
     )
 
-    # Assume: majority Jupyter Notebook projects are actually Python projects.
+    # Assume: projects categorised as "Jupyter Notebook" are actually Python projects.
+    # This occurs because the repository language is based on number of lines and Jupyter Notebooks have _a lot_ of lines.
     df["language"] = df.language.replace({"Jupyter Notebook": "Python"})
+    df = df[~df["language"].isin(NOT_OPEN_SOURCE_LANGUAGES)]
     df["name"] = df.name.apply(lambda x: x.split(",")[0])
 
     for col, dtype_func in COLUMN_DTYPES.items():
@@ -91,6 +98,11 @@ def is_numeric_column(series: pd.Series) -> bool:
 def is_categorical_column(series: pd.Series) -> bool:
     """Check if a column should be treated as categorical."""
     return isinstance(series.dtype, pd.StringDtype | pd.CategoricalDtype)
+
+
+def is_list_column(series: pd.Series) -> bool:
+    """Check if a column contains lists of items."""
+    return all(series.dropna().apply(lambda x: isinstance(x, list)))
 
 
 def nan_filter(col: pd.Series) -> pd.Series:
@@ -153,6 +165,28 @@ def categorical_filter(col: pd.Series, to_filter: Iterable) -> pd.Series:
         pd.Series: Filtered `col`.
     """
     return col.isin(to_filter) | col.isna()
+
+
+def list_filter(col: pd.Series, to_filter: Iterable) -> pd.Series:
+    """Filter list columns.
+
+    Dataframes shouldn't really be holding lists so this is a bit of a hack.
+
+    Args:
+        col (pd.Series): Column to filter.
+        to_filter (Iterable): List of category items to keep.
+
+    Returns:
+        pd.Series: Filtered `col`.
+    """
+    with pd.option_context("future.no_silent_downcasting", True):
+        return (
+            col.dropna()
+            .apply(lambda x: any(i in x for i in to_filter))
+            .reindex(col.index)
+            .fillna(True)
+            .infer_objects()
+        )
 
 
 @overload
@@ -386,6 +420,18 @@ def main(df: pd.DataFrame):
                 categorical_filter(df_filtered[col], selected_values)
             ]
             col_config[col] = st.column_config.TextColumn(col, help=COLUMN_HELP[col])
+
+        elif is_list_column(df[col]):
+            # Categorical multiselect with list column entry
+            unique_values = list(set(i for j in df[col].dropna().values for i in j))
+            selected_values = st.sidebar.multiselect(
+                f"Select {col} values",
+                options=unique_values,
+                default=unique_values,
+                key=f"multiselect_{col}",
+            )
+            df_filtered = df_filtered[list_filter(df_filtered[col], selected_values)]
+            col_config[col] = st.column_config.ListColumn(col, help=COLUMN_HELP[col])
 
     # Sort the table based on default order
     df_filtered = df_filtered.sort_values(DEFAULT_ORDER, ascending=False)

@@ -7,7 +7,7 @@ version = "0.1.0"
 
 [tasks.get-tools]
 cmd = "python $PIXI_PROJECT_ROOT/inventory/get_tools.py inventory/output/tools.csv"
-inputs = ["inventory/get_tools.py", "pre_compiled_esm_list.csv"]
+inputs = ["inventory/get_tools.py", "inventory/pre_compiled_esm_list.csv", "inventory/categories.csv"]
 outputs = ["inventory/output/tools.csv"]
 
 [tasks.filter-tools]
@@ -48,6 +48,8 @@ serve = "streamlit run $PIXI_PROJECT_ROOT/website/streamlit_app.py"
 plotly = "*"
 matplotlib = "*"
 seaborn = "*"
+ipykernel = ">=6.29.5,<7"
+nbformat = ">=5.10.4,<6"
 
 [environments]
 app = ["app"]

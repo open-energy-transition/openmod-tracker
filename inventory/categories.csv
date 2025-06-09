@@ -1,0 +1,20 @@
+id,category,comment
+egret,"production-cost,power-flow",
+oemof_solph,"capacity-expansion,production-cost",
+grid2op,"power-flow",
+hopp,"capacity-expansion,production-cost",
+gridcal,"capacity-expansion,production-cost,power-flow","power grid only"
+pypower,"power-flow",
+pysam,"production-cost,capacity-expansion","fixed technology options; focussed on specific assets."
+powsybl,"power-flow",
+fine,"capacity-expansion","possibly also production-cost"
+power_grid_model,"power-flow",
+andes,"power-flow",
+genx,"production-cost,capacity-expansion",
+powersimulations,"production-cost",
+powersimulationsdynamics,"power-flow",
+urbs,"capacity-expansion",
+open_modeling_framework,"production-cost,power-flow",
+temoa,"capacity-expansion","possibly also production-cost"
+energy_system_simulation_and_optimization,"production-cost","possibly exclude as it is a building energy management system optimisation"
+prep_shot,"capacity-expansion","possibly also production-cost"

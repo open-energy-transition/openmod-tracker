@@ -36,8 +36,8 @@ def drop_duplicates(df: pd.DataFrame, on: str = "url") -> pd.DataFrame:
 
     for idx in df_duplicates[on].unique():
         dup_df = df[df[on] == idx]
-        sources = ",".join(set(dup_df.source.values))
-        names = ",".join(set(dup_df.name.values))
+        sources = ",".join(sorted(set(dup_df.source.values)))
+        names = ",".join(sorted(set(dup_df.name.values)))
         filled = df_unique.loc[[idx]]
         for _, series in dup_df.iterrows():
             with pd.option_context("future.no_silent_downcasting", True):
@@ -109,7 +109,7 @@ def cli(infile: Path, outfile: Path, ignore: tuple[str]):
     filtered_entries = drop_no_git(filtered_entries)
     filtered_entries = drop_exclusions(filtered_entries)
 
-    filtered_entries.to_csv(outfile, index=False)
+    filtered_entries.sort_values("id").to_csv(outfile, index=False)
 
 
 if __name__ == "__main__":

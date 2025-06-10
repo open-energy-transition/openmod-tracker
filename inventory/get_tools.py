@@ -254,7 +254,7 @@ def cli(outfile: Path):
 
     entries = add_categories(entries)
 
-    entries.to_csv(outfile, index=False)
+    entries.sort_values("id").to_csv(outfile, index=False)
 
 
 if __name__ == "__main__":

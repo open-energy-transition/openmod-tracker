@@ -5,12 +5,12 @@ grid2op,"power-flow",
 hopp,"capacity-expansion,production-cost",
 gridcal,"capacity-expansion,production-cost,power-flow","power grid only"
 pypower,"power-flow",
-pysam,"production-cost,capacity-expansion","fixed technology options; focussed on specific assets."
+pysam,"capacity-expansion,production-cost","fixed technology options; focussed on specific assets."
 powsybl,"power-flow",
-fine,"capacity-expansion","possibly also production-cost"
+fine,"capacity-expansion,production-cost",
 power_grid_model,"power-flow",
 andes,"power-flow",
-genx,"production-cost,capacity-expansion",
+genx,"capacity-expansion,production-cost",
 powersimulations,"production-cost",
 powersimulationsdynamics,"power-flow",
 urbs,"capacity-expansion",

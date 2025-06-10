@@ -31,7 +31,6 @@ jobs:
           cache: true
           # Do not cache in branches
           cache-write: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
-          auth-host: prefix.dev
 
       - name: Run pixi task
         run: pixi run get-stats

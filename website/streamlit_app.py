@@ -432,14 +432,14 @@ def main(df: pd.DataFrame):
 
     # Display options
     col1, col2 = st.columns([3, 2])
-    with col1:
-        st.metric("Tools in view", f"{len(df_filtered)} / {len(df)}")
     with col2:
         search_result = st_keyup("Find a tool by name", value="", key="search_box")
-
     df_filtered = df_filtered[
         df_filtered["name"].str.lower().str.contains(search_result.lower())
     ]
+
+    with col1:
+        st.metric("Tools in view", f"{len(df_filtered)} / {len(df)}")
 
     column_config = {
         "name": st.column_config.TextColumn("Tool Name"),

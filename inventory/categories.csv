@@ -15,6 +15,8 @@ powersimulationsdynamics,"power-flow",
 powsybl,"power-flow",
 prep_shot,"capacity-expansion","possibly also production-cost"
 pypower,"power-flow",
+pypowsybl,"power-flow",
 pysam,"capacity-expansion,production-cost","fixed technology options; focussed on specific assets."
+sam,"capacity-expansion,production-cost","fixed technology options; focussed on specific assets."
 temoa,"capacity-expansion","possibly also production-cost"
 urbs,"capacity-expansion",

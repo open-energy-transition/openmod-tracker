@@ -6,9 +6,10 @@ from urllib.parse import urlparse
 
 import click
 import pandas as pd
+import util
 from get_tools import TOOL_TYPES
 
-LOGGER = logging.getLogger(__file__)
+LOGGER = logging.getLogger(__name__)
 
 
 def drop_duplicates(df: pd.DataFrame, on: str = "url") -> pd.DataFrame:
@@ -86,6 +87,57 @@ def drop_exclusions(df: pd.DataFrame) -> pd.DataFrame:
     return new_df
 
 
+def add_categories(df: pd.DataFrame) -> pd.DataFrame:
+    """Add manually derived tool categories.
+
+    Args:
+        df (pd.DataFrame): Tools table.
+
+    Returns:
+        pd.DataFrame: Updated `df` with `category` column filled with manual categories.
+    """
+    categories = pd.read_csv(
+        Path(__file__).parent / "categories.csv", index_col="id"
+    ).category
+    df = df.set_index("id")
+    df["category"] = df["category"].fillna(categories.reindex(df.index))
+    return df.reset_index()
+
+
+def resolve_duplicated_urls(df: pd.DataFrame) -> pd.DataFrame:
+    """If there are duplicate Git URLs, they will need resolving by inspecting their ecosyste.ms entries.
+
+    Args:
+        df (pd.DataFrame): Tools table.
+
+    Returns:
+        pd.DataFrame: Tools table without duplicate IDs, choosing the most likely best URL option.
+    """
+    duplicates = df[df.id.duplicated()]
+    for duplicate in duplicates.id.unique():
+        urls = df[df.id == duplicate].url
+        LOGGER.warning(f"Found {len(urls)} entries for tool ID '{duplicate}'")
+        for url in urls:
+            repo_data = util.get_ecosystems_repo_data(url)
+            if repo_data is None:
+                LOGGER.warning(f"Removing {url} as it has no ecosyste.ms entry.")
+                df = df[df.url != url]
+            elif url != (new_url := repo_data["html_url"].lower()):
+                LOGGER.warning(f"Found redirect for: {url} -> {new_url}.")
+                df.loc[df.id == duplicate, "url"] = new_url
+            elif (new_name := repo_data["source_name"]) is not None:
+                new_url = "https://" + urlparse(url).netloc + "/" + new_name
+                LOGGER.warning(f"Removing {url} as it is a fork of {new_url}.")
+                df.loc[df.id == duplicate, "url"] = new_url
+        remaining_urls = df[df.id == duplicate].url.unique()
+        if len(remaining_urls) > 1:
+            LOGGER.warning(
+                f"Could not resolve duplicate URLs for {duplicate}. Remaining: {remaining_urls}."
+            )
+    df = drop_duplicates(df, "url")
+    return df
+
+
 @click.command()
 @click.argument("infile", type=click.Path(exists=True, dir_okay=False, file_okay=True))
 @click.argument(
@@ -104,12 +156,19 @@ def cli(infile: Path, outfile: Path, ignore: tuple[str]):
     entries_ignore_sources = entries.where(~entries["source"].isin(ignore)).dropna(
         how="all"
     )
-    filtered_entries = drop_duplicates(entries_ignore_sources, on="id")
+    filtered_entries = drop_no_git(entries_ignore_sources)
     filtered_entries = drop_duplicates(filtered_entries, on="url")
-    filtered_entries = drop_no_git(filtered_entries)
     filtered_entries = drop_exclusions(filtered_entries)
+    filtered_entries = resolve_duplicated_urls(filtered_entries)
 
-    filtered_entries.sort_values("id").to_csv(outfile, index=False)
+    # We fill any remaining gaps from the initial set of tools
+    filler = drop_duplicates(entries_ignore_sources, on="id").set_index("id")
+    reindexed_filler = filler.reindex(filtered_entries.set_index("id").index)
+    filtered_entries = filtered_entries.set_index("id").fillna(
+        {col: reindexed_filler[col] for col in reindexed_filler.columns}
+    )
+
+    filtered_entries.sort_index().to_csv(outfile)
 
 
 if __name__ == "__main__":

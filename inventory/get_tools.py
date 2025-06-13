@@ -19,7 +19,7 @@ OST_URL = (
 )
 OPENMOD_URL = "https://wiki.openmod-initiative.org/wiki/Open_Models"
 
-LOGGER = logging.getLogger(__file__)
+LOGGER = logging.getLogger(__name__)
 
 
 def get_lf_energy_landscape() -> pd.DataFrame:
@@ -153,12 +153,6 @@ def get_openmod() -> pd.DataFrame:
         url = _get_openmod_model_property(soup_child, "Source download")
         if url is None:
             not_found.append(i.attrs["title"])
-        if url is not None:
-            # HACK: there are known URLs that are _almost_ valid Git URLs, so we clean them up here.
-            if "/-/" in url:
-                url = url.split("/-/")[0]
-            elif "codeload.github" in url:
-                url = url.replace("codeload.", "").split("/zip/")[0]
 
         description = _get_openmod_model_property(soup_child, "Text description")
         urls.append({"name": i.attrs["title"], "url": url, "description": description})
@@ -198,10 +192,10 @@ def load_pre_compiled_list() -> pd.DataFrame:
         pd.DataFrame: Pre-compiled list with tool names based on URL content.
     """
     pre_compiled_list = pd.read_csv(Path(__file__).parent / "pre_compiled_esm_list.csv")
-    names = pre_compiled_list.source_url.apply(lambda x: Path(x.strip("/")).stem)
+    names = pre_compiled_list.source_url.apply(lambda x: x.strip("/").split("/")[-1])
     df = pd.DataFrame({"url": pre_compiled_list.source_url, "name": names})
 
-    return df.assign(source="manual")
+    return df.assign(source="pre-compiled")
 
 
 def add_categories(df: pd.DataFrame) -> pd.DataFrame:
@@ -221,6 +215,28 @@ def add_categories(df: pd.DataFrame) -> pd.DataFrame:
     return df.reset_index()
 
 
+def clean_url(url: str) -> str:
+    """There are known URLs that are _almost_ valid Git URLs, so we clean them up here.
+
+    This is a bit of a hack and could keep growing in complexity.
+
+    Args:
+        url (str): URL to clean
+
+    Returns:
+        str: Potentially cleaned URL.
+    """
+    if "codeload.github" in url:
+        url = url.replace("codeload.", "")
+    for path_endswith_to_remove in ["/releases", "/-", ".git"]:
+        if url.endswith(path_endswith_to_remove):
+            url = url.removesuffix(path_endswith_to_remove)
+    for path_suffix_to_remove in ["/zip/", "/archive/", "/-/"]:
+        if path_suffix_to_remove in url:
+            url = url.split(path_suffix_to_remove)[0]
+    return url
+
+
 @click.command()
 @click.argument(
     "outfile", type=click.Path(exists=False, dir_okay=False, file_okay=True)
@@ -236,15 +252,16 @@ def cli(outfile: Path):
         ]
     )
 
-    manual_entries = load_pre_compiled_list()
+    pre_compiled_entries = load_pre_compiled_list()
 
-    entries = pd.concat([automatic_entries, manual_entries])
+    entries = pd.concat([automatic_entries, pre_compiled_entries])
     # Clean up URLs
     entries["url"] = (
         entries["url"]
         .astype(str)
         .apply(lambda x: x.strip("/").lower())
         .apply(lambda x: "https://" + x if not x.startswith("http") else x)
+        .apply(clean_url)
         .where(entries["url"].notnull())
     )
 

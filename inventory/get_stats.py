@@ -56,9 +56,11 @@ def get_ecosystems_entry_data(urls: Iterable) -> pd.DataFrame:
     """
     repo_dfs = []
     for url in tqdm(urls):
-        repo_response = util.get_ecosystems_repo_data(url)
-        if repo_response.ok:
-            repo_data = yaml.safe_load(repo_response.content.decode("utf-8"))
+        repo_data = util.get_ecosystems_repo_data(url)
+        if repo_data is None:
+            LOGGER.warning(f"Could not find ecosyste.ms entry for {url}")
+            continue
+        else:
             repo_data_to_keep = {}
             for entry in ENTRIES_TO_KEEP:
                 if "." in entry:
@@ -67,9 +69,6 @@ def get_ecosystems_entry_data(urls: Iterable) -> pd.DataFrame:
                     val = repo_data[entry]
                 repo_data_to_keep[entry] = val
             repo_df = pd.DataFrame(repo_data_to_keep, index=[url])
-        else:
-            LOGGER.warning(f"Could not find ecosyste.ms entry for {url}")
-            continue
 
         package_data = _get_package_data(url)
 

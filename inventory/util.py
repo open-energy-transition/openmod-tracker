@@ -1,5 +1,7 @@
 """Various util functions for inventory collection, filtering, and stats getting."""
 
+import logging
+import time
 from urllib.parse import quote_plus
 
 import requests
@@ -9,6 +11,8 @@ ECOSYSTEMS_REPO_LOOKUP_API = "https://repos.ecosyste.ms/api/v1/repositories/look
 ECOSYSTEMS_PACKAGES_LOOKUP_API = (
     "https://packages.ecosyste.ms/api/v1/packages/lookup?repository_url="
 )
+
+LOGGER = logging.getLogger(__name__)
 
 
 def get_url_json_content(url: str) -> dict:
@@ -25,18 +29,33 @@ def get_url_json_content(url: str) -> dict:
     return yaml.safe_load(content)
 
 
-def get_ecosystems_repo_data(url: str) -> requests.Response:
+def get_ecosystems_repo_data(url: str, attempt: int = 1) -> dict | None:
     """Get repository lookup API call response from ecosyste.ms based on the provided repo URL.
 
     Args:
         url (str): Git repo URL.
+        attempt (int):
+            Tracks the number of attempts at checking this URL.
+            We use this to avoid stressing the ecosyste.ms servers with reattempts after possible timeouts.
+            Defaults to False.
 
     Returns:
         requests.Response: Content of data for `url`.
     """
     safe_query = get_safe_url_string(url)
 
-    return requests.get(ECOSYSTEMS_REPO_LOOKUP_API + safe_query)
+    response = requests.get(ECOSYSTEMS_REPO_LOOKUP_API + safe_query)
+    if response.ok:
+        return yaml.safe_load(response.content.decode("utf-8"))
+    elif response.status_code == "500" and attempt == 1:
+        # Likely a timeout, let's try again
+        LOGGER.warning(
+            "Problem communicating with ecosyste.ms; trying again in 10 seconds."
+        )
+        time.sleep(10)
+        return get_ecosystems_repo_data(url, 2)
+    else:
+        return None
 
 
 def get_ecosystems_package_data(url: str) -> requests.Response:

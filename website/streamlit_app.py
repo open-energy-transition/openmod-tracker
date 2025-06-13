@@ -12,6 +12,7 @@ from typing import overload
 import numpy as np
 import pandas as pd
 import streamlit as st
+from st_keyup import st_keyup
 
 COLUMN_NAME_MAPPING: dict[str, str] = {
     "created_at": "Created",
@@ -259,30 +260,6 @@ def multiselect(unique_values: list[str], col: str, reset_mode: bool) -> list[st
     return selected_values
 
 
-def paginate(df: pd.DataFrame, rows_per_page: int) -> pd.DataFrame:
-    """Distribute table across pages.
-
-    Args:
-        df (pd.DataFrame): Table to paginate.
-        rows_per_page (int): Number of table rows to show per page.
-
-    Returns:
-        pd.DataFrame: First page of the table.
-    """
-    # Pagination
-    total_pages = (len(df) - 1) // rows_per_page + 1 if len(df) > 0 else 1
-
-    if total_pages > 1:
-        page = st.number_input(
-            f"Page (1-{total_pages})", min_value=1, max_value=total_pages, value=1
-        )
-        start_idx = (page - 1) * rows_per_page
-        end_idx = start_idx + rows_per_page
-        df = df.iloc[start_idx:end_idx]
-
-    return df
-
-
 def reset(button_press: bool = False) -> bool:
     """Return result of the reset button having been pressed.
 
@@ -320,7 +297,7 @@ def preamble(latest_changes: str):
 
         The global energy transition is moving fast, but so are the challenges in directing time and resources effectively.
         Achieving international climate goals will require around **4.5 trillion in annual investments** by the early 2030s.
-        To optimize infrastructure investments, grid operations and policy decisions, open-source tools are becoming the 'goat' in the room with increasing adoption across all sectors (see e.g. this [ENTSO-E post on LinkedIn](https://www.linkedin.com/posts/entso-e_energytransition-opensource-innovation-activity-7293296246813851649-2ynL)).
+        To optimize infrastructure investments, grid operations and policy decisions, open-source tools are becoming the elephant in the room with increasing adoption across all sectors (see e.g. this [ENTSO-E post on LinkedIn](https://www.linkedin.com/posts/entso-e_energytransition-opensource-innovation-activity-7293296246813851649-2ynL)).
 
         However, with an ever-growing number of open-source (OS) energy tools, the question remains: **How do decision-makers - whether researchers, funders, or grid operators - select the right tools for their needs?**
         The answer lies in data combined with experience.
@@ -330,15 +307,17 @@ def preamble(latest_changes: str):
         Funders and users alike need to distinguish between active, well-maintained tools and those that might no longer be viable. While qualitative reviews (user feedback, case studies, etc.) are valuable, quantitative metrics offer critical signals about a tool's reliability, sustainability, and adoption.
 
         The table below highlights key statistics for several leading OS energy planning tools, offering a snapshot of their development activity, usage, and maintenance.
-        These tools have been collated from various publicly accessible tool inventories (see [our project homepage](https://github.com/open-energy-transition/open-esm-analysis/) for the full list!) and filtered for only those that have accessible Git repositories.
+        These tools have been collated from various publicly accessible tool inventories (see [our project homepage](https://github.com/open-energy-transition/open-esm-analysis/) for the full list!) and filtered for only those that have accessible Git repositories and are written in open source programming languages.
 
         ## Open-Source ESM Tools - Key Data Indicators
 
-        Data source: ecosystem.ms
+        **Data source**:
+        - *Category*: [G-PST open tools](https://opentools.globalpst.org/) & [our own categorisation](https://github.com/open-energy-transition/open-esm-analysis/blob/main/inventory/categories.csv)
+        - *All other metrics*: [ecosyste.ms](https://ecosyste.ms)
 
-        Last Update: {latest_changes}
+        **Last Update**: {latest_changes}
 
-        Default Order: Number of {DEFAULT_ORDER} (descending)
+        **Default Order**: Number of {DEFAULT_ORDER} (descending)
         """
     )
 
@@ -452,23 +431,25 @@ def main(df: pd.DataFrame):
     df_filtered = df_filtered.sort_values(DEFAULT_ORDER, ascending=False)
 
     # Display options
-    col1, col2 = st.columns([3, 1])
+    col1, col2 = st.columns([3, 2])
     with col1:
         st.metric("Tools in view", f"{len(df_filtered)} / {len(df)}")
     with col2:
-        rows_per_page = st.selectbox("Rows per page", [10, 25, 50, 100], index=0)
+        search_result = st_keyup("Find a tool by name", value="", key="search_box")
 
-    df_display = paginate(df_filtered, rows_per_page)
+    df_filtered = df_filtered[
+        df_filtered["name"].str.lower().str.contains(search_result.lower())
+    ]
 
     column_config = {
-        "name": st.column_config.TextColumn("Project Name"),
-        "url": st.column_config.LinkColumn("Source code", display_text="Open link"),
+        "name": st.column_config.TextColumn("Tool Name"),
+        "url": st.column_config.LinkColumn("Source Code", display_text="Open link"),
         **col_config,
     }
     # Display the table
-    if len(df_display) > 0:
+    if len(df_filtered) > 0:
         st.dataframe(
-            df_display,
+            df_filtered,
             use_container_width=True,
             hide_index=True,
             column_config=column_config,

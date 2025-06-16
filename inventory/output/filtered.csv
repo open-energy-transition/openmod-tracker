@@ -197,7 +197,7 @@ powersimulationsdynamics_jl,https://github.com/nrel-sienna/powersimulationsdynam
 powersystemdatamodel,https://github.com/ie3-institute/powersystemdatamodel,PowerSystemDataModel,Provides an extensive data model capable of modeling energy systems with high granularity e.g. for bottom-up simulations.,"lf-energy-landscape,opensustain-tech",
 powersystems_jl,https://github.com/nrel-sienna/powersystems.jl,PowerSystems.jl,Provides a rigorous data model using Julia structures to enable power systems analysis and modeling.,"lf-energy-landscape,openmod,opensustain-tech,pre-compiled",
 powersystemsinvestments_jl,https://github.com/nrel-sienna/powersystemsinvestments.jl,PowerSystemsInvestments.jl,,pre-compiled,
-pownet,https://github.com/critical-infrastructure-systems-lab/pownet,PowNet,A least-cost optimization model for simulating the Unit Commitment and Economic Dispatch of large-scale (regional to country) power systems.,"lf-energy-landscape,opensustain-tech,pre-compiled",
+pownet,https://github.com/critical-infrastructure-systems-lab/pownet,PowNet,A least-cost optimization model for simulating the Unit Commitment and Economic Dispatch of large-scale (regional to country) power systems.,"opensustain-tech,pre-compiled",
 powsybl,https://github.com/powsybl/powsybl-core,PowSyBl,"An open source framework written in Java, that makes it easy to write complex software for power systems simulations and analysis.",opensustain-tech,power-flow
 powsybl_open_load_flow,https://github.com/powsybl/powsybl-open-loadflow,PowSyBl Open Load Flow,"An open source library written in Java, that makes it easy to write complex software for power systems simulations and analysis.",opensustain-tech,
 pras,https://github.com/nrel/pras,PRAS,,pre-compiled,

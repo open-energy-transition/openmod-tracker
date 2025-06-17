@@ -1,4 +1,32 @@
 
 # pixi environments
 .pixi
+
+# OS-specific
+.DS_Store
+
+# Editors
+*~
+\#*\#
+**/.vscode
+
+# Byte-compiled files
+__pycache__
+*.pyc
+
+# Build output
+build
 *.egg-info
+
+# Reports
+.coverage
+.coverage.*
+.hypothesis/
+coverage.xml
+*.cover
+
+# Caches
+.*[cC]ache*
+
+# Project-specific
+.ipynb_checkpoints

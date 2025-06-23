@@ -11,6 +11,8 @@ from typing import overload
 
 import numpy as np
 import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
 import streamlit as st
 from st_keyup import st_keyup
 
@@ -283,6 +285,87 @@ def reset(button_press: bool = False) -> bool:
     return reset_mode
 
 
+@st.cache_data
+def _distribution_table(col: pd.Series, bins: int = 30) -> pd.DataFrame:
+    """Pre-compute histogram representing the distribution of values for each numeric column of the tool stats table.
+
+    This reduces the calculation complexity on re-running the streamlit app.
+
+    Args:
+        col (pd.Series): Numeric column of the tool stats table.
+        bins (int): Number of histogram bins to use in generating the tables. Defaults to 30.
+
+    Returns:
+        pd.DataFrame: x/y values of histogram describing the distribution of values in `col`.
+    """
+    y, x = np.histogram(col.dropna(), bins=bins)
+    # bin edges to midpoint
+    x = [(a + b) / 2 for a, b in zip(x, x[1:])]
+
+    return pd.DataFrame({"x": x, "y": y})
+
+
+def _plotly_plot(df: pd.DataFrame) -> go.Figure:
+    """Create a static plotly bar plot.
+
+    The fill colour of bars is dictated by the "color" column, with "in"/"out" values in the column coloured as red/grey, respectively.
+    The resulting figure will have no interactivity.
+    These plots are meant to be updated by user-induced changes that are passed by streamlit in the form of changes to the dataframe.
+
+    Args:
+        df (pd.DataFrame): Data to plot, with "x", "y", and "color" columns
+
+    Returns:
+        go.Figure: Plotly figure.
+    """
+    fig = px.bar(
+        df,
+        x="x",
+        y="y",
+        color="color",
+        color_discrete_map={"in": "#FF4B4B", "out": "#A3A8B8"},
+    )
+    fig.update_layout(
+        yaxis_title=None,
+        yaxis={"visible": False, "range": (0, df.y.max())},
+        xaxis={"visible": False},
+        margin={"b": 0, "t": 0},
+        bargap=0,
+        showlegend=False,
+        height=100,
+        title="",
+        plot_bgcolor="rgba(0,0,0,0)",
+        paper_bgcolor="rgba(0,0,0,0)",
+    )
+    fig.update_traces(hoverinfo="skip", hovertemplate=None)
+    return fig
+
+
+def dist_plot(col: pd.Series) -> None:
+    """Create a distribution plot in the sidebar.
+
+    Args:
+        col (pd.Series): Column of data linked to the distribution data table.
+    """
+    min_val, max_val = st.session_state.get(
+        f"slider_{col.name}", (col.min(), col.max())
+    )
+    df_dist = _distribution_table(col)
+    df_dist["color"] = [
+        "in" if ((i >= min_val) & (i <= max_val)) else "out" for i in df_dist.x
+    ]
+    fig = _plotly_plot(df_dist)
+
+    config = {"displayModeBar": False, "staticPlot": True}
+    st.sidebar.plotly_chart(
+        fig,
+        selection_mode=[],
+        use_container_width=True,
+        key=f"{col.name}_chart",
+        config=config,
+    )
+
+
 def preamble(latest_changes: str):
     """Text to show before the app table.
 
@@ -376,6 +459,7 @@ def main(df: pd.DataFrame):
     st.sidebar.header("Table filters", divider=True)
     df_filtered = df.copy()
     col_config = {}
+
     for col in COLUMN_NAME_MAPPING.values():
         # Show missing data info and checkbox for each column
         missing_count = df[col].isnull().sum()
@@ -405,7 +489,9 @@ def main(df: pd.DataFrame):
             col_config[col] = st.column_config.DateColumn(col, help=COLUMN_HELP[col])
 
         elif is_numeric_column(df[col]):
+            dist_plot(df[col])
             slider_range = slider(df[col].min(), df[col].max(), col, reset_mode)
+
             df_filtered = df_filtered[
                 numeric_range_filter(df_filtered[col], *slider_range)
             ]

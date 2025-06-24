@@ -4,9 +4,11 @@ import logging
 from collections.abc import Iterable
 from datetime import datetime
 from pathlib import Path
+from urllib.parse import urlparse
 
 import click
 import pandas as pd
+import requests
 import util
 import yaml
 from tqdm import tqdm
@@ -24,6 +26,7 @@ ENTRIES_TO_KEEP = [
     "updated_at",
     "commit_stats.dds",
     "commit_stats.total_committers",
+    "homepage",
 ]
 # HACK: the previous month's Anaconda data doesn't get compiled and uploaded to S3 until sometime into the following month.
 # Guessing 7 days in here but don't know for sure.
@@ -71,8 +74,8 @@ def get_ecosystems_entry_data(urls: Iterable) -> pd.DataFrame:
             repo_df = pd.DataFrame(repo_data_to_keep, index=[url])
 
         package_data = _get_package_data(url)
-
-        repo_dfs.append(repo_df.assign(**package_data))
+        docs_data = _get_docs_data(repo_data["html_url"])
+        repo_dfs.append(repo_df.assign(**package_data).assign(**docs_data))
 
     return pd.concat(repo_dfs)
 
@@ -160,6 +163,105 @@ def _get_package_data(url: str) -> dict:
         LOGGER.warning(f"Could not find ecosyste.ms package entry for {url}")
         filtered_package_data = {}
     return filtered_package_data
+
+
+def _get_docs_data(url: str) -> dict:
+    """Get most likely URLs for project documentation.
+
+    We make some strong assumptions here:
+    1. Projects are most likely hosted on readthedocs, github/gitlab pages, or a repo wiki.
+    2. If a project name is already taken on readthedocs, the most likely alternative is `<org>-<project>`, but could also be <project> underscores replaced with dashes or `<project>-documentation` (1 known instance).
+    3. Pages docs redirect to `stable` docs but may need directly requesting a `stable` page if not redirected automatically.
+
+    Still, we don't catch everything.
+    For instance, some projects have docs directories in their repositories but require manual builds or refer directly to the markdown files in that directory from their README.
+
+    Args:
+        url (str): project URL to act as the basis for docs searching
+
+    Returns:
+        dict: Dict mapping docs sources (rtd, pages, wiki) to links, if those links exist.
+    """
+    parsed = urlparse(url)
+    host, owner, repo = (
+        parsed.netloc,
+        parsed.path.strip("/").split("/")[0],
+        parsed.path.strip("/").split("/")[-1],
+    )
+    rtd_doc = f"http://{repo}.readthedocs.io"
+    rtd_dash_doc = f"http://{repo.replace('_', '-')}.readthedocs.io"
+    rtd_owner_doc = f"http://{owner}-{repo}.readthedocs.io"
+    rtd_docs_doc = f"http://{repo}-documentation.readthedocs.io"
+    rtd = (
+        rtd_doc
+        if _check_header(rtd_doc) and _verify_rtd(repo, url)
+        else rtd_dash_doc
+        if _check_header(rtd_dash_doc) and _verify_rtd(repo.replace("_", "-"), url)
+        else rtd_owner_doc
+        if _check_header(rtd_owner_doc) and _verify_rtd(f"{repo}-documentation", url)
+        else rtd_docs_doc
+        if _check_header(rtd_docs_doc) and _verify_rtd(f"{repo}-documentation", url)
+        else None
+    )
+
+    pages_doc = f"http://{owner}.{host.replace('.com', '.io')}/{repo}"
+    pages_doc_stable = f"http://{owner}.{host.replace('.com', '.io')}/{repo}/stable"
+    pages = (
+        pages_doc
+        if _check_header(pages_doc)
+        else pages_doc_stable
+        if _check_header(pages_doc_stable)
+        else None
+    )
+
+    bb_wiki_doc = f"{url}.git/wiki"
+    other_wiki_doc = f"{url}.wiki.git"
+    wiki = (
+        bb_wiki_doc
+        if (host == "bitbucket.org" and _check_header(bb_wiki_doc))
+        else other_wiki_doc
+        if _check_header(other_wiki_doc)
+        else None
+    )
+
+    docs = {"rtd": rtd, "pages": pages, "wiki": wiki}
+    if all(doc is None for doc in docs.values()):
+        LOGGER.warning(f"No documentation found for {url}")
+    return docs
+
+
+def _check_header(url: str) -> bool:
+    """Check that a `url` exists by querying the header (allowing for redirects)."""
+    try:
+        response = requests.head(url, allow_redirects=True)
+        return response.ok
+    except (requests.exceptions.HTTPError, requests.exceptions.ConnectionError):
+        return False
+
+
+def _verify_rtd(slug: str, url: str) -> bool:
+    """Verify that a successful readthedocs find actually refers to the Git repo we're expecting.
+
+    We achieve this by querying the RTD API for the found docs site and checking the git repo used to generate that site against the Git repo URL we believe it should be.
+
+    In some cases, the RTD Git URL is a redirect
+
+    Args:
+        slug (str): `readthedocs` slug, i.e. <slug>.readthedocs.io
+        url (str): Git repo URL to check.
+
+    Returns:
+        bool: True if RTD Git URL linked to the `slug` site matches the `url`, False otherwise.
+    """
+    response = util.get_url_json_content(
+        f"https://readthedocs.org/api/v3/projects/{slug.lower()}"
+    )
+    rtd_git_url = response.get("repository", {}).get("url", None)
+    if rtd_git_url is not None:
+        rtd_git_url_cleaned = requests.head(rtd_git_url, allow_redirects=True).url
+        return rtd_git_url_cleaned == url
+    else:
+        return False
 
 
 @click.command()

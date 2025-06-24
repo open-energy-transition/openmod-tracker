@@ -12,6 +12,8 @@ open_modeling_framework,"production-cost,power-flow",
 power_grid_model,"power-flow",
 powersimulations,"production-cost",
 powersimulationsdynamics,"power-flow",
+powersimulations_jl,"production-cost",
+powersimulationsdynamics_jl,"power-flow",
 powsybl,"power-flow",
 prep_shot,"capacity-expansion","possibly also production-cost"
 pypower,"power-flow",

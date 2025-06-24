@@ -5,10 +5,10 @@ License: MIT / CC0 1.0
 """
 
 from collections.abc import Callable, Iterable
-from datetime import datetime
 from pathlib import Path
 from typing import overload
 
+import git
 import numpy as np
 import pandas as pd
 import streamlit as st
@@ -80,8 +80,9 @@ def create_vis_table(tool_data_dir: Path) -> pd.DataFrame:
 
     for col, dtype_func in COLUMN_DTYPES.items():
         df[col] = dtype_func(df[col])
+    df["docs"] = df["pages"].fillna(df["rtd"]).fillna(df["wiki"]).fillna(df["homepage"])
     df_vis = df.rename(columns=COLUMN_NAME_MAPPING)[
-        ["name", "url"] + list(COLUMN_NAME_MAPPING.values())
+        ["name", "url", "docs"] + list(COLUMN_NAME_MAPPING.values())
     ]
     return df_vis
 
@@ -440,10 +441,14 @@ def main(df: pd.DataFrame):
 
     with col1:
         st.metric("Tools in view", f"{len(df_filtered)} / {len(df)}")
-
     column_config = {
         "name": st.column_config.TextColumn("Tool Name"),
-        "url": st.column_config.LinkColumn("Source Code", display_text="Open link"),
+        "url": st.column_config.LinkColumn(
+            "Source Code", display_text="Open link", help="Link to tool source code."
+        ),
+        "docs": st.column_config.LinkColumn(
+            "Docs", display_text="📖", help="Link to tool documentation."
+        ),
         **col_config,
     }
     # Display the table
@@ -476,9 +481,8 @@ if __name__ == "__main__":
     # define the path of the CSV file listing the packages to assess
     output_dir = Path(__file__).parent.parent / "inventory" / "output"
     df_vis = create_vis_table(output_dir)
-    latest_changes = datetime.fromtimestamp(
-        (output_dir / "stats.csv").stat().st_ctime
-    ).strftime("%Y-%m-%d")
+    g = git.cmd.Git()
+    latest_changes = g.log("-1", "--pretty=%cs", output_dir / "stats.csv")
 
     st.set_page_config(layout="wide")
     preamble(latest_changes)

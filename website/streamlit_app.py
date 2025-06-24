@@ -48,6 +48,7 @@ COLUMN_HELP: dict[str, str] = {
     "Dependents": "Packages dependent on this project (only available if the project is indexed on a package repository)",
     "Last Month Downloads": "Package installs last month (only available if the project is indexed on a package repository)",
     "Category": "Category of energy system planning / operation problem for which this tool could be used. This is based on [G-PST entries](https://api.github.com/repos/G-PST/opentools) and our own manual assignment applied to a subset of tools.",
+    "Docs": "Link to tool documentation.",
 }
 
 DEFAULT_ORDER = "Stars"
@@ -80,9 +81,9 @@ def create_vis_table(tool_data_dir: Path) -> pd.DataFrame:
 
     for col, dtype_func in COLUMN_DTYPES.items():
         df[col] = dtype_func(df[col])
-    df["docs"] = df["pages"].fillna(df["rtd"]).fillna(df["wiki"]).fillna(df["homepage"])
+    df["Docs"] = df["pages"].fillna(df["rtd"]).fillna(df["wiki"]).fillna(df["homepage"])
     df_vis = df.rename(columns=COLUMN_NAME_MAPPING)[
-        ["name", "url", "docs"] + list(COLUMN_NAME_MAPPING.values())
+        ["name", "url", "Docs"] + list(COLUMN_NAME_MAPPING.values())
     ]
     return df_vis
 
@@ -284,6 +285,34 @@ def reset(button_press: bool = False) -> bool:
     return reset_mode
 
 
+def header_and_missing_value_toggle(col: pd.Series, reset_mode: bool) -> bool:
+    """Create sidebar subheader and missing value toggle for a column.
+
+    Args:
+        col (pd.Series): Stats table column.
+        reset_mode (bool): Whether to reset multiselect to initial values.
+
+    Returns:
+        bool: True if there are NaN values and the missing value toggle is switched on.
+    """
+    missing_count = col.isnull().sum()
+    if missing_count > 0:
+        missing_text = f"🚫 Missing values: {missing_count}"
+        st.sidebar.subheader(f"{col.name} ({missing_text})", help=COLUMN_HELP[col.name])
+        exclude_nan = st.sidebar.toggle(
+            f"Exclude missing values for {col.name}",
+            value=False
+            if reset_mode
+            else st.session_state.get(f"exclude_nan_{col.name}", False),
+            key=f"exclude_nan_{col.name}",
+        )
+    else:
+        missing_text = "✅ No missing values"
+        st.sidebar.subheader(f"{col.name} ({missing_text})", help=COLUMN_HELP[col.name])
+        exclude_nan = False
+    return exclude_nan
+
+
 def preamble(latest_changes: str):
     """Text to show before the app table.
 
@@ -377,24 +406,17 @@ def main(df: pd.DataFrame):
     st.sidebar.header("Table filters", divider=True)
     df_filtered = df.copy()
     col_config = {}
+
+    # Show missing data info and toggle for docs column
+    exclude_nan = header_and_missing_value_toggle(df["Docs"], reset_mode)
+    if exclude_nan:
+        df_filtered = df_filtered[nan_filter(df_filtered["Docs"])]
+
     for col in COLUMN_NAME_MAPPING.values():
-        # Show missing data info and checkbox for each column
-        missing_count = df[col].isnull().sum()
-        if missing_count > 0:
-            missing_text = f"🚫 Missing values: {missing_count}"
-            st.sidebar.subheader(f"{col} ({missing_text})", help=COLUMN_HELP[col])
-            exclude_nan = st.sidebar.checkbox(
-                f"Exclude missing values for {col}",
-                value=False
-                if reset_mode
-                else st.session_state.get(f"exclude_nan_{col}", False),
-                key=f"exclude_nan_{col}",
-            )
-            if exclude_nan:
-                df_filtered = df_filtered[nan_filter(df_filtered[col])]
-        else:
-            missing_text = "✅ No missing values"
-            st.sidebar.subheader(f"{col} ({missing_text})", help=COLUMN_HELP[col])
+        # Show missing data info and toggle for each column
+        exclude_nan = header_and_missing_value_toggle(df[col], reset_mode)
+        if exclude_nan:
+            df_filtered = df_filtered[nan_filter(df_filtered[col])]
 
         if is_datetime_column(df[col]):
             slider_range = slider(
@@ -446,8 +468,8 @@ def main(df: pd.DataFrame):
         "url": st.column_config.LinkColumn(
             "Source Code", display_text="Open link", help="Link to tool source code."
         ),
-        "docs": st.column_config.LinkColumn(
-            "Docs", display_text="📖", help="Link to tool documentation."
+        "Docs": st.column_config.LinkColumn(
+            "Docs", display_text="📖", help=COLUMN_HELP["Docs"]
         ),
         **col_config,
     }

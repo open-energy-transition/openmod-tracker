@@ -4,13 +4,14 @@
 License: MIT / CC0 1.0
 """
 
+import datetime
 from collections.abc import Callable, Iterable
-from datetime import datetime
 from pathlib import Path
-from typing import overload
 
 import numpy as np
 import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
 import streamlit as st
 from st_keyup import st_keyup
 
@@ -135,7 +136,7 @@ def numeric_range_filter(
 
 
 def date_range_filter(
-    col: pd.Series, start_date: np.datetime64, end_date: np.datetime64
+    col: pd.Series, start_date: datetime.date, end_date: datetime.date
 ) -> pd.Series:
     """Filter datetime column.
 
@@ -143,8 +144,8 @@ def date_range_filter(
 
     Args:
         col (pd.Series): Column to filter.
-        start_date (np.datetime64): Lower datetime bound (inclusive).
-        end_date (np.datetime64): Upper datetime bound (inclusive).
+        start_date (datetime.date): Lower datetime bound (inclusive).
+        end_date (datetime.date): Upper datetime bound (inclusive).
 
     Returns:
         pd.Series: Filtered `col`.
@@ -190,46 +191,42 @@ def list_filter(col: pd.Series, to_filter: Iterable) -> pd.Series:
         )
 
 
-@overload
 def slider(
-    min_value: float, max_value: float, col: str, reset_mode: bool
-) -> tuple[float, float]: ...
-@overload
-def slider(
-    min_value: np.datetime64, max_value: np.datetime64, col: str, reset_mode: bool
-) -> tuple[np.datetime64, np.datetime64]: ...
-def slider(
-    min_value: float | np.datetime64,
-    max_value: float | np.datetime64,
-    col: str,
-    reset_mode: bool,
-) -> tuple[float | np.datetime64, float | np.datetime64]:
+    col: pd.Series, reset_mode: bool
+) -> tuple[float, float] | tuple[datetime.date, datetime.date]:
     """Generate a slider for numeric / datetime table data.
 
     Args:
-        min_value (float | np.datetime64): Minimum slider value.
-        max_value (float | np.datetime64): Maximum slider value.
-        col (str): Column name.
+        col (pd.Series): Data table column.
         reset_mode (bool): Whether to reset slider to initial values.
 
     Returns:
-        tuple[float | np.datetime64, float | np.datetime64]:
+        tuple[float, float] | tuple[datetime.date, datetime.date]:
             Min/max values given by slider to use in data table filtering.
             Will be in datetime format if that was the format of the inputs, otherwise floats.
     """
-    default_range = (min_value, max_value)
+    if col.dtype.kind == "M":
+        default_range = (col.min().date(), col.max().date())
+    else:
+        default_range = (col.min(), col.max())
     current_range = (
         default_range
         if reset_mode
-        else st.session_state.get(f"slider_{col}", default_range)
+        else st.session_state.get(f"slider_{col.name}", default_range)
     )
+    if col.dtype.kind == "M":
+        slider_range = tuple(pd.Timestamp(i).timestamp() for i in current_range)
+        col = col.apply(lambda x: x.timestamp())
+    else:
+        slider_range = current_range
 
+    dist_plot(col, slider_range)
     selected_range = st.sidebar.slider(
-        f"Range for {col}",
-        min_value=min_value,
-        max_value=max_value,
+        f"Range for {col.name}",
+        min_value=default_range[0],
+        max_value=default_range[1],
         value=current_range,
-        key=f"slider_{col}",
+        key=f"slider_{col.name}",
     )
 
     return selected_range
@@ -281,6 +278,86 @@ def reset(button_press: bool = False) -> bool:
         # Clear the reset flag
         st.session_state["reset_filters"] = False
     return reset_mode
+
+
+@st.cache_data
+def _distribution_table(col: pd.Series, bins: int = 30) -> pd.DataFrame:
+    """Pre-compute histogram representing the distribution of values for each numeric column of the tool stats table.
+
+    This reduces the calculation complexity on re-running the streamlit app.
+
+    Args:
+        col (pd.Series): Numeric column of the tool stats table.
+        bins (int): Number of histogram bins to use in generating the tables. Defaults to 30.
+
+    Returns:
+        pd.DataFrame: x/y values of histogram describing the distribution of values in `col`.
+    """
+    y, x = np.histogram(col.dropna(), bins=bins)
+    # bin edges to midpoint
+    x = [(a + b) / 2 for a, b in zip(x, x[1:])]
+
+    return pd.DataFrame({"x": x, "y": y})
+
+
+def _plotly_plot(df: pd.DataFrame) -> go.Figure:
+    """Create a static plotly bar plot.
+
+    The fill colour of bars is dictated by the "color" column, with "in"/"out" values in the column coloured as red/grey, respectively.
+    The resulting figure will have no interactivity.
+    These plots are meant to be updated by user-induced changes that are passed by streamlit in the form of changes to the dataframe.
+
+    Args:
+        df (pd.DataFrame): Data to plot, with "x", "y", and "color" columns
+
+    Returns:
+        go.Figure: Plotly figure.
+    """
+    fig = px.bar(
+        df,
+        x="x",
+        y="y",
+        color="color",
+        color_discrete_map={"in": "#FF4B4B", "out": "#A3A8B8"},
+    )
+    fig.update_layout(
+        yaxis_title=None,
+        yaxis={"visible": False, "range": (0, df.y.max())},
+        xaxis={"visible": False},
+        margin={"b": 0, "t": 0},
+        bargap=0,
+        showlegend=False,
+        height=100,
+        title="",
+        plot_bgcolor="rgba(0,0,0,0)",
+        paper_bgcolor="rgba(0,0,0,0)",
+    )
+    fig.update_traces(hoverinfo="skip", hovertemplate=None)
+    return fig
+
+
+def dist_plot(col: pd.Series, slider_range: tuple[float, float]) -> None:
+    """Create a distribution plot in the sidebar.
+
+    Args:
+        col (pd.Series): Column of data linked to the distribution data table.
+        slider_range (tuple[float, float]): Min/max defined by the user-defined slider values.
+    """
+    df_dist = _distribution_table(col)
+    df_dist["color"] = [
+        "in" if ((i >= slider_range[0]) & (i <= slider_range[1])) else "out"
+        for i in df_dist.x
+    ]
+    fig = _plotly_plot(df_dist)
+
+    config = {"displayModeBar": False, "staticPlot": True}
+    st.sidebar.plotly_chart(
+        fig,
+        selection_mode=[],
+        use_container_width=True,
+        key=f"{col.name}_chart",
+        config=config,
+    )
 
 
 def preamble(latest_changes: str):
@@ -376,6 +453,7 @@ def main(df: pd.DataFrame):
     st.sidebar.header("Table filters", divider=True)
     df_filtered = df.copy()
     col_config = {}
+
     for col in COLUMN_NAME_MAPPING.values():
         # Show missing data info and checkbox for each column
         missing_count = df[col].isnull().sum()
@@ -396,16 +474,15 @@ def main(df: pd.DataFrame):
             st.sidebar.subheader(f"{col} ({missing_text})", help=COLUMN_HELP[col])
 
         if is_datetime_column(df[col]):
-            slider_range = slider(
-                df[col].min().date(), df[col].max().date(), col, reset_mode
-            )
+            slider_range = slider(df[col], reset_mode)
             df_filtered = df_filtered[
                 date_range_filter(df_filtered[col], *slider_range)
             ]
             col_config[col] = st.column_config.DateColumn(col, help=COLUMN_HELP[col])
 
         elif is_numeric_column(df[col]):
-            slider_range = slider(df[col].min(), df[col].max(), col, reset_mode)
+            slider_range = slider(df[col], reset_mode)
+
             df_filtered = df_filtered[
                 numeric_range_filter(df_filtered[col], *slider_range)
             ]
@@ -476,7 +553,7 @@ if __name__ == "__main__":
     # define the path of the CSV file listing the packages to assess
     output_dir = Path(__file__).parent.parent / "inventory" / "output"
     df_vis = create_vis_table(output_dir)
-    latest_changes = datetime.fromtimestamp(
+    latest_changes = datetime.datetime.fromtimestamp(
         (output_dir / "stats.csv").stat().st_ctime
     ).strftime("%Y-%m-%d")
 

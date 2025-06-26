@@ -41,6 +41,7 @@ gitpython = ">=3.1.44,<4"
 [feature.app.dependencies]
 streamlit = "*"
 streamlit-keyup = ">=0.3.0,<0.4"
+plotly = ">=6.1.2,<7"
 
 
 [feature.app.tasks]

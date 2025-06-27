@@ -7,6 +7,7 @@ License: MIT / CC0 1.0
 import datetime
 from collections.abc import Callable, Iterable
 from pathlib import Path
+from typing import Literal
 
 import git
 import numpy as np
@@ -51,6 +52,7 @@ COLUMN_HELP: dict[str, str] = {
     "Last Month Downloads": "Package installs last month (only available if the project is indexed on a package repository)",
     "Category": "Category of energy system planning / operation problem for which this tool could be used. This is based on [G-PST entries](https://api.github.com/repos/G-PST/opentools) and our own manual assignment applied to a subset of tools.",
     "Docs": "Link to tool documentation.",
+    "Score": "The tool score is a weighted average of all numeric metrics, after scaling those metrics to similar ranges.",
 }
 
 DEFAULT_ORDER = "Stars"
@@ -79,13 +81,16 @@ def create_vis_table(tool_data_dir: Path) -> pd.DataFrame:
     # This occurs because the repository language is based on number of lines and Jupyter Notebooks have _a lot_ of lines.
     df["language"] = df.language.replace({"Jupyter Notebook": "Python"})
     df = df[~df["language"].isin(NOT_OPEN_SOURCE_LANGUAGES)]
-    df["name"] = df.name.apply(lambda x: x.split(",")[0])
+    df["name"] = df.url + "#" + df.name.apply(lambda x: x.split(",")[0])
 
     for col, dtype_func in COLUMN_DTYPES.items():
         df[col] = dtype_func(df[col])
     df["Docs"] = df["pages"].fillna(df["rtd"]).fillna(df["wiki"]).fillna(df["homepage"])
+    df["Score"] = pd.Series(
+        np.random.choice([0, 100], size=len(df.index)), index=df.index
+    )
     df_vis = df.rename(columns=COLUMN_NAME_MAPPING)[
-        ["name", "url", "Docs"] + list(COLUMN_NAME_MAPPING.values())
+        ["name", "Docs", "Score"] + list(COLUMN_NAME_MAPPING.values())
     ]
     return df_vis
 
@@ -194,14 +199,85 @@ def list_filter(col: pd.Series, to_filter: Iterable) -> pd.Series:
         )
 
 
+def add_scoring(cols: list[str]) -> float:
+    """Create inputs for defining the score weighting for a given column and the metric scaling method.
+
+    Args:
+        cols (list[str]): List
+        score_col (st.container): Streamlit column in which to add the number input.
+
+    Returns:
+        float: Column score weighting
+    """
+    selectbox_cols = st.columns(len(cols))
+    selectbox_cols[0].selectbox(
+        "Metric scaling method",
+        ("min-max", "rank"),
+        help="""Select the method by which metrics should be scaled to bring them to a similar range.
+    `min-max` uses [min-max normalisation](https://en.wikipedia.org/wiki/Feature_scaling#Rescaling_(min-max_normalization)).
+    `rank` uses the absolute rank of a tool for each metric.""",
+        key="scoring_method",
+    )
+    score_cols = st.columns(len(cols))
+    for i, score_col in enumerate(score_cols):
+        col_name = cols[i]
+        number = score_col.number_input(
+            label=col_name,
+            min_value=0.0,
+            max_value=1.0,
+            value=0.5,
+            step=0.1,
+            format="%0.01f",
+            key=f"scoring_{col_name}",
+        )
+
+    return number
+
+
+def update_score_col(df: pd.DataFrame) -> pd.Series:
+    """Generate a new set of scores by combining all columns of the given dataframe.
+
+    Args:
+        df (pd.DataFrame): Tool metric table containing only columns relevant to scoring.
+
+    Returns:
+        pd.Series: Tool score.
+    """
+    # Add tool score by combining metrics with the provided weightings
+    scores = {col: st.session_state.get(f"scoring_{col}", 0.5) for col in df.columns}
+    scoring_method = st.session_state.get("scoring_method", "min-max")
+    normalised_data = normalise(df, scoring_method)
+    score = normalised_data.mul(scores).div(sum(scores.values())).sum(axis=1).mul(100)
+    return score
+
+
+def normalise(
+    df: pd.DataFrame, scaling_method: Literal["min-max", "rank"]
+) -> pd.DataFrame:
+    """Scale each column of the given dataframe relative to data in that column.
+
+    Args:
+        df (pd.DataFrame): Tool metric table. All columns must be numeric.
+        scaling_method (Literal[min-max, rank]): Tool scaling method to use
+
+    Returns:
+        pd.DataFrame: `df` with each column scaled.
+    """
+    if scaling_method == "min-max":
+        return (df - df.min()) / (df.max() - df.min())
+    elif scaling_method == "rank":
+        return df.rank() / df.rank().max()
+
+
 def slider(
-    col: pd.Series, reset_mode: bool
+    col: pd.Series, reset_mode: bool, plot_dist: bool = True
 ) -> tuple[float, float] | tuple[datetime.date, datetime.date]:
     """Generate a slider for numeric / datetime table data.
 
     Args:
         col (pd.Series): Data table column.
         reset_mode (bool): Whether to reset slider to initial values.
+        plot_dist (bool): If True, add a distribution plot of the column's data above the slider.
 
     Returns:
         tuple[float, float] | tuple[datetime.date, datetime.date]:
@@ -223,7 +299,8 @@ def slider(
     else:
         slider_range = current_range
 
-    dist_plot(col, slider_range)
+    if plot_dist:
+        dist_plot(col, slider_range)
     selected_range = st.sidebar.slider(
         f"Range for {col.name}",
         min_value=default_range[0],
@@ -482,13 +559,17 @@ def main(df: pd.DataFrame):
     """
     reset_mode = reset()
     st.sidebar.header("Table filters", divider=True)
-    df_filtered = df.copy()
+    df_filtered = df
     col_config = {}
-
+    numeric_cols = []
     # Show missing data info and toggle for docs column
     exclude_nan = header_and_missing_value_toggle(df["Docs"], reset_mode)
     if exclude_nan:
         df_filtered = df_filtered[nan_filter(df_filtered["Docs"])]
+
+    # Add score filtering first.
+    st.sidebar.subheader("Score", help=COLUMN_HELP["Score"])
+    score_slider_range = slider(df["Score"], reset_mode, plot_dist=False)
 
     for col in COLUMN_NAME_MAPPING.values():
         # Show missing data info and toggle for each column
@@ -509,6 +590,7 @@ def main(df: pd.DataFrame):
             df_filtered = df_filtered[
                 numeric_range_filter(df_filtered[col], *slider_range)
             ]
+            numeric_cols.append(col)
             col_config[col] = st.column_config.NumberColumn(col, help=COLUMN_HELP[col])
 
         elif is_categorical_column(df[col]):
@@ -527,6 +609,12 @@ def main(df: pd.DataFrame):
             df_filtered = df_filtered[list_filter(df_filtered[col], selected_values)]
             col_config[col] = st.column_config.ListColumn(col, help=COLUMN_HELP[col])
 
+    # Add tool score by combining metrics with the provided weightings
+    df_filtered["Score"] = update_score_col(df_filtered[numeric_cols])
+    df_filtered = df_filtered[
+        numeric_range_filter(df_filtered["Score"], *score_slider_range)
+    ]
+
     # Sort the table based on default order
     df_filtered = df_filtered.sort_values(DEFAULT_ORDER, ascending=False)
 
@@ -541,12 +629,20 @@ def main(df: pd.DataFrame):
     with col1:
         st.metric("Tools in view", f"{len(df_filtered)} / {len(df)}")
     column_config = {
-        "name": st.column_config.TextColumn("Tool Name"),
-        "url": st.column_config.LinkColumn(
-            "Source Code", display_text="Open link", help="Link to tool source code."
+        "name": st.column_config.LinkColumn(
+            "Tool Name",
+            help="Click on the tool name to navigate to its source code repository.",
+            display_text=".*#(.*)",
         ),
         "Docs": st.column_config.LinkColumn(
             "Docs", display_text="📖", help=COLUMN_HELP["Docs"]
+        ),
+        "Score": st.column_config.ProgressColumn(
+            "Score",
+            min_value=0,
+            max_value=100,
+            format="%.0f%%",
+            help=COLUMN_HELP["Score"],
         ),
         **col_config,
     }
@@ -557,20 +653,17 @@ def main(df: pd.DataFrame):
             use_container_width=True,
             hide_index=True,
             column_config=column_config,
-        )
-
-        # Download button for filtered data
-        csv = df_filtered.to_csv(index=False)
-        st.download_button(
-            label="📥 Download filtered data as CSV",
-            data=csv,
-            file_name="filtered_data.csv",
-            mime="text/csv",
+            column_order=["name", "url", "Docs", "Score", *col_config.keys()],
         )
     else:
         st.warning(
             "No data matches the current filter criteria. Try adjusting your filters."
         )
+    st.subheader("📊 Adjust tool scoring")
+    st.markdown(
+        "You can create your own tool scores by adjusting the weights applied to each numeric metric."
+    )
+    add_scoring(numeric_cols)
 
     reset_button = st.sidebar.button("🔄 Reset All Filters")
     reset_mode = reset(reset_button)

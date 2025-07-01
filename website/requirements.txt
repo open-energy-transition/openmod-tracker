@@ -1,3 +1,4 @@
 streamlit
 streamlit-keyup
 plotly>=6.1.2
+GitPython>=3.1.44

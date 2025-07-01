@@ -22,7 +22,7 @@ jobs:
 
       - id: automerge
         name: automerge
-        run:
+        run: |
           gh pr review --approve ${{ github.event.pull_request.number }}
           gh pr merge --admin ${{ github.event.pull_request.number }}
         env:

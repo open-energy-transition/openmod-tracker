@@ -1,7 +1,7 @@
 
 # Smarter Investments in Open Energy Planning: How Data Can Guide Decision-Makers
 
-*Repository for analyzing Energy System Modelling (ESM) tools using Git data and other publicly available sources (e.g., ecosyste.ms and opensustain.tech). It is online at [Streamlit](https://open-esm-analysis.streamlit.app/).*
+*Repository for analyzing ecosystem health and adoption of Energy System Modelling (ESM) tools using Git data and other publicly available sources (e.g., ecosyste.ms and opensustain.tech). It is online at [Streamlit](https://open-esm-analysis.streamlit.app/).*
 
 ## Features
 

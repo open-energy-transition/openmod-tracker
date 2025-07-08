@@ -28,17 +28,21 @@ ENTRIES_TO_KEEP = [
     "commit_stats.total_committers",
     "homepage",
 ]
-# HACK: the previous month's Anaconda data doesn't get compiled and uploaded to S3 until sometime into the following month.
-# Guessing 7 days in here but don't know for sure.
-if NOW.day < 7:
-    LAST_MONTH = NOW.month - 2
-else:
-    LAST_MONTH = NOW.month - 1
 
-CONDA_DOWNLOAD_DF = pd.read_parquet(
-    f"s3://anaconda-package-data/conda/monthly/{NOW.year}/{NOW.year}-{LAST_MONTH:02d}.parquet"
-)
+LAST_MONTH = NOW.month - 1
+try:
+    # The previous month's Anaconda data doesn't get compiled and uploaded to S3 until sometime into the following month.
+    # If the file isn't found, we take the month before that
+    CONDA_DOWNLOAD_DF = pd.read_parquet(
+        f"s3://anaconda-package-data/conda/monthly/{NOW.year}/{NOW.year}-{LAST_MONTH:02d}.parquet"
+    )
+except FileNotFoundError:
+    CONDA_DOWNLOAD_DF = pd.read_parquet(
+        f"s3://anaconda-package-data/conda/monthly/{NOW.year}/{NOW.year}-{LAST_MONTH - 1:02d}.parquet"
+    )
+
 JULIA_STATS_API = "https://juliapkgstats.com/api/v1/monthly_downloads/"
+NOT_OPEN_SOURCE_LANGUAGES = ["GAMS", "MATLAB", "JetBrains MPS", "PowerBuilder", "AMPL"]
 
 
 def get_ecosystems_entry_data(urls: Iterable) -> pd.DataFrame:
@@ -72,6 +76,11 @@ def get_ecosystems_entry_data(urls: Iterable) -> pd.DataFrame:
                     val = repo_data[entry]
                 repo_data_to_keep[entry] = val
             repo_df = pd.DataFrame(repo_data_to_keep, index=[url])
+            if repo_df["language"].iloc[0] in NOT_OPEN_SOURCE_LANGUAGES:
+                LOGGER.warning(
+                    f"Skipping {url} as it is not written in an open source language: {repo_df['language'].iloc[0]}"
+                )
+                continue
 
         package_data = _get_package_data(url)
         docs_data = _get_docs_data(repo_data["html_url"])

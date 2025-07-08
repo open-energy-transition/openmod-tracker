@@ -1,32 +1,32 @@
 id,name,description,url,source,category
-adopt_net0,AdOpT-NET0,,https://github.com/uu-er/adopt-net0,pre-compiled,
 adopt_net0,AdOpT-NET0,AdOpT-NET0 is a Python Library for bottom-up multi energy system modelling. It can model conversion technologies and networks for any carrier and optimize the design and operation of your energy system.,https://github.com/uu-er/adopt-net0,openmod,
+adopt_net0,AdOpT-NET0,,https://github.com/uu-er/adopt-net0,pre-compiled,
 amiris,AMIRIS,,https://gitlab.com/dlr-ve/esy/amiris/amiris,lf-energy-landscape,
 amiris,AMIRIS,"Agent-based electricty market model for analysing questions on future energy markets, their market design, and energy-related policy instruments",https://gitlab.com/dlr-ve/esy/amiris/amiris,openmod,
 andes,ANDES,Power system transient dynamics simulation with symbolic modeling and numerical analysis.,https://github.com/curent/andes,lf-energy-landscape,power-flow
 andes,ANDES,Power system transient dynamics simulation with symbolic modeling and numerical analysis.,https://github.com/curent/andes,opensustain-tech,power-flow
 antares,Antares,Power system simulator for quantifying the adequacy or the economic performance of interconnected energy systems,,g-pst,production-cost
-antares_simulator,Antares_Simulator,,https://github.com/antaressimulatorteam/antares_simulator,pre-compiled,
+antares_simulator,Antares Simulator,"An Open Source power system simulator to quantify the adequacy or the economic performance of interconnected energy systems, at short or remote time horizons.",https://github.com/antaressimulatorteam/antares_simulator,lf-energy-landscape,
 antares_simulator,Antares Simulator,"An Open Source power system simulator to quantify the adequacy or the economic performance of interconnected energy systems, at short or remote time horizons.",https://github.com/antaressimulatorteam/antares_simulator,opensustain-tech,
 antares_simulator,Antares-Simulator,"Antares-Simulator is an open-source tool for the modelling, the simulation and the planning of multi-energy systems. It is a sequential Monte-Carlo simulator designed for short to long term studies of large interconnected energy grids. It simulates the economic behavior of the whole transmission-generation system, throughout the year and with a resolution of one hour.he year and with a resolution of one hour.",https://antares-simulator.org/pages/antares-simulator/6,openmod,
-antares_simulator,Antares Simulator,"An Open Source power system simulator to quantify the adequacy or the economic performance of interconnected energy systems, at short or remote time horizons.",https://github.com/antaressimulatorteam/antares_simulator,lf-energy-landscape,
-antaresread,antaresRead,"Import, manipulate and explore the results of an Antares simulation.",https://github.com/rte-antares-rpackage/antaresread,opensustain-tech,
+antares_simulator,Antares_Simulator,,https://github.com/antaressimulatorteam/antares_simulator,pre-compiled,
 antaresread,antaresRead,"Import, manipulate and explore the results of an Antares simulation.",https://github.com/rte-antares-rpackage/antaresread,lf-energy-landscape,
+antaresread,antaresRead,"Import, manipulate and explore the results of an Antares simulation.",https://github.com/rte-antares-rpackage/antaresread,opensustain-tech,
 antaresviz,antaresViz,"Visualize the results of Antares, an Open Source power system simulator meant to be used by anybody placing value in quantifying the adequacy or the economic performance of interconnected energy systems, at short or remote time horizons.",https://github.com/rte-antares-rpackage/antaresviz,lf-energy-landscape,
 antaresviz,antaresViz,"Visualize the results of Antares, an Open Source power system simulator meant to be used by anybody placing value in quantifying the adequacy or the economic performance of interconnected energy systems, at short or remote time horizons.",https://github.com/rte-antares-rpackage/antaresviz,opensustain-tech,
 anymod,AnyMOD,AnyMOD is a framework to create large scale energy system models with multiple periods of capacity expansion. It pursues a graph-based approach that was developed to address the challenges in modelling high-levels of intermittent generation and sectoral integration.ttent generation and sectoral integration.,,openmod,
+anymod_jl,AnyMOD.jl,Creating large scale energy system models with multiple periods of capacity expansion formulated as linear optimization problems.,https://github.com/leonardgoeke/anymod.jl,lf-energy-landscape,
 anymod_jl,AnyMOD.jl,Creating large scale energy system models with multiple periods of capacity expansion formulated as linear optimization problems.,https://github.com/leonardgoeke/anymod.jl,opensustain-tech,
 anymod_jl,AnyMOD.jl,,https://github.com/leonardgoeke/anymod.jl,pre-compiled,
-anymod_jl,AnyMOD.jl,Creating large scale energy system models with multiple periods of capacity expansion formulated as linear optimization problems.,https://github.com/leonardgoeke/anymod.jl,lf-energy-landscape,
 aristopy,aristopy,,https://git.tu-berlin.de/etus/public/aristopy,pre-compiled,
 asam,ASAM,Agent-based model to simulate processes of ancillary services acquisition and electricity markets. ASAM uses the agent-based model framework Mesa and the toolbox for power system analyses PyPSA.,https://github.com/ancillaryservicesacquisitionmodel/asam,openmod,
 "asset_level_transition_risk_in_the_global_coal,_oil,_and_gas_supply_chains","Asset-level Transition Risk in the Global Coal, Oil, and Gas Supply Chains","The global fossil fuel supply chain, mapped at the asset-level.",https://github.com/lkruitwagen/global-fossil-fuel-supply-chain,lf-energy-landscape,
 assume,ASSUME,"ASSUME is an open-source toolbox for agent-based simulations of European electricity markets, with a primary focus on the German market setup and Reinforcement Learning. Developed as an open-source model, its primary objectives are to ensure usability and customizability for a wide range of users and use cases in the energy system modeling community.s in the energy system modeling community.",https://github.com/assume-framework/assume,openmod,
+backbone,Backbone,"Backbone represents a highly adaptable energy systems modelling framework, which can be utilized to create models for studying the design and operation of energy systems. The model can be solved as an investment model (single or multi-period, myopic, or full foresight) or as a rolling production cost / unit commitment model to simulate operations. It includes a wide range of features and constraints, such as stochastic parameters, multiple reserve products, unit start-ups (also with trajectories), energy storage units, controlled and uncontrolled energy transfers, DC power flow and can be used to represent any energy sector at a discretionary level of detail. It allows the modeler to change the temporal resolution of the model between time steps. — and this enables, for example, to use a coarser time resolution further ahead in the time horizon of the model.",https://gitlab.vtt.fi/backbone/backbone,g-pst,"capacity-expansion,production-cost"
+backbone,Backbone,A generic energy network optimization tool written in GAMS.,https://gitlab.vtt.fi/backbone/backbone,lf-energy-landscape,
 backbone,Backbone,A generic energy network optimization tool written in GAMS.,https://gitlab.vtt.fi/backbone/backbone,opensustain-tech,
 backbone,Backbone,"Backbone represents a highly adaptable energy systems modelling framework, which can be utilised to create models for studying the design and operation of energy systems, both from investment planning and scheduling perspectives. It includes a wide range of features and constraints, such as stochastic parameters, multiple reserve products, energy storage units, controlled and uncontrolled energy transfers, and, most significantly, multiple energy sectors. The formulation is based on mixed-integer programming and takes into account unit commitment decisions for power plants and other energy conversion facilities. Both high-level large-scale systems and fully detailed smaller-scale systems can be appropriately modelled. The framework has been implemented as the open-source Backbone modelling tool using General Algebraic Modeling System (GAMS). General Algebraic Modeling System (GAMS).",https://gitlab.vtt.fi/backbone/backbone,openmod,
-backbone,Backbone,A generic energy network optimization tool written in GAMS.,https://gitlab.vtt.fi/backbone/backbone,lf-energy-landscape,
 backbone,backbone,,https://gitlab.vtt.fi/backbone/backbone,pre-compiled,
-backbone,Backbone,"Backbone represents a highly adaptable energy systems modelling framework, which can be utilized to create models for studying the design and operation of energy systems. The model can be solved as an investment model (single or multi-period, myopic, or full foresight) or as a rolling production cost / unit commitment model to simulate operations. It includes a wide range of features and constraints, such as stochastic parameters, multiple reserve products, unit start-ups (also with trajectories), energy storage units, controlled and uncontrolled energy transfers, DC power flow and can be used to represent any energy sector at a discretionary level of detail. It allows the modeler to change the temporal resolution of the model between time steps. — and this enables, for example, to use a coarser time resolution further ahead in the time horizon of the model.",https://gitlab.vtt.fi/backbone/backbone,g-pst,"capacity-expansion,production-cost"
 balmorel,Balmorel,A partial equilibrium model for analyzing the electricity and combined heat and power sectors in an international perspective.,https://github.com/balmorelcommunity/balmorel,lf-energy-landscape,
 balmorel,Balmorel,"A bottom-up partial equilibrium energy system model that has traditionally been applied to investigate decarbonisation pathways of sector-coupled energy systems, infrastructure, renewable fuel production and more.",https://github.com/balmorelcommunity/balmorel,opensustain-tech,
 balmorel,Balmorel,"Balmorel is a deterministic, partial equilibrium model for optimizing an energy system. The optimization maximizes the social welfare of the energy system. The model optimizes both investments and operational dispatch under physical and regulatory constraints.under physical and regulatory constraints.",https://github.com/balmorelcommunity/balmorel,openmod,
@@ -34,20 +34,20 @@ balmorel,Balmorel,,https://github.com/balmorelcommunity/balmorel,pre-compiled,
 bewhere_model,BeWhere-model,,https://github.com/caaficus/bewhere-model,pre-compiled,
 bioindustrial_park,Bioindustrial-Park,,https://github.com/biosteamdevelopmentgroup/bioindustrial-park,pre-compiled,
 biosteam,biosteam,,https://github.com/biosteamdevelopmentgroup/biosteam,pre-compiled,
-bluesky,BlueSky,,https://github.com/eiagov/bluesky,pre-compiled,
 bluesky,BlueSky,"An EIA initiative to develop an open source, next generation energy systems model, which will eventually be used to produce the Annual Energy Outlook (AEO) and International Energy Outlook (IEO).",https://github.com/eiagov/bluesky,opensustain-tech,
+bluesky,BlueSky,,https://github.com/eiagov/bluesky,pre-compiled,
 breakthrough_energy_model,Breakthrough Energy Model,"The Breakthrough Energy Model is a production cost model with capacity expansion algorithms and heuristics, originally designed to explore the generation and transmission expansion needs to meet U.S. states’ clean energy goals. The data management occurs within Python, the DCOPF optimization problem is created via Julia, and the preferred solver currently being used is Gurobi, while it is flexible to choose various free or proprietary solvers.  A fully integrated capacity expansion model is in development.apacity expansion model is in development.",https://github.com/breakthrough-energy,openmod,
 bridges,BRIDGES,,https://github.com/stanford-eao/bridges,pre-compiled,
+calliope,Calliope,Energy system modelling framework,https://github.com/calliope-project/calliope,g-pst,"capacity-expansion,production-cost"
+calliope,Calliope,"A framework to develop energy system models, with a focus on flexibility, high spatial and temporal resolution, the ability to execute many runs based on the same base model, and a clear separation of framework and model.",https://github.com/calliope-project/calliope,lf-energy-landscape,
 calliope,Calliope,"A framework to develop energy system models, with a focus on flexibility, high spatial and temporal resolution, the ability to execute many runs based on the same base model, and a clear separation of framework and model.",https://github.com/calliope-project/calliope,opensustain-tech,
 calliope,Calliope,"Calliope is a framework to develop energy system models using a modern and open source Python-based toolchain. It is under active development and freely available under the Apache 2.0 license.
 Feedback and contributions are very welcome!",https://github.com/calliope-project/calliope,openmod,
 calliope,calliope,,https://github.com/calliope-project/calliope,pre-compiled,
-calliope,Calliope,"A framework to develop energy system models, with a focus on flexibility, high spatial and temporal resolution, the ability to execute many runs based on the same base model, and a clear separation of framework and model.",https://github.com/calliope-project/calliope,lf-energy-landscape,
-calliope,Calliope,Energy system modelling framework,https://github.com/calliope-project/calliope,g-pst,"capacity-expansion,production-cost"
 capacityexpansion,CapacityExpansion,CapacityExpansion is a julia implementation of an input-data-scaling capacity expansion modeling framework.,https://github.com/youngfaithful/capacityexpansion.jl,openmod,
+capacityexpansion_jl,CapacityExpansion.jl,Future energy system planning (Generation and Transmission Capacity Expansion Planning) in Julia.,https://github.com/youngfaithful/capacityexpansion.jl,lf-energy-landscape,
 capacityexpansion_jl,CapacityExpansion.jl,Future energy system planning (Generation and Transmission Capacity Expansion Planning) in Julia.,https://github.com/youngfaithful/capacityexpansion.jl,opensustain-tech,
 capacityexpansion_jl,CapacityExpansion.jl,,https://github.com/youngfaithful/capacityexpansion.jl,pre-compiled,
-capacityexpansion_jl,CapacityExpansion.jl,Future energy system planning (Generation and Transmission Capacity Expansion Planning) in Julia.,https://github.com/youngfaithful/capacityexpansion.jl,lf-energy-landscape,
 capow,CAPOW,"Python-based multi-zone unit commitment/economic dispatch model of CAISO and Mid-C markets coupled with ""stochastic engine"" for representing effects of multiple spatiotemporally correlated hydrometeorological processes on demand, hydropower and wind and solar power production.power and wind and solar power production.",https://github.com/romulus97/capow_py36,openmod,
 cesar_p,CESAR-P,"The package allows for simulating the building energy demand of a district, including options for retrofitting, cost and emission calculation.",https://github.com/hues-platform/cesar-p-core,openmod,
 chronix2grid,chronix2grid,,https://github.com/grid2op/chronix2grid,pre-compiled,
@@ -65,8 +65,8 @@ copper,COPPER,"The Canadian Opportunities for Planning and Production of Electri
 copper,copper,,https://gitlab.com/sesit/copper,pre-compiled,
 coral,CORAL,,https://github.com/nrel/coral,lf-energy-landscape,
 deeco,deeco,,https://github.com/robbiemorrison/deeco,pre-compiled,
-deflex,deflex,"Flexible multi-regional energy system model for heat, power and mobility.",https://github.com/reegis/deflex,opensustain-tech,
 deflex,deflex,"Flexible multi-regional energy system model for heat, power and mobility.",https://github.com/reegis/deflex,lf-energy-landscape,
+deflex,deflex,"Flexible multi-regional energy system model for heat, power and mobility.",https://github.com/reegis/deflex,opensustain-tech,
 demandlib,demandlib,With the demandlib you can create power and heat profiles for various sectors by scaling them to your desired demand.,https://github.com/oemof/demandlib,lf-energy-landscape,
 demod,Demod,"demod is an open-source python library for socio-technical simulation of domestic energy demand (e.g., electrical and thermal). It allows to generate household occupancy, activity, thermal and electrical demand profiles with high temporal resolution",https://github.com/epfl-herus/demod,openmod,
 desstinee,DESSTinEE,"The DESSTINEE model (Demand for Energy Services, Supply and Transmission in EuropE) a model of the European energy system in 2050, with a focus on the electricity system. The model is designed to test assumptions about the technical requirements for energy transport (particularly for electricity), and the scale of the economic challenge to develop the necessary infrastructure.  Forty countries are considered in and around Europe, and 10 forms of primary and secondary energy.  The model uses a predictive simulation technique, rather than solving a partial or general equilibrium.  Data is therefore specified by the user (exogenously), and the model calculates a set of answers for the given set of assumptions.
@@ -80,13 +80,13 @@ dieter_jl,DIETER.jl,,https://gitlab.com/diw-evu/dieter_public/dieter.jl,pre-comp
 dieter_py,dieter_py,An open source power sector optimization model that has been developed to investigate the role of electricity storage and sector coupling options in future scenarios with high shares of renewable energy sources.,https://gitlab.com/diw-evu/dieter_public/dieterpy,lf-energy-landscape,
 dietergms,dietergms,,https://gitlab.com/diw-evu/dieter_public/dietergms,pre-compiled,
 digripy,DiGriPy,,https://github.com/lvorspel/digripy,pre-compiled,
-dispa_set,Dispa-SET,The Dispa-SET model is an open-source unit commitment and dispatch model developed within the “Joint Research Centre” and focused on the balancing and flexibility problems in European grids.,https://joinup.ec.europa.eu/software/dispaset/description,openmod,
-dispa_set,Dispa-SET,,https://github.com/energy-modelling-toolkit/dispa-set,pre-compiled,
 dispa_set,Dispa-SET,"Allows to model a power system at any level of detail e.g. micro-grid, region, country, continent.",https://github.com/energy-modelling-toolkit/dispa-set,lf-energy-landscape,
 dispa_set,Dispa-SET,"Allows to model a power system at any level of detail e.g. micro-grid, region, country, continent.",https://github.com/energy-modelling-toolkit/dispa-set,opensustain-tech,
+dispa_set,Dispa-SET,The Dispa-SET model is an open-source unit commitment and dispatch model developed within the “Joint Research Centre” and focused on the balancing and flexibility problems in European grids.,https://joinup.ec.europa.eu/software/dispaset/description,openmod,
+dispa_set,Dispa-SET,,https://github.com/energy-modelling-toolkit/dispa-set,pre-compiled,
 dispatches,DISPATCHES,Developed and used to identify and optimize Integrated Energy Systems for operation within the bulk power system via energy market signals.,https://github.com/gmlc-dispatches/dispatches,opensustain-tech,
-distaix,DistAIX,A simulator for cyber-physical power systems that makes use of high performance computing techniques to scale up the simulation.,https://git.rwth-aachen.de/acs/public/simulation/distaixframework/distaix,opensustain-tech,
 distaix,DistAIX,A simulator for cyber-physical power systems that makes use of high performance computing techniques to scale up the simulation.,https://git.rwth-aachen.de/acs/public/simulation/distaixframework/distaix,lf-energy-landscape,
+distaix,DistAIX,A simulator for cyber-physical power systems that makes use of high performance computing techniques to scale up the simulation.,https://git.rwth-aachen.de/acs/public/simulation/distaixframework/distaix,opensustain-tech,
 distaixweb,distaixweb,,https://git.rwth-aachen.de/acs/public/simulation/distaixframework/distaixweb,pre-compiled,
 dpsim,DPSim,DPsim is a real-time capable power system simulator that supports dynamic phasor and electromagnetic transient simulation as well as continuous power flow. It primarily targets large-scale scenarios on commercial off-the-sheld hardware that require deterministic time steps in the range of micro- to milliseconds.,https://github.com/sogno-platform/dpsim,g-pst,power-flow
 dpsim,DPsim,A solver library for dynamic power system simulation.,https://github.com/sogno-platform/dpsim,opensustain-tech,
@@ -104,8 +104,8 @@ easy_simauto,Easy SimAuto,An easy-to-use Power System Analysis Automation Platfo
 edisgo,eDisGo,Optimization of flexibility options and grid expansion for distribution grids based on PyPSA.,https://github.com/openego/edisgo,opensustain-tech,
 ego,eGo,,https://github.com/openego/ego,pre-compiled,
 egon,eGon,,https://github.com/openego/ego,lf-energy-landscape,
-egret,Egret,,https://github.com/grid-parity-exchange/egret,pre-compiled,"production-cost,power-flow"
 egret,Egret,A Python-based package for electrical grid optimization based on the Pyomo optimization modeling language.,https://github.com/grid-parity-exchange/egret,opensustain-tech,"production-cost,power-flow"
+egret,Egret,,https://github.com/grid-parity-exchange/egret,pre-compiled,"production-cost,power-flow"
 eiadata,EIAdata,Provides programmatic access to the Energy Information Administration's API.,https://github.com/matt-brigida/eiadata,lf-energy-landscape,
 electricgrid_jl,ElectricGrid.jl,A time domain electrical energy grid modeling and simulation tool with a focus on the control of power electronics converters.,https://github.com/upb-lea/electricgrid.jl,opensustain-tech,
 elmod,ELMOD,"The ""Electricity Model"" (ELMOD) is a deterministic linear or mixed integer dispatch model framework of the German (and European) electricity and co-generation heat sector.",,openmod,
@@ -136,26 +136,25 @@ Additional Information
 The EPS is released under the GNU General Public License version 3 (GPLv3) or any later version and is free and open-source software. For more information, please see the Software License page.
 
 The EPS has benefited from the work of many contributors and reviewers.e work of many contributors and reviewers.",https://github.com/energy-innovation/eps-us,openmod,
-energy_py,energy-py,Reinforcement learning for energy systems.,https://github.com/adgefficiency/energy-py,opensustain-tech,
 energy_py,energy-py,Reinforcement learning for energy systems.,https://github.com/adgefficiency/energy-py,lf-energy-landscape,
-energy_py_linear,energy-py-linear,Optimizing energy systems using mixed integer linear programming.,https://github.com/adgefficiency/energy-py-linear,opensustain-tech,
+energy_py,energy-py,Reinforcement learning for energy systems.,https://github.com/adgefficiency/energy-py,opensustain-tech,
 energy_py_linear,energy-py-linear,Optimizing energy systems using mixed integer linear programming.,https://github.com/adgefficiency/energy-py-linear,lf-energy-landscape,
+energy_py_linear,energy-py-linear,Optimizing energy systems using mixed integer linear programming.,https://github.com/adgefficiency/energy-py-linear,opensustain-tech,
 energy_system_simulation_and_optimization,Energy System Simulation and Optimization,"An open-source energy optimization system that integrates renewable energy sources, such as photovoltaic (PV) systems, battery storage, and smart load management solutions.",https://github.com/akkudoktor-eos/eos,opensustain-tech,production-cost
 energy_system_technology_data,Energy System Technology Data,"Compilation of assumptions about energy system technologies such as cost, efficiency and lifetime that can be read by energy system modelling software.",https://github.com/pypsa/technology-data,lf-energy-landscape,
 energy_transition_engine,Energy Transition Engine,Calculation engine for the Energy Transition Model.,https://github.com/quintel/etengine,opensustain-tech,
 energy_transition_model,Energy Transition Model,Web-based model based on a holistic description of a country's energy system.,https://github.com/quintel/documentation,openmod,
 energymodelsbase_jl,EnergyModelsBase.jl,,https://github.com/energymodelsx/energymodelsbase.jl,pre-compiled,
 energynumbers_balancing,EnergyNumbers-Balancing,"The model uses historic demand data, and historic (half-)hourly capacity factors for PV and wind, to simulate the extent to which demand could be met by some combination of wind, PV and storage. Please do email me if you'd like to request early access to the source, and mention your github username. source, and mention your github username.",https://github.com/rcuk-cee/energynumbers-balancing,openmod,
+energyrt,energyRt,Making Energy Systems Modeling as simple as a linear regression in R.,https://github.com/energyrt/energyrt,lf-energy-landscape,
 energyrt,energyRt,Making Energy Systems Modeling as simple as a linear regression in R.,https://github.com/optimal2050/energyrt,opensustain-tech,
 energyrt,EnergyRt,"energyRt is a package for R to develop Reference Energy System (RES) models and analyze energy-technologies. The package includes a standard RES (or ""Bottom-Up"") linear, cost-minimizing model, which can be solved by GAMS or GLPK. The model has similarities with TIMES/MARKAL, OSeMOSYS, but has its own specifics, f.i. definition of technologies.pecifics, f.i. definition of technologies.",https://github.com/olugovoy/energyrt,openmod,
-energyrt,energyRt,Making Energy Systems Modeling as simple as a linear regression in R.,https://github.com/energyrt/energyrt,lf-energy-landscape,
 energyscope,EnergyScope,"EnergyScope is open-source model for the strategic energy planning
 of urban and regional energy systems.
 
 EnergyScope (v2.0) optimises both the investment and operating strategy of an entire energy system (including electricity, heating and mobility). Additionally, its hourly resolution (using typical days) makes the model suitable for the integration of intermittent renewables, and its concise mathematical formulation and computational effciency are appropriate for uncertainty applications. appropriate for uncertainty applications.",https://github.com/energyscope/energyscope,openmod,
 energysim,energysim,,https://github.com/dgusain1/energysim,pre-compiled,
 energysystemmodelling_jl,EnergySystemModelling.jl,,https://github.com/gamma-opt/energysystemmodelling.jl,pre-compiled,
-enflow,enflow,,https://github.com/rebase-energy/enflow,pre-compiled,
 enflow,enflow,,https://github.com/rebase-energy/enflow,pre-compiled,
 eoles_elec,EOLES elec,"The EOLES family of models optimizes the investment and operation of an energy system
 in order to minimize the total cost while satisfying energy demand. EOLES_elec is the
@@ -177,31 +176,30 @@ storage (PHS), batteries and methanation combined with open-cycle gas turbines.i
 eoles_mv,EOLES_mv,,https://github.com/behrangshirizadeh/eoles_mv,pre-compiled,
 erad,erad,,https://github.com/nrel-distribution-suites/erad,pre-compiled,
 erf,ERF,,https://github.com/erf-model/erf,lf-energy-landscape,
-esdl,ESDL,A modelling language created for the components in an energy system and their relations towards each other.,https://github.com/energytransition/esdl,opensustain-tech,
 esdl,ESDL,A modelling language created for the components in an energy system and their relations towards each other.,https://github.com/energytransition/esdl,lf-energy-landscape,
+esdl,ESDL,A modelling language created for the components in an energy system and their relations towards each other.,https://github.com/energytransition/esdl,opensustain-tech,
 eso_x,ESO-X,The Electricity Systems Optimisation (ESO) framework contains a suite of power system capacity expansion and unit commitment models at different levels of spatial and temporal resolution and modelling complexity. Available for download is the single-node model with long-term capacity expansion from 2015 to 2050 in 5 yearly time steps and at hourly discretisation including endogenous technology cost learning (ESO-XEL) as perfect foresight and myopic foresight planning option.ight and myopic foresight planning option.,,openmod,
 etengine,etengine,,https://github.com/quintel/etengine,pre-compiled,
 etm_pro,ETM Pro,Professional interface of the Energy Transition model.,https://github.com/quintel/etmodel,opensustain-tech,
 etsource,ETSource,"Contains the data used by Quintel energy transition modelling applications, allowing you to explore possible future energy systems for your country, region or municipality.",https://github.com/quintel/etsource,opensustain-tech,
-exago,ExaGO,"High-performance power grid optimization for stochastic, security-constrained, and multi-period ACOPF problems.",https://github.com/pnnl/exago,opensustain-tech,
-exago,exago,,https://gitlab.pnnl.gov/exasgd/frameworks/exago,pre-compiled,
-exago,ExaGO,"ExaGO is a library for solving large-scale alternating current optimal power flow (ACOPF) problems including stochastic effects, security constraints and multi-period constraints.",https://gitlab.pnnl.gov/exasgd/frameworks/exago,lf-energy-landscape,
-exago,ExaGO,,https://github.com/pnnl/exago,pre-compiled,
 exago,ExaGO,"ExaGO provides applications to solve stochastic, security-constrained, and multiperiod ACOPF problems on high-performance with CPUs and GPUs.",https://gitlab.pnnl.gov/exasgd/frameworks/exago,g-pst,power-flow
+exago,ExaGO,"ExaGO is a library for solving large-scale alternating current optimal power flow (ACOPF) problems including stochastic effects, security constraints and multi-period constraints.",https://gitlab.pnnl.gov/exasgd/frameworks/exago,lf-energy-landscape,
+exago,ExaGO,"High-performance power grid optimization for stochastic, security-constrained, and multi-period ACOPF problems.",https://github.com/pnnl/exago,opensustain-tech,
+exago,ExaGO,,https://github.com/pnnl/exago,pre-compiled,
 fame,FAME,,https://gitlab.com/fame-framework,lf-energy-landscape,
 fame,FAME,Its purpose is supporting the rapid development and fast execution of complex agent-based energy system simulations.,https://gitlab.com/fame-framework/fame-core,opensustain-tech,
 ficus,Ficus,A (mixed integer) linear optimisation model for local energy systems,https://github.com/yabata/ficus,openmod,
 ficus,ficus,,https://github.com/tum-ewk/ficus,pre-compiled,
-fine,FINE,,https://github.com/fzj-iek3-vsa/fine,pre-compiled,"capacity-expansion,production-cost"
 fine,FINE,"Provides a framework for modeling, optimizing and assessing energy systems.",https://github.com/fzj-iek3-vsa/fine,lf-energy-landscape,"capacity-expansion,production-cost"
 fine,FINE,"Provides a framework for modeling, optimizing and assessing energy systems.",https://github.com/fzj-iek3-vsa/fine,opensustain-tech,"capacity-expansion,production-cost"
-flexigis,FlexiGIS,"FlexiGIS: an open source GIS-based platform for modelling energy systems and flexibility options in urban areas. It extracts, filters and categorises the geo-referenced urban energy infrastructure, simulates the local electricity consumption and power generation from on-site renewable energy resources, and allocates the required decentralised storage in urban settings using oemof-solph. FlexiGIS investigates systematically different scenarios of self-consumption, it analyses the characteristics and roles of flexibilisation technologies in promoting higher autarky levels in cities. The extracted urban energy infrustructure are based mainly on OpenStreetMap data.re are based mainly on OpenStreetMap data.",https://github.com/flexigis/flexigis,openmod,
+fine,FINE,,https://github.com/fzj-iek3-vsa/fine,pre-compiled,"capacity-expansion,production-cost"
 flexigis,FlexiGIS,"Extracts, filters and categorizes the geo-referenced urban energy infrastructure and allocates the required decentralized storage in urban settings.",https://github.com/flexigis/flexigis,lf-energy-landscape,
 flexigis,FlexiGIS,"Extracts, filters and categorizes the geo-referenced urban energy infrastructure and allocates the required decentralized storage in urban settings.",https://github.com/flexigis/flexigis,opensustain-tech,
+flexigis,FlexiGIS,"FlexiGIS: an open source GIS-based platform for modelling energy systems and flexibility options in urban areas. It extracts, filters and categorises the geo-referenced urban energy infrastructure, simulates the local electricity consumption and power generation from on-site renewable energy resources, and allocates the required decentralised storage in urban settings using oemof-solph. FlexiGIS investigates systematically different scenarios of self-consumption, it analyses the characteristics and roles of flexibilisation technologies in promoting higher autarky levels in cities. The extracted urban energy infrustructure are based mainly on OpenStreetMap data.re are based mainly on OpenStreetMap data.",https://github.com/flexigis/flexigis,openmod,
 flexplan_jl,FlexPlan.jl,An open-source Julia tool for transmission and distribution expansion planning considering storage and demand flexibility.,https://github.com/electa-git/flexplan.jl,opensustain-tech,
 flexplan_jl,FlexPlan.jl,,https://github.com/electa-git/flexplan.jl,pre-compiled,
-flixopt,flixOpt,,https://github.com/flixopt/flixopt,pre-compiled,
 flixopt,flixOpt,Python-based optimization framework designed to tackle energy and material flow problems using mixed-integer linear programming (MILP) and provides a powerful platform for both dispatch and investment optimization challenges.,https://github.com/flixopt/flixopt,opensustain-tech,
+flixopt,flixOpt,,https://github.com/flixopt/flixopt,pre-compiled,
 frictionless_energy_data,Frictionless Energy data,Common medium to facilitate the flow of data between energy and environmental models in a way that can be automated.,https://github.com/sentinel-energy/friendly_data,lf-energy-landscape,
 friendlysam,friendlysam,,https://github.com/sp-etx/friendlysam,pre-compiled,
 gamamod,GAMAMOD,"The gas market model GAMAMOD is a bottom-up model used to determine and analyze the optimal natural gas supply structure in Germany and to examine the utilization of the natural gas infrastructure. In its basic version, the model is a Linear Program with  a high spatial resolution and daily time steps. It contains more than 800 nodes and 1200 edges, while also taking into account parallel transmission lines, storage, and changes to demand and the grid as year progress. It's main outputs are optimal flow, imports, storage usage and retrofitting.
@@ -233,22 +231,22 @@ genx_jl,GenX.jl,,https://github.com/genxproject/genx.jl,pre-compiled,
 glaes,glaes,Geospatial Land Availability for Energy Systems.,https://github.com/fzj-iek3-vsa/glaes,lf-energy-landscape,
 glaes,glaes,Geospatial Land Availability for Energy Systems.,https://github.com/fzj-iek3-vsa/glaes,opensustain-tech,
 globalenergygis,GlobalEnergyGIS,Generates input data for energy models on renewable energy in arbitrary world regions using public datasets.,https://github.com/niclasmattsson/globalenergygis,lf-energy-landscape,
-grid2op,grid2op,,https://github.com/grid2op/grid2op,pre-compiled,power-flow
 grid2op,Grid2Op,A testbed platform to model sequential decision making in power systems.,https://github.com/grid2op/grid2op,opensustain-tech,power-flow
+grid2op,grid2op,,https://github.com/grid2op/grid2op,pre-compiled,power-flow
 gridcal,GridCal,"GridCal, a cross-platform power systems software written in Python with user interface, used in academia and industry.
 
 GridCal does all sort of static analysis of power systems with or without time series (power flow, short circuit, linear and non linear optimization, ..., you name it)",https://github.com/sanpen/gridcal,lf-energy-landscape,"capacity-expansion,production-cost,power-flow"
-gridcal,GridCal,,https://github.com/sanpen/gridcal,pre-compiled,"capacity-expansion,production-cost,power-flow"
+gridcal,GridCal,Aims to be a complete platform for power systems research and simulation.,https://github.com/sanpen/gridcal,opensustain-tech,"capacity-expansion,production-cost,power-flow"
 gridcal,GridCal,"GridCal is a research oriented power systems software.
 Research oriented? How? Well, it is a fruit of research. It is designed to be modular. As a researcher I found that the available software (not even talking about commercial options) are hard to expand or adapt to achieve complex simulations. GridCal is designed to allow you to build and reuse modules, which eventually will boost your productivity and the possibilities that are at hand.ty and the possibilities that are at hand.",https://github.com/sanpen/gridcal,openmod,"capacity-expansion,production-cost,power-flow"
-gridcal,GridCal,Aims to be a complete platform for power systems research and simulation.,https://github.com/sanpen/gridcal,opensustain-tech,"capacity-expansion,production-cost,power-flow"
+gridcal,GridCal,,https://github.com/sanpen/gridcal,pre-compiled,"capacity-expansion,production-cost,power-flow"
 gridlab_d,GridLAB-D,A simulation platform for future electricity distribution power systems.,https://github.com/arras-energy/gridlabd,opensustain-tech,
 gridlab_d,gridlab-d ,,https://github.com/gridlab-d/gridlab-d ,pre-compiled,
 gridpack,GridPACK,An open-source high-performance package for simulation of large-scale electrical grids.,https://github.com/gridoptics/gridpack,opensustain-tech,
 gridpath,GridPath,A versatile simulation and optimization platform for power-system planning and operations.,,g-pst,"capacity-expansion,production-cost"
-gridpath,gridpath,,https://github.com/blue-marble/gridpath,pre-compiled,
-gridpath,GridPath,A versatile simulation and optimization platform for power-system planning and operations.,https://github.com/blue-marble/gridpath,opensustain-tech,
 gridpath,GridPath,A versatile simulation and optimization platform for power-system planning and operations.,https://github.com/blue-marble/gridpath,lf-energy-landscape,
+gridpath,GridPath,A versatile simulation and optimization platform for power-system planning and operations.,https://github.com/blue-marble/gridpath,opensustain-tech,
+gridpath,gridpath,,https://github.com/blue-marble/gridpath,pre-compiled,
 grimsel_flex,GRIMSEL-FLEX,,https://github.com/arthurrinaldi/grimsel,openmod,
 h2integrate,H2Integrate,"An open-source Python package for modeling and designing hybrid energy systems producing electricity, hydrogen, ammonia, steel, and other products.",https://github.com/nrel/h2integrate,opensustain-tech,
 helics,HELICS,"Today the core uses are in the energy domain, where there is extensive and growing support for a wide-range of electric power system, natural gas, communications and control-schemes, transportation, buildings, and related domain tools.",https://github.com/gmlc-tdc/helics,opensustain-tech,
@@ -263,8 +261,8 @@ highres_europe,highRES-Europe,,https://github.com/highres-model/highres-europe,p
 hope,HOPE,,https://github.com/hope-model-project/hope,pre-compiled,
 hopp,HOPP,,https://github.com/nrel/hopp,pre-compiled,"capacity-expansion,production-cost"
 hvdc_wise_lib,HVDC-Wise lib,"Hosts a library of HVDC equipment models for model exchange, based on the IEC CIM/CGMES standard format.",https://github.com/hvdc-wise/hvdc-wise_lib,opensustain-tech,
-hybrid,HYBRID,,https://github.com/idaholab/hybrid,pre-compiled,
 hybrid,HYBRID,A modeling toolset to assess the integration and economic viability of Integrated Energy Systems.,https://github.com/idaholab/hybrid,opensustain-tech,
+hybrid,HYBRID,,https://github.com/idaholab/hybrid,pre-compiled,
 hybridbosse,HybridBOSSE,,https://github.com/nrel/hybridbosse,lf-energy-landscape,
 hydrogenmod_jl,HydrOGEnMod.jl,,https://github.com/lukasbarner/hydrogenmod.jl,pre-compiled,
 idaes_pse,idaes-pse,,https://github.com/idaes/idaes-pse,pre-compiled,
@@ -302,17 +300,17 @@ Web browsers provide access to the data management, simulation, and analysis env
 Users get support by work-leveraging parameterization tools, comprehensive quality checks, and interactive visualizations. Maon provides not only results like prices, dispatches, and capacities, but also capture rates, costs, price distributions, revenues, utilizations, and many other measures.es, utilizations, and many other measures.",,openmod,
 marmot,Marmot,,https://github.com/nrel/marmot,lf-energy-landscape,
 match_model,MATCH-model,,https://github.com/pencleanenergy/match-model,pre-compiled,
-matpower,matpower,"A package of M-files for solving power flow, continuation power flow and optimal power flow problems using MATLAB or Octave.",https://github.com/matpower/matpower,lf-energy-landscape,
 matpower,MATPOWER,"Free, open-source tools for electric power system simulation and optimization. Multiple formulations of AC and DC models for power flow, continuation power flow, optimal power flow, deterministic and stochastic unit commitment and more.",https://matpower.org/doc,g-pst,"power-flow,production-cost"
-matpower,matpower,,https://github.com/matpower/matpower,pre-compiled,
-matpower,matpower,,https://github.com/matpower/matpower,pre-compiled,
+matpower,matpower,"A package of M-files for solving power flow, continuation power flow and optimal power flow problems using MATLAB or Octave.",https://github.com/matpower/matpower,lf-energy-landscape,
 matpower,matpower,"A package of M-files for solving power flow, continuation power flow and optimal power flow problems using MATLAB or Octave.",https://github.com/matpower/matpower,opensustain-tech,
+matpower,matpower,,https://github.com/matpower/matpower,pre-compiled,
 medea,Medea,,https://github.com/inwe-boku/medea,openmod,
 medeas,MEDEAS,,http://medeas.eu/model/medeas-model,openmod,
-mesmo,mesmo,,https://github.com/mesmo-dev/mesmo,pre-compiled,
 mesmo,MESMO,"An open-source Python tool for the modeling, simulation and optimization of multi-scale electric and thermal distribution systems along with distributed energy resources.",https://github.com/mesmo-dev/mesmo,opensustain-tech,
+mesmo,mesmo,,https://github.com/mesmo-dev/mesmo,pre-compiled,
 messpy,MESSpy,,https://github.com/pielube/messpy,pre-compiled,
 microgrids_py,Microgrids.py,,https://github.com/microgrids-x/microgrids.py,pre-compiled,
+microgridspy,MicroGridsPy,Provide an open-source alternative to the problem of sizing and dispatch of energy in micro-grids in isolated places.,https://github.com/microgridspy/microgridspy,opensustain-tech,
 microgridspy,MicroGridsPy,"The MicroGridsPy model main objective is to provide an open-source alternative to the problem of sizing and dispatch of energy in micro-grids in isolated places. It’s written in python(pyomo) and use excel and text files as input and output data handling and visualisation.
 Main features:
 -Optimal sizing of PV panels, wind turbines, other renewable technologies, back-up genset and electrochemical storage system for least cost electricity supply in rural isolated areas;
@@ -329,7 +327,6 @@ Possible features:
 -Built-in load archetypes for rural users;
 
 -Endogenous calculation of renewable energy sources production.on of renewable energy sources production.",https://github.com/sesam-polimi/microgridspy-sesam,openmod,
-microgridspy,MicroGridsPy,Provide an open-source alternative to the problem of sizing and dispatch of energy in micro-grids in isolated places.,https://github.com/microgridspy/microgridspy,opensustain-tech,
 microgridspy,MicroGridsPy,,https://github.com/microgridspy/microgridspy,pre-compiled,
 minigrid_jcc,Minigrid-JCC,,https://github.com/autarky-power/minigrid-jcc,pre-compiled,
 minpower,Minpower,An open source toolkit for students and researchers in power systems.,https://github.com/adamgreenhall/minpower,lf-energy-landscape,
@@ -338,11 +335,11 @@ minpower,minpower,,https://github.com/adamgreenhall/minpower,pre-compiled,
 moces,MOCES,"MOCES is a modeling tool that allows a simulative investigation of complex energy systems. It is build on top of the modeling language Modelica. It is not restricted to a specific modeling depth, neither spatial nor temporal. Nevertheless, in the time domain it focuses on dynamics with time constants larger then seconds and in the spatial domain it concentrates on the super ‘entity connected to the grid’ level.uper ‘entity connected to the grid’ level.",,openmod,
 model_energy,Model Energy,"This is the code for the online optimization of zero-direct-emission electricity systems with wind, solar and storage (using batteries and electrolysed hydrogen gas) to provide a baseload electricity demand, using the cost and other assumptions of your choice.",https://github.com/pypsa/whobs-server,lf-energy-landscape,
 modpowersystems,ModPowerSystems,,https://github.com/modpowersystems/modpowersystems,pre-compiled,
+mosaik,mosaik,A flexible Smart Grid co-simulation framework.,https://gitlab.com/mosaik/mosaik,opensustain-tech,
 mosaik,Mosaik,"Mosaik is a flexible Smart Grid co-simulation framework.
 Mosaik allows you to reuse and combine existing simulation models and simulators to create large-scale Smart Grid scenarios – and by large-scale we mean thousands of simulated entities distributed over multiple simulator processes. These scenarios can then serve as test bed for various types of control strategies (e.g., multi-agent systems (MAS) or centralized control).
 
 Mosaik is written in Python and completely open source (LGPL), including some simple simulators, a binding to pandapower and PYPOWER and a demonstration scenario. and PYPOWER and a demonstration scenario.",https://gitlab.com/mosaik,openmod,
-mosaik,mosaik,A flexible Smart Grid co-simulation framework.,https://gitlab.com/mosaik/mosaik,opensustain-tech,
 most,most,,https://github.com/matpower/most,pre-compiled,
 multi_vector_simulator,multi-vector-simulator,,https://github.com/rl-institut/multi-vector-simulator,pre-compiled,
 multimod,MultiMod,"The energy system and resource market model ""MultiMod"" is a large-scale representation of the supply and demand of fossil fuels and renewable energy sources. It captures endogenous substitution between fuels, infrastructure constraints and endogenous investment (e.g., pipeline capacity, power generation technologies), as well as market power by producers of fossil fuels in a unified framework. 
@@ -357,9 +354,9 @@ The model is formulated and solved as a Mixed Complementarity Problem (MCP) and 
 muse_os,MUSE_OS,A open source agent-based modelling environment that can be used to simulate change in an energy system over time.,https://github.com/energysystemsmodellinglab/muse_os,opensustain-tech,
 mvs,MVS,"The multi-vector simulator allows the evaluation of local sector-coupled energy systems that include the energy carriers electricity, heat and/or gas.",https://github.com/rl-institut/multi-vector-simulator,lf-energy-landscape,
 mvs,MVS,"The multi-vector simulator allows the evaluation of local sector-coupled energy systems that include the energy carriers electricity, heat and/or gas.",https://github.com/rl-institut/multi-vector-simulator,opensustain-tech,
-nemo,NEMO,,https://github.com/bje-/nemo,pre-compiled,
 nemo,NEMO,"A state-of-the-art modeling framework for research activities and forecasting services in ocean and climate sciences, developed in a sustainable way by a European consortium.",https://github.com/bje-/nemo,lf-energy-landscape,
 nemo,NEMO,NEMO is a chronological dispatch model for testing and optimising different portfolios of conventional and renewable electricity generation technologies.,https://git.ozlabs.org/?p=nemo,openmod,
+nemo,NEMO,,https://github.com/bje-/nemo,pre-compiled,
 nemo_(sei),NEMO (SEI),"NEMO is a high performance, open-source energy system optimization modeling tool developed in Julia. It is intended for users who seek substantial optimization capabilities without the financial burden of proprietary software or the performance bottlenecks of common open-source alternatives. It can be used in stand-alone mode or with the Low Emissions Analysis Platform (LEAP) as a front-end.s Analysis Platform (LEAP) as a front-end.",https://github.com/sei-international/nemomod.jl,openmod,
 nemomod_jl,NemoMod.jl,"A high performance, open-source energy system optimization modeling tool developed in Julia.",https://github.com/sei-international/nemomod.jl,opensustain-tech,
 nemomod_jl,NemoMod.jl,,https://github.com/sei-international/nemomod.jl,pre-compiled,
@@ -367,31 +364,31 @@ nempy,Nempy,Aims to enhance the Australian electricity industries modeling and a
 nempy,nempy,,https://github.com/unsw-ceem/nempy,pre-compiled,
 nordic_model,nordic_model,,https://github.com/elisnycander/nordic_model,pre-compiled,
 oemof,oemof,"Open Energy Modelling Framework - A Python toolbox for energy system modeling and optimization. A community driven, modular, flexible and generic software project.",https://github.com/oemof/oemof,lf-energy-landscape,
+oemof,oemof,"Open Energy Modelling Framework - A Python toolbox for energy system modeling and optimization. A community driven, modular, flexible and generic software project.",https://github.com/oemof/oemof,opensustain-tech,
 oemof,Oemof,"oemof is a framework for energy system model development and its application in energy system analysis. Currently, it bases on collaborative work of three institutions. You can clone/fork the code at github.
 Containing a linear optimisation problem formulation library, feedin-data generation library and other auxiliary libraries it is meant to be developed further according to interests of user/ developer community.to interests of user/ developer community.",https://github.com/oemof/oemof,openmod,
-oemof,oemof,"Open Energy Modelling Framework - A Python toolbox for energy system modeling and optimization. A community driven, modular, flexible and generic software project.",https://github.com/oemof/oemof,opensustain-tech,
-oemof_solph,oemof-solph,A model generator for energy system modeling and optimization.,https://github.com/oemof/oemof-solph,opensustain-tech,"capacity-expansion,production-cost"
 oemof_solph,oemof-solph,A model generator for energy system modeling and optimization.,https://github.com/oemof/oemof-solph,lf-energy-landscape,"capacity-expansion,production-cost"
+oemof_solph,oemof-solph,A model generator for energy system modeling and optimization.,https://github.com/oemof/oemof-solph,opensustain-tech,"capacity-expansion,production-cost"
 oemof_solph,oemof-solph,,https://github.com/oemof/oemof-solph,pre-compiled,"capacity-expansion,production-cost"
-oemof_thermal,oemof-thermal,"Provides tools to model thermal energy components as an extension of oemof.solph, e.g. compression heat pumps, concentrating solar plants, thermal storage and solar thermal collectors.",https://github.com/oemof/oemof-thermal,opensustain-tech,
 oemof_thermal,oemof-thermal,"Provides tools to model thermal energy components as an extension of oemof.solph, e.g. compression heat pumps, concentrating solar plants, thermal storage and solar thermal collectors.",https://github.com/oemof/oemof-thermal,lf-energy-landscape,
-omegalpes,OMEGAlpes,"OMEGAlpes stands for Generation of Optimization Models As Linear Programming for Energy Systems. It aims to be an energy systems modelling tool for linear optimisation (LP, MILP). It is currently based on the LP modeler PuLP.",https://gricad-gitlab.univ-grenoble-alpes.fr/omegalpes/omegalpes,openmod,
+oemof_thermal,oemof-thermal,"Provides tools to model thermal energy components as an extension of oemof.solph, e.g. compression heat pumps, concentrating solar plants, thermal storage and solar thermal collectors.",https://github.com/oemof/oemof-thermal,opensustain-tech,
 omegalpes,OMEGAlpes,"Aims to be an energy systems modeling tool for linear optimization (LP, MILP).",https://gricad-gitlab.univ-grenoble-alpes.fr/omegalpes/omegalpes,lf-energy-landscape,
 omegalpes,OMEGAlpes,"Aims to be an energy systems modeling tool for linear optimization (LP, MILP).",https://gricad-gitlab.univ-grenoble-alpes.fr/omegalpes/omegalpes,opensustain-tech,
+omegalpes,OMEGAlpes,"OMEGAlpes stands for Generation of Optimization Models As Linear Programming for Energy Systems. It aims to be an energy systems modelling tool for linear optimisation (LP, MILP). It is currently based on the LP modeler PuLP.",https://gricad-gitlab.univ-grenoble-alpes.fr/omegalpes/omegalpes,openmod,
 omegalpes,omegalpes,,https://gricad-gitlab.univ-grenoble-alpes.fr/omegalpes/omegalpes,pre-compiled,
+onsset,onsset,A GIS based optimization tool that has been developed to support electrification planning and decision making for the achievement of energy access goals in currently unserved locations.,https://github.com/onsset/onsset,lf-energy-landscape,
 onsset,onsset,A GIS based optimization tool that has been developed to support electrification planning and decision making for the achievement of energy access goals in currently unserved locations.,https://github.com/onsset/onsset,opensustain-tech,
 onsset,OnSSET,"OnSSET has been designed for identifying least-cost technology options to electrify areas presently unserved by grid-based electricity and to estimate associated investment needs related to electrification. OnSSET uses energy-related data and information on a geographical basis such as settlement sizes and locations, distances from existing and planned transmission network, power plants, economic activity, local renewable energy flows,road network, nighttime light etc.y flows,road network, nighttime light etc.",https://github.com/kth-desa/pyonsset,openmod,
-onsset,onsset,A GIS based optimization tool that has been developed to support electrification planning and decision making for the achievement of energy access goals in currently unserved locations.,https://github.com/onsset/onsset,lf-energy-landscape,
 onsset_2016,OnSSET-2016,,https://github.com/kth-desa/onsset-2016,pre-compiled,
 open,OPEN,,https://github.com/epgoxford/open,pre-compiled,
 open_energy_cell_simulation,Open-Energy-Cell-Simulation,,https://github.com/fabmid/open-energy-cell-simulation,pre-compiled,
 open_energy_modeling_benchmarks,open-energy-modeling-benchmarks,The purpose of this repository is to collate a collection of benchmarks related to open energy modeling in JuMP.,https://github.com/jump-dev/open-energy-modeling-benchmarks,opensustain-tech,
-open_energy_platform,Open Energy Platform,"Aims to ensure quality, transparency and reproducibility in energy system research. It is a collection of various tools and information and that help working with energy-related data.",https://github.com/openenergyplatform/oeplatform,opensustain-tech,
 open_energy_platform,Open Energy Platform,"Aims to ensure quality, transparency and reproducibility in energy system research. It is a collection of various tools and information and that help working with energy-related data.",https://github.com/openenergyplatform/oeplatform,lf-energy-landscape,
-open_energy_system_databases,Open Energy System Databases,"Employ open data methods to collect, clean, and republish energy-related datasets for open use.",https://en.wikipedia.org/wiki/open_energy_system_databases,opensustain-tech,
+open_energy_platform,Open Energy Platform,"Aims to ensure quality, transparency and reproducibility in energy system research. It is a collection of various tools and information and that help working with energy-related data.",https://github.com/openenergyplatform/oeplatform,opensustain-tech,
 open_energy_system_databases,Open Energy System Databases,"Employ open data methods to collect, clean, and republish energy-related datasets for open use.",,lf-energy-landscape,
-open_energy_system_models,Open Energy System Models,Used to explore future energy systems and are often applied to questions involving energy and climate policy.,https://en.wikipedia.org/wiki/open_energy_system_models,opensustain-tech,
+open_energy_system_databases,Open Energy System Databases,"Employ open data methods to collect, clean, and republish energy-related datasets for open use.",https://en.wikipedia.org/wiki/open_energy_system_databases,opensustain-tech,
 open_energy_system_models,Open Energy System Models,Used to explore future energy systems and are often applied to questions involving energy and climate policy.,,lf-energy-landscape,
+open_energy_system_models,Open Energy System Models,Used to explore future energy systems and are often applied to questions involving energy and climate policy.,https://en.wikipedia.org/wiki/open_energy_system_models,opensustain-tech,
 open_infrastructure_map,Open Infrastructure Map,A view of the world's energy and water infrastructure mapped in the OpenStreetMap database.,https://github.com/openinframap/openinframap,opensustain-tech,
 open_modeling_framework,Open Modeling Framework,A set of Python libraries for simulating power systems behavior with an emphasis on cost-benefit analysis of emerging technologies.,https://github.com/dpinney/omf,lf-energy-landscape,"production-cost,power-flow"
 open_modeling_framework,Open Modeling Framework,A set of Python libraries for simulating power systems behavior with an emphasis on cost-benefit analysis of emerging technologies.,https://github.com/dpinney/omf,opensustain-tech,"production-cost,power-flow"
@@ -399,8 +396,8 @@ open_models,Open Models,This page lists energy models published under open sourc
 open_plan,open_plan,,https://github.com/open-plan-tool/gui,lf-energy-landscape,
 opencem,openCEM,Capacity Expansion Model and Optimiser for the Australian National Energy Market.,https://github.com/opencemorg/opencem,lf-energy-landscape,
 opencem,openCEM,,https://github.com/opencemorg/opencem,pre-compiled,
-opender,OpenDER,,https://github.com/epri-dev/opender,pre-compiled,
 opender,OpenDER,Aims to accurately represent steady-state and dynamic behaviors of inverter-based distributed energy resources.,https://github.com/epri-dev/opender,opensustain-tech,
+opender,OpenDER,,https://github.com/epri-dev/opender,pre-compiled,
 opendss_c,OpenDSS-C,,https://github.com/epri-dev/opendss-c,pre-compiled,
 openentrance,openENTRANCE,"The Horizon 2020 openENTRANCE project aims at developing, using and disseminating an open, transparent and integrated modeling platform for assessing low-carbon transition pathways in Europe.",https://github.com/openentrance/openentrance,lf-energy-landscape,
 openipsl,OpenIPSL,"A library of power system component models written in the Modelica language that can be used for power system dynamic analysis, such as phasor time-domain simulations.",https://github.com/openipsl/openipsl,lf-energy-landscape,
@@ -409,68 +406,65 @@ openipsl,OpenIPSL,,https://github.com/openipsl/openipsl,pre-compiled,
 openmaster,openMASTER,,https://github.com/iit-energysystemmodels/openmaster,pre-compiled,
 opensduc,openSDUC,,https://github.com/iit-energysystemmodels/opensduc,pre-compiled,
 opentepes,openTEPES,"Determines the investment plans of new facilities (generators, ESS and lines) for supplying the forecasted demand at minimum cost.",https://github.com/iit-energysystemmodels/opentepes,lf-energy-landscape,
-opentepes,openTEPES,,https://github.com/iit-energysystemmodels/opentepes,pre-compiled,
 opentepes,openTEPES,"Determines the investment plans of new facilities (generators, ESS and lines) for supplying the forecasted demand at minimum cost.",https://github.com/iit-energysystemmodels/opentepes,opensustain-tech,
 opentepes,OpenTEPES,"The openTEPES model presents a decision support system for defining the integrated generation, storage, and transmission expansion plan (GEP+SEP+TEP) of a large-scale electric system at a tactical level (i.e., time horizons of 10-20 years), defined as a set of generation, storage, and (electricity, hydrogen, and heat) networks dynamic investment decisions for multiple future years.tment decisions for multiple future years.",https://github.com/iit-energysystemmodels/opentepes,openmod,
+opentepes,openTEPES,,https://github.com/iit-energysystemmodels/opentepes,pre-compiled,
 opentumflex,OpenTUMFlex,An open-source flexibility estimation model that quantifies all possible flexibilities from the available prosumer devices and prices them.,https://github.com/tum-ewk/opentumflex,openmod,
 opentumflex,OpenTUMFlex,,https://github.com/tum-ewk/opentumflex,pre-compiled,
 optihood,optihood,,https://github.com/spf-ost/optihood,pre-compiled,
-osemosys,OSeMOSYS,,https://github.com/osemosys/osemosys,pre-compiled,
+osemosys,OSeMOSYS,"An open source modeling system for long-run integrated assessment and energy planning. It has been employed to develop energy systems models from the scale of continents (African Power Pools, South America, EU28+2) down to the scale of countries, regions and villages.",https://github.com/osemosys/osemosys,lf-energy-landscape,
 osemosys,OSeMOSYS,"An open source modeling system for long-run integrated assessment and energy planning. It has been employed to develop energy systems models from the scale of continents (African Power Pools, South America, EU28+2) down to the scale of countries, regions and villages.",https://github.com/osemosys/osemosys,opensustain-tech,
 osemosys,OSeMOSYS,"OSeMOSYS has been created by a community of leading institutions and is capable of powerful energy systems analysis and prototyping new energy model formulations. It is typically used for the analysis of energy systems looking over the medium (10-15yrs) and long (50-100yrs) term. It is used by experienced modellers as an exploratory tool, by developing country modellers where data limitations are an issue, and as a teaching tool.ions are an issue, and as a teaching tool.",http://github.com/osemosys/osemosys,openmod,
-osemosys,OSeMOSYS,"An open source modeling system for long-run integrated assessment and energy planning. It has been employed to develop energy systems models from the scale of continents (African Power Pools, South America, EU28+2) down to the scale of countries, regions and villages.",https://github.com/osemosys/osemosys,lf-energy-landscape,
+osemosys,OSeMOSYS,,https://github.com/osemosys/osemosys,pre-compiled,
 osmogrid,OSMoGrid,"A java tool to generate life like electrical grid models based on publicly available data, mainly OpenStreetMap and a special focus on low voltage grids.",https://github.com/ie3-institute/osmogrid,opensustain-tech,
-pandapipes,pandapipes,,https://github.com/e2niee/pandapipes,pre-compiled,
 pandapipes,Pandapipes,"An easy to use open source tool for fluid system modeling, analysis and optimization with a high degree of automation.",https://github.com/e2niee/pandapipes,openmod,
-pandapower,pandapower,,https://github.com/e2niee/pandapower,pre-compiled,
-pandapower,pandapower,,https://github.com/e2niee/pandapower,pre-compiled,
-pandapower,pandapower,"An easy to use open source tool for power system modeling, analysis and optimization with a high degree of automation.",https://github.com/e2niee/pandapower,lf-energy-landscape,
-pandapower,Pandapower,"pandapower builds on the data analysis library pandas and the power system analysis toolbox PYPOWER to create an easy to use network calculation program aimed at automation of analysis and optimization in power systems. What started as a convenience wrapper around PYPOWER has evolved into a stand-alone power systems analysis toolbox with extensive power system model library, an improved power flow solver and many other power systems analysis functions.ny other power systems analysis functions.",https://github.com/e2niee/pandapower,openmod,
-pandapower,pandapower,"An easy to use open source tool for power system modeling, analysis and optimization with a high degree of automation.",https://github.com/e2niee/pandapower,opensustain-tech,
+pandapipes,pandapipes,,https://github.com/e2niee/pandapipes,pre-compiled,
 pandapower,pandapower,"An easy to use open source tool for power system modeling, analysis and optimization with a high degree of automation. ",https://github.com/e2niee/pandapower,g-pst,power-flow
+pandapower,pandapower,"An easy to use open source tool for power system modeling, analysis and optimization with a high degree of automation.",https://github.com/e2niee/pandapower,lf-energy-landscape,
+pandapower,pandapower,"An easy to use open source tool for power system modeling, analysis and optimization with a high degree of automation.",https://github.com/e2niee/pandapower,opensustain-tech,
+pandapower,Pandapower,"pandapower builds on the data analysis library pandas and the power system analysis toolbox PYPOWER to create an easy to use network calculation program aimed at automation of analysis and optimization in power systems. What started as a convenience wrapper around PYPOWER has evolved into a stand-alone power systems analysis toolbox with extensive power system model library, an improved power flow solver and many other power systems analysis functions.ny other power systems analysis functions.",https://github.com/e2niee/pandapower,openmod,
+pandapower,pandapower,,https://github.com/e2niee/pandapower,pre-compiled,
 paraemt_public,ParaEMT_public,,https://github.com/nrel/paraemt_public,pre-compiled,
 peaky_finders,Peaky Finders,A Plotly Dash application with helpful peak load visualizations and a day ahead forecasting model for five different ISOs.,https://github.com/kbaranko/peaky-finders,lf-energy-landscape,
 plexos_open_eu,PLEXOS Open EU,"Full Details available at
 http://wiki.openmod-initiative.org/wiki/Power_plant_portfolios",http://wiki.openmod-initiative.org/wiki/power_plant_portfolios,openmod,
-pomato,POMATO,"POMATO stands for (POwer MArket TOol) and is an easy to use tool for the comprehensive analysis of the modern electricity market. It comprises the necessary power engineering framework to account for power flow physics, thermal transport constraints and security policies of the underlying transmission infrastructure, depending on the requirements defined by the user. POMATO was specifically designed to realistically model Flow-Based Market-Coupling (FBMC) and is therefore equipped with a fast security constrained optimal power flow algorithm and allows zonal market clearing with endogenously generated flow-based parameters, and redispatch.ted flow-based parameters, and redispatch.",https://github.com/richard-weinhold/pomato,openmod,
 pomato,POMATO,An easy to use tool for the comprehensive analysis of the modern electricity market.,https://github.com/richard-weinhold/pomato,lf-energy-landscape,
+pomato,POMATO,"POMATO stands for (POwer MArket TOol) and is an easy to use tool for the comprehensive analysis of the modern electricity market. It comprises the necessary power engineering framework to account for power flow physics, thermal transport constraints and security policies of the underlying transmission infrastructure, depending on the requirements defined by the user. POMATO was specifically designed to realistically model Flow-Based Market-Coupling (FBMC) and is therefore equipped with a fast security constrained optimal power flow algorithm and allows zonal market clearing with endogenously generated flow-based parameters, and redispatch.ted flow-based parameters, and redispatch.",https://github.com/richard-weinhold/pomato,openmod,
 power_grid_lib,Power Grid Lib,This benchmark library is curated and maintained by the IEEE PES Task Force on Benchmarks for Validation of Emerging Power System Algorithms and is designed to evaluate a well established version of the AC Optimal Power Flow problem.,https://github.com/power-grid-lib/pglib-opf,opensustain-tech,
 power_grid_model,Power Grid Model,A library for steady-state distribution power system analysis distributed for Python and C.,https://github.com/powergridmodel/power-grid-model,opensustain-tech,power-flow
 power_grid_model,power-grid-model,,https://github.com/powergridmodel/power-grid-model,pre-compiled,power-flow
 power_system_analysis_toolbox,Power System Analysis Toolbox,A Matlab toolbox for electric power system analysis and simulation.,,lf-energy-landscape,
-powerdynamics_jl,PowerDynamics.jl,,https://github.com/juliaenergy/powerdynamics.jl,pre-compiled,
 powerdynamics_jl,PowerDynamics.jl,Provides all the tools you need to create a dynamic power grid model and analyze it.,https://github.com/juliaenergy/powerdynamics.jl,opensustain-tech,
+powerdynamics_jl,PowerDynamics.jl,,https://github.com/juliaenergy/powerdynamics.jl,pre-compiled,
 powergama,PowerGAMA,A lightweight simulation tool for high level analyses of renewable energy integration in large power systems.,https://bitbucket.org/harald_g_svendsen/powergama,lf-energy-landscape,
 powergenome,PowerGenome,A tool to quickly and easily create inputs for power systems models.,https://github.com/powergenome/powergenome,lf-energy-landscape,
-powermatcher,PowerMatcher,"""The PowerMatcher is a smart grid coordination mechanism. It balances distributed energy resources (DER) and (flexible) loads ... The PowerMatcher core application provides the market mechanism for the determination of the market equilibrium, while the devices work as actors for demand and/or supply""s work as actors for demand and/or supply""",https://github.com/flexiblepower/powermatcher,openmod,
 powermatcher,PowerMatcher,"The PowerMatcher is a ‘demand response’ technology that balances all smart devices, from low voltage to high voltage, in a virtual market.",https://github.com/flexiblepower/powermatcher,lf-energy-landscape,
+powermatcher,PowerMatcher,"""The PowerMatcher is a smart grid coordination mechanism. It balances distributed energy resources (DER) and (flexible) loads ... The PowerMatcher core application provides the market mechanism for the determination of the market equilibrium, while the devices work as actors for demand and/or supply""s work as actors for demand and/or supply""",https://github.com/flexiblepower/powermatcher,openmod,
 powermodels,PowerModels,"PowerModels.jl is a Julia package for Steady-State Power Network Optimization. It is designed to enable computational evaluation of emerging power network formulations and algorithms in a common platform. The code is engineered to decouple problem specifications (e.g. Power Flow, Optimal Power Flow, ...) from the power network formulations (e.g. AC, DC-approximation, SOC-relaxation, ...). This enables the definition of a wide variety of power network formulations and their comparison on common problem specifications.",https://github.com/lanl-ansi/powermodels.jl,g-pst,power-flow
 powermodels_jl,PowerModels.jl,Designed to enable computational evaluation of emerging power network formulations and algorithms in a common platform.,https://github.com/lanl-ansi/powermodels.jl,opensustain-tech,
 powermodels_jl,PowerModels.jl,,https://github.com/lanl-ansi/powermodels.jl,pre-compiled,
 powermodelsannex_jl,PowerModelsAnnex.jl,An extension of PowerModels.jl that provides a home for open source sharing of preliminary and/or exploratory methods in power system optimization.,https://github.com/lanl-ansi/powermodelsannex.jl,opensustain-tech,
 powersimdata,PowerSimData,Is part of a Python software ecosystem developed by Breakthrough Energy Sciences to carry out power flow study in the U.S. electrical grid.,https://github.com/breakthrough-energy/powersimdata,opensustain-tech,
-powersimulations_jl,PowerSimulations.jl,,https://github.com/nrel-sienna/powersimulations.jl,pre-compiled,production-cost
-powersimulations_jl,PowerSimulations.jl,"Flexible, modular, and scalable package for power system quasi-static analysis with sequential problem specification capabilities.",https://github.com/nrel-siip/powersimulations.jl,openmod,production-cost
 powersimulations_jl,PowerSimulations.jl,A Julia package for power system modeling and simulation of Power Systems operations.,https://github.com/nrel-siip/powersimulations.jl,lf-energy-landscape,production-cost
 powersimulations_jl,PowerSimulations.jl,A Julia package for power system modeling and simulation of Power Systems operations.,https://github.com/nrel-sienna/powersimulations.jl,opensustain-tech,production-cost
 powersimulations_jl,PowerSimulations.jl,PowerSimulations.jl is a Julia package for power system modeling and simulation of Power Systems operations.,,g-pst,production-cost
+powersimulations_jl,PowerSimulations.jl,"Flexible, modular, and scalable package for power system quasi-static analysis with sequential problem specification capabilities.",https://github.com/nrel-siip/powersimulations.jl,openmod,production-cost
 powersimulations_jl,PowerSimulations.jl,,https://github.com/nrel-sienna/powersimulations.jl,pre-compiled,production-cost
-powersimulationsdynamics_jl,PowerSimulationsDynamics.jl,,https://github.com/nrel-sienna/powersimulationsdynamics.jl,pre-compiled,power-flow
 powersimulationsdynamics_jl,PowerSimulationsDynamics.jl,,https://github.com/nrel-siip/powersimulationsdynamics.jl,openmod,power-flow
-powersystemdatamodel,PowerSystemDataModel,Provides an extensive data model capable of modeling energy systems with high granularity e.g. for bottom-up simulations.,https://github.com/ie3-institute/powersystemdatamodel,opensustain-tech,
+powersimulationsdynamics_jl,PowerSimulationsDynamics.jl,,https://github.com/nrel-sienna/powersimulationsdynamics.jl,pre-compiled,power-flow
 powersystemdatamodel,PowerSystemDataModel,Provides an extensive data model capable of modeling energy systems with high granularity e.g. for bottom-up simulations.,https://github.com/ie3-institute/powersystemdatamodel,lf-energy-landscape,
-powersystems_jl,PowerSystems.jl,"The PowerSystems.jl package provides a rigorous data model using Julia structures to enable power systems analysis and modeling. In addition to stand-alone system analysis tools and data model building, the PowerSystems.jl package is used as the foundational data container for the PowerSimulations.jl and PowerSimulationsDynamics.jl packages. PowerSystems.jl supports a limited number of data file formats for parsing.d number of data file formats for parsing.",https://github.com/nrel-siip/powersystems.jl,openmod,
+powersystemdatamodel,PowerSystemDataModel,Provides an extensive data model capable of modeling energy systems with high granularity e.g. for bottom-up simulations.,https://github.com/ie3-institute/powersystemdatamodel,opensustain-tech,
 powersystems_jl,PowerSystems.jl,Provides a rigorous data model using Julia structures to enable power systems analysis and modeling.,https://github.com/nrel-siip/powersystems.jl,lf-energy-landscape,
-powersystems_jl,PowerSystems.jl,,https://github.com/nrel-sienna/powersystems.jl,pre-compiled,
 powersystems_jl,PowerSystems.jl,Provides a rigorous data model using Julia structures to enable power systems analysis and modeling.,https://github.com/nrel-sienna/powersystems.jl,opensustain-tech,
+powersystems_jl,PowerSystems.jl,"The PowerSystems.jl package provides a rigorous data model using Julia structures to enable power systems analysis and modeling. In addition to stand-alone system analysis tools and data model building, the PowerSystems.jl package is used as the foundational data container for the PowerSimulations.jl and PowerSimulationsDynamics.jl packages. PowerSystems.jl supports a limited number of data file formats for parsing.d number of data file formats for parsing.",https://github.com/nrel-siip/powersystems.jl,openmod,
+powersystems_jl,PowerSystems.jl,,https://github.com/nrel-sienna/powersystems.jl,pre-compiled,
 powersystemsinvestments_jl,PowerSystemsInvestments.jl,,https://github.com/nrel-sienna/powersystemsinvestments.jl,pre-compiled,
-pownet,PowNet,"PowNet is a least-cost optimization model for simulating the Unit Commitment and Economic Dispatch (UC/ED) of large-scale (regional to country) power systems. In PowNet, a power system is represented by a set of nodes that include power plants, high-voltage substations, and import/export stations (for cross-border systems). The model schedules and dispatches the electricity supply from power plant units to meet hourly electricity demand in substations (at a minimum cost). It considers the techno-economic constraints of both generating units and high-voltage transmission network. The power flow calculation is based on a Direct Current (DC) network (with N-1 criterion), which provides a reasonable balance between modelling accuracy and data and computational requirements.y and data and computational requirements.",https://zenodo.org/record/3462879#.xol6t4gzzaq,openmod,
 pownet,PowNet,A least-cost optimization model for simulating the Unit Commitment and Economic Dispatch of large-scale (regional to country) power systems.,https://github.com/kamal0013/pownet,lf-energy-landscape,
-pownet,PowNet,,https://github.com/critical-infrastructure-systems-lab/pownet,pre-compiled,
 pownet,PowNet,A least-cost optimization model for simulating the Unit Commitment and Economic Dispatch of large-scale (regional to country) power systems.,https://github.com/critical-infrastructure-systems-lab/pownet,opensustain-tech,
-powsybl,powsybl,,https://github.com/powsybl,pre-compiled,power-flow
-powsybl,powsybl,,https://github.com/powsybl,pre-compiled,power-flow
+pownet,PowNet,"PowNet is a least-cost optimization model for simulating the Unit Commitment and Economic Dispatch (UC/ED) of large-scale (regional to country) power systems. In PowNet, a power system is represented by a set of nodes that include power plants, high-voltage substations, and import/export stations (for cross-border systems). The model schedules and dispatches the electricity supply from power plant units to meet hourly electricity demand in substations (at a minimum cost). It considers the techno-economic constraints of both generating units and high-voltage transmission network. The power flow calculation is based on a Direct Current (DC) network (with N-1 criterion), which provides a reasonable balance between modelling accuracy and data and computational requirements.y and data and computational requirements.",https://zenodo.org/record/3462879#.xol6t4gzzaq,openmod,
+pownet,PowNet,,https://github.com/critical-infrastructure-systems-lab/pownet,pre-compiled,
 powsybl,PowSyBl,"An open source framework written in Java, that makes it easy to write complex software for power systems simulations and analysis.",https://github.com/powsybl/powsybl-core,opensustain-tech,power-flow
+powsybl,powsybl,,https://github.com/powsybl,pre-compiled,power-flow
 powsybl_open_load_flow,PowSyBl Open Load Flow,"An open source library written in Java, that makes it easy to write complex software for power systems simulations and analysis.",https://github.com/powsybl/powsybl-open-loadflow,opensustain-tech,
 pras,PRAS,,https://github.com/nrel/pras,pre-compiled,
 prep_shot,PREP-SHOT,"A transparent, modular, and open-source Energy Capacity Expansion Model.",https://github.com/prep-next/prep-shot,opensustain-tech,capacity-expansion
@@ -483,22 +477,22 @@ pvlib_python,Pvlib python,pvlib python is a community supported tool that provid
 pycity_scheduling,pycity_scheduling,"Python package pycity_scheduling is a framework for the effective development, testing, and assessment of optimization-based power scheduling algorithms for local multi-energy systems in city districts. The framework primarily targets the elaboration of coordination concepts that can efficiently solve the power dispatch problem on the city district level. Its target users are researchers in the field of smart grid applications and the deployment of operational flexibility for local energy systems.",https://git.rwth-aachen.de/acs/public/simulation/pycity_scheduling,g-pst,production-cost
 pycity_scheduling,pycity_scheduling,,https://git.rwth-aachen.de/acs/public/simulation/pycity_scheduling,pre-compiled,
 pygreta,pyGRETA,Python Generator of REnewable Time series and mAps: a tool that generates high-resolution potential maps and time series for user-defined regions within the globe.,https://github.com/tum-ens/pygreta,lf-energy-landscape,
-pylesa,PyLESA,,https://github.com/andrewlyden/pylesa,pre-compiled,
 pylesa,PyLESA,"PyLESA is an open source tool capable of modelling local energy systems containing both electrical and thermal technologies. It was developed with the aim of aiding the design of local energy systems. The focus of the tool is on modelling systems with heat pumps and thermal storage alongside time-of-use electricity tariffs and predictive control strategies. It is anticipated that the tool provides a framework for future development including electrical battery studies and participation in grid balancing mechanisms.
 This tool was developed as part of a PhD, ""Modelling and Design of Local Energy Systems Incorporating Heat Pumps, Thermal Storage, Future Tariffs, and Model Predictive Control "" by Andrew Lyden.odel Predictive Control "" by Andrew Lyden.",https://github.com/andrewlyden/pylesa,openmod,
+pylesa,PyLESA,,https://github.com/andrewlyden/pylesa,pre-compiled,
 pymarket,pymarket,,https://github.com/kiedanski/pymarket,pre-compiled,
 pymfm,pymfm,,https://github.com/sogno-platform/pymfm,pre-compiled,
 pymicrogridcontrol,pyMicrogridControl,,https://github.com/soheilmohseni/pymicrogridcontrol,pre-compiled,
 pypower,PYPOWER,,https://github.com/rwl/pypower,pre-compiled,power-flow
 pypower_dynamics,PYPOWER-Dynamics,,https://github.com/susantoj/pypower-dynamics,pre-compiled,
-pypownet,pypownet,,https://github.com/marvinler/pypownet,pre-compiled,
 pypownet,pypownet,A power network simulator with a Reinforcement Learning-focused usage.,https://github.com/marvinler/pypownet,opensustain-tech,
+pypownet,pypownet,,https://github.com/marvinler/pypownet,pre-compiled,
 pypowsybl,PyPowSyBl,A Python library for modelling and simulating power grids by providing bindings to the powsybl Java framework.,https://github.com/powsybl/pypowsybl,opensustain-tech,power-flow
 pypsa,PyPSA,Open source toolbox for simulating and optimising modern power and energy systems,https://github.com/pypsa/pypsa,g-pst,"capacity-expansion,production-cost"
-pypsa,PyPSA,"PyPSA is a free software toolbox for simulating and optimising modern energy systems that include features such as variable wind and solar generation, storage units, sector coupling and mixed alternating and direct current networks. PyPSA is designed to scale well with large networks and long time series. with large networks and long time series.",https://github.com/pypsa/pypsa,openmod,
-pypsa,PyPSA,,https://github.com/pypsa/pypsa,pre-compiled,
 pypsa,PyPSA,"A free software toolbox for simulating and optimizing modern power systems that include features such as conventional generators with unit commitment, variable wind and solar generation, storage units, coupling to other energy sectors, and mixed alternating and direct current networks.",https://github.com/pypsa/pypsa,lf-energy-landscape,
 pypsa,PyPSA,"A free software toolbox for simulating and optimizing modern power systems that include features such as conventional generators with unit commitment, variable wind and solar generation, storage units, coupling to other energy sectors, and mixed alternating and direct current networks.",https://github.com/pypsa/pypsa,opensustain-tech,
+pypsa,PyPSA,"PyPSA is a free software toolbox for simulating and optimising modern energy systems that include features such as variable wind and solar generation, storage units, sector coupling and mixed alternating and direct current networks. PyPSA is designed to scale well with large networks and long time series. with large networks and long time series.",https://github.com/pypsa/pypsa,openmod,
+pypsa,PyPSA,,https://github.com/pypsa/pypsa,pre-compiled,
 pypsa_earth,PyPSA-Earth,An Open Optimisation Model of the Earth Energy System.,https://github.com/pypsa-meets-earth/pypsa-earth,lf-energy-landscape,
 pypsa_eur_sec,PyPSA-Eur-Sec,A Sector-Coupled Open Optimisation Model of the European Energy System.,https://github.com/pypsa/pypsa-eur-sec,lf-energy-landscape,
 pysam,pysam,,https://github.com/nrel/pysam,pre-compiled,"capacity-expansion,production-cost"
@@ -530,22 +524,22 @@ MODULE 3: Investment and dispatch optimisation of demand response; economic asse
 
 (Article: https://doi.org/10.3390/en15228577; Code repository: https://doi.org/10.5281/zenodo.6424639)y: https://doi.org/10.5281/zenodo.6424639)",,openmod,
 reho,REHO,,https://github.com/ipese/reho,pre-compiled,
-reise_jl,REISE.jl,,https://github.com/breakthrough-energy/reise.jl,pre-compiled,
 reise_jl,REISE.jl,Renewable Energy Integration Simulation Engine.,https://github.com/breakthrough-energy/reise.jl,lf-energy-landscape,
+reise_jl,REISE.jl,,https://github.com/breakthrough-energy/reise.jl,pre-compiled,
 remix,REMix,"REMix is a powerful software for energy systems optimization. It can be used for the planning and techno-economical assessment of future multi-energy systems of any spatial, temporal and technological scope. REMix offers a wide range of methods and features that can be flexibly selected by the user.",https://gitlab.com/dlr-ve/esy/remix,g-pst,"capacity-expansion,production-cost"
 remix,REMix,The main focus is on the broad techno-economical assessment of possible future,https://gitlab.com/dlr-ve/esy/remix/framework,opensustain-tech,
 remix,remix,,https://gitlab.com/dlr-ve/esy/remix,pre-compiled,
 renewcast,Renewcast,"Forecasting renewable energy generation in EU countries with machine learning algorithms, based on Streamlit and sktime.",https://github.com/derevirn/renewcast,lf-energy-landscape,
-renpass,renpass,,https://github.com/fraukewiese/renpass,pre-compiled,
 renpass,Renpass,"renpass is an open source simulation energy model which has the goal to fulfil the requirements of full transparency and the possibility to image 100% renewable energy systems as well as today's system on a high regional and time resolution.
 Currently renpass is being developed further as renpassG!S based on the Open Energy Modelling Framework (oemof).e Open Energy Modelling Framework (oemof).",https://github.com/fraukewiese/renpass,openmod,
+renpass,renpass,,https://github.com/fraukewiese/renpass,pre-compiled,
 reopt,REopt,"The REopt™ model provides concurrent, multiple technology integration and optimization capabilities to help organizations meet their cost savings and energy performance goals. Formulated as a mixed integer linear program, the REopt model recommends an optimally sized mix of renewable energy, conventional generation, and energy storage technologies; estimates the net present value of implementing those technologies; and provides a dispatch strategy for operating the technology mix at maximum economic efficiency.nology mix at maximum economic efficiency.",https://github.com/nrel/reopt_lite_api,openmod,
 reopt_api,REopt_API,"Offers a subset of features from NREL's more comprehensive REopt model. Both models provide concurrent, multiple technology integration and optimization capabilities to help organizations meet their cost savings and energy performance goals.",https://github.com/nrel/reopt_api,opensustain-tech,
 reopt_jl,REopt.jl,,https://github.com/nrel/reopt.jl,pre-compiled,
 reopt_lite_api,REopt_Lite_API,"Offers a subset of features from NREL's more comprehensive REopt model. Both models provide concurrent, multiple technology integration and optimization capabilities to help organizations meet their cost savings and energy performance goals.",https://github.com/nrel/reopt_api,lf-energy-landscape,
 reskit,RESKit,A toolkit to help generate renewable energy generation time series for energy systems analysis.,https://github.com/fzj-iek3-vsa/reskit,lf-energy-landscape,
-resolve,resolve,,https://github.com/e3-/resolve,pre-compiled,
 resolve,resolve,Resolve is a Python-based least-cost capacity expansion model that identifies optimal electricity supply portfolios through capacity expansion and production simulation modeling.,https://github.com/e3-/resolve,opensustain-tech,
+resolve,resolve,,https://github.com/e3-/resolve,pre-compiled,
 rev,reV,"Enables the efficient and scalable computation of renewable energy generation, levelized cost of energy, application of geospatial exclusion layers, and generation of renewable energy supply curves.",https://github.com/nrel/rev,lf-energy-landscape,
 revub,REVUB,The main objective is to model how flexible operation of hydropower plants can help renewable electricity mixes with variable solar and wind power to provide reliable electricity supply and load-following services.,https://github.com/vub-hydr/revub,lf-energy-landscape,
 revx,reVX,Renewable Energy Potential(V) eXchange Tool,https://github.com/nrel/revx,lf-energy-landscape,
@@ -606,14 +600,14 @@ The program source is available on github (https://github.com/ozsolarwind/siren)
 smartgridtoolbox,SmartGridToolbox,Designed to provide an extensible and flexible starting point for developing a wide variety of smart grid simulations and other applications.,https://gitlab.com/smartgridtoolbox/smartgridtoolbox,opensustain-tech,
 sms++,SMS++,SMS++ is a software framework for modelling and solving large-scale problems with multiple nested forms of structure. The primary application of SMS++ has been to energy problems and several specific components have been developed.,https://gitlab.com/smspp/smspp-project,openmod,
 softx_2020_61,SOFTX_2020_61,,https://github.com/elseviersoftwarex/softx_2020_61,pre-compiled,
-spine_toolbox,Spine-Toolbox,,https://github.com/spine-tools/spine-toolbox,pre-compiled,
-spine_toolbox,Spine-Toolbox,"An application to define, manage, and execute various energy system simulation models.",https://github.com/spine-tools/spine-toolbox,opensustain-tech,
 spine_toolbox,Spine-Toolbox,"An application to define, manage, and execute various energy system simulation models.",https://github.com/spine-tools/spine-toolbox,lf-energy-landscape,
+spine_toolbox,Spine-Toolbox,"An application to define, manage, and execute various energy system simulation models.",https://github.com/spine-tools/spine-toolbox,opensustain-tech,
+spine_toolbox,Spine-Toolbox,,https://github.com/spine-tools/spine-toolbox,pre-compiled,
 spineopt,SpineOpt,A highly adaptable modelling framework for multi-energy systems,,g-pst,"capacity-expansion,production-cost"
-spineopt_jl,SpineOpt.jl,,https://github.com/spine-tools/spineopt.jl,pre-compiled,
 spineopt_jl,SpineOpt.jl,"SpineOpt is a flexible, open-source, energy systems modelling framework for performing operational and planning studies, consisting of a wide spectrum of novel tools and functionalities. The most salient features of SpineOpt include a generic data structure, flexible temporal and spatial structures, a comprehensive representation of uncertainties, and model decomposition capabilities to reduce the computational complexity.",https://github.com/spine-tools/spineopt.jl,lf-energy-landscape,
 spineopt_jl,SpineOpt.jl,A highly adaptable modelling framework for multi-energy systems written in Julia.,https://github.com/spine-tools/spineopt.jl,opensustain-tech,
 spineopt_jl,SpineOpt.jl,"SpineOpt is a flexible, open-source, energy system modelling framework for performing operational and planning studies, consisting of a wide spectrum of novel tools and functionalities. The most salient features of SpineOpt include a generic data structure, flexible temporal and spatial structures, a comprehensive representation of uncertainties, and model decomposition capabilities to reduce the computational complexity. These enable the implementation of highly diverse case studies.ementation of highly diverse case studies.",https://github.com/spine-tools/spineopt.jl,openmod,
+spineopt_jl,SpineOpt.jl,,https://github.com/spine-tools/spineopt.jl,pre-compiled,
 ssc,ssc,,https://github.com/nrel/ssc,pre-compiled,
 ssmd,ssmd,,https://git.rwth-aachen.de/acs/public/simulation/ssmd,pre-compiled,
 starlite,StarLite,,https://github.com/iit-energysystemmodels/starlite,pre-compiled,
@@ -623,16 +617,16 @@ steps,steps,,https://github.com/changgang/steps,pre-compiled,
 storagevet,StorageVET,A valuation model for analysis of energy storage technologies and some other energy resources paired with storage.,https://github.com/epri-dev/storagevet,opensustain-tech,
 supergrid,Supergrid,,https://github.com/niclasmattsson/supergrid,pre-compiled,
 sustaingym,SustainGym,Reinforcement Learning Environments for Sustainable Energy Systems.,https://github.com/chrisyeh96/sustaingym,opensustain-tech,
-switch,Switch,"Switch is a capacity-planning model for power systems with large shares of renewable energy, storage and/or demand response. It optimizes investment decisions for renewable and conventional generation, storage, hydro and other assets, based on how they would be used during a collection of sample days in many future years. The use of multiple investment periods and chronologically sequenced hours enables optimization and assessment of a long-term renewable transition based on a direct consideration of how these resources would be used hour-by-hour. The Switch platform is highly modular, allowing easy selection between prewritten components or addition of custom components as first-class elements in the model.ents as first-class elements in the model.",https://github.com/switch-model/switch,openmod,
 switch,Switch,"Switch is a capacity-planning model for power systems with large shares of renewable energy, storage and/or demand response. It optimizes investment decisions for renewable and conventional generation, battery or hydrogen storage, hydro and other assets, based on how they would be used during a collection of sample days in many future years. The use of multiple investment periods and chronologically sequenced hours enables optimization and assessment of a long-term renewable transition based on a direct consideration of how these resources would be used hour-by-hour. The Switch platform is highly modular, allowing easy selection between prewritten components or addition of custom components as first-class elements in the model.",https://github.com/switch-model/switch,g-pst,capacity-expansion
+switch,Switch,"Switch is a capacity-planning model for power systems with large shares of renewable energy, storage and/or demand response. It optimizes investment decisions for renewable and conventional generation, storage, hydro and other assets, based on how they would be used during a collection of sample days in many future years. The use of multiple investment periods and chronologically sequenced hours enables optimization and assessment of a long-term renewable transition based on a direct consideration of how these resources would be used hour-by-hour. The Switch platform is highly modular, allowing easy selection between prewritten components or addition of custom components as first-class elements in the model.ents as first-class elements in the model.",https://github.com/switch-model/switch,openmod,
 switch,switch,,https://github.com/switch-model/switch,pre-compiled,
 switch_model,switch-model,Optimal planning model for power systems with large shares of renewable energy.,https://github.com/switch-model/switch,lf-energy-landscape,
 system_advisor_model,System Advisor Model,"A simulation program for electricity generation projects. It has models for different kinds of renewable energy systems and financial models for residential, commercial, and utility-scale projects.",https://github.com/nrel/sam,lf-energy-landscape,
 system_advisor_model,System Advisor Model,"A simulation program for electricity generation projects. It has models for different kinds of renewable energy systems and financial models for residential, commercial, and utility-scale projects.",https://github.com/nrel/sam,opensustain-tech,
 system_advisor_model_(sam),System Advisor Model (SAM),The System Advisor Model (SAM) is a free techno-economic software model that facilitates decision-making for people in the renewable energy industry.,https://github.com/nrel/sam,openmod,
+temoa,Temoa,Tools for Energy Model Optimization and Analysis (Temoa) is an open source modeling framework for conducting energy system analysis.,https://github.com/temoaproject/temoa,lf-energy-landscape,capacity-expansion
 temoa,Temoa,Tools for Energy Model Optimization and Analysis (Temoa) is an open source modeling framework for conducting energy system analysis.,https://github.com/temoaproject/temoa,opensustain-tech,capacity-expansion
 temoa,Temoa,"Tools for Energy Model Optimization and Analysis (Temoa) is an open source framework used to conduct analysis with a bottom-up, technology rich energy system model.",https://github.com/temoaproject/temoa,openmod,capacity-expansion
-temoa,Temoa,Tools for Energy Model Optimization and Analysis (Temoa) is an open source modeling framework for conducting energy system analysis.,https://github.com/temoaproject/temoa,lf-energy-landscape,capacity-expansion
 temoa,temoa,,https://github.com/temoaproject/temoa,pre-compiled,capacity-expansion
 tesp,tesp,,https://github.com/pnnl/tesp,pre-compiled,
 tespy,tespy,,https://github.com/oemof/tespy,pre-compiled,
@@ -658,9 +652,9 @@ tsam,tsam,A Python package which uses different machine learning algorithms for 
 tsam,tsam,A Python package which uses different machine learning algorithms for the aggregation of time series.,https://github.com/fzj-iek3-vsa/tsam,opensustain-tech,
 tulipa_energy_model,Tulipa Energy Model,An energy system modelling framework for investment (expansion) and dispatch (operations) optimisations using mixed-integer linear programming (MILP) - primarily for informing policy-maker & stakeholder decisions in the energy transition. Focuses on generalized & compact formulations (peer-reviewed publications) and efficient code implementation to handle large-scale problems (i.e. European) while maintaining sufficient granularity.,https://github.com/tulipaenergy/tulipaenergymodel.jl,opensustain-tech,
 tulipaenergymodel_jl,TulipaEnergyModel.jl,,https://github.com/tulipaenergy/tulipaenergymodel.jl,pre-compiled,
-urbs,URBS,"urbs is a linear programming optimisation model for capacity expansion planning and unit commitment for distributed energy systems. Its name, latin for city, stems from its origin as a model for optimisation for urban energy systems. Since then, it has been adapted to multiple scales from neighbourhoods to continents. scales from neighbourhoods to continents.",https://github.com/tum-ens/urbs,openmod,capacity-expansion
-urbs,urbs,A linear optimization model for distributed energy systems.,https://github.com/tum-ens/urbs,opensustain-tech,capacity-expansion
 urbs,urbs,A linear optimization model for distributed energy systems.,https://github.com/tum-ens/urbs,lf-energy-landscape,capacity-expansion
+urbs,urbs,A linear optimization model for distributed energy systems.,https://github.com/tum-ens/urbs,opensustain-tech,capacity-expansion
+urbs,URBS,"urbs is a linear programming optimisation model for capacity expansion planning and unit commitment for distributed energy systems. Its name, latin for city, stems from its origin as a model for optimisation for urban energy systems. Since then, it has been adapted to multiple scales from neighbourhoods to continents. scales from neighbourhoods to continents.",https://github.com/tum-ens/urbs,openmod,capacity-expansion
 urbs,urbs,,https://github.com/tum-ens/urbs,pre-compiled,capacity-expansion
 uselectricity,USelectricity,Forecast the US demand for electricity.,https://github.com/ramikrispin/uselectricity,lf-energy-landscape,
 usensys,USENSYS,"United States Energy SYStem (USENSYS) is an open source capacity expansion model (CEM, also knows as Reference Energy System model, RES), developped based on energyRt package for R.",https://github.com/usensys/usensys,openmod,
@@ -671,5 +665,5 @@ whobs_server,whobs-server,"This is the code for the online optimization of zero-
 wisdem_dakota_driver,WISDEM dakota_driver,,https://github.com/wisdem/dakota_driver,lf-energy-landscape,
 wpgnn_and_playgen,WPGNN and PLayGen,,https://github.com/nrel/wpgnn,lf-energy-landscape,
 xl2times,xl2times,An open source tool to convert TIMES models specified in Excel to a format ready for processing by GAMS.,https://github.com/etsap-times/xl2times,opensustain-tech,
-zen_garden,ZEN-garden,,https://github.com/zen-universe/zen-garden,pre-compiled,
 zen_garden,ZEN-garden,"ZEN-garden is an open-source linear optimization model of long-term energy system transition pathways. ZEN-garden, with a modular and flexible design, can be used to optimize different types of energy systems, value chains, or other network-based systems. ZEN-garden particularly provides a detailed description of transition pathways with, among other features, cumulative or annual carbon limits, capacity expansion constraints, and construction years. Data handling is user-oriented with features covering unit consistency, scaling, and parallelizable scenario analysis. Results output by ZEN-garden are investigated on an intuitive and flexible visualization platform.itive and flexible visualization platform.",,openmod,
+zen_garden,ZEN-garden,,https://github.com/zen-universe/zen-garden,pre-compiled,

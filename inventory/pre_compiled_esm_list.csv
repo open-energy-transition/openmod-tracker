@@ -33,7 +33,6 @@ github.com/dgusain1/energysim,simulation model
 github.com/dss-extensions/dss_capi,simulation model
 github.com/dynawo/dynawo,
 github.com/e2nIEE/pandapipes,simulation model
-github.com/e2nIEE/pandapower,
 github.com/e2nIEE/pandapower,simulation model
 github.com/e3-/resolve,
 github.com/EIAgov/BlueSky,
@@ -84,7 +83,6 @@ github.com/lvorspel/DiGriPy,simulation model
 github.com/macroenergy/MacroEnergy.jl,
 github.com/magpiemodel/magpie,
 github.com/MarvinLer/pypownet,simulation model
-github.com/MATPOWER/matpower,
 github.com/MATPOWER/matpower,simulation model
 github.com/MATPOWER/most,
 github.com/mesmo-dev/mesmo,
@@ -93,7 +91,6 @@ github.com/MicroGridsPy/MicroGridsPy,
 github.com/ModPowerSystems/ModPowerSystems,
 github.com/niclasmattsson/Supergrid,
 github.com/NREL-Distribution-Suites/erad,
-github.com/NREL-Sienna/PowerSimulations.jl,
 github.com/NREL-Sienna/PowerSimulations.jl,simulation model
 github.com/NREL-Sienna/PowerSimulationsDynamics.jl,
 github.com/NREL-Sienna/PowerSystems.jl,
@@ -120,13 +117,11 @@ github.com/pielube/MESSpy,simulation model
 github.com/pnnl/ExaGO,
 github.com/pnnl/tesp,simulation model
 github.com/PowerGridModel/power-grid-model,simulation model
-github.com/powsybl,
 github.com/powsybl,simulation model
 github.com/psrenergy/SDDPDSO.jl,simulation model
 github.com/PyPSA/PyPSA,
 github.com/quintel/etengine,
 github.com/RahmanKhorramfar91/JPoNG,
-github.com/rebase-energy/enflow,
 github.com/rebase-energy/enflow,simulation model
 github.com/rl-institut/multi-vector-simulator,
 github.com/robbiemorrison/deeco,
@@ -165,7 +160,6 @@ gitlab.com/energyincities/python-ehub,
 gitlab.com/sesit/copper,
 gitlab.com/sesit/idea,deprecated
 gitlab.com/sesit/silver,
-gitlab.pnnl.gov/exasgd/frameworks/exago,access denied
 gitlab.tubit.tu-berlin.de/wip/dynelmod_public,access denied
 gitlab.uliege.be/smart_grids/public/gboml,
 gitlab.vtt.fi/backbone/backbone,

@@ -86,4 +86,11 @@ For the remaining tools, we collect source code repository and package data usin
 At this stage, some tools will be filtered out for lack of any data or because they are written in a proprietary programming language (e.g. MATLAB, GAMS, AMPL).
 Lack of repository data is usually because the repository is no longer available or because it is not publicly accessible (which we deem to be *not* an open source tool, irrespective of the tool's license).
 In very rare cases (<1% of tools in the inventory), the repository host is not indexed by <https://ecosyste.ms>.
-If this is the case for your tool and you would like it to be included in this inventory then you should raise an issue on the appropriate [ecosyste.ms repository](https://github.com/ecosyste-ms).
+If this is the case for your tool and you would like it to be included in this inventory then you should open an issue on the appropriate [ecosyste.ms repository](https://github.com/ecosyste-ms).
+
+Further to data from <https://ecosyste.ms>, we attempt to link repositories with their documentation sites.
+The most likely hosts for documentation are readthedocs.org, Github/Gitlab Pages, or repository Wikis.
+For each repository, we check the most likely URL for each of these as they follow a pre-defined structure.
+If we get a positive match, we link that to the repository.
+This is not perfect as sometimes a project uses an unexpected site URL for their documentation.
+If your project is listed without documentation that you know exists then [open an issue](https://github.com/open-energy-transition/open-esm-analysis/issues/new)!

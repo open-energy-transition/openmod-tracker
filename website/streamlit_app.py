@@ -34,11 +34,20 @@ COLUMN_DTYPES: dict[str, Callable] = {
     "updated_at": pd.to_datetime,
     "stargazers_count": pd.to_numeric,
     "commit_stats.total_committers": pd.to_numeric,
-    "commit_stats.dds": pd.to_numeric,
+    "commit_stats.dds": lambda x: 100 * pd.to_numeric(x),
     "forks_count": pd.to_numeric,
     "dependent_repos_count": pd.to_numeric,
     "last_month_downloads": pd.to_numeric,
     "category": lambda x: x.str.split(","),
+}
+
+NUMBER_FORMAT: dict[str, str] = {
+    "Stars": "localized",
+    "Contributors": "localized",
+    "DDS": "%d%%",
+    "Forks": "localized",
+    "Dependents": "localized",
+    "Last Month Downloads": "localized",
 }
 
 COLUMN_HELP: dict[str, str] = {
@@ -56,7 +65,6 @@ COLUMN_HELP: dict[str, str] = {
 }
 
 DEFAULT_ORDER = "Stars"
-NOT_OPEN_SOURCE_LANGUAGES = ["GAMS", "MATLAB", "JetBrains MPS", "PowerBuilder", "AMPL"]
 
 
 def create_vis_table(tool_data_dir: Path) -> pd.DataFrame:
@@ -80,7 +88,7 @@ def create_vis_table(tool_data_dir: Path) -> pd.DataFrame:
     # Assume: projects categorised as "Jupyter Notebook" are actually Python projects.
     # This occurs because the repository language is based on number of lines and Jupyter Notebooks have _a lot_ of lines.
     df["language"] = df.language.replace({"Jupyter Notebook": "Python"})
-    df = df[~df["language"].isin(NOT_OPEN_SOURCE_LANGUAGES)]
+
     df["name"] = df.url + "#" + df.name.apply(lambda x: x.split(",")[0])
 
     for col, dtype_func in COLUMN_DTYPES.items():
@@ -125,6 +133,27 @@ def nan_filter(col: pd.Series) -> pd.Series:
         pd.Series: Filtered `col`.
     """
     return col.notna()
+
+
+def get_state(key, default=None):
+    """Get a value from Streamlit session state, or set it to default if not present."""
+    return st.session_state.get(key, default)
+
+
+def set_state(key, value, subkey: str | None = None):
+    """Set a value in Streamlit session state."""
+    if subkey is None:
+        st.session_state[key] = value
+    else:
+        st.session_state[key][subkey] = value
+
+
+def init_state(key, default, subkey: str | None = None):
+    """Initialise a key in Streamlit session state."""
+    if subkey is None:
+        set_state(key, get_state(key, default))
+    else:
+        set_state(key, get_state(key, default)[subkey], subkey)
 
 
 def numeric_range_filter(
@@ -244,8 +273,8 @@ def update_score_col(df: pd.DataFrame) -> pd.Series:
         pd.Series: Tool score.
     """
     # Add tool score by combining metrics with the provided weightings
-    scores = {col: st.session_state.get(f"scoring_{col}", 0.5) for col in df.columns}
-    scoring_method = st.session_state.get("scoring_method", "min-max")
+    scores = {col: get_state(f"scoring_{col}", 0.5) for col in df.columns}
+    scoring_method = get_state("scoring_method", "min-max")
     normalised_data = normalise(df, scoring_method)
     score = normalised_data.mul(scores).div(sum(scores.values())).sum(axis=1).mul(100)
     return score
@@ -289,9 +318,7 @@ def slider(
     else:
         default_range = (col.min(), col.max())
     current_range = (
-        default_range
-        if reset_mode
-        else st.session_state.get(f"slider_{col.name}", default_range)
+        default_range if reset_mode else get_state(f"slider_{col.name}", default_range)
     )
     if col.dtype.kind == "M":
         slider_range = tuple(pd.Timestamp(i).timestamp() for i in current_range)
@@ -301,6 +328,7 @@ def slider(
 
     if plot_dist:
         dist_plot(col, slider_range)
+
     selected_range = st.sidebar.slider(
         f"Range for {col.name}",
         min_value=default_range[0],
@@ -324,9 +352,7 @@ def multiselect(unique_values: list[str], col: str, reset_mode: bool) -> list[st
         list[str]: values given by multiselect to use in data table filtering.
     """
     current_selected = (
-        unique_values
-        if reset_mode
-        else st.session_state.get(f"multiselect_{col}", unique_values)
+        unique_values if reset_mode else get_state(f"multiselect_{col}", unique_values)
     )
     selected_values = st.sidebar.multiselect(
         f"Select {col} values",
@@ -349,14 +375,14 @@ def reset(button_press: bool = False) -> bool:
     # Reset filters button and logic
     if button_press:
         # Set a flag to indicate we want to reset
-        st.session_state["reset_filters"] = True
+        set_state("reset_filters", True)
         st.rerun()
 
     # Check if we need to reset filters
-    reset_mode = st.session_state.get("reset_filters", False)
+    reset_mode = get_state("reset_filters", False)
     if reset_mode:
         # Clear the reset flag
-        st.session_state["reset_filters"] = False
+        set_state("reset_filters", False)
     return reset_mode
 
 
@@ -370,20 +396,16 @@ def header_and_missing_value_toggle(col: pd.Series, reset_mode: bool) -> bool:
     Returns:
         bool: True if there are NaN values and the missing value toggle is switched on.
     """
+    name: str = col.name  # type:ignore
+    st.sidebar.subheader(name, help=COLUMN_HELP[name])
     missing_count = col.isnull().sum()
     if missing_count > 0:
-        missing_text = f"🚫 Missing values: {missing_count}"
-        st.sidebar.subheader(f"{col.name} ({missing_text})", help=COLUMN_HELP[col.name])
         exclude_nan = st.sidebar.toggle(
-            f"Exclude missing values for {col.name}",
-            value=False
-            if reset_mode
-            else st.session_state.get(f"exclude_nan_{col.name}", False),
-            key=f"exclude_nan_{col.name}",
+            f"Exclude {missing_count} tools missing `{name}` data",
+            value=False if reset_mode else get_state(f"exclude_nan_{name}", False),
+            key=f"exclude_nan_{name}",
         )
     else:
-        missing_text = "✅ No missing values"
-        st.sidebar.subheader(f"{col.name} ({missing_text})", help=COLUMN_HELP[col.name])
         exclude_nan = False
     return exclude_nan
 
@@ -591,7 +613,9 @@ def main(df: pd.DataFrame):
                 numeric_range_filter(df_filtered[col], *slider_range)
             ]
             numeric_cols.append(col)
-            col_config[col] = st.column_config.NumberColumn(col, help=COLUMN_HELP[col])
+            col_config[col] = st.column_config.NumberColumn(
+                col, help=COLUMN_HELP[col], format=NUMBER_FORMAT[col]
+            )
 
         elif is_categorical_column(df[col]):
             # Categorical multiselect

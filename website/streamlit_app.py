@@ -34,11 +34,20 @@ COLUMN_DTYPES: dict[str, Callable] = {
     "updated_at": pd.to_datetime,
     "stargazers_count": pd.to_numeric,
     "commit_stats.total_committers": pd.to_numeric,
-    "commit_stats.dds": pd.to_numeric,
+    "commit_stats.dds": lambda x: 100 * pd.to_numeric(x),
     "forks_count": pd.to_numeric,
     "dependent_repos_count": pd.to_numeric,
     "last_month_downloads": pd.to_numeric,
     "category": lambda x: x.str.split(","),
+}
+
+NUMBER_FORMAT: dict[str, str] = {
+    "Stars": "localized",
+    "Contributors": "localized",
+    "DDS": "%d%%",
+    "Forks": "localized",
+    "Dependents": "localized",
+    "Last Month Downloads": "localized",
 }
 
 COLUMN_HELP: dict[str, str] = {
@@ -56,7 +65,6 @@ COLUMN_HELP: dict[str, str] = {
 }
 
 DEFAULT_ORDER = "Stars"
-NOT_OPEN_SOURCE_LANGUAGES = ["GAMS", "MATLAB", "JetBrains MPS", "PowerBuilder", "AMPL"]
 
 
 def create_vis_table(tool_data_dir: Path) -> pd.DataFrame:
@@ -80,7 +88,7 @@ def create_vis_table(tool_data_dir: Path) -> pd.DataFrame:
     # Assume: projects categorised as "Jupyter Notebook" are actually Python projects.
     # This occurs because the repository language is based on number of lines and Jupyter Notebooks have _a lot_ of lines.
     df["language"] = df.language.replace({"Jupyter Notebook": "Python"})
-    df = df[~df["language"].isin(NOT_OPEN_SOURCE_LANGUAGES)]
+
     df["name"] = df.url + "#" + df.name.apply(lambda x: x.split(",")[0])
 
     for col, dtype_func in COLUMN_DTYPES.items():
@@ -370,20 +378,21 @@ def header_and_missing_value_toggle(col: pd.Series, reset_mode: bool) -> bool:
     Returns:
         bool: True if there are NaN values and the missing value toggle is switched on.
     """
+    name: str = col.name  # type:ignore
     missing_count = col.isnull().sum()
     if missing_count > 0:
         missing_text = f"🚫 Missing values: {missing_count}"
-        st.sidebar.subheader(f"{col.name} ({missing_text})", help=COLUMN_HELP[col.name])
+        st.sidebar.subheader(f"{name} ({missing_text})", help=COLUMN_HELP[name])
         exclude_nan = st.sidebar.toggle(
-            f"Exclude missing values for {col.name}",
+            f"Exclude missing values for {name}",
             value=False
             if reset_mode
-            else st.session_state.get(f"exclude_nan_{col.name}", False),
-            key=f"exclude_nan_{col.name}",
+            else st.session_state.get(f"exclude_nan_{name}", False),
+            key=f"exclude_nan_{name}",
         )
     else:
         missing_text = "✅ No missing values"
-        st.sidebar.subheader(f"{col.name} ({missing_text})", help=COLUMN_HELP[col.name])
+        st.sidebar.subheader(f"{name} ({missing_text})", help=COLUMN_HELP[name])
         exclude_nan = False
     return exclude_nan
 
@@ -591,7 +600,9 @@ def main(df: pd.DataFrame):
                 numeric_range_filter(df_filtered[col], *slider_range)
             ]
             numeric_cols.append(col)
-            col_config[col] = st.column_config.NumberColumn(col, help=COLUMN_HELP[col])
+            col_config[col] = st.column_config.NumberColumn(
+                col, help=COLUMN_HELP[col], format=NUMBER_FORMAT[col]
+            )
 
         elif is_categorical_column(df[col]):
             # Categorical multiselect

@@ -152,10 +152,8 @@ def resolve_duplicated_urls(df: pd.DataFrame) -> pd.DataFrame:
 )
 def cli(infile: Path, outfile: Path, ignore: tuple[str]):
     """Filter collated tool list."""
-    entries = pd.read_csv(infile)
-    entries_ignore_sources = entries.where(~entries["source"].isin(ignore)).dropna(
-        how="all"
-    )
+    entries = pd.read_csv(infile).drop("description", axis=1)
+    entries_ignore_sources = entries[~entries["source"].isin(ignore)]
     filtered_entries = drop_no_git(entries_ignore_sources)
     filtered_entries = drop_duplicates(filtered_entries, on="url")
     filtered_entries = drop_exclusions(filtered_entries)

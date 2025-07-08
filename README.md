@@ -36,9 +36,33 @@ To serve the streamlit app, call `pixi run serve` from the command line.
 
 ## Refreshing data
 
+Data refreshes are necessary when changing the inventory source code and are recommended at periodic intervals to capture upstream changes.
+These are automated with a Github action but you can force a manual update locally following the below steps.
+
+
+>[!NOTE]
+>The below steps leverage [pixi tasks](https://pixi.sh/dev/workspace/advanced_tasks/) which will run all steps in the sequence if there have been changes to the source code or it is the first time you are running the command.
+>If you want to just run one step in isolation you will need to call the Python script directly, e.g. `pixi run python inventory/get-stats.py inventory/output/filtered.csv inventory/output/stats.csv`.
+>See `pixi.toml` for the command to run for each step.
+
+>[!WARNING]
+>Data refreshes _override_ the entire dataset.
+>This can be time consuming, particularly when refreshing [user statistics](#user-stats) which will take hours.
+
+### Tool stats
+
 The model inventory and associated statistics can be updated by calling `pixi run get-stats`.
-If nothing has changed in the source code files or CSVs, nothing will run.
-To force an update, delete the CSVs in `inventory/output` and _then_ call `pixi run get-stats`.
+This will get tools from the various upstream inventories, filter them based on [our requirements](#our-data-processing-approach), and then get stats from ecosyste.ms and by speculatively querying known documentation sites.
+
+### User stats
+
+The repository user interactions can be updated by calling `pixi run get-repo-users`.
+This gets _all_ repository data from scratch as the [PyGitHub](https://github.com/PyGithub/PyGithub) API does not allow us to only access the most recent changes.
+Therefore, it can be very time consuming.
+
+The repository user details can be updated by calling `pixi run get-user-details`.
+This will append `inventory/output/user_details.csv` with any new users listed in `inventory/output/user_interactions.csv`.
+As we have already prepared the initial set of users, this should be relatively quick when refreshing.
 
 ### Our data processing approach
 

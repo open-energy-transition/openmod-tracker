@@ -1,92 +1,145 @@
 """Get all users who interacted with a GitHub repository in various ways."""
 
+import concurrent.futures
 import logging
+from datetime import datetime
 from pathlib import Path
+from urllib.parse import urlparse
 
 import click
 import pandas as pd
-
-from .github_api import get_github_client
+from github import Github
+from github.Repository import Repository
+from github_api import get_github_client, get_rate_limit_info
+from tqdm import tqdm
 
 LOGGER = logging.getLogger(__name__)
+COLS = ["username", "timestamp", "interaction", "repo"]
 
 
-def get_repo_users(repo: str, interaction_type: str, g=None) -> pd.DataFrame:
+def get_repo_users(repo: str, gh_client: Github, threads: int = 5) -> pd.DataFrame:
     """Get all users who interacted with a repo in a specific way using PyGithub.
 
     Args:
         repo (str): The repository in 'owner/name' format.
-        interaction_type (str): One of 'stargazers', 'forks', 'watchers', 'issues', 'pulls'.
-        g (Github, optional): An authenticated PyGithub Github client. If None, a new client is created.
+        gh_client (Github): An authenticated PyGithub Github client.
+        threads (int, optional): Number of threads over which to parallelise the tasks. Defaults to 5.
 
     Returns:
         pd.DataFrame: DataFrame with columns ['username', 'timestamp', 'interaction', 'repo'] for each user interaction.
     """
-    if g is None:
-        g = get_github_client()
-    all_users = []
-    repo_obj = g.get_repo(repo)
-    if interaction_type == "stargazers":
-        for user in repo_obj.get_stargazers_with_dates():
-            all_users.append((user.user.login, user.starred_at))
-    elif interaction_type == "forks":
-        for fork in repo_obj.get_forks():
-            all_users.append((fork.owner.login, fork.created_at))
-    elif interaction_type == "watchers":
-        for user in repo_obj.get_watchers():
-            all_users.append((user.login, None))
-    elif interaction_type == "issues":
-        for issue in repo_obj.get_issues(state="all"):
-            if issue.user:
-                all_users.append((issue.user.login, issue.created_at))
-    elif interaction_type == "pulls":
-        for pr in repo_obj.get_pulls(state="all"):
-            if pr.user:
-                all_users.append((pr.user.login, pr.created_at))
+    repo_obj = gh_client.get_repo(repo)
+    # Prepare function and args for parallel execution
+    tasks = [
+        _get_stargazer_users,
+        _get_fork_users,
+        _get_watcher_users,
+        _get_issue_users,
+        _get_pull_users,
+    ]
+    with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor:
+        # Submit functions for execution
+        results = [executor.submit(task, repo_obj) for task in tasks]
+
+        all_users = [user for sublist in results for user in sublist.result()]
+
     if all_users:
-        df = pd.DataFrame(all_users, columns=["username", "timestamp"])
-        df["interaction"] = interaction_type
+        df = pd.DataFrame(all_users, columns=["username", "timestamp", "interaction"])
         df["repo"] = repo
         return df
     return pd.DataFrame()
+
+
+def _get_stargazer_users(repo_obj: Repository) -> list[tuple[str, datetime, str]]:
+    """Get all users who starred a repository with their star date."""
+    stargazers = [
+        (stargazer.user.login, stargazer.starred_at, "stargazer")
+        for stargazer in repo_obj.get_stargazers_with_dates()
+    ]
+    return stargazers
+
+
+def _get_fork_users(repo_obj: Repository) -> list[tuple[str, datetime, str]]:
+    """Get all users who forked a repository with their fork date."""
+    forkers = [
+        (fork.owner.login, fork.created_at, "fork") for fork in repo_obj.get_forks()
+    ]
+    return forkers
+
+
+def _get_watcher_users(repo_obj: Repository) -> list[tuple[str, None, str]]:
+    """Get all users who are watching a repository."""
+    watchers = [(watcher.login, None, "watcher") for watcher in repo_obj.get_watchers()]
+    return watchers
+
+
+def _get_issue_users(repo_obj: Repository) -> list[tuple[str, datetime, str]]:
+    """Get all users who opened issues on a repository with their issue creation date."""
+    issue_users = [
+        (issue.user.login, issue.created_at, "issue")
+        for issue in repo_obj.get_issues(state="all")
+        if issue.user
+    ]
+    return issue_users
+
+
+def _get_pull_users(repo_obj: Repository) -> list[tuple[str, datetime, str]]:
+    """Get all users who opened pull requests on a repository with their PR creation date."""
+    pr_users = [
+        (pr.user.login, pr.created_at, "pull")
+        for pr in repo_obj.get_pulls(state="all")
+        if pr.user
+    ]
+    return pr_users
 
 
 @click.command()
 @click.option(
     "--stats-file",
     type=click.Path(exists=True, path_type=Path),
+    help="Path to the CSV file containing repository URLs in the first column.",
     default="inventory/output/stats.csv",
 )
 @click.option(
     "--outdir",
     type=click.Path(exists=False, dir_okay=True, file_okay=False, path_type=Path),
+    help="Output directory for the user_interactions.csv file.",
     default="inventory/output",
 )
-def cli(stats_file: Path, outdir: Path):
-    """CLI entry point to collect all GitHub users who interact with the repositories listed in a stats file.
-
-    Args:
-        stats_file (Path): Path to the CSV file containing repository URLs in the first column.
-        outdir (Path): Output directory for the user_interactions.csv file.
-
-    Output:
-        Writes user_interactions.csv to the output directory, containing all user interactions for each repo.
-    """
-    g = get_github_client()
-    repos_df = pd.read_csv(stats_file, header=None)
-    repo_urls = repos_df.iloc[:, 0].tolist()
-    users_df = pd.DataFrame()
-    for repo_url in repo_urls:
-        if repo_url.startswith("https://github.com/"):
-            repo = repo_url.replace("https://github.com/", "")
-        else:
-            continue
-        LOGGER.info(f"Collecting users for {repo}")
-        for interaction_type in ["stargazers", "forks", "watchers", "issues", "pulls"]:
-            df = get_repo_users(repo, interaction_type, g=g)
-            users_df = pd.concat([users_df, df])
+@click.option(
+    "--threads",
+    type=int,
+    help="Number of threads over which to parallelise the tasks.",
+    default=5,
+)
+def cli(stats_file: Path, outdir: Path, threads: int):
+    """CLI entry point to collect all GitHub users who interact with the repositories listed in a stats file."""
     outdir.mkdir(parents=True, exist_ok=True)
+    users_df = pd.DataFrame(columns=COLS, index=[])
     users_df.to_csv(outdir / "user_interactions.csv", index=False)
+
+    gh_client = get_github_client()
+    repos_df = pd.read_csv(stats_file, index_col=0)
+    for repo_url in tqdm(repos_df.index, desc="Collecting users"):
+        url_parts = urlparse(repo_url)
+        if url_parts.netloc.endswith("github.com"):
+            repo = url_parts.path.strip("/")
+            LOGGER.warning(f"Collecting users for {repo}")
+        else:
+            LOGGER.warning(
+                f"Skipping user collection for {repo_url} as it is not a GitHub repo."
+            )
+            continue
+
+        df = get_repo_users(repo, gh_client, threads)
+        if df.empty:
+            LOGGER.warning(f"No users found for {repo}.")
+            continue
+        df[COLS].to_csv(
+            outdir / "user_interactions.csv", mode="a", header=False, index=False
+        )
+        remaining_calls = get_rate_limit_info(gh_client)[0]
+        LOGGER.warning(f"Remaining API calls: {remaining_calls}.")
 
 
 if __name__ == "__main__":

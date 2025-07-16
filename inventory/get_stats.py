@@ -43,9 +43,17 @@ except FileNotFoundError:
 
 JULIA_STATS_API = "https://juliapkgstats.com/api/v1/monthly_downloads/"
 NOT_OPEN_SOURCE_LANGUAGES = ["GAMS", "MATLAB", "JetBrains MPS", "PowerBuilder", "AMPL"]
+ECOSYSTEMS_CACHE_FILE = Path(__file__).parent / "ecosystems_urls.yaml"
+ECOSYSTEMS_CACHE = (
+    yaml.safe_load(ECOSYSTEMS_CACHE_FILE.read_text())
+    if ECOSYSTEMS_CACHE_FILE.exists()
+    else {}
+)
 
 
-def get_ecosystems_entry_data(urls: Iterable) -> pd.DataFrame:
+def get_ecosystems_entry_data(
+    urls: Iterable, existing_data: pd.DataFrame
+) -> pd.DataFrame:
     """Get data about repositories and associated packages from ecosyste.ms.
 
     Known issues:
@@ -56,31 +64,63 @@ def get_ecosystems_entry_data(urls: Iterable) -> pd.DataFrame:
     - PyPi downloads statistics are for last month (or _the_ last month?) only, not total.
 
     Args:
-        urls (Iterable): Iterable of URLs to search.
+        urls (Iterable): URLs (index) of tools (name = values) to search.
+        existing_data (pd.DataFrame): Existing data for all / most URLs, to fill in for server-side errors (which are common).
 
     Returns:
         pd.DataFrame: Collated data from ecosyste.ms for the given URLs
     """
     repo_dfs = []
     for url in tqdm(urls):
-        repo_data = util.get_ecosystems_repo_data(url)
-        if repo_data is None:
-            LOGGER.warning(f"Could not find ecosyste.ms entry for {url}")
+        ems_url = ECOSYSTEMS_CACHE.get(url, None)
+        if pd.isnull(ems_url):
+            ems_url = util.lookup_ecosystems_repo(url)
+            ECOSYSTEMS_CACHE[url] = ems_url
+            ECOSYSTEMS_CACHE_FILE.write_text(
+                yaml.safe_dump(ECOSYSTEMS_CACHE, sort_keys=True)
+            )
+
+        if ems_url is None:
+            if url in existing_data.index:
+                suffix = "; using older data"
+                repo_dfs.append(existing_data.loc[[url]])
+            else:
+                suffix = ""
+            LOGGER.warning(f"Could not access ecosyste.ms entry for {url}{suffix}.")
             continue
-        else:
-            repo_data_to_keep = {}
-            for entry in ENTRIES_TO_KEEP:
-                if "." in entry:
-                    val = _get_nested_dict_entry(repo_data, entry)
-                else:
-                    val = repo_data[entry]
-                repo_data_to_keep[entry] = val
-            repo_df = pd.DataFrame(repo_data_to_keep, index=[url])
-            if repo_df["language"].iloc[0] in NOT_OPEN_SOURCE_LANGUAGES:
-                LOGGER.warning(
-                    f"Skipping {url} as it is not written in an open source language: {repo_df['language'].iloc[0]}"
-                )
-                continue
+        elif ems_url is None:
+            LOGGER.warning(
+                f"Could not find ecosyste.ms entry for {url} (likely a server-side error)"
+            )
+            continue
+        if ems_url == "not-found":
+            LOGGER.warning(f"No ecosyste.ms entry for {url}")
+            continue
+
+        repo_data = util.get_ecosystems_repo_data(ems_url)
+
+        if not repo_data:
+            if url in existing_data.index:
+                suffix = "; using older data"
+                repo_dfs.append(existing_data.loc[[url]])
+            else:
+                suffix = ""
+            LOGGER.warning(f"Could not access ecosyste.ms entry for {url}{suffix}.")
+            continue
+
+        repo_data_to_keep = {}
+        for entry in ENTRIES_TO_KEEP:
+            if "." in entry:
+                val = _get_nested_dict_entry(repo_data, entry)
+            else:
+                val = repo_data[entry]
+            repo_data_to_keep[entry] = val
+        repo_df = pd.DataFrame(repo_data_to_keep, index=pd.Index([url], name="url"))
+        if repo_df["language"].iloc[0] in NOT_OPEN_SOURCE_LANGUAGES:
+            LOGGER.warning(
+                f"Skipping {url} as it is not written in an open source language: {repo_df['language'].iloc[0]}"
+            )
+            continue
 
         package_data = _get_package_data(url)
         docs_data = _get_docs_data(repo_data["html_url"])
@@ -146,7 +186,7 @@ def _get_package_data(url: str) -> dict:
             ):
                 download_count_all += package_source["downloads"]
             else:
-                LOGGER.warning(
+                LOGGER.debug(
                     f"Found null package downloads for {package_source['name']} from {package_source['ecosystem']}"
                 )
             latest_release = pd.to_datetime(
@@ -274,15 +314,32 @@ def _verify_rtd(slug: str, url: str) -> bool:
 
 
 @click.command()
-@click.argument("infile", type=click.Path(exists=True, dir_okay=False, file_okay=True))
 @click.argument(
-    "outfile", type=click.Path(exists=False, dir_okay=False, file_okay=True)
+    "infile",
+    type=click.Path(exists=True, dir_okay=False, file_okay=True, path_type=Path),
 )
-def cli(infile: Path, outfile: Path):
+@click.argument(
+    "outfile",
+    type=click.Path(exists=False, dir_okay=False, file_okay=True, path_type=Path),
+)
+@click.option("--find-missing", is_flag=True)
+def cli(infile: Path, outfile: Path, find_missing: bool):
     """Get ecosyste.ms stats for all entries."""
     entries = pd.read_csv(infile)
-    stats_df = get_ecosystems_entry_data(entries.url)
-    stats_df.to_csv(outfile)
+    if outfile.exists():
+        existing_stats_df = pd.read_csv(outfile, index_col="url")
+    else:
+        existing_stats_df = pd.DataFrame()
+
+    if find_missing:
+        entries = entries[~entries.url.isin(existing_stats_df.index)]
+
+    stats_df = get_ecosystems_entry_data(entries.url.unique(), existing_stats_df)
+
+    if find_missing:
+        stats_df = pd.concat([stats_df, existing_stats_df])
+
+    stats_df.sort_index().to_csv(outfile)
 
 
 if __name__ == "__main__":

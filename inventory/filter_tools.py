@@ -126,7 +126,7 @@ def resolve_duplicated_urls(df: pd.DataFrame) -> pd.DataFrame:
                 LOGGER.warning(f"Found redirect for: {url} -> {new_url}.")
                 df.loc[df.id == duplicate, "url"] = new_url
             elif (new_name := repo_data["source_name"]) is not None:
-                new_url = "https://" + urlparse(url).netloc + "/" + new_name
+                new_url = "https://" + urlparse(url).netloc + "/" + new_name.lower()
                 LOGGER.warning(f"Removing {url} as it is a fork of {new_url}.")
                 df.loc[df.id == duplicate, "url"] = new_url
         remaining_urls = df[df.id == duplicate].url.unique()

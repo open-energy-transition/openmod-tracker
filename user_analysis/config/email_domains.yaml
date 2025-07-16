@@ -1,0 +1,54 @@
+government:
+  keyword:
+    - gov
+  match:
+    - email_domain: [gov]
+      country: United States
+    - email_domain: [gov.uk]
+      country: United Kingdom
+    - email_domain: [gc.ca, .canada.ca]
+      country: Canada
+    - email_domain: [gov.au]
+      country: Australia
+    - email_domain: [bund.de, .gov.de]
+      country: Germany
+    - email_domain: [gouv.fr]
+      country: France
+    - email_domain: [gov.in]
+      country: India
+    - email_domain: [gov.cn]
+      country: China
+    - email_domain: [go.jp]
+      country: Japan
+    - email_domain: [gov.br]
+      country: Brazil
+    - email_domain: [gov.za]
+      country: South Africa
+    - email_domain: [govt.nz]
+      country: New Zealand
+    - email_domain: [gob.mx]
+      country: Mexico
+    - email_domain: [gov.it]
+      country: Italy
+    - email_domain: [go.kr]
+      country: South Korea
+    - email_domain: [gov.ru]
+      country: Russia
+    - email_domain: [gov.tr]
+      country: Turkey
+    - email_domain: [go.id]
+      country: Indonesia
+    - email_domain: [gov.ar]
+      country: Argentina
+    - email_domain: [gov.ph]
+      country: Philippines
+    - email_domain: [admin.ch]
+      country: Switzerland
+academic:
+  keyword:
+    - edu
+    - ac
+research:
+  match:
+    - email_domain: [iiasa.ac.at]
+      country: Austria

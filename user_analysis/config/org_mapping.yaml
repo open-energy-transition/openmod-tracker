@@ -1,0 +1,421 @@
+- name: abb
+  variations:
+  - abb group
+  - abb.com
+  - asea brown boveri
+- name: abn amro
+  variations:
+  - abnamro
+  - abn amro bank
+  - abn-amro
+  - abnamro.com
+- name: accenture
+  variations:
+  - accenture consulting
+  - accenture plc
+  - accenture.com
+- name: african development bank
+  shortname: afdb
+- name: alberta electric system operator
+  shortname: aeso
+  variations:
+  - aeso.ca
+- name: argonne national laboratory
+  shortname: anl
+  variations:
+  - anl.gov
+  - argonne lab
+- name: arup
+  variations:
+  - arup-group
+- name: asian development bank
+  shortname: adb
+- name: bain & company
+  variations:
+  - bain
+  - bain & co
+  - bain and company
+  - bain.com
+- name: boston consulting group
+  shortname: bcg
+  variations:
+  - bcg
+  - bcg.com
+  - the boston consulting group
+- name: brookhaven national laboratory
+  shortname: bnl
+  variations:
+  - bnl.gov
+  - brookhaven lab
+  - brookhaven national lab
+- name: california independent system operator
+  shortname: caiso
+  variations:
+  - ca iso
+  - caiso.com
+  - california iso
+- name: credit agricole
+  variations:
+  - creditagricole
+  - creditagricole.com
+  - credit agricole
+  - credit-agricole
+  - credit-agricole.com
+- name: delft university of technology
+  shortname: tud
+  variations:
+  - tu delft
+- name: deloitte
+  variations:
+  - deloitte consulting
+  - deloitte touche tohmatsu
+  - deloitte.com
+- name: ecole polytechnique federale de lausanne
+  shortname: epfl
+- name: electric power research institute
+  shortname: epri
+  variations:
+  - electric power research inst
+  - epri.org
+- name: energy information administration
+  shortname: eia
+- name: energy systems integration group
+  shortname: esig
+  variations:
+  - esig.energy
+- name: ernst & young
+  shortname: ey
+  variations:
+  - ernst and young
+  - ey.com
+- name: eth zurich
+  shortname: ethz
+  variations:
+  - eidgenossische technische hochschule zurich
+  - eth
+  - ethz.ch
+- name: european bank for reconstruction and development
+  shortname: ebrd
+- name: european investment bank
+  shortname: eib
+- name: fermi national accelerator laboratory
+  shortname: fnal
+  variations:
+  - fermilab
+  - fnal.gov
+- name: general electric
+  shortname: ge
+  variations:
+  - ge energy
+  - ge.com
+- name: gisce
+  shortname: gisce
+  variations:
+    - gisce-ti
+- name: google
+  variations:
+  - alphabet
+  - google inc
+  - google llc
+  - google.com
+- name: idaho national laboratory
+  shortname: inl
+  variations:
+  - idaho lab
+  - inl.gov
+- name: imperial college london
+  variations:
+  - ic london
+  - icl
+  - imperial
+  - imperial college
+  - imperial.ac.uk
+- name: independent consultant
+  variations:
+  - freelance consultant
+  - freelancer
+  - independent professional
+  - self-employed
+- name: independent developer
+  variations:
+  - freelance developer
+  - independent software developer
+  - software consultant
+- name: independent electricity system operator
+  shortname: ieso
+  variations:
+  - ieso.ca
+- name: independent researcher
+  variations:
+  - independent research
+  - independent scholar
+  - research consultant
+- name: independent system operator of new england
+  shortname: isone
+  variations:
+  - iso new england
+  - iso-ne
+  - iso-ne.com
+- name: ing bank
+  shortname: ing
+  variations:
+  - ing bank n.v.
+  - ing group
+  - ing.com
+- name: inter-american development bank
+  shortname: idb
+- name: international energy agency
+  shortname: iea
+- name: international institute for applied systems analysis
+  shortname: iiasa
+  variations:
+  - iiasa.ac.at
+  - applied systems analysis
+  - iiasa laxenburg
+  - iiasa schlossplatz
+  - international institute for applied systems
+  - laxenburg iiasa
+- name: international monetary fund
+  shortname: imf
+- name: international renewable energy agency
+  shortname: irena
+- name: kpmg
+  variations:
+  - kpmg international
+  - kpmg llp
+  - kpmg.com
+- name: kth royal institute of technology
+  shortname: kth
+- name: lawrence berkeley national laboratory
+  shortname: lbnl
+  variations:
+  - berkeley lab
+  - lawrence berkeley lab
+  - lbl
+- name: lawrence livermore national laboratory
+  shortname: llnl
+  variations:
+  - livermore lab
+  - llnl
+  - llnl.gov
+- name: lloyds bank
+  variations:
+  - lloyds.com
+  - lloyds
+  - lloyds banking group
+  - lloydsbank.com
+- name: los alamos national laboratory
+  shortname: lanl
+  variations:
+  - lanl.gov
+  - los alamos lab
+- name: massachusetts institute of technology
+  shortname: mit
+  variations:
+  - m.i.t.
+  - massachusetts institute of tech
+  - mit.edu
+- name: mckinsey
+  variations:
+  - mckinsey & co
+  - mckinsey & company
+  - mckinsey.com
+- name: meta
+  variations:
+  - facebook
+  - facebook.com
+  - fb
+  - meta platforms
+  - meta.com
+- name: microsoft
+  variations:
+  - microsoft corp
+  - microsoft corporation
+  - microsoft.com
+  - msft
+- name: midcontinent independent system operator
+  shortname: miso
+  variations:
+  - midwest iso
+  - miso.org
+- name: national energy technology laboratory
+  shortname: netl
+  variations:
+  - netl.gov
+- name: national renewable energy laboratory
+  shortname: nrel
+  variations:
+  - national renewable energy lab
+  - nrel,
+  - nrel.gov
+  - nrel/
+- name: natixis
+  variations:
+  - natixis bank
+  - natixis investment managers
+  - natixis.com
+- name: natwest
+  variations:
+  - natwest bank
+  - natwest group
+  - natwest.com
+- name: oak ridge national laboratory
+  shortname: ornl
+  variations:
+  - oak ridge lab
+  - ornl
+  - ornl.gov
+- name: open energy transition
+  shortname: oet
+  variations:
+  - openenergytransition
+- name: pacific northwest national laboratory
+  shortname: pnnl
+  variations:
+  - pacific northwest lab
+  - pnnl.gov
+- name: pjm interconnection
+  shortname: pjm
+  variations:
+  - pjm.com
+- name: power systems engineering research center
+  shortname: pserc
+  variations:
+  - pserc.org
+- name: price waterhouse coopers
+  shortname: pwc
+  variations:
+  - pricewaterhousecoopers
+  - pwc.com
+- name: rabobank
+  variations:
+  - cooperatieve rabobank
+  - rabo bank
+  - rabobank banking
+  - rabobank group
+  - rabobank international
+  - rabobank n.a.
+  - rabobank na
+  - rabobank nederland
+  - rabobank.com
+- name: reiner lemoine institute
+  shortname: rli
+  variations:
+  - reiner lemoine institut
+  - rl-institut
+- name: reseau de transport d'electricite
+  shortname: rte
+  variations:
+  - rte-france
+  - rte
+  - rte (reseau de transport d'electricite)
+  - rte france
+- name: rwth aachen university
+  shortname: rwth
+- name: sandia national laboratories
+  shortname: snl
+  variations:
+  - sandia
+  - sandia.gov
+  - snl.gov
+- name: santander
+  variations:
+  - banco santander
+  - santander bank
+  - santander.com
+- name: schneider electric
+  variations:
+  - schneider
+  - schneider.com
+- name: siemens
+  variations:
+  - siemens ag
+  - siemens energy
+  - siemens.com
+- name: slac national accelerator laboratory
+  shortname: slac
+  variations:
+  - slac.gov
+- name: societe generale
+  variations:
+  - socgen.com
+  - socgen
+  - societe generale
+  - societegenerale.com
+- name: stanford university
+  variations:
+  - stanford
+  - stanford.edu
+- name: technical university of berlin
+  shortname: tub
+  variations:
+  - tu berlin
+- name: technical university of denmark
+  shortname: dtu
+  variations:
+  - danmarks tekniske universitet
+  - dtu.dk
+- name: technical university of munich
+  shortname: tum
+  variations:
+  - tu munich
+- name: tesla
+  variations:
+  - tesla energy
+  - tesla inc
+  - tesla, inc.
+  - tesla.com
+- name: transition zero
+  variations:
+  - transition-zero
+- name: tsinghua university
+  shortname: thu
+  variations:
+  - 'Qing Hua Da Xue '
+  - tsinghua
+  - tsinghua tbsi
+  - tsinghua university - tbsi
+  - tsinghua.edu.cn
+- name: united states department of energy
+  shortname: doe
+  variations:
+  - department of energy
+  - doe.gov
+  - energy.gov
+  - u.s. department of energy
+  - us department of energy
+  - us doe
+- name: university of california berkeley
+  variations:
+  - berkeley
+  - berkeley.edu
+  - cal
+  - uc berkeley
+  - uc-berkeley
+  - ucb
+  - university of california at berkeley
+- name: university of cambridge
+  variations:
+  - cam
+  - cambridge
+  - cambridge.ac.uk
+- name: university of new south wales
+  shortname: unsw
+- name: university of north carolina at charlotte
+  variations:
+  - university of north carolina
+  - charlotte
+  - unc charlotte
+  - uncc
+  - uncc.edu
+- name: university of nottingham ningbo china
+  shortname: unnc
+- name: university of oxford
+  variations:
+  - ox
+  - oxford
+  - oxford.ac.uk
+- name: world bank
+  shortname: wb
+  variations:
+  - world bank group

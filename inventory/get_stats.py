@@ -72,34 +72,12 @@ def get_ecosystems_entry_data(
     """
     repo_dfs = []
     for url in tqdm(urls):
-        ems_url = ECOSYSTEMS_CACHE.get(url, None)
-        if pd.isnull(ems_url):
-            ems_url = util.lookup_ecosystems_repo(url)
-            ECOSYSTEMS_CACHE[url] = ems_url
-            ECOSYSTEMS_CACHE_FILE.write_text(
-                yaml.safe_dump(ECOSYSTEMS_CACHE, sort_keys=True)
-            )
+        repo_data = util.get_ecosystems_repo_data(url)
 
-        if ems_url is None:
-            if url in existing_data.index:
-                suffix = "; using older data"
-                repo_dfs.append(existing_data.loc[[url]])
-            else:
-                suffix = ""
-            LOGGER.warning(f"Could not access ecosyste.ms entry for {url}{suffix}.")
-            continue
-        elif ems_url is None:
-            LOGGER.warning(
-                f"Could not find ecosyste.ms entry for {url} (likely a server-side error)"
-            )
-            continue
-        if ems_url == "not-found":
+        if repo_data == "not-found":
             LOGGER.warning(f"No ecosyste.ms entry for {url}")
             continue
-
-        repo_data = util.get_ecosystems_repo_data(ems_url)
-
-        if not repo_data:
+        if repo_data is None:
             if url in existing_data.index:
                 suffix = "; using older data"
                 repo_dfs.append(existing_data.loc[[url]])

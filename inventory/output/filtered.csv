@@ -33,7 +33,7 @@ distaix,https://git.rwth-aachen.de/acs/public/simulation/distaixframework/distai
 dpsim,https://github.com/sogno-platform/dpsim,"DPSim,DPsim,dpsim","g-pst,opensustain-tech,pre-compiled",power-flow
 draf,https://github.com/drafproject/draf,draf,lf-energy-landscape,
 dss_capi,https://github.com/dss-extensions/dss_capi,dss_capi,pre-compiled,
-dynawo,https://github.com/dynawo/dynawo,"Dynaωo,dynawo","opensustain-tech,pre-compiled",
+dynawo,https://github.com/dynawo/dynawo,"Dynaωo,dynawo","opensustain-tech,pre-compiled",power-flow
 dynelmod_public,https://gitlab.tubit.tu-berlin.de/wip/dynelmod_public,dynelmod_public,pre-compiled,
 easy_simauto,https://github.com/mzy2240/esa,Easy SimAuto,opensustain-tech,
 edisgo,https://github.com/openego/edisgo,eDisGo,opensustain-tech,
@@ -66,7 +66,7 @@ etm_pro,https://github.com/quintel/etmodel,ETM Pro,opensustain-tech,
 exago,https://github.com/pnnl/exago,ExaGO,"opensustain-tech,pre-compiled",power-flow
 fame,https://gitlab.com/fame-framework/fame-core,FAME,opensustain-tech,
 ficus,https://github.com/tum-ewk/ficus,"Ficus,ficus","openmod,pre-compiled",
-fine,https://github.com/fzj-iek3-vsa/fine,FINE,"lf-energy-landscape,opensustain-tech,pre-compiled","capacity-expansion,production-cost"
+fine,https://github.com/fzj-iek3-vsa/fine,FINE,"lf-energy-landscape,opensustain-tech,pre-compiled",capacity-expansion
 flexigis,https://github.com/flexigis/flexigis,FlexiGIS,"lf-energy-landscape,openmod,opensustain-tech",
 flexplan_jl,https://github.com/electa-git/flexplan.jl,FlexPlan.jl,"opensustain-tech,pre-compiled",
 flixopt,https://github.com/flixopt/flixopt,flixOpt,"opensustain-tech,pre-compiled",
@@ -79,7 +79,7 @@ genx,https://github.com/genxproject/genx.jl,"GenX,GenX,GenX.jl","lf-energy-lands
 grid2op,https://github.com/grid2op/grid2op,"Grid2Op,grid2op","opensustain-tech,pre-compiled",power-flow
 gridcal,https://github.com/sanpen/gridcal,GridCal,"lf-energy-landscape,openmod,opensustain-tech,pre-compiled","capacity-expansion,production-cost,power-flow"
 gridlab_d,https://github.com/arras-energy/gridlabd,GridLAB-D,opensustain-tech,
-gridpack,https://github.com/gridoptics/gridpack,GridPACK,opensustain-tech,
+gridpack,https://github.com/gridoptics/gridpack,GridPACK,opensustain-tech,power-flow
 gridpath,https://github.com/blue-marble/gridpath,"GridPath,gridpath","lf-energy-landscape,opensustain-tech,pre-compiled","capacity-expansion,production-cost"
 grimsel_flex,https://github.com/arthurrinaldi/grimsel,GRIMSEL-FLEX,openmod,
 h2integrate,https://github.com/nrel/h2integrate,H2Integrate,opensustain-tech,
@@ -139,7 +139,7 @@ opensduc,https://github.com/iit-energysystemmodels/opensduc,openSDUC,pre-compile
 opentepes,https://github.com/iit-energysystemmodels/opentepes,"OpenTEPES,openTEPES","lf-energy-landscape,openmod,opensustain-tech,pre-compiled",
 opentumflex,https://github.com/tum-ewk/opentumflex,OpenTUMFlex,"openmod,pre-compiled",
 optihood,https://github.com/spf-ost/optihood,optihood,pre-compiled,
-osemosys,https://github.com/osemosys/osemosys,OSeMOSYS,"lf-energy-landscape,opensustain-tech,pre-compiled,openmod",
+osemosys,https://github.com/osemosys/osemosys,OSeMOSYS,"lf-energy-landscape,opensustain-tech,pre-compiled,openmod",capacity-expansion
 pandapower,https://github.com/e2niee/pandapower,"Pandapower,pandapower","g-pst,lf-energy-landscape,openmod,opensustain-tech,pre-compiled",power-flow
 paraemt_public,https://github.com/nrel/paraemt_public,ParaEMT_public,pre-compiled,
 pomato,https://github.com/richard-weinhold/pomato,POMATO,"lf-energy-landscape,openmod",
@@ -180,7 +180,7 @@ reho,https://github.com/ipese/reho,REHO,pre-compiled,
 reise_jl,https://github.com/breakthrough-energy/reise.jl,REISE.jl,"lf-energy-landscape,pre-compiled",
 remix,https://gitlab.com/dlr-ve/esy/remix/framework,REMix,opensustain-tech,"capacity-expansion,production-cost"
 renpass,https://github.com/fraukewiese/renpass,"Renpass,renpass","openmod,pre-compiled",
-reopt,https://github.com/nrel/reopt_lite_api,REopt,openmod,
+reopt,https://github.com/nrel/reopt_lite_api,REopt,openmod,capacity-expansion
 reopt_api,https://github.com/nrel/reopt_api,"REopt_API,REopt_Lite_API","lf-energy-landscape,opensustain-tech",
 reopt_jl,https://github.com/nrel/reopt.jl,REopt.jl,pre-compiled,
 resolve,https://github.com/e3-/resolve,resolve,"opensustain-tech,pre-compiled",

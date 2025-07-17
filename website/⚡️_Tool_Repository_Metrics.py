@@ -493,37 +493,109 @@ def dist_plot(col: pd.Series, slider_range: tuple[float, float]) -> None:
     )
 
 
-def preamble(latest_changes: str):
+def preamble(latest_changes: str, n_tools: int):
     """Text to show before the app table.
 
     Args:
         latest_changes (str): the date associated with the most recent changes to the table.
+        n_tools (int): Number of tools shown in the table.
     """
     st.markdown(
         f"""
-        # Smarter Investments in Open Energy Planning: How Data Can Guide Decision-Makers
+        # Open Energy Modelling Tool Tracker
 
-        This analysis is available at OET's [open-esm-analysis GitHub repository](https://github.com/open-energy-transition/open-esm-analysis/).
+        The global energy transition accelerating.
+        Given the inherent complexity of energy system planning, planners rely heavily on software tools to provide quantitative evidence to support decisions.
+        Open source tools are becoming increasingly prevalent and are beginning to gain traction in industry and the public sector (e.g. at [ENTSO-E](https://www.linkedin.com/posts/entso-e_energytransition-opensource-innovation-activity-7293296246813851649-2ynL)).
+        It's no wonder; they are:
 
-        The global energy transition is moving fast, but so are the challenges in directing time and resources effectively.
-        Achieving international climate goals will require around **4.5 trillion in annual investments** by the early 2030s.
-        To optimize infrastructure investments, grid operations and policy decisions, open-source tools are becoming the elephant in the room with increasing adoption across all sectors (see e.g. this [ENTSO-E post on LinkedIn](https://www.linkedin.com/posts/entso-e_energytransition-opensource-innovation-activity-7293296246813851649-2ynL)).
+        ✅ freely available,
 
-        However, with an ever-growing number of open-source (OS) energy tools, the question remains: **How do decision-makers - whether researchers, funders, or grid operators - select the right tools for their needs?**
-        The answer lies in data combined with experience.
+        ✅ white-box, and
 
-        ## The Challenge: Identifying Reliable and Impactful Tools
+        ✅ developed and maintained by world leading academic and R&D institutes.
 
-        Funders and users alike need to distinguish between active, well-maintained tools and those that might no longer be viable. While qualitative reviews (user feedback, case studies, etc.) are valuable, quantitative metrics offer critical signals about a tool's reliability, sustainability, and adoption.
+        With an ever-growing number of mature open source energy modelling tools, the question should no longer be _whether_ to use them, but rather _which_ to use!
 
-        The table below highlights key statistics for several leading OS energy planning tools, offering a snapshot of their development activity, usage, and maintenance.
-        These tools have been collated from various publicly accessible tool inventories (see [our project homepage](https://github.com/open-energy-transition/open-esm-analysis/) for the full list!) and filtered for only those that have accessible Git repositories and are written in open source programming languages.
+        With this dashboard, we aim to answer such questions as:
 
-        ## Open-Source ESM Tools - Key Data Indicators
+        ❓ Which tools are most popular in the community?
 
-        **Data source**:
-        - *Category*: [G-PST open tools](https://opentools.globalpst.org/) & [our own categorisation](https://github.com/open-energy-transition/open-esm-analysis/blob/main/inventory/categories.csv)
-        - *All other metrics*: [ecosyste.ms](https://ecosyste.ms)
+        ❓ Which tools are actively maintained and developed, and have a high [bus factor](https://en.wikipedia.org/wiki/Bus_factor)?
+
+        ❓ Which tools have the strongest and broadest community support?
+
+        To do so, we provide an overview of metrics associated with the source code repositories of {n_tools} open energy planning tools.
+        These tools have been collated from various publicly accessible tool inventories (see [our project homepage](https://github.com/open-energy-transition/open-esm-analysis/) for the full list!) and filtered for only those that have accessible Git repositories.
+        You can explore the tools in the table below and filter them using the sliders in the sidebar.
+        """
+    )
+    with st.expander("Our data processing toolkit", icon="🧰"):
+        st.markdown(
+            """
+            We collect tools listed in the following inventories:
+
+            - [LF Energy Landscape](https://github.com/lf-energy/lfenergy-landscape)
+            - [G-PST OpenTools](https://api.github.com/repos/G-PST/opentools)
+            - [Open Sustainable Technology](https://github.com/protontypes/open-sustainable-technology)
+            - [Open Energy Modelling Initiative](https://wiki.openmod-initiative.org/wiki/Open_Models)
+
+            Alongside a [pre-compiled list](https://github.com/open-energy-transition/open-esm-analysis/blob/main/inventory/pre_compiled_esm_list.csv) of tools (based on [DOI:10.1016/j.rser.2018.11.020](https://doi.org/10.1016/j.rser.2018.11.020) and subsequent searches), we filter the collection to:
+
+            - Remove duplicates according to tool name, after normalising the string to lower case and converting all special characters to underscores.
+            - Remove duplicates according to tool source code URL, after normalising the string to lower case.
+            - Remove tools without a valid Git repository for their source code (hosted on e.g. GitHub, GitLab, Bitbucket, or a custom domain).
+            - Remove tools that we know, from manual inspection, are not appropriate for including in our inventory.
+              This may be because they are duplicates of the same tool that we cannot catch with our simple detection methods, are supporting tools for another listed tool, or have been catalogued erroneously in the upstream inventory.
+              We give the reason for manually excluding a tool in our [list of exclusions](https://github.com/open-energy-transition/open-esm-analysis/blob/main/inventory/exclusions.csv).
+
+            For the remaining tools, we collect source code repository and package data using <https://ecosyste.ms> APIs.
+            At this stage, some tools will be filtered out for lack of any data.
+            Lack of repository data is usually because the repository is no longer available or because it is not publicly accessible (which we deem to be *not* an open source tool, irrespective of the tool's license).
+            In very rare cases (<1% of tools in the inventory), the repository host is not indexed by <https://ecosyste.ms>.
+            If this is the case for your tool and you would like it to be included in this inventory then you should open an issue on the appropriate [ecosyste.ms repository](https://github.com/ecosyste-ms).
+
+            Further to data from <https://ecosyste.ms>, we rely on other sources to (1) link repositories with their documentation sites, (2) Fill gaps in package download numbers, and (3) gather data on user interactions.
+
+            1. The most likely hosts for documentation are readthedocs.org, Github/Gitlab Pages, or repository Wikis.
+               For each repository, we check the most likely URL for each of these as they follow a pre-defined structure.
+               If we get a positive match, we link that to the repository.
+               This is not perfect as sometimes a project uses an unexpected site URL for their documentation.
+            1. Most packages are indexed on PyPI, conda-forge or on public Julia package servers.
+               For each of these, since <https://ecosyste.ms> data is often missing here, we use direct or third party APIs to query the downloads for the previous month.
+            1. User interaction data utilises the direct GitHub API.
+               This is the API with which much of the <https://ecosyste.ms> database is generated.
+               However, they don't store user data unless a user is also a repository owner.
+               Direct use of the GitHub API is time intensive due to hourly request limits.
+               Therefore, this data (e.g. informing the rate of user interactions over the past 6 months) is updated less frequently than other tools stats.
+            """
+        )
+    with st.expander("Caveats", icon="⚠️"):
+        st.markdown(
+            """
+
+            1. We rely on third parties to enable us to collate tools and their metrics.
+               Where we undertake the data collection directly from the tool repositories, our heuristics may not capture some things (e.g. documentation sites).
+               This means some tools and / or metrics may be missing.
+               If you notice this is the case, [raise an issue on our project homepage](https://github.com/open-energy-transition/open-esm-analysis/issues/new).
+
+            2. These metrics do not tell the whole story.
+               For instance, a project may have documentation but we have not reviewed how comprehensive it is!
+
+            3. We want to add more information on tools, such as the category of problem they can be used to address (the "category" column in the table above).
+               However, these are manual tasks that are best undertaken by the tool maintainers themselves.
+               If you are a tool maintainer, consider contributing your category here or alongside contributing your tool to the [G-PST opentools project](https://github.com/g-pst/opentools).
+               We'll pick up the contribution and feed the data back through automatically to this dashboard.
+
+            4. We have had to manually exclude some tools from our list that have been mis-categorised in the upstream inventories.
+               New, mis-categorised tools may slip through our manual exclusion net, so don't be surprised if you see a tool that doesn't seem to be useful for energy system planning.
+               Conversely, you may have reason to believe a tool has been manually excluded in error.
+               If that's the case, [raise an issue on our project homepage](https://github.com/open-energy-transition/open-esm-analysis/issues/new).
+            """
+        )
+    st.markdown(
+        f"""
+        ## Open Energy Modelling Tools - Key Metrics
 
         **Last Update**: {latest_changes}
 
@@ -538,14 +610,18 @@ def conclusion():
         """
         ## Key Takeaways from the Data
 
-        - **Adoption Signals Matter**: High download counts, active contributors, and ongoing issue resolutions suggest healthy, well-maintained projects. However, GitHub stars alone can be misleading—some highly starred projects have stalled development."
-        - **Sustainability Risks**: Projects with fewer than 10 contributors face a higher risk of abandonment. Also depending on packages with a small number of contributors might be a risk for the project. Funders should be wary of investing in tools that lack a committed maintainer base.
-        - **Transparency Gaps**: Some projects do not disclose key statistics (e.g., download counts), which may indicate poor release management and hinder long-term usability.
-        - **Interoperability Potential**: Many tools serve niche roles, but interoperability—how well they integrate with others—is becoming a crucial factor for large-scale adoption.
+        - **Adoption Signals Matter**: High download counts, active contributors, and ongoing issue resolutions suggest healthy, well-maintained projects.
+          However, source code activity alone can be misleading — some highly starred projects have stalled development and some with limited source code development are in heavy use in supporting planning decisions."
+        - **Sustainability Risks**: Projects with fewer than 10 contributors face a higher risk of abandonment.
+          A committed and broad contributor base can be hard to come by and may need to be cultivated with financial support rather than relying on it to grow naturally.
+        - **Usability Gaps**: Some projects do not have builds of their tools indexed online (e.g. on PyPI or conda-forge), which may indicate poor release management and hinder long-term usability.
+        - **Interoperability Potential**: Many tools serve niche roles and may only be suitable for supporting decision-making as part of a tool suite.
+          This requires tools to be interoperable, using common nomenclature and data structures.
 
         ## Beyond Data: The Need for Qualitative Assessments
 
-        While data helps filter out unreliable tools, deeper investigation is needed to ensure a tool is the right fit. Some key qualitative factors to consider:
+        While data helps filter out the most interesting tools, deeper investigation is needed to ensure a tool is the right fit.
+        Some key qualitative factors to consider:
 
         - **Documentation Quality**: Are installation and usage guides clear and up to date?
         - **Community Support**: Is there an active forum, mailing list, or issue tracker?
@@ -553,25 +629,9 @@ def conclusion():
         - **Licensing & Governance**: Is it permissively licensed (e.g., MIT) or does it enforce restrictions (e.g., GPL)?
         - **Collaboration Potential**: Can multiple stakeholders contribute effectively?
 
-        ## The Case for a Live Decision-Support Platform
-
-        Right now, there is no single source of truth for assessing the viability of open-source energy planning tools.
-        An up-to-date, data-driven decision-support platform could bridge this gap, providing real-time insights on:
-
-        - **Maintenance health** (contributor activity, unresolved issues)
-        - **Adoption rates** (downloads, citations, user engagement)
-        - **Tool interoperability** (compatibility testing with other OS models)
-        - **Funding needs** (identifying tools at risk due to lack of maintainers)
-
-        Such a platform would empower funders to invest wisely, helping direct resources to projects with the highest impact potential.
-
-        Selecting the right OS energy planning tool is no longer just a technical choice — it's an **investment decision**.
-        While **data-driven insights can highlight adoption trends, sustainability risks, and tool maturity**, *qualitative assessments remain essential for selecting the best fit*.
-
         **By combining live data tracking with structured qualitative evaluation**, the energy community can reduce wasted investments and ensure the best tools remain available for researchers, grid operators, project developers, investors and policymakers.
 
-        **Would you find a real-time OS tool insight platform useful?** Share your thoughts and suggestions in the comments or the [issues tracker](https://github.com/open-energy-transition/open-esm-analysis/issues)!
-
+        **Have you found this platform useful, or want to see it grow in any specific way?** Share your thoughts and suggestions on our [project homepage](https://github.com/open-energy-transition/open-esm-analysis/issues)!
         """
     )
 
@@ -721,6 +781,6 @@ if __name__ == "__main__":
     st.set_page_config(
         page_title="Tool Repository Metrics", page_icon="⚡️", layout="wide"
     )
-    preamble(latest_changes)
+    preamble(latest_changes, len(df_vis))
     main(df_vis)
     conclusion()

@@ -119,8 +119,13 @@ def resolve_duplicated_urls(df: pd.DataFrame) -> pd.DataFrame:
         LOGGER.warning(f"Found {len(urls)} entries for tool ID '{duplicate}'")
         for url in urls:
             repo_data = util.get_ecosystems_repo_data(url)
-            if repo_data is None:
+            if repo_data == "not-found":
                 LOGGER.warning(f"Removing {url} as it has no ecosyste.ms entry.")
+                df = df[df.url != url]
+            elif repo_data is None:
+                LOGGER.warning(
+                    f"Removing {url} as we cannot access the ecosyste.ms server right now."
+                )
                 df = df[df.url != url]
             elif url != (new_url := repo_data["html_url"].lower()):
                 LOGGER.warning(f"Found redirect for: {url} -> {new_url}.")

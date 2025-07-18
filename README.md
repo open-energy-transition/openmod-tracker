@@ -44,6 +44,7 @@ These are automated with a Github action but you can force a manual update local
 >[!NOTE]
 >The below steps leverage [pixi tasks](https://pixi.sh/dev/workspace/advanced_tasks/) which will run all steps in the sequence if there have been changes to the source code or it is the first time you are running the command.
 >If you want to just run one step in isolation you will need to call the Python script directly, e.g. `pixi run python inventory/get-stats.py inventory/output/filtered.csv inventory/output/stats.csv`.
+>[User statistics](#user-stats) runs will require extra dependencies provided by the "geo" environment, e.g. `pixi run -e geo python user_analysis/classify_users.py`.
 >See `pixi.toml` for the command to run for each step.
 
 >[!WARNING]

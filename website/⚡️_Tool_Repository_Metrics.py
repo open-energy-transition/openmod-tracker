@@ -10,12 +10,14 @@ from pathlib import Path
 from typing import Literal
 
 import git
+import markdown
 import numpy as np
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 import util
+from bs4 import BeautifulSoup
 from st_keyup import st_keyup
 
 COLUMN_NAME_MAPPING: dict[str, str] = {
@@ -493,6 +495,28 @@ def dist_plot(col: pd.Series, slider_range: tuple[float, float]) -> None:
     )
 
 
+def extract_processing_approach_from_readme(readme: Path, header: str) -> str:
+    """Extract all HTML text from the README below a given (sub)header.
+
+    Args:
+        readme (Path): Path to the repository README.
+        header (str): header to extract the text from under.
+
+    Returns:
+        str: HTML string of content under the header. Does not include the header string itself.
+    """
+    text = markdown.markdown(readme.read_text())
+    soup = BeautifulSoup(text, "html.parser")
+    h3 = soup.find("h3", string=header)
+    all_html = ""
+    for sib in h3.find_next_siblings():
+        if sib.name in ["h1", "h2", "h3"]:
+            break
+        else:
+            all_html += str(sib)
+    return all_html
+
+
 def preamble(latest_changes: str, n_tools: int):
     """Text to show before the app table.
 
@@ -604,36 +628,10 @@ def preamble(latest_changes: str, n_tools: int):
     )
 
 
-def conclusion():
+def conclusion(data_processing_text: str):
     """Text to show after the app table."""
-    st.markdown(
-        """
-        ## Key Takeaways from the Data
-
-        - **Adoption Signals Matter**: High download counts, active contributors, and ongoing issue resolutions suggest healthy, well-maintained projects.
-          However, source code activity alone can be misleading — some highly starred projects have stalled development and some with limited source code development are in heavy use in supporting planning decisions."
-        - **Sustainability Risks**: Projects with fewer than 10 contributors face a higher risk of abandonment.
-          A committed and broad contributor base can be hard to come by and may need to be cultivated with financial support rather than relying on it to grow naturally.
-        - **Usability Gaps**: Some projects do not have builds of their tools indexed online (e.g. on PyPI or conda-forge), which may indicate poor release management and hinder long-term usability.
-        - **Interoperability Potential**: Many tools serve niche roles and may only be suitable for supporting decision-making as part of a tool suite.
-          This requires tools to be interoperable, using common nomenclature and data structures.
-
-        ## Beyond Data: The Need for Qualitative Assessments
-
-        While data helps filter out the most interesting tools, deeper investigation is needed to ensure a tool is the right fit.
-        Some key qualitative factors to consider:
-
-        - **Documentation Quality**: Are installation and usage guides clear and up to date?
-        - **Community Support**: Is there an active forum, mailing list, or issue tracker?
-        - **Use Cases**: Has the tool been applied in real-world projects similar to your needs?
-        - **Licensing & Governance**: Is it permissively licensed (e.g., MIT) or does it enforce restrictions (e.g., GPL)?
-        - **Collaboration Potential**: Can multiple stakeholders contribute effectively?
-
-        **By combining live data tracking with structured qualitative evaluation**, the energy community can reduce wasted investments and ensure the best tools remain available for researchers, grid operators, project developers, investors and policymakers.
-
-        **Have you found this platform useful, or want to see it grow in any specific way?** Share your thoughts and suggestions on our [project homepage](https://github.com/open-energy-transition/open-esm-analysis/issues)!
-        """
-    )
+    st.markdown("## Key Takeaways from the Data")
+    st.html(data_processing_text)
 
 
 def main(df: pd.DataFrame):
@@ -774,6 +772,8 @@ if __name__ == "__main__":
     # define the path of the CSV file listing the packages to assess
     tool_stats_dir = Path(__file__).parent.parent / "inventory" / "output"
     user_stats_dir = Path(__file__).parent.parent / "user_analysis" / "output"
+    readme_path = Path(__file__).parent.parent / "README.md"
+
     df_vis = create_vis_table(tool_stats_dir, user_stats_dir)
     g = git.cmd.Git()
     latest_changes = g.log("-1", "--pretty=%cs", tool_stats_dir / "stats.csv")
@@ -781,6 +781,10 @@ if __name__ == "__main__":
     st.set_page_config(
         page_title="Tool Repository Metrics", page_icon="⚡️", layout="wide"
     )
+
+    data_processing_approach_string = extract_processing_approach_from_readme(
+        readme_path, "Our data processing approach"
+    )
     preamble(latest_changes, len(df_vis))
     main(df_vis)
-    conclusion()
+    conclusion(data_processing_approach_string)

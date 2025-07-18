@@ -1,6 +1,7 @@
 """Various util functions for inventory collection, filtering, and stats getting."""
 
 import logging
+from pathlib import Path
 from urllib.parse import quote_plus
 
 import requests
@@ -12,6 +13,12 @@ ECOSYSTEMS_PACKAGES_LOOKUP_API = (
 )
 
 LOGGER = logging.getLogger(__name__)
+ECOSYSTEMS_CACHE_FILE = Path(__file__).parent / "ecosystems_urls.yaml"
+ECOSYSTEMS_CACHE = (
+    yaml.safe_load(ECOSYSTEMS_CACHE_FILE.read_text())
+    if ECOSYSTEMS_CACHE_FILE.exists()
+    else {}
+)
 
 
 def get_url_json_content(url: str) -> dict:
@@ -57,7 +64,17 @@ def get_ecosystems_repo_data(url: str) -> dict | None:
     Returns:
         requests.Response: Content of data for `url`.
     """
-    response = requests.get(url)
+    ems_url = ECOSYSTEMS_CACHE.get(url, None)
+    if ems_url is None:
+        ems_url = lookup_ecosystems_repo(url)
+        ECOSYSTEMS_CACHE[url] = ems_url
+        ECOSYSTEMS_CACHE_FILE.write_text(
+            yaml.safe_dump(ECOSYSTEMS_CACHE, sort_keys=True)
+        )
+    if ems_url is None or ems_url == "not-found":
+        return ems_url
+
+    response = requests.get(ems_url)
     if response.ok:
         return yaml.safe_load(response.content.decode("utf-8"))
     else:

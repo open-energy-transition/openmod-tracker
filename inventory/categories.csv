@@ -2,7 +2,7 @@ id,category,comment
 andes,"power-flow",
 egret,"production-cost,power-flow",
 energy_system_simulation_and_optimization,"production-cost","possibly exclude as it is a building energy management system optimisation"
-fine,"capacity-expansion,production-cost",
+fine,"capacity-expansion","possibly also production-cost"
 genx,"capacity-expansion,production-cost",
 grid2op,"power-flow",
 gridcal,"capacity-expansion,production-cost,power-flow","power grid only"
@@ -22,3 +22,10 @@ pysam,"capacity-expansion,production-cost","fixed technology options; focussed o
 sam,"capacity-expansion,production-cost","fixed technology options; focussed on specific assets."
 temoa,"capacity-expansion","possibly also production-cost"
 urbs,"capacity-expansion",
+reopt,"capacity-expansion","possibly also production-cost"
+osemosys,"capacity-expansion",
+reeds-2.0,"capacity-expansion","possibly also production-cost"
+spineopt.jl,"capacity-expansion,production-cost",
+etmodel,"capacity-expansion",
+gridpack,"power-flow",
+dynawo,"power-flow",

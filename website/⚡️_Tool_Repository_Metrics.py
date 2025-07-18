@@ -28,6 +28,7 @@ COLUMN_NAME_MAPPING: dict[str, str] = {
     "dependent_repos_count": "Dependents",
     "last_month_downloads": "1 Month Downloads",
     "category": "Category",
+    "language": "Language",
 }
 
 COLUMN_DTYPES: dict[str, Callable] = {
@@ -64,10 +65,12 @@ COLUMN_HELP: dict[str, str] = {
     "Docs": "Link to tool documentation.",
     "Score": "The tool score is a weighted average of all numeric metrics, after scaling those metrics to similar ranges.",
     "Interactions": "The cumulative sum of interactions with the repository in the past 6 months at a weekly resolution. Interactions include new stars, issues, forks, and pull requests. Data only available for GitHub-hosted repositories.",
+    "Language": "The programming language in which the majority of the tool source code is written.",
 }
 
 EXTRA_COLUMNS = ["name_with_url", "Docs", "Score", "Interactions"]
 DEFAULT_ORDER = "Stars"
+NOT_OPEN_SOURCE_LANGUAGES = ["gams", "matlab", "jetbrains mps", "powerbuilder", "ampl"]
 
 
 @st.cache_data
@@ -91,9 +94,12 @@ def create_vis_table(tool_stats_dir: Path, user_stats_dir: Path) -> pd.DataFrame
         .reindex(df.url.values)
         .values
     )
+
     # Assume: projects categorised as "Jupyter Notebook" are actually Python projects.
     # This occurs because the repository language is based on number of lines and Jupyter Notebooks have _a lot_ of lines.
-    df["language"] = df.language.replace({"Jupyter Notebook": "Python"})
+    df["language"] = (
+        df.language.replace({"Jupyter Notebook": "Python"}).str.lower().astype("string")
+    )
 
     # Add the tool name to the end of the URL after a `#`.
     # This allows us to use regex to show the tool name in a streamlit "link column" while still making the URL valid to direct users to the source code.
@@ -108,6 +114,7 @@ def create_vis_table(tool_stats_dir: Path, user_stats_dir: Path) -> pd.DataFrame
     df_vis = df.rename(columns=COLUMN_NAME_MAPPING)[
         EXTRA_COLUMNS + list(COLUMN_NAME_MAPPING.values())
     ]
+
     return df_vis
 
 
@@ -357,6 +364,23 @@ def multiselect(unique_values: list[str], col: str, reset_mode: bool) -> list[st
         if reset_mode
         else util.get_state(f"multiselect_{col}", unique_values)
     )
+
+    if col.lower() == "language":
+        exclude_proprietary = proprietary_language_toggle(reset_mode)
+        if exclude_proprietary:
+            util.set_state(
+                "selected_proprietary",
+                set(current_selected).intersection(NOT_OPEN_SOURCE_LANGUAGES),
+            )
+            current_selected = sorted(
+                set(current_selected).difference(NOT_OPEN_SOURCE_LANGUAGES)
+            )
+        else:
+            current_selected = sorted(
+                set(current_selected)
+                | util.get_state("selected_proprietary").intersection(unique_values)
+            )
+
     selected_values = st.sidebar.multiselect(
         f"Select {col} values",
         options=unique_values,
@@ -411,6 +435,24 @@ def header_and_missing_value_toggle(col: pd.Series, reset_mode: bool) -> bool:
     else:
         exclude_nan = False
     return exclude_nan
+
+
+def proprietary_language_toggle(reset_mode: bool) -> bool:
+    """Create toggle to add / remove tools using proprietary languages.
+
+    Args:
+        reset_mode (bool): Whether to reset multiselect to initial values.
+
+    Returns:
+        bool: True if there are NaN values and the missing value toggle is switched on.
+    """
+    exclude_proprietary = st.sidebar.toggle(
+        "Exclude tools which can only run with access to proprietary software",
+        value=True if reset_mode else util.get_state("exclude_proprietary", True),
+        key="exclude_proprietary",
+    )
+    util.init_state("selected_proprietary", set(NOT_OPEN_SOURCE_LANGUAGES))
+    return exclude_proprietary
 
 
 @st.cache_data

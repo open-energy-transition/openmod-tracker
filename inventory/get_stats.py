@@ -28,7 +28,14 @@ ENTRIES_TO_KEEP = [
     "commit_stats.total_committers",
     "homepage",
 ]
-
+EXTRA_COLS = [
+    "last_month_downloads",
+    "dependent_repos_count",
+    "latest_release_published_at",
+    "rtd",
+    "pages",
+    "wiki",
+]
 LAST_MONTH = NOW.month - 1
 try:
     # The previous month's Anaconda data doesn't get compiled and uploaded to S3 until sometime into the following month.
@@ -42,7 +49,6 @@ except FileNotFoundError:
     )
 
 JULIA_STATS_API = "https://juliapkgstats.com/api/v1/monthly_downloads/"
-NOT_OPEN_SOURCE_LANGUAGES = ["GAMS", "MATLAB", "JetBrains MPS", "PowerBuilder", "AMPL"]
 ECOSYSTEMS_CACHE_FILE = Path(__file__).parent / "ecosystems_urls.yaml"
 ECOSYSTEMS_CACHE = (
     yaml.safe_load(ECOSYSTEMS_CACHE_FILE.read_text())
@@ -94,17 +100,15 @@ def get_ecosystems_entry_data(
                 val = repo_data[entry]
             repo_data_to_keep[entry] = val
         repo_df = pd.DataFrame(repo_data_to_keep, index=pd.Index([url], name="url"))
-        if repo_df["language"].iloc[0] in NOT_OPEN_SOURCE_LANGUAGES:
-            LOGGER.warning(
-                f"Skipping {url} as it is not written in an open source language: {repo_df['language'].iloc[0]}"
-            )
-            continue
 
         package_data = _get_package_data(url)
         docs_data = _get_docs_data(repo_data["html_url"])
         repo_dfs.append(repo_df.assign(**package_data).assign(**docs_data))
 
-    return pd.concat(repo_dfs)
+    if repo_dfs:
+        return pd.concat(repo_dfs)
+    else:
+        return pd.DataFrame()
 
 
 def _get_nested_dict_entry(
@@ -317,7 +321,7 @@ def cli(infile: Path, outfile: Path, find_missing: bool):
     if find_missing:
         stats_df = pd.concat([stats_df, existing_stats_df])
 
-    stats_df.sort_index().to_csv(outfile)
+    stats_df[ENTRIES_TO_KEEP + EXTRA_COLS].sort_index().to_csv(outfile)
 
 
 if __name__ == "__main__":

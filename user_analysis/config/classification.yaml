@@ -1,0 +1,274 @@
+academic:
+  keyword:
+  - ac
+  - academy
+  - center
+  - centre
+  - college
+  - department
+  - edu
+  - fachhochschule
+  - faculty
+  - faculty of
+  - fernuniversitat
+  - fraunhofer
+  - graduate school
+  - hochschule
+  - iit
+  - institute
+  - institute of technology
+  - ku
+  - nit
+  - phd
+  - politecnica
+  - politecnico
+  - polytechnic
+  - polytechnique
+  - postdoc
+  - professor
+  - research
+  - researcher
+  - school
+  - school of
+  - science
+  - sciences
+  - student
+  - technische
+  - technological
+  - tu
+  - uc
+  - uni
+  - universidad
+  - universidade
+  - universitas
+  - universitat
+  - universite
+  - universiteit
+  - university
+  - ut
+  match:
+  - delft university of technology
+  - ecole polytechnique federale de lausanne
+  - eth zurich
+  - imperial college london
+  - kth royal institute of technology
+  - massachusetts institute of technology
+  - reiner lemoine institute
+  - rwth aachen universit
+  - stanford university
+  - technical university of berlin
+  - technical university of denmark
+  - technical university of munich
+  - tsinghua university
+  - university of california berkeley
+  - university of cambridge
+  - university of new south wales
+  - university of north carolina at charlotte
+  - university of nottingham ningbo china
+  - university of oxford
+financial:
+  keyword:
+  - asset
+  - bank
+  - banking
+  - capital
+  - credit
+  - finance
+  - financial
+  - fund
+  - insurance
+  - investment
+  - investor
+  - securities
+  - venture
+  match:
+  - abn amro
+  - african development bank
+  - asian development bank
+  - credit agricole
+  - european bank for reconstruction and development
+  - european investment bank
+  - ing bank
+  - inter-american development bank
+  - international monetary fund
+  - lloyds bank
+  - natixis
+  - natwest
+  - rabobank
+  - santander
+  - societe generale
+  - world bank
+government:
+  keyword:
+  - administration
+  - agency
+  - authority
+  - bureau
+  - buro
+  - commission
+  - council
+  - department
+  - dept
+  - doe
+  - federal
+  - government
+  - ministry
+  - municipal
+  - public sector
+  - regulator
+  - regulatory
+  - secretariat
+  match:
+  - energy information administration
+  - international renewable energy agency
+  - united states department of energy
+industry:
+  keyword:
+  - ai
+  - automation
+  - company
+  - corp
+  - corporation
+  - developer
+  - engineer
+  - engineering
+  - enterprises
+  - factory
+  - gmbh
+  - hardware
+  - inc
+  - industries
+  - innovation
+  - labs
+  - llc
+  - ltd
+  - manufacturer
+  - manufacturing
+  - platform
+  - robotics
+  - software
+  - solutions
+  - startups
+  - systems
+  - technologies
+  - technology
+  - ventures
+  match:
+  - abb
+  - general electric
+  - google
+  - meta
+  - microsoft
+  - schneider electric
+  - siemens
+  - tesla
+professional:
+  keyword:
+  - advisor
+  - advisors
+  - analytics
+  - association
+  - bv
+  - consultancy
+  - consultant
+  - consulting
+  - contractor
+  - cooperative
+  - data scientist
+  - freelance
+  - gmbh
+  - group
+  - independent
+  - limited
+  - llc
+  - ltd
+  - management
+  - partner
+  - partners
+  - self-employed
+  - services
+  - solutions
+  - traders
+  match:
+  - accenture
+  - arup
+  - bain & company
+  - boston consulting group
+  - deloitte
+  - energy systems integration group
+  - ernst & young
+  - gisce
+  - independent consultant
+  - independent developer
+  - independent researcher
+  - international energy agency
+  - kpmg
+  - mckinsey
+  - open energy transition
+  - price waterhouse coopers
+  - transition zero
+research:
+  keyword:
+  - lab
+  - labs
+  - laboratory
+  - national lab
+  - national laboratories
+  - national laboratory
+  match:
+  - argonne national laboratory
+  - brookhaven national laboratory
+  - fermi national accelerator laboratory
+  - idaho national laboratory
+  - international institute for applied systems analysis
+  - lawrence berkeley national laboratory
+  - lawrence livermore national laboratory
+  - los alamos national laboratory
+  - national energy technology laboratory
+  - national renewable energy laboratory
+  - oak ridge national laboratory
+  - pacific northwest national laboratory
+  - power systems engineering research center
+  - sandia national laboratories
+  - slac national accelerator laboratory
+utility:
+  keyword:
+  - distribution
+  - dno
+  - dso
+  - electric
+  - electric company
+  - electricity
+  - energy
+  - energy company
+  - eso
+  - gas
+  - grid
+  - grid operator
+  - hydro
+  - iso
+  - load dispatch
+  - nuclear
+  - power
+  - power company
+  - renewable
+  - rto
+  - solar
+  - system operator
+  - tno
+  - transmission
+  - transmission operator
+  - tso
+  - utilities
+  - utility
+  - wind
+  match:
+  - alberta electric system operator
+  - california independent system operator
+  - centrica
+  - electric power research institute
+  - independent electricity system operator
+  - independent system operator of new england
+  - midcontinent independent system operator
+  - pjm interconnection
+  - reseau de transport d'electricite

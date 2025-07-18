@@ -1,7 +1,7 @@
 """Various util functions for inventory collection, filtering, and stats getting."""
 
 import logging
-import time
+from pathlib import Path
 from urllib.parse import quote_plus
 
 import requests
@@ -13,6 +13,12 @@ ECOSYSTEMS_PACKAGES_LOOKUP_API = (
 )
 
 LOGGER = logging.getLogger(__name__)
+ECOSYSTEMS_CACHE_FILE = Path(__file__).parent / "ecosystems_urls.yaml"
+ECOSYSTEMS_CACHE = (
+    yaml.safe_load(ECOSYSTEMS_CACHE_FILE.read_text())
+    if ECOSYSTEMS_CACHE_FILE.exists()
+    else {}
+)
 
 
 def get_url_json_content(url: str) -> dict:
@@ -29,31 +35,48 @@ def get_url_json_content(url: str) -> dict:
     return yaml.safe_load(content)
 
 
-def get_ecosystems_repo_data(url: str, attempt: int = 1) -> dict | None:
-    """Get repository lookup API call response from ecosyste.ms based on the provided repo URL.
+def lookup_ecosystems_repo(url: str) -> str | None:
+    """Get repository API string from ecosyste.ms based on the provided repo URL.
 
     Args:
         url (str): Git repo URL.
-        attempt (int):
-            Tracks the number of attempts at checking this URL.
-            We use this to avoid stressing the ecosyste.ms servers with reattempts after possible timeouts.
-            Defaults to False.
+
+    Returns:
+        requests.Response: If the repository exists, the ecosyste.ms API repository URL
+    """
+    safe_query = get_safe_url_string(url)
+    response = requests.get(ECOSYSTEMS_REPO_LOOKUP_API + safe_query)
+
+    if response.ok:
+        return yaml.safe_load(response.content.decode("utf-8"))["repository_url"]
+    elif response.status_code != "500":
+        return "not-found"
+    else:
+        return None
+
+
+def get_ecosystems_repo_data(url: str) -> dict | None:
+    """Get repository lookup API call response from ecosyste.ms based on the provided API repository URL.
+
+    Args:
+        url (str): ecosyste.ms API repo URL.
 
     Returns:
         requests.Response: Content of data for `url`.
     """
-    safe_query = get_safe_url_string(url)
+    ems_url = ECOSYSTEMS_CACHE.get(url, None)
+    if ems_url is None:
+        ems_url = lookup_ecosystems_repo(url)
+        ECOSYSTEMS_CACHE[url] = ems_url
+        ECOSYSTEMS_CACHE_FILE.write_text(
+            yaml.safe_dump(ECOSYSTEMS_CACHE, sort_keys=True)
+        )
+    if ems_url is None or ems_url == "not-found":
+        return ems_url
 
-    response = requests.get(ECOSYSTEMS_REPO_LOOKUP_API + safe_query)
+    response = requests.get(ems_url)
     if response.ok:
         return yaml.safe_load(response.content.decode("utf-8"))
-    elif response.status_code == "500" and attempt == 1:
-        # Likely a timeout, let's try again
-        LOGGER.warning(
-            "Problem communicating with ecosyste.ms; trying again in 10 seconds."
-        )
-        time.sleep(10)
-        return get_ecosystems_repo_data(url, 2)
     else:
         return None
 

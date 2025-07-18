@@ -101,10 +101,10 @@ def _get_pull_users(repo_obj: Repository) -> list[tuple[str, datetime, str]]:
     default="inventory/output/stats.csv",
 )
 @click.option(
-    "--outdir",
-    type=click.Path(exists=False, dir_okay=True, file_okay=False, path_type=Path),
-    help="Output directory for the user_interactions.csv file.",
-    default="inventory/output",
+    "--out-path",
+    type=click.Path(exists=False, dir_okay=False, file_okay=True, path_type=Path),
+    help="Output path for the user interactions data file.",
+    default="inventory/output/user_interactions.csv",
 )
 @click.option(
     "--threads",
@@ -112,11 +112,11 @@ def _get_pull_users(repo_obj: Repository) -> list[tuple[str, datetime, str]]:
     help="Number of threads over which to parallelise the tasks.",
     default=5,
 )
-def cli(stats_file: Path, outdir: Path, threads: int):
+def cli(stats_file: Path, out_path: Path, threads: int):
     """CLI entry point to collect all GitHub users who interact with the repositories listed in a stats file."""
-    outdir.mkdir(parents=True, exist_ok=True)
+    out_path.mkdir(parents=True, exist_ok=True)
     users_df = pd.DataFrame(columns=COLS, index=[])
-    users_df.to_csv(outdir / "user_interactions.csv", index=False)
+    users_df.to_csv(out_path, index=False)
 
     gh_client = get_github_client()
     repos_df = pd.read_csv(stats_file, index_col=0)
@@ -135,9 +135,7 @@ def cli(stats_file: Path, outdir: Path, threads: int):
         if df.empty:
             LOGGER.warning(f"No users found for {repo}.")
             continue
-        df[COLS].to_csv(
-            outdir / "user_interactions.csv", mode="a", header=False, index=False
-        )
+        df[COLS].to_csv(out_path, mode="a", header=False, index=False)
         remaining_calls = get_rate_limit_info(gh_client)[0]
         LOGGER.warning(f"Remaining API calls: {remaining_calls}.")
 

@@ -23,15 +23,21 @@ outputs = ["inventory/output/stats.csv"]
 depends-on = ["filter-tools"]
 
 [tasks.get-repo-users]
-cmd = "python $PIXI_PROJECT_ROOT/inventory/get_repo_users.py --stats-file inventory/output/stats.csv --outdir inventory/output"
-inputs = ["inventory/output/stats.csv", "inventory/get_repo_users.py"]
-outputs = ["inventory/output/user_interactions.csv"]
+cmd = "python $PIXI_PROJECT_ROOT/user_analysis/get_repo_users.py --stats-file inventory/output/stats.csv --out-path user_analysis/output/user_interactions.csv"
+inputs = ["inventory/output/stats.csv", "user_analysis/get_repo_users.py"]
+outputs = ["user_analysis/output/user_interactions.csv"]
 depends-on = ["get-stats"]
 
 [tasks.get-user-details]
-cmd = "python $PIXI_PROJECT_ROOT/inventory/get_user_details.py --user-interactions inventory/output/repo_interactions.csv --outdir inventory/output"
-inputs = ["inventory/output/repo_interactions.csv"]
-outputs = ["inventory/output/user_details.csv", "inventory/output/organizations.csv"]
+cmd = "python $PIXI_PROJECT_ROOT/user_analysis/get_user_details.py --user-interactions user_analysis/output/user_interactions.csv --outdir user_analysis/output"
+inputs = ["user_analysis/output/user_interactions.csv"]
+outputs = ["user_analysis/output/user_details.csv", "user_analysis/output/organizations.csv"]
+depends-on = ["get-repo-users"]
+
+[feature.geo.tasks.classify-users]
+cmd = "python $PIXI_PROJECT_ROOT/user_analysis/classify_users.py --user-details user_analysis/output/user_details.csv --out-path user_analysis/output/user_classifications.csv"
+inputs = ["user_analysis/output/user_details.csv"]
+outputs = ["user_analysis/output/user_classifications.csv"]
 depends-on = ["get-repo-users"]
 
 [dependencies]
@@ -51,6 +57,7 @@ pre-commit = ">=4.2.0,<5"
 gitpython = ">=3.1.44,<4"
 pygithub = ">=2.6.1,<3"
 python-dotenv = ">=1.1.1,<2"
+unidecode = ">=1.3.8,<2"
 
 [feature.app.dependencies]
 streamlit = "*"
@@ -59,7 +66,7 @@ plotly = ">=6.1.2,<7"
 
 
 [feature.app.tasks]
-serve = "streamlit run $PIXI_PROJECT_ROOT/website/streamlit_app.py"
+serve = "streamlit run $PIXI_PROJECT_ROOT/website/⚡️_Tool_Repository_Metrics.py"
 
 [feature.vis.dependencies]
 plotly = "*"
@@ -68,6 +75,11 @@ seaborn = "*"
 ipykernel = ">=6.29.5,<7"
 nbformat = ">=5.10.4,<6"
 
+[feature.geo.dependencies]
+geopy = "*"
+pycountry = "*"
+
 [environments]
 app = ["app"]
 vis = ["vis"]
+geo = ["geo"]

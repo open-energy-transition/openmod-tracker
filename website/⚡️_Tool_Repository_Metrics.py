@@ -15,6 +15,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
+import util
 from st_keyup import st_keyup
 
 COLUMN_NAME_MAPPING: dict[str, str] = {
@@ -25,7 +26,7 @@ COLUMN_NAME_MAPPING: dict[str, str] = {
     "commit_stats.dds": "DDS",
     "forks_count": "Forks",
     "dependent_repos_count": "Dependents",
-    "last_month_downloads": "Last Month Downloads",
+    "last_month_downloads": "1 Month Downloads",
     "category": "Category",
 }
 
@@ -47,7 +48,7 @@ NUMBER_FORMAT: dict[str, str] = {
     "DDS": "%d%%",
     "Forks": "localized",
     "Dependents": "localized",
-    "Last Month Downloads": "localized",
+    "1 Month Downloads": "localized",
 }
 
 COLUMN_HELP: dict[str, str] = {
@@ -58,38 +59,45 @@ COLUMN_HELP: dict[str, str] = {
     "DDS": "Development distribution score (the bigger the number the better, 0 means only one contributor. [Click for more info](https://report.opensustain.tech/chapters/development-distribution-score))",
     "Forks": "Number of Git forks",
     "Dependents": "Packages dependent on this project (only available if the project is indexed on a package repository)",
-    "Last Month Downloads": "Package installs last month (only available if the project is indexed on a package repository)",
+    "1 Month Downloads": "Package installs last month (only available if the project is indexed on a package repository)",
     "Category": "Category of energy system planning / operation problem for which this tool could be used. This is based on [G-PST entries](https://api.github.com/repos/G-PST/opentools) and our own manual assignment applied to a subset of tools.",
     "Docs": "Link to tool documentation.",
     "Score": "The tool score is a weighted average of all numeric metrics, after scaling those metrics to similar ranges.",
+    "Interactions": "The cumulative sum of interactions with the repository in the past 6 months at a weekly resolution. Interactions include new stars, issues, forks, and pull requests. Data only available for GitHub-hosted repositories.",
 }
 
+EXTRA_COLUMNS = ["name_with_url", "Docs", "Score", "Interactions"]
 DEFAULT_ORDER = "Stars"
 
 
-def create_vis_table(tool_data_dir: Path) -> pd.DataFrame:
+@st.cache_data
+def create_vis_table(tool_stats_dir: Path, user_stats_dir: Path) -> pd.DataFrame:
     """Create the tool table with columns renamed and filtered ready for visualisation.
 
     Args:
-        tool_data_dir (Path): The directory in which to find tool list and stats.
+        tool_stats_dir (Path): The directory in which to find tool list and stats.
+        user_stats_dir (Path): The directory in which to find tool user stats.
 
     Returns:
         pd.DataFrame: Filtered and column renamed tool table.
     """
-    stats_df = pd.read_csv(tool_data_dir / "stats.csv", index_col=0)
-    tools_df = pd.read_csv(tool_data_dir / "filtered.csv", index_col="url")
-
-    df = (
-        pd.merge(left=stats_df, right=tools_df, right_index=True, left_index=True)
-        .rename_axis(index="url")
-        .reset_index()
+    stats_df = pd.read_csv(tool_stats_dir / "stats.csv", index_col="url")
+    tools_df = pd.read_csv(tool_stats_dir / "filtered.csv", index_col="url")
+    df = pd.merge(
+        left=stats_df, right=tools_df, right_index=True, left_index=True
+    ).reset_index()
+    df["Interactions"] = (
+        _create_user_interactions_timeseries(user_stats_dir)
+        .reindex(df.url.values)
+        .values
     )
-
     # Assume: projects categorised as "Jupyter Notebook" are actually Python projects.
     # This occurs because the repository language is based on number of lines and Jupyter Notebooks have _a lot_ of lines.
     df["language"] = df.language.replace({"Jupyter Notebook": "Python"})
 
-    df["name"] = df.url + "#" + df.name.apply(lambda x: x.split(",")[0])
+    # Add the tool name to the end of the URL after a `#`.
+    # This allows us to use regex to show the tool name in a streamlit "link column" while still making the URL valid to direct users to the source code.
+    df["name_with_url"] = df.url + "#" + df.name.apply(lambda x: x.split(",")[0])
 
     for col, dtype_func in COLUMN_DTYPES.items():
         df[col] = dtype_func(df[col])
@@ -98,62 +106,53 @@ def create_vis_table(tool_data_dir: Path) -> pd.DataFrame:
         np.random.choice([0, 100], size=len(df.index)), index=df.index
     )
     df_vis = df.rename(columns=COLUMN_NAME_MAPPING)[
-        ["name", "Docs", "Score"] + list(COLUMN_NAME_MAPPING.values())
+        EXTRA_COLUMNS + list(COLUMN_NAME_MAPPING.values())
     ]
     return df_vis
 
 
-def is_datetime_column(series: pd.Series) -> bool:
-    """Check if a column is datetime."""
-    return pd.api.types.is_datetime64_any_dtype(series)
-
-
-def is_numeric_column(series: pd.Series) -> bool:
-    """Check if a column is numeric."""
-    return pd.api.types.is_numeric_dtype(series)
-
-
-def is_categorical_column(series: pd.Series) -> bool:
-    """Check if a column should be treated as categorical."""
-    return isinstance(series.dtype, pd.StringDtype | pd.CategoricalDtype)
-
-
-def is_list_column(series: pd.Series) -> bool:
-    """Check if a column contains lists of items."""
-    return all(series.dropna().apply(lambda x: isinstance(x, list)))
-
-
-def nan_filter(col: pd.Series) -> pd.Series:
-    """Remove rows with NaNs in column.
+def _create_user_interactions_timeseries(
+    tool_data_dir: Path, resolution: str = "7d", n_months: int = 6
+) -> pd.Series:
+    """Create a cumulative sum timeseries of github repo user interactions.
 
     Args:
-        col (pd.Series): Column potentially containing NaNs
+        tool_data_dir (Path): The directory in which to find user interaction data.
+        resolution (str, optional): Resolution of timeseries to resample data. Defaults to 7d (weekly).
+        n_months (int, optional): Number of months prior to today of data to keep.
 
     Returns:
-        pd.Series: Filtered `col`.
+        pd.Series:
+            Streamlit table bar plot compatible data stored in a pandas Series.
+            This is not a data structure that pandas really supports as the dtype is list-like.
     """
-    return col.notna()
+    user_df = pd.read_csv(
+        tool_data_dir / "user_interactions.csv", parse_dates=["timestamp"]
+    )
+    interactions = (
+        user_df.groupby([user_df.timestamp, user_df.repo])
+        .count()["interaction"]
+        .unstack("repo")
+        .resample(resolution)
+        .sum()
+        .T
+    )
+    last_6me_interactions = interactions.loc[
+        :,
+        interactions.columns.tz_localize(None).to_pydatetime()
+        > (pd.to_datetime("now") - pd.DateOffset(months=n_months)),
+    ].cumsum(axis=1)
 
+    map_repo = {
+        idx: "https://github.com/" + idx.lower() for idx in last_6me_interactions.index
+    }
+    last_6me_interactions.index = last_6me_interactions.index.map(map_repo)
 
-def get_state(key, default=None):
-    """Get a value from Streamlit session state, or set it to default if not present."""
-    return st.session_state.get(key, default)
+    streamlit_ready_interactions = last_6me_interactions.groupby(
+        last_6me_interactions.index
+    ).apply(lambda x: x.values[0])
 
-
-def set_state(key, value, subkey: str | None = None):
-    """Set a value in Streamlit session state."""
-    if subkey is None:
-        st.session_state[key] = value
-    else:
-        st.session_state[key][subkey] = value
-
-
-def init_state(key, default, subkey: str | None = None):
-    """Initialise a key in Streamlit session state."""
-    if subkey is None:
-        set_state(key, get_state(key, default))
-    else:
-        set_state(key, get_state(key, default)[subkey], subkey)
+    return streamlit_ready_interactions
 
 
 def numeric_range_filter(
@@ -273,8 +272,8 @@ def update_score_col(df: pd.DataFrame) -> pd.Series:
         pd.Series: Tool score.
     """
     # Add tool score by combining metrics with the provided weightings
-    scores = {col: get_state(f"scoring_{col}", 0.5) for col in df.columns}
-    scoring_method = get_state("scoring_method", "min-max")
+    scores = {col: util.get_state(f"scoring_{col}", 0.5) for col in df.columns}
+    scoring_method = util.get_state("scoring_method", "min-max")
     normalised_data = normalise(df, scoring_method)
     score = normalised_data.mul(scores).div(sum(scores.values())).sum(axis=1).mul(100)
     return score
@@ -318,7 +317,9 @@ def slider(
     else:
         default_range = (col.min(), col.max())
     current_range = (
-        default_range if reset_mode else get_state(f"slider_{col.name}", default_range)
+        default_range
+        if reset_mode
+        else util.get_state(f"slider_{col.name}", default_range)
     )
     if col.dtype.kind == "M":
         slider_range = tuple(pd.Timestamp(i).timestamp() for i in current_range)
@@ -352,7 +353,9 @@ def multiselect(unique_values: list[str], col: str, reset_mode: bool) -> list[st
         list[str]: values given by multiselect to use in data table filtering.
     """
     current_selected = (
-        unique_values if reset_mode else get_state(f"multiselect_{col}", unique_values)
+        unique_values
+        if reset_mode
+        else util.get_state(f"multiselect_{col}", unique_values)
     )
     selected_values = st.sidebar.multiselect(
         f"Select {col} values",
@@ -375,14 +378,14 @@ def reset(button_press: bool = False) -> bool:
     # Reset filters button and logic
     if button_press:
         # Set a flag to indicate we want to reset
-        set_state("reset_filters", True)
+        util.set_state("reset_filters", True)
         st.rerun()
 
     # Check if we need to reset filters
-    reset_mode = get_state("reset_filters", False)
+    reset_mode = util.get_state("reset_filters", False)
     if reset_mode:
         # Clear the reset flag
-        set_state("reset_filters", False)
+        util.set_state("reset_filters", False)
     return reset_mode
 
 
@@ -402,7 +405,7 @@ def header_and_missing_value_toggle(col: pd.Series, reset_mode: bool) -> bool:
     if missing_count > 0:
         exclude_nan = st.sidebar.toggle(
             f"Exclude {missing_count} tools missing `{name}` data",
-            value=False if reset_mode else get_state(f"exclude_nan_{name}", False),
+            value=False if reset_mode else util.get_state(f"exclude_nan_{name}", False),
             key=f"exclude_nan_{name}",
         )
     else:
@@ -587,7 +590,7 @@ def main(df: pd.DataFrame):
     # Show missing data info and toggle for docs column
     exclude_nan = header_and_missing_value_toggle(df["Docs"], reset_mode)
     if exclude_nan:
-        df_filtered = df_filtered[nan_filter(df_filtered["Docs"])]
+        df_filtered = df_filtered[util.nan_filter(df_filtered["Docs"])]
 
     # Add score filtering first.
     st.sidebar.subheader("Score", help=COLUMN_HELP["Score"])
@@ -597,16 +600,16 @@ def main(df: pd.DataFrame):
         # Show missing data info and toggle for each column
         exclude_nan = header_and_missing_value_toggle(df[col], reset_mode)
         if exclude_nan:
-            df_filtered = df_filtered[nan_filter(df_filtered[col])]
+            df_filtered = df_filtered[util.nan_filter(df_filtered[col])]
 
-        if is_datetime_column(df[col]):
+        if util.is_datetime_column(df[col]):
             slider_range = slider(df[col], reset_mode)
             df_filtered = df_filtered[
                 date_range_filter(df_filtered[col], *slider_range)
             ]
             col_config[col] = st.column_config.DateColumn(col, help=COLUMN_HELP[col])
 
-        elif is_numeric_column(df[col]):
+        elif util.is_numeric_column(df[col]):
             slider_range = slider(df[col], reset_mode)
 
             df_filtered = df_filtered[
@@ -617,7 +620,7 @@ def main(df: pd.DataFrame):
                 col, help=COLUMN_HELP[col], format=NUMBER_FORMAT[col]
             )
 
-        elif is_categorical_column(df[col]):
+        elif util.is_categorical_column(df[col]):
             # Categorical multiselect
             unique_values = sorted(df[col].dropna().unique().tolist())
             selected_values = multiselect(unique_values, col, reset_mode)
@@ -626,7 +629,7 @@ def main(df: pd.DataFrame):
             ]
             col_config[col] = st.column_config.TextColumn(col, help=COLUMN_HELP[col])
 
-        elif is_list_column(df[col]):
+        elif util.is_list_column(df[col]):
             # Categorical multiselect with list column entry
             unique_values = list(set(i for j in df[col].dropna().values for i in j))
             selected_values = multiselect(unique_values, col, reset_mode)
@@ -647,13 +650,15 @@ def main(df: pd.DataFrame):
     with col2:
         search_result = st_keyup("Find a tool by name", value="", key="search_box")
     df_filtered = df_filtered[
-        df_filtered["name"].str.lower().str.contains(search_result.lower())
+        df_filtered["name_with_url"].str.lower().str.contains(search_result.lower())
     ]
 
     with col1:
         st.metric("Tools in view", f"{len(df_filtered)} / {len(df)}")
-    column_config = {
-        "name": st.column_config.LinkColumn(
+
+    max_interactions = df["Interactions"].dropna().apply(lambda x: x.max()).max()
+    col_config = {
+        "name_with_url": st.column_config.LinkColumn(
             "Tool Name",
             help="Click on the tool name to navigate to its source code repository.",
             display_text=".*#(.*)",
@@ -668,16 +673,28 @@ def main(df: pd.DataFrame):
             format="%.0f%%",
             help=COLUMN_HELP["Score"],
         ),
+        "Interactions": st.column_config.BarChartColumn(
+            "6 Month Interactions",
+            y_min=0,
+            y_max=max_interactions,
+            help=COLUMN_HELP["Interactions"],
+        ),
         **col_config,
     }
+    cols_missing_config = set(col_config.keys()).symmetric_difference(
+        EXTRA_COLUMNS + list(COLUMN_NAME_MAPPING.values())
+    )
+    assert not cols_missing_config, (
+        f"Missing column configuration for {cols_missing_config}"
+    )
     # Display the table
     if len(df_filtered) > 0:
         st.dataframe(
             df_filtered,
             use_container_width=True,
             hide_index=True,
-            column_config=column_config,
-            column_order=["name", "url", "Docs", "Score", *col_config.keys()],
+            column_config=col_config,
+            column_order=col_config.keys(),
         )
     else:
         st.warning(
@@ -695,12 +712,15 @@ def main(df: pd.DataFrame):
 
 if __name__ == "__main__":
     # define the path of the CSV file listing the packages to assess
-    output_dir = Path(__file__).parent.parent / "inventory" / "output"
-    df_vis = create_vis_table(output_dir)
+    tool_stats_dir = Path(__file__).parent.parent / "inventory" / "output"
+    user_stats_dir = Path(__file__).parent.parent / "user_analysis" / "output"
+    df_vis = create_vis_table(tool_stats_dir, user_stats_dir)
     g = git.cmd.Git()
-    latest_changes = g.log("-1", "--pretty=%cs", output_dir / "stats.csv")
+    latest_changes = g.log("-1", "--pretty=%cs", tool_stats_dir / "stats.csv")
 
-    st.set_page_config(layout="wide")
+    st.set_page_config(
+        page_title="Tool Repository Metrics", page_icon="⚡️", layout="wide"
+    )
     preamble(latest_changes)
     main(df_vis)
     conclusion()

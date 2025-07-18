@@ -24,10 +24,12 @@ def create_vis_table(user_stats_dir: Path) -> pd.DataFrame:
     return class_df
 
 
-def user_pie(user_stats_df: pd.DataFrame):
+def user_pie(
+    user_stats_df: pd.DataFrame, container: st.delta_generator.DeltaGenerator = st
+):
     """Prepare plot to show distribution of user classifications."""
     # Create pie chart of classifications
-    st.subheader("User Types Across All Repositories")
+    container.subheader("User Types Across All Repositories")
     class_counts = user_stats_df.classification.value_counts()
 
     fig = px.pie(
@@ -36,12 +38,14 @@ def user_pie(user_stats_df: pd.DataFrame):
         title=f"Distribution of {len(user_stats_df)} Users by Type",
         color_discrete_sequence=px.colors.qualitative.Plotly,
     )
-    st.plotly_chart(fig, key="user_types_pie")
+    container.plotly_chart(fig, key="user_types_pie")
 
 
-def org_bar(user_stats_df: pd.DataFrame):
+def org_bar(
+    user_stats_df: pd.DataFrame, container: st.delta_generator.DeltaGenerator = st
+):
     """Prepare plot to show orgs to which users are affiliated."""
-    st.subheader("Top Organizations Engaging with Repositories")
+    container.subheader("Top Organizations Engaging with Repositories")
 
     # Sort organizations by count
     org_counts = user_stats_df.company.value_counts().head(KEEP_TOP)
@@ -55,11 +59,14 @@ def org_bar(user_stats_df: pd.DataFrame):
         color_continuous_scale=px.colors.sequential.Viridis,
     )
     fig.update_layout(xaxis_tickangle=-45, xaxis={"title": "Organization"})
-    st.plotly_chart(fig, key="top_orgs_bar")
+    container.plotly_chart(fig, key="top_orgs_bar")
 
 
-def user_locations(user_stats_df: pd.DataFrame):
-    """Prepare plots to show user locations (i.e. countries)."""
+def user_locations_bar(
+    user_stats_df: pd.DataFrame, container: st.delta_generator.DeltaGenerator = st
+):
+    """Prepare bar plot to show top user locations (i.e. countries)."""
+    container.subheader("Top User Origin Countries")
     locations_count = user_stats_df.location.value_counts().head(KEEP_TOP)
     fig = px.bar(
         locations_count.to_frame("Number of Users").reset_index(),
@@ -70,10 +77,17 @@ def user_locations(user_stats_df: pd.DataFrame):
         color_continuous_scale=px.colors.sequential.Viridis,
     )
     fig.update_layout(xaxis_tickangle=-45, xaxis={"title": "Location"})
-    st.plotly_chart(fig, key="top_locations_bar")
+    container.plotly_chart(fig, key="top_locations_bar")
+
+
+def user_locations_map(
+    user_stats_df: pd.DataFrame, container: st.delta_generator.DeltaGenerator = st
+):
+    """Prepare map plot to show all user locations (i.e., countries)."""
+    locations_count = user_stats_df.location.value_counts()
 
     # Add a world map visualization
-    st.subheader("Geographic Map")
+    container.subheader("Geographic Map")
 
     fig = px.choropleth(
         locations_count.rename_axis(index="country")
@@ -100,7 +114,7 @@ def user_locations(user_stats_df: pd.DataFrame):
         paper_bgcolor="rgba(0,0,0,0)",  # Transparent background
         plot_bgcolor="rgba(0,0,0,0)",  # Transparent plot area
     )
-    st.plotly_chart(fig, key="country_map")
+    container.plotly_chart(fig, key="country_map")
 
 
 def _repo_to_tool_map(user_stats_df: pd.DataFrame) -> list[dict]:
@@ -135,13 +149,20 @@ def preamble():
         On this page, we have collated all these interactions for all GitHub-hosted tools.
         We have then gathered data on the GitHub users linked to those interactions to find their origin country and attempted to classify them as being from one of 5 main groups:
 
-        - 🎓 **academic** - an academic institution (e.g., university).
-        - 🏦 **financial** - a financial institution (e.g., bank).
-        - 🏬 **government** - a government department.
-        - 🏭 **industry** - an energy industry actor (e.g., wind turbine manufacturer).
-        - 👩‍💻 **professional** - a consultancy / professional interest group (incl. self-employed).
-        - 🔎 **research** - a non-academic research institution (e.g. a US national lab).
-        - 💡 **utility** - an energy industry public/private utility company or system operator (e.g. a transmission system operator)
+        🎓 **academic** - an academic institution (e.g., university).
+
+        🏦 **financial** - a financial institution (e.g., bank).
+
+        🏬 **government** - a government department.
+
+        🏭 **industry** - an energy industry actor (e.g., wind turbine manufacturer).
+
+        👩‍💻 **professional** - a consultancy / professional interest group (incl. self-employed).
+
+        🔎 **research** - a non-academic research institution (e.g. a US national lab).
+
+        💡 **utility** - an energy industry public/private utility company or system operator (e.g. a transmission system operator)
+
 
         Here, you can explore the result of our user interaction analysis for each tool (or any set of tools).
         In doing so, you may find out more about:
@@ -201,7 +222,8 @@ def main(user_stats_df: pd.DataFrame):
         org_bar(user_stats_df)
 
         if user_stats_df.location.notnull().any():
-            user_locations(user_stats_df)
+            user_locations_bar(user_stats_df)
+            user_locations_map(user_stats_df)
 
 
 if __name__ == "__main__":

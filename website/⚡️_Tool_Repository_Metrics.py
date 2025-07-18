@@ -559,12 +559,13 @@ def extract_processing_approach_from_readme(readme: Path, header: str) -> str:
     return all_html
 
 
-def preamble(latest_changes: str, n_tools: int):
+def preamble(latest_changes: str, n_tools: int, data_processing_text: str):
     """Text to show before the app table.
 
     Args:
         latest_changes (str): the date associated with the most recent changes to the table.
         n_tools (int): Number of tools shown in the table.
+        data_processing_text (str): HTML text snippet to drop into the data processing explainer box.
     """
     st.markdown(
         f"""
@@ -597,45 +598,8 @@ def preamble(latest_changes: str, n_tools: int):
         """
     )
     with st.expander("Our data processing toolkit", icon="🧰"):
-        st.markdown(
-            """
-            We collect tools listed in the following inventories:
+        st.markdown(data_processing_text, unsafe_allow_html=True)
 
-            - [LF Energy Landscape](https://github.com/lf-energy/lfenergy-landscape)
-            - [G-PST OpenTools](https://api.github.com/repos/G-PST/opentools)
-            - [Open Sustainable Technology](https://github.com/protontypes/open-sustainable-technology)
-            - [Open Energy Modelling Initiative](https://wiki.openmod-initiative.org/wiki/Open_Models)
-
-            Alongside a [pre-compiled list](https://github.com/open-energy-transition/open-esm-analysis/blob/main/inventory/pre_compiled_esm_list.csv) of tools (based on [DOI:10.1016/j.rser.2018.11.020](https://doi.org/10.1016/j.rser.2018.11.020) and subsequent searches), we filter the collection to:
-
-            - Remove duplicates according to tool name, after normalising the string to lower case and converting all special characters to underscores.
-            - Remove duplicates according to tool source code URL, after normalising the string to lower case.
-            - Remove tools without a valid Git repository for their source code (hosted on e.g. GitHub, GitLab, Bitbucket, or a custom domain).
-            - Remove tools that we know, from manual inspection, are not appropriate for including in our inventory.
-              This may be because they are duplicates of the same tool that we cannot catch with our simple detection methods, are supporting tools for another listed tool, or have been catalogued erroneously in the upstream inventory.
-              We give the reason for manually excluding a tool in our [list of exclusions](https://github.com/open-energy-transition/open-esm-analysis/blob/main/inventory/exclusions.csv).
-
-            For the remaining tools, we collect source code repository and package data using <https://ecosyste.ms> APIs.
-            At this stage, some tools will be filtered out for lack of any data.
-            Lack of repository data is usually because the repository is no longer available or because it is not publicly accessible (which we deem to be *not* an open source tool, irrespective of the tool's license).
-            In very rare cases (<1% of tools in the inventory), the repository host is not indexed by <https://ecosyste.ms>.
-            If this is the case for your tool and you would like it to be included in this inventory then you should open an issue on the appropriate [ecosyste.ms repository](https://github.com/ecosyste-ms).
-
-            Further to data from <https://ecosyste.ms>, we rely on other sources to (1) link repositories with their documentation sites, (2) Fill gaps in package download numbers, and (3) gather data on user interactions.
-
-            1. The most likely hosts for documentation are readthedocs.org, Github/Gitlab Pages, or repository Wikis.
-               For each repository, we check the most likely URL for each of these as they follow a pre-defined structure.
-               If we get a positive match, we link that to the repository.
-               This is not perfect as sometimes a project uses an unexpected site URL for their documentation.
-            1. Most packages are indexed on PyPI, conda-forge or on public Julia package servers.
-               For each of these, since <https://ecosyste.ms> data is often missing here, we use direct or third party APIs to query the downloads for the previous month.
-            1. User interaction data utilises the direct GitHub API.
-               This is the API with which much of the <https://ecosyste.ms> database is generated.
-               However, they don't store user data unless a user is also a repository owner.
-               Direct use of the GitHub API is time intensive due to hourly request limits.
-               Therefore, this data (e.g. informing the rate of user interactions over the past 6 months) is updated less frequently than other tools stats.
-            """
-        )
     with st.expander("Caveats", icon="⚠️"):
         st.markdown(
             """
@@ -670,10 +634,36 @@ def preamble(latest_changes: str, n_tools: int):
     )
 
 
-def conclusion(data_processing_text: str):
+def conclusion():
     """Text to show after the app table."""
-    st.markdown("## Key Takeaways from the Data")
-    st.html(data_processing_text)
+    st.markdown(
+        """
+        ## Key Takeaways from the Data
+
+        - **Adoption Signals Matter**: High download counts, active contributors, and ongoing issue resolutions suggest healthy, well-maintained projects.
+          However, source code activity alone can be misleading — some highly starred projects have stalled development and some with limited source code development are in heavy use in supporting planning decisions."
+        - **Sustainability Risks**: Projects with fewer than 10 contributors face a higher risk of abandonment.
+          A committed and broad contributor base can be hard to come by and may need to be cultivated with financial support rather than relying on it to grow naturally.
+        - **Usability Gaps**: Some projects do not have builds of their tools indexed online (e.g. on PyPI or conda-forge), which may indicate poor release management and hinder long-term usability.
+        - **Interoperability Potential**: Many tools serve niche roles and may only be suitable for supporting decision-making as part of a tool suite.
+          This requires tools to be interoperable, using common nomenclature and data structures.
+
+        ## Beyond Data: The Need for Qualitative Assessments
+
+        While data helps filter out the most interesting tools, deeper investigation is needed to ensure a tool is the right fit.
+        Some key qualitative factors to consider:
+
+        - **Documentation Quality**: Are installation and usage guides clear and up to date?
+        - **Community Support**: Is there an active forum, mailing list, or issue tracker?
+        - **Use Cases**: Has the tool been applied in real-world projects similar to your needs?
+        - **Licensing & Governance**: Is it permissively licensed (e.g., MIT) or does it enforce restrictions (e.g., GPL)?
+        - **Collaboration Potential**: Can multiple stakeholders contribute effectively?
+
+        **By combining live data tracking with structured qualitative evaluation**, the energy community can reduce wasted investments and ensure the best tools remain available for researchers, grid operators, project developers, investors and policymakers.
+
+        **Have you found this platform useful, or want to see it grow in any specific way?** Share your thoughts and suggestions on our [project homepage](https://github.com/open-energy-transition/open-esm-analysis/issues)!
+        """
+    )
 
 
 def main(df: pd.DataFrame):
@@ -827,6 +817,6 @@ if __name__ == "__main__":
     data_processing_approach_string = extract_processing_approach_from_readme(
         readme_path, "Our data processing approach"
     )
-    preamble(latest_changes, len(df_vis))
+    preamble(latest_changes, len(df_vis), data_processing_approach_string)
     main(df_vis)
-    conclusion(data_processing_approach_string)
+    conclusion()

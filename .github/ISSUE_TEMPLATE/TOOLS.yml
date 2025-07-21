@@ -1,0 +1,20 @@
+name: Report a missing or incorrectly included tool
+description: Missing or incorrectly included tools in the inventory? Report them here.
+labels:
+  - tools
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: >-
+        Please describe the tool you believe is missing and / or the tool that is included that you don't believe should be.
+    validations:
+      required: true
+
+  - type: textarea
+    id: git-link
+    attributes:
+      label: Git repo link
+      description: >-
+        If requesting for a tool to be added, a link to a public git repository is needed (e.g. hosted on GitHub, GitLab, BitBucket, etc.).

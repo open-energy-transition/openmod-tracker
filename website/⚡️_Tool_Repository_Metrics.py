@@ -136,7 +136,7 @@ def _create_user_interactions_timeseries(
             This is not a data structure that pandas really supports as the dtype is list-like.
     """
     user_df = pd.read_csv(
-        tool_data_dir / "user_interactions.csv", parse_dates=["timestamp"]
+        tool_data_dir / "_user_interactions.csv", parse_dates=["timestamp"]
     )
     interactions = (
         user_df.groupby([user_df.timestamp, user_df.repo])
@@ -321,14 +321,13 @@ def slider(
             Min/max values given by slider to use in data table filtering.
             Will be in datetime format if that was the format of the inputs, otherwise floats.
     """
+    state_name = f"slider_{col.name}"
     if col.dtype.kind == "M":
         default_range = (col.min().date(), col.max().date())
     else:
         default_range = (col.min(), col.max())
     current_range = (
-        default_range
-        if reset_mode
-        else util.get_state(f"slider_{col.name}", default_range)
+        default_range if reset_mode else util.get_state(state_name, default_range)
     )
     if col.dtype.kind == "M":
         slider_range = tuple(pd.Timestamp(i).timestamp() for i in current_range)
@@ -344,8 +343,10 @@ def slider(
         min_value=default_range[0],
         max_value=default_range[1],
         value=current_range,
-        key=f"slider_{col.name}",
+        key=state_name,
     )
+    if selected_range != default_range:
+        util.get_state("filters")["slider"].append(col.name)
 
     return selected_range
 
@@ -361,10 +362,9 @@ def multiselect(unique_values: list[str], col: str, reset_mode: bool) -> list[st
     Returns:
         list[str]: values given by multiselect to use in data table filtering.
     """
+    state_name = f"multiselect_{col}"
     current_selected = (
-        unique_values
-        if reset_mode
-        else util.get_state(f"multiselect_{col}", unique_values)
+        unique_values if reset_mode else util.get_state(state_name, unique_values)
     )
 
     if col.lower() == "language":
@@ -387,8 +387,10 @@ def multiselect(unique_values: list[str], col: str, reset_mode: bool) -> list[st
         f"Select {col} values",
         options=unique_values,
         default=current_selected,
-        key=f"multiselect_{col}",
+        key=state_name,
     )
+    if selected_values != unique_values:
+        util.get_state("filters")["multiselect"].append(col)
     return selected_values
 
 
@@ -428,12 +430,15 @@ def header_and_missing_value_toggle(col: pd.Series, reset_mode: bool) -> bool:
     name: str = col.name  # type:ignore
     st.sidebar.subheader(name, help=COLUMN_HELP[name])
     missing_count = col.isnull().sum()
+    state_name = f"exclude_nan_{name}"
     if missing_count > 0:
         exclude_nan = st.sidebar.toggle(
             f"Exclude {missing_count} tools missing `{name}` data",
-            value=False if reset_mode else util.get_state(f"exclude_nan_{name}", False),
-            key=f"exclude_nan_{name}",
+            value=False if reset_mode else util.get_state(state_name, False),
+            key=state_name,
         )
+        if exclude_nan:
+            util.get_state("filters")["toggle"].append(name)
     else:
         exclude_nan = False
     return exclude_nan
@@ -537,6 +542,23 @@ def dist_plot(col: pd.Series, slider_range: tuple[float, float]) -> None:
     )
 
 
+def create_filter_message() -> str:
+    """Create a message listing all the columns on which a filter has been applied by the user."""
+    filters = util.get_state("filters")
+    messages = []
+    if filters["multiselect"] or filters["slider"]:
+        to_filter = [f"`{name}`" for name in filters["multiselect"] + filters["slider"]]
+        messages.append(f"filtered on subset of: {', '.join(to_filter)}")
+    if filters["toggle"]:
+        to_filter = [f"`{name}`" for name in filters["toggle"]]
+        messages.append(f"excluding missing data in: {', '.join(to_filter)}")
+    if messages:
+        message = " (" + "; ".join(messages) + ")"
+    else:
+        message = ""
+    return message
+
+
 def extract_processing_approach_from_readme(readme: Path, header: str) -> str:
     """Extract all HTML text from the README below a given (sub)header.
 
@@ -628,8 +650,6 @@ def preamble(latest_changes: str, n_tools: int, data_processing_text: str):
         ## Open Energy Modelling Tools - Key Metrics
 
         **Last Update**: {latest_changes}
-
-        **Default Order**: Number of {DEFAULT_ORDER} (descending)
         """
     )
 
@@ -674,13 +694,16 @@ def main(df: pd.DataFrame):
     """
     reset_mode = reset()
     st.sidebar.header("Table filters", divider=True)
-    df_filtered = df
+
+    util.set_state("filters", {"toggle": [], "multiselect": [], "slider": []})
+
     col_config = {}
     numeric_cols = []
+    filters = []
     # Show missing data info and toggle for docs column
     exclude_nan = header_and_missing_value_toggle(df["Docs"], reset_mode)
     if exclude_nan:
-        df_filtered = df_filtered[util.nan_filter(df_filtered["Docs"])]
+        filters.append(util.nan_filter(df["Docs"]))
 
     # Add score filtering first.
     st.sidebar.subheader("Score", help=COLUMN_HELP["Score"])
@@ -690,21 +713,18 @@ def main(df: pd.DataFrame):
         # Show missing data info and toggle for each column
         exclude_nan = header_and_missing_value_toggle(df[col], reset_mode)
         if exclude_nan:
-            df_filtered = df_filtered[util.nan_filter(df_filtered[col])]
+            filters.append(util.nan_filter(df[col]))
 
         if util.is_datetime_column(df[col]):
             slider_range = slider(df[col], reset_mode)
-            df_filtered = df_filtered[
-                date_range_filter(df_filtered[col], *slider_range)
-            ]
+            filters.append(date_range_filter(df[col], *slider_range))
             col_config[col] = st.column_config.DateColumn(col, help=COLUMN_HELP[col])
 
         elif util.is_numeric_column(df[col]):
             slider_range = slider(df[col], reset_mode)
 
-            df_filtered = df_filtered[
-                numeric_range_filter(df_filtered[col], *slider_range)
-            ]
+            filters.append(numeric_range_filter(df[col], *slider_range))
+
             numeric_cols.append(col)
             col_config[col] = st.column_config.NumberColumn(
                 col, help=COLUMN_HELP[col], format=NUMBER_FORMAT[col]
@@ -714,37 +734,32 @@ def main(df: pd.DataFrame):
             # Categorical multiselect
             unique_values = sorted(df[col].dropna().unique().tolist())
             selected_values = multiselect(unique_values, col, reset_mode)
-            df_filtered = df_filtered[
-                categorical_filter(df_filtered[col], selected_values)
-            ]
+            filters.append(categorical_filter(df[col], selected_values))
             col_config[col] = st.column_config.TextColumn(col, help=COLUMN_HELP[col])
 
         elif util.is_list_column(df[col]):
             # Categorical multiselect with list column entry
             unique_values = list(set(i for j in df[col].dropna().values for i in j))
             selected_values = multiselect(unique_values, col, reset_mode)
-            df_filtered = df_filtered[list_filter(df_filtered[col], selected_values)]
+            filters.append(list_filter(df[col], selected_values))
             col_config[col] = st.column_config.ListColumn(col, help=COLUMN_HELP[col])
 
     # Add tool score by combining metrics with the provided weightings
-    df_filtered["Score"] = update_score_col(df_filtered[numeric_cols])
-    df_filtered = df_filtered[
-        numeric_range_filter(df_filtered["Score"], *score_slider_range)
-    ]
-
-    # Sort the table based on default order
-    df_filtered = df_filtered.sort_values(DEFAULT_ORDER, ascending=False)
+    df["Score"] = update_score_col(df[numeric_cols])
+    filters.append(numeric_range_filter(df["Score"], *score_slider_range))
 
     # Display options
     col1, col2 = st.columns([3, 2])
     with col2:
         search_result = st_keyup("Find a tool by name", value="", key="search_box")
-    df_filtered = df_filtered[
-        df_filtered["name_with_url"].str.lower().str.contains(search_result.lower())
-    ]
+    filters.append(df["name_with_url"].str.lower().str.contains(search_result.lower()))
+
+    filter_series = pd.concat(filters, axis=1).all(axis=1)
+    df_filtered = df[filter_series].sort_values(DEFAULT_ORDER, ascending=False)
 
     with col1:
-        st.metric("Tools in view", f"{len(df_filtered)} / {len(df)}")
+        message = create_filter_message()
+        st.metric(f"Tools in view{message}", f"{len(df_filtered)} / {len(df)}")
 
     max_interactions = df["Interactions"].dropna().apply(lambda x: x.max()).max()
     col_config = {
@@ -818,5 +833,5 @@ if __name__ == "__main__":
         readme_path, "Our data processing approach"
     )
     preamble(latest_changes, len(df_vis), data_processing_approach_string)
-    main(df_vis)
+    main(df_vis.copy())
     conclusion()

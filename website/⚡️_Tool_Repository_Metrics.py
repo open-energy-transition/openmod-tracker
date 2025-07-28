@@ -361,6 +361,10 @@ def multiselect(unique_values: list[str], col: str, reset_mode: bool) -> list[st
 
     Returns:
         list[str]: values given by multiselect to use in data table filtering.
+
+    Note:
+        - The `Language` column has a custom toggle that we need to account for in creating its multiselect box.
+          We handle that directly in this method.
     """
     state_name = f"multiselect_{col}"
     current_selected = (
@@ -370,10 +374,6 @@ def multiselect(unique_values: list[str], col: str, reset_mode: bool) -> list[st
     if col.lower() == "language":
         exclude_proprietary = proprietary_language_toggle(reset_mode)
         if exclude_proprietary:
-            util.set_state(
-                "selected_proprietary",
-                set(current_selected).intersection(NOT_OPEN_SOURCE_LANGUAGES),
-            )
             current_selected = sorted(
                 set(current_selected).difference(NOT_OPEN_SOURCE_LANGUAGES)
             )
@@ -389,6 +389,13 @@ def multiselect(unique_values: list[str], col: str, reset_mode: bool) -> list[st
         default=current_selected,
         key=state_name,
     )
+
+    if col.lower() == "language" and not util.get_state("exclude_proprietary"):
+        util.set_state(
+            "selected_proprietary",
+            set(selected_values).intersection(NOT_OPEN_SOURCE_LANGUAGES),
+        )
+
     if selected_values != unique_values:
         util.get_state("filters")["multiselect"].append(col)
     return selected_values
@@ -547,10 +554,13 @@ def create_filter_message() -> str:
     filters = util.get_state("filters")
     messages = []
     if filters["multiselect"] or filters["slider"]:
-        to_filter = [f"`{name}`" for name in filters["multiselect"] + filters["slider"]]
+        to_filter = [
+            f"`{name}`"
+            for name in sorted(set(filters["multiselect"] + filters["slider"]))
+        ]
         messages.append(f"filtered on subset of: {', '.join(to_filter)}")
     if filters["toggle"]:
-        to_filter = [f"`{name}`" for name in filters["toggle"]]
+        to_filter = [f"`{name}`" for name in sorted(set(filters["toggle"]))]
         messages.append(f"excluding missing data in: {', '.join(to_filter)}")
     if messages:
         message = " (" + "; ".join(messages) + ")"

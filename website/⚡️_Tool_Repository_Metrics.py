@@ -806,13 +806,13 @@ if __name__ == "__main__":
     user_stats_dir = Path(__file__).parent.parent / "user_analysis" / "output"
     readme_path = Path(__file__).parent.parent / "README.md"
 
-    df_vis = create_vis_table(tool_stats_dir, user_stats_dir)
-    g = git.cmd.Git()
-    latest_changes = g.log("-1", "--pretty=%cs", tool_stats_dir / "stats.csv")
-
     st.set_page_config(
         page_title="Tool Repository Metrics", page_icon="⚡️", layout="wide"
     )
+
+    df_vis = create_vis_table(tool_stats_dir, user_stats_dir)
+    g = git.cmd.Git()
+    latest_changes = g.log("-1", "--pretty=%cs", tool_stats_dir / "stats.csv")
 
     data_processing_approach_string = extract_processing_approach_from_readme(
         readme_path, "Our data processing approach"

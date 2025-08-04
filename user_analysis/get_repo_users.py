@@ -17,7 +17,7 @@ LOGGER = logging.getLogger(__name__)
 COLS = ["username", "timestamp", "interaction", "repo"]
 
 
-def get_repo_users(repo: str, gh_client: Github, threads: int = 5) -> pd.DataFrame:
+def get_repo_users(repo: str, gh_client: Github, threads: int = 4) -> pd.DataFrame:
     """Get all users who interacted with a repo in a specific way using PyGithub.
 
     Args:
@@ -30,13 +30,7 @@ def get_repo_users(repo: str, gh_client: Github, threads: int = 5) -> pd.DataFra
     """
     repo_obj = gh_client.get_repo(repo)
     # Prepare function and args for parallel execution
-    tasks = [
-        _get_stargazer_users,
-        _get_fork_users,
-        _get_watcher_users,
-        _get_issue_users,
-        _get_pull_users,
-    ]
+    tasks = [_get_stargazer_users, _get_fork_users, _get_issue_users, _get_pull_users]
     with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor:
         # Submit functions for execution
         results = [executor.submit(task, repo_obj) for task in tasks]
@@ -65,12 +59,6 @@ def _get_fork_users(repo_obj: Repository) -> list[tuple[str, datetime, str]]:
         (fork.owner.login, fork.created_at, "fork") for fork in repo_obj.get_forks()
     ]
     return forkers
-
-
-def _get_watcher_users(repo_obj: Repository) -> list[tuple[str, None, str]]:
-    """Get all users who are watching a repository."""
-    watchers = [(watcher.login, None, "watcher") for watcher in repo_obj.get_watchers()]
-    return watchers
 
 
 def _get_issue_users(repo_obj: Repository) -> list[tuple[str, datetime, str]]:

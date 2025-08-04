@@ -228,11 +228,12 @@ def main(user_stats_df: pd.DataFrame):
 
 if __name__ == "__main__":
     # define the path of the CSV file listing the packages to assess
-    user_stats_dir = Path(__file__).parent.parent.parent / "user_analysis" / "output"
-    df_vis = create_vis_table(user_stats_dir)
-
     st.set_page_config(
         page_title="User Interaction Analysis", page_icon="👤", layout="wide"
     )
+
+    user_stats_dir = Path(__file__).parent.parent.parent / "user_analysis" / "output"
+    df_vis = create_vis_table(user_stats_dir)
+
     preamble()
     main(df_vis)

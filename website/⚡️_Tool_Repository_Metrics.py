@@ -136,7 +136,7 @@ def _create_user_interactions_timeseries(
             This is not a data structure that pandas really supports as the dtype is list-like.
     """
     user_df = pd.read_csv(
-        tool_data_dir / "_user_interactions.csv", parse_dates=["timestamp"]
+        tool_data_dir / "user_interactions.csv", parse_dates=["timestamp"]
     )
     interactions = (
         user_df.groupby([user_df.timestamp, user_df.repo])

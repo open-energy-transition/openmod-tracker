@@ -49,12 +49,7 @@ except FileNotFoundError:
     )
 
 JULIA_STATS_API = "https://juliapkgstats.com/api/v1/monthly_downloads/"
-ECOSYSTEMS_CACHE_FILE = Path(__file__).parent / "ecosystems_urls.yaml"
-ECOSYSTEMS_CACHE = (
-    yaml.safe_load(ECOSYSTEMS_CACHE_FILE.read_text())
-    if ECOSYSTEMS_CACHE_FILE.exists()
-    else {}
-)
+DOCS_CACHE = util.read_cache("docs_urls")
 
 
 def get_ecosystems_entry_data(
@@ -213,6 +208,9 @@ def _get_docs_data(url: str) -> dict:
     Returns:
         dict: Dict mapping docs sources (rtd, pages, wiki) to links, if those links exist.
     """
+    if url in DOCS_CACHE and any(site is not None for site in DOCS_CACHE[url].values()):
+        return DOCS_CACHE[url]
+
     parsed = urlparse(url)
     host, owner, repo = (
         parsed.netloc,
@@ -256,6 +254,8 @@ def _get_docs_data(url: str) -> dict:
     )
 
     docs = {"rtd": rtd, "pages": pages, "wiki": wiki}
+    DOCS_CACHE[url] = docs
+    util.dump_cache("docs_urls", DOCS_CACHE)
     if all(doc is None for doc in docs.values()):
         LOGGER.warning(f"No documentation found for {url}")
     return docs

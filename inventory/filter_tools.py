@@ -113,10 +113,16 @@ def resolve_duplicated_urls(df: pd.DataFrame) -> pd.DataFrame:
     Returns:
         pd.DataFrame: Tools table without duplicate IDs, choosing the most likely best URL option.
     """
+    duplicate_cache = util.read_cache("duplicate_urls")
     duplicates = df[df.id.duplicated()]
     for duplicate in duplicates.id.unique():
         urls = df[df.id == duplicate].url
         LOGGER.warning(f"Found {len(urls)} entries for tool ID '{duplicate}'")
+        if duplicate in duplicate_cache:
+            url = duplicate_cache[duplicate]
+            LOGGER.warning(f"Using cached resolved URL: {url}")
+            df.loc[df.id == duplicate, "url"] = url
+            continue
         for url in urls:
             repo_data = util.get_ecosystems_repo_data(url)
             if repo_data == "not-found":
@@ -139,6 +145,9 @@ def resolve_duplicated_urls(df: pd.DataFrame) -> pd.DataFrame:
             LOGGER.warning(
                 f"Could not resolve duplicate URLs for {duplicate}. Remaining: {remaining_urls}."
             )
+        else:
+            duplicate_cache[duplicate] = remaining_urls[0]
+    util.dump_cache("duplicate_urls", duplicate_cache)
     df = drop_duplicates(df, "url")
     return df
 

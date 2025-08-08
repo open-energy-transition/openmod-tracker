@@ -13,12 +13,6 @@ ECOSYSTEMS_PACKAGES_LOOKUP_API = (
 )
 
 LOGGER = logging.getLogger(__name__)
-ECOSYSTEMS_CACHE_FILE = Path(__file__).parent / "ecosystems_urls.yaml"
-ECOSYSTEMS_CACHE = (
-    yaml.safe_load(ECOSYSTEMS_CACHE_FILE.read_text())
-    if ECOSYSTEMS_CACHE_FILE.exists()
-    else {}
-)
 
 
 def get_url_json_content(url: str) -> dict:
@@ -64,13 +58,10 @@ def get_ecosystems_repo_data(url: str) -> dict | None:
     Returns:
         requests.Response: Content of data for `url`.
     """
+    ECOSYSTEMS_CACHE = read_cache("ecosystems_urls")
     ems_url = ECOSYSTEMS_CACHE.get(url, None)
     if ems_url is None:
-        ems_url = lookup_ecosystems_repo(url)
-        ECOSYSTEMS_CACHE[url] = ems_url
-        ECOSYSTEMS_CACHE_FILE.write_text(
-            yaml.safe_dump(ECOSYSTEMS_CACHE, sort_keys=True)
-        )
+        dump_cache("ecosystems_urls", ECOSYSTEMS_CACHE)
     if ems_url is None or ems_url == "not-found":
         return ems_url
 
@@ -105,3 +96,32 @@ def get_safe_url_string(url: str) -> str:
         str: Encoded URL string.
     """
     return quote_plus(url)
+
+
+def read_cache(filename: str) -> dict:
+    """Read YAML cache file."""
+    file = _filename_to_yaml_path(filename, "cache")
+    if not file.exists():
+        return {}
+    else:
+        return yaml.safe_load(file.read_text())
+
+
+def dump_cache(filename: str, data: dict):
+    """Dump dict to yaml cache file."""
+    _filename_to_yaml_path(filename, "cache").write_text(
+        yaml.safe_dump(data, sort_keys=True)
+    )
+
+
+def _filename_to_yaml_path(filename: str, dir: str) -> Path:
+    """Convert a filename to a Path object relative to the current directory.
+
+    Args:
+        filename (str): YAML file name. Suffix will be coerced to `.yaml`, whether or not it is included in `filename`.
+        dir (str): Subdirectory in which the file is found.
+
+    Returns:
+        Path: Path object pointing to `<util_dir>/<dir>/<filename>.yaml`
+    """
+    return (Path(__file__).parent / dir / filename).with_suffix(".yaml")

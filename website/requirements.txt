@@ -1,6 +1,6 @@
-streamlit
-streamlit-keyup
-plotly>=6.1.2
+beautifulsoup4>=4.13.4
 GitPython>=3.1.44
 markdown>=3.8.2
-beautifulsoup4>=4.13.4
+plotly>=6.1.2
+streamlit-keyup>=0.3.0
+streamlit>=1.48.0

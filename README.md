@@ -36,6 +36,10 @@ The result of the analysis is available in an [online dashboard](https://open-es
 
 To serve the streamlit app, call `pixi run serve` from the command line.
 
+## Test
+
+You can run our minimal test suite by calling `pixi run test`.
+
 ## Refreshing data
 
 Data refreshes are necessary when changing the inventory source code and are recommended at periodic intervals to capture upstream changes.

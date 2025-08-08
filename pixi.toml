@@ -65,9 +65,14 @@ streamlit-keyup = ">=0.3.0,<0.4"
 plotly = ">=6.1.2,<7"
 markdown = ">=3.8.2,<4"
 
-
 [feature.app.tasks]
 serve = "streamlit run $PIXI_PROJECT_ROOT/website/⚡️_Tool_Repository_Metrics.py"
+
+[feature.test.dependencies]
+pytest = ">=8.4.1,<9"
+
+[feature.test.tasks]
+test = "pytest"
 
 [feature.vis.dependencies]
 plotly = "*"
@@ -84,3 +89,4 @@ pycountry = "*"
 app = ["app"]
 vis = ["vis"]
 geo = ["geo"]
+test = ["app", "test"]

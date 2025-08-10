@@ -391,7 +391,7 @@ open_energy_system_models,Open Energy System Models,Used to explore future energ
 open_energy_system_models,Open Energy System Models,Used to explore future energy systems and are often applied to questions involving energy and climate policy.,https://en.wikipedia.org/wiki/open_energy_system_models,opensustain-tech,
 open_infrastructure_map,Open Infrastructure Map,A view of the world's energy and water infrastructure mapped in the OpenStreetMap database.,https://github.com/openinframap/openinframap,opensustain-tech,
 open_modeling_framework,Open Modeling Framework,A set of Python libraries for simulating power systems behavior with an emphasis on cost-benefit analysis of emerging technologies.,https://github.com/dpinney/omf,lf-energy-landscape,"production-cost,power-flow"
-open_modeling_framework,Open Modeling Framework,A set of Python libraries for simulating power systems behavior with an emphasis on cost-benefit analysis of emerging technologies.,https://github.com/dpinney/omf,opensustain-tech,"production-cost,power-flow"
+open_modeling_framework,Open Modeling Framework,A set of Python libraries for simulating power systems behavior with an emphasis on cost-benefit analysis of emerging technologies.,https://github.com/nreca-bts/omf,opensustain-tech,"production-cost,power-flow"
 open_models,Open Models,This page lists energy models published under open source licenses.,,lf-energy-landscape,
 open_plan,open_plan,,https://github.com/open-plan-tool/gui,lf-energy-landscape,
 opencem,openCEM,Capacity Expansion Model and Optimiser for the Australian National Energy Market.,https://github.com/opencemorg/opencem,lf-energy-landscape,
@@ -550,6 +550,7 @@ rivus,rivus,,https://github.com/tum-ens/rivus,pre-compiled,
 rl_testbed_for_energyplus,rl-testbed-for-energyplus,Reinforcement Learning Testbed for Power Consumption Optimization using EnergyPlus.,https://github.com/ibm/rl-testbed-for-energyplus,lf-energy-landscape,
 rl_testbed_for_energyplus,rl-testbed-for-energyplus,Reinforcement Learning Testbed for Power Consumption Optimization using EnergyPlus.,https://github.com/ibm/rl-testbed-for-energyplus,opensustain-tech,
 rodeo,RODeO,,https://github.com/nrel/rodeo,pre-compiled,
+roseau_load_flow,Roseau Load Flow,A powerful load flow solver and static analysis tool.,https://github.com/roseautechnologies/roseau_load_flow,opensustain-tech,
 rts_gmlc,RTS-GMLC,Reliability Test System of the Grid Modernization Lab Consortium.,https://github.com/gridmod/rts-gmlc,opensustain-tech,
 rustpower,rustpower,,https://github.com/chengts95/rustpower,pre-compiled,
 sam,SAM,,https://github.com/nrel/sam,pre-compiled,"capacity-expansion,production-cost"

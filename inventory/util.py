@@ -29,7 +29,7 @@ def get_url_json_content(url: str) -> dict:
     return yaml.safe_load(content)
 
 
-def lookup_ecosystems_repo(url: str) -> str | None:
+def get_ecosystems_data(url: str) -> dict | str | None:
     """Get repository API string from ecosyste.ms based on the provided repo URL.
 
     Args:
@@ -38,18 +38,18 @@ def lookup_ecosystems_repo(url: str) -> str | None:
     Returns:
         requests.Response: If the repository exists, the ecosyste.ms API repository URL
     """
-    safe_query = get_safe_url_string(url)
-    response = requests.get(ECOSYSTEMS_REPO_LOOKUP_API + safe_query)
+    response = requests.get(url)
 
     if response.ok:
-        return yaml.safe_load(response.content.decode("utf-8"))["repository_url"]
-    elif response.status_code != "500":
+        return yaml.safe_load(response.content.decode("utf-8"))
+    elif response.status_code != 500:
+        LOGGER.warning(f"Static URL {url} returned {response.status_code} status code.")
         return "not-found"
     else:
         return None
 
 
-def get_ecosystems_repo_data(url: str) -> dict | None:
+def get_ecosystems_repo_data(url: str) -> dict | str | None:
     """Get repository lookup API call response from ecosyste.ms based on the provided API repository URL.
 
     Args:
@@ -60,16 +60,24 @@ def get_ecosystems_repo_data(url: str) -> dict | None:
     """
     ECOSYSTEMS_CACHE = read_cache("ecosystems_urls")
     ems_url = ECOSYSTEMS_CACHE.get(url, None)
-    if ems_url is None:
-        dump_cache("ecosystems_urls", ECOSYSTEMS_CACHE)
-    if ems_url is None or ems_url == "not-found":
-        return ems_url
 
-    response = requests.get(ems_url)
-    if response.ok:
-        return yaml.safe_load(response.content.decode("utf-8"))
+    if ems_url == "not-found":
+        ems_data = ems_url
+
+    elif ems_url is None:
+        safe_query = get_safe_url_string(url)
+        ems_data = get_ecosystems_data(ECOSYSTEMS_REPO_LOOKUP_API + safe_query)
+        if isinstance(ems_data, dict):
+            cache_entry = ems_data["repository_url"]
+        else:
+            cache_entry = ems_data
+        ECOSYSTEMS_CACHE[url] = cache_entry
+        dump_cache("ecosystems_urls", ECOSYSTEMS_CACHE)
+
     else:
-        return None
+        ems_data = get_ecosystems_data(ems_url)
+
+    return ems_data
 
 
 def get_ecosystems_package_data(url: str) -> requests.Response:
@@ -82,8 +90,7 @@ def get_ecosystems_package_data(url: str) -> requests.Response:
         requests.Response: Content of data for packages linked to `url`.
     """
     safe_query = get_safe_url_string(url)
-
-    return requests.get(ECOSYSTEMS_PACKAGES_LOOKUP_API + safe_query)
+    return get_ecosystems_data(ECOSYSTEMS_PACKAGES_LOOKUP_API + safe_query)
 
 
 def get_safe_url_string(url: str) -> str:

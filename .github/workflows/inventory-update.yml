@@ -35,7 +35,7 @@ jobs:
           cache-write: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
 
       - name: Run pixi task
-        run: pixi run get-stats
+        run: pixi run get-docs
 
       - name: Check for file changes
         id: check-changes

@@ -14,7 +14,6 @@ from tqdm import tqdm
 LOGGER = logging.getLogger(__name__)
 
 USER_COLS = [
-    "name",
     "company",
     "blog",
     "location",
@@ -53,7 +52,6 @@ def get_user_details(
     try:
         user = gh_client.get_user(username)
         user_data = {
-            "name": user.name,
             "company": user.company,
             "blog": user.blog,
             "location": user.location,
@@ -97,13 +95,13 @@ def get_user_details(
     "--user-interactions",
     type=click.Path(exists=True, dir_okay=False, file_okay=True, path_type=Path),
     help="Path to the user_interactions.csv file (from get_repo_users.py).",
-    default="inventory/output/user_interactions.csv",
+    default="user_analysis/output/user_interactions.csv",
 )
 @click.option(
     "--outdir",
     type=click.Path(exists=False, dir_okay=True, file_okay=False, path_type=Path),
     help="Output directory for user_details.csv and organizations.csv.",
-    default="inventory/output",
+    default="user_analysis/output",
 )
 @click.option(
     "--refresh-cache",
@@ -140,7 +138,7 @@ def cli(user_interactions: Path, outdir: Path, refresh_cache: bool):
         remaining_calls = get_rate_limit_info(gh_client)[0]
         LOGGER.warning(f"Remaining API calls: {remaining_calls}.")
         # Only add new orgs
-        org_df = org_df.drop(existing_orgs.index, axis=0)
+        org_df = org_df.drop(existing_orgs.index, axis=0, errors="ignore")
         if not user_df.empty:
             user_df[USER_COLS].to_csv(user_details_path, mode="a", header=False)
         if not org_df.empty:

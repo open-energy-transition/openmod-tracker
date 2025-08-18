@@ -1,38 +1,22 @@
 ,description
-spine-tools,Open source modelling tools
-TulipaEnergy,Energy System Optimization Tools from TNO and eScience
-ansuiuc,
-ucsusa, Science for a healthy planet and safer world.
-OSeMOSYS,Open-source Energy Modelling System
-DeltaE,ΔE+ (Delta-E-plus) explores the synergies and trade-offs at the nexus of energy+ to support effective policy development.
+pik-piam,Tools developed for use with data and models related to PIK's research.
+remindmodel,"REMIND is a global multi-regional model incorporating the economy, the climate system and a detailed representation of the energy sector."
+freeCodeCamp,Learn to code for free with millions of other people around the world
+avtools-io,The Media Workflow Toolbox
+amidev-org,Alexis Michaltsis Sofware Development
+Alertas-tempranas-Covid-19,
+powsybl,Power System Blocks
+GenieFramework,Highly productive web development with Julia
+invenia,
 pvlib,
 AssessingSolar,
 PV-Tutorials,Tutorial materials for open-source python packages for simulating and analyzing photovoltaic power systems
-gisce,IT for Energy utilities
-pygrn,Som Gironins apassionats pel llenguatge de programació Python! 🐍🐍🐍
-podlinker,Podcast Social Network
-openmod-initiative,
-FRESNA,Repository of FRESNA (FIAS Renewable Energy Systems & Network Analysis)
-PyPSA,Python for Power System Analysis
-openlectures,Free online education for anyone who wants to learn
-uteepi,
-icdronesoc,Building London's leading hotspot for drone enthusiasts
-gdp-drone,
-freeCodeCamp,Learn to code for free with millions of other people around the world
-ReeemProject,Role of technologies in an energy efficient economy – model based analysis policy measures and transformation pathways to a sustainable energy system
-avtools-io,The Media Workflow Toolbox
-amidev-org,Alexis Michaltsis Sofware Development
-R-Techy-work,
-DATA-STRUCTURES-ALGORITHMS-TEST-GROUND,
-ANDROID-TECHY-GROUNDS,
-powsybl,Power System Blocks
-javelinadevelopers,
-GenieFramework,Highly productive web development with Julia
 M-68,M-68 aims to encourage independent student research by collaboration with organizations and people in academia globally.
 OREL-group,"A distributed collaborative-based open science lab with interests in computational science, biology & neuroscience, and cognition."
 opfab,"OperatorFabric is a modular, extensible, industrial-strength and field-tested platform for use in electricity, water, and other utility operations."
 jupyter4edu,Jupyter for Education focuses on best practices and content for teaching with Jupyter notebooks.
 OpenModelica,
+open-energy-transition,Non-profit that accelerates the energy transition with open data and open source software solutions.
 geeckode,open source community
 Computer-Engineering-UniPA,
 opusonesolutions,
@@ -40,81 +24,22 @@ PIK-ICoNe,"Dynamics, stability and resilience of complex hybrid infrastructure n
 CIRED,Repository for the models developed in CIRED
 OneDAS-Group,
 nexus-main,
-COPSI-Teaching,
 nuaajc-lab107,
 Redstone-Tech-Reupload-Group,红石科技搬运组字幕、工具、数据集等。
 MaREI-EPMG,
-JuliaAtmosOceanHydro,
-JuliaClimate,
 AtomicApps,
 brightway-lca,Open source framework for Brightway framework
-cigroup-ol,
 lfenergyarchitecturemodel,
 Nault,A secure web based wallet for Nano currency
-elua,
-greenant,A melhor energia é a que você não gasta!
-ii,inclusively integrating the world
-kubernetes,Production-Grade Container Scheduling and Management
-knative,"Kubernetes-based platform to build, deploy, and manage modern serverless workloads"
-kubernetes-sigs,Org for Kubernetes SIG-related work
-Safe-Surfer,"Protect the mental health of our young people through technology, education, and advocacy"
-knative-extensions,Extensions and plugins that extend the Knative project.
-FlatTrackio,Collaborate with your flatmates
-humacs,
-sharingio,A shareable pairing environment
-apisnoop,
-thisisnottheorganisationyourelookingfor,"you are not looking for it
-"
 WiserUFBA,"WISER: Web, Internet and Intelligent Systems Research Group"
 GitHawkApp,
 sourcecred,
-Freelunch-AI,10xing the AI Engineer.
+EddieHubCommunity,"Community of inclusive Open Source people - Collaboration 1st, Code 2nd! Join our GitHub Org 👇"
+Freelunch-AI,Making 2-person startup unicorns a reality.
 egnitionHamburg,Formula Student Team of TUHH. Building electric racecars since 2011 and autonomous racecars since 2016.
-tildetown,code archive for tilde.town open source code. see git.tilde.town
-PurpurProject,
+cla-assistant,Contributor License Agreement assistant
 elastic,
-JuliaLang,The Julia Programming Language
-numfocus,Non-profit organization promoting accessible and reproducible scientific and technical computing
-modelica,Projects of the Modelica Association
-PumasAI,Developing scientific leaders in drug development and clinical therapeutics
-JuliaCon,The Julia Conference
-JuliaGPU,GPU Computing in Julia
-JuliaDiff,Differentiation Tools in Julia
-JunoLab,Interesting Development Environment
-QuantEcon,Open source code for quantitative economic modeling
-UCIDataScienceInitiative,
-JuliaComputing,
-ReScience,Reproducible Science  is good. Replicated Science  is better.
-conda-forge,"A community led collection of recipes, build infrastructure and distributions for the conda package manager."
-JuliaString,Organization for Julia string handling packages
-JuliaPlots,Data visualization in Julia
-JuliaMath,Mathematics made easy in Julia
-JuliaLabs,
-JuliaInterop,Easy interoperability between Julia and other languages
-SciML,Open source software for scientific machine learning
-JuliaArrays,Custom array types (and utilities for building array types) for Julia
-NieLab,"Mathematical, Computational, and Systems Biology"
-osmosisfoundation,Open Source Modeling and Simulation Solutions
-FluxML,The Elegant Machine Learning Stack
-JuliaRegistries,
-JuliaDynamics,"A Julia-based software organization for dynamical systems, nonlinear dynamics, complex systems and the complexities of the scientific life"
-JuliaPDE,Methods for solving Partial Differential Equations in the Julia programming language
-JuliaLinearAlgebra,A collection of linear algebra packages for the Julia Programming Language.
-epirecipes,A cookbook of infectious disease transmission models
-JuliaSymbolics,A fast and modern CAS for a fast and modern language
-mitmath,educational materials for MIT math courses
-MIT-AI-Accelerator,Official GitHub of the DAF-MIT AI Accelerator
-JuliaHealth,"Using the Julia programming language to improve medicine, health care, public health, and biomedical research."
-JuliaSIMD,
-MIT-Adaptive-Radio-Science,
-ODINN-SciML,Global climate-glacier interactions modelling with Universal Differential Equations
-SWQU,
-Neuroblox,
-JuliaChemicalReactions,An organization focused on development of chemical reactions tools
-JuliaEpi,Computational epidemiology in @JuliaLang.
-PumasAI-Labs,"One powerful platform, Infinite potential."
-JuliaDispatch,Stay tuned! (hehe)
-DyadLang,Hardware Engineering at the speed of Software
+open-energy-transition,Non-profit that accelerates the energy transition with open data and open source software solutions.
 JuliaGraphs,Graph modeling and analysis packages for the Julia programming language
 InPhyT,"Complex Systems Modelling Group: Computational Social Science, Epidemiology and Neuroscience."
 BayesianDataAnalysisJulia,"@JuliaLang implementation of concepts, methods and examples from ""Bayesian Data Analysis"" by Gelman, Carlin, Stern, Dunson, Vehtari and Rubin."
@@ -122,33 +47,24 @@ NeuronalDynamicsJulia,"@JuliaLang implementation of models and exercises from th
 JuliaEpi,Computational epidemiology in @JuliaLang.
 enurgen,Deep-tech software defining utility-scale solar systems of tomorrow.
 ScavixSoftware,
-wpoa,Integrating openly licensed literature with Wikimedia projects
-JATS4R,JATS for reuse
-FAIR-Data-EG,
-UVA-DSI,"Making sense of data, and helping others learn to do so"
-OpenScienceRoadmap,"A community collaborating to advance nonprofit, open-source tools for science."
-FellowsFreiesWissen,
-WDscholia,scholarly profiles based on Linked Open Data from Wikidata
-QIDSOD,"A research project led by Jundong Li and Daniel Mietchen, University of Virginia."
-savethechildrenhackathon,
-InvasionBiologyHypotheses,
-digital-botanical-gardens-initiative,
-beehind,
 ACoM-RWTH,Research lab for applied and computational mathematics at RWTH Aachen University
+trixi-framework,Adaptive high-order numerical simulations of hyperbolic PDEs in Julia
 satRdays,Accessible R conferences around the world 🤗📊👩‍🏫🙋‍♀️🙋‍♂️➰🌍
 Gradure-Inc,
+HomelabGeneration,Doing all kinds of homelab related stuff.
 Riodigital-de,
-leonard-lab,
 codalab,
+pythonmg,Comunidade Mineira de Python
 PrivacyLabs-AI,
-IgnitedAndExploded,
+OpenDataMap,
 BYteWareGmbH,
+SacredHeartPreparatory,Computer Science projects by students and faculty for Sacred Heart Preparatory.
 code-for-venezuela,
 mammut-io,ML - Computational Linguistics - NLP - NLU - Chatbots
-openego,open electricity Grid optimization
 oemof-heat,Modelling energy systems with focus on heat and power-to-heat using oemof
 EPSRC-DIGEST,
 publiccodenet,We enable public-purpose software and policy that is open and collaborative.
+K-FOSS,
 SciML,Open source software for scientific machine learning
 casbin,Casbin authorization library and the official middlewares
 casdoor,An Identity and Access Management (IAM) / Single-Sign-On (SSO) platform with beautiful web UI and the official client SDKs
@@ -176,20 +92,12 @@ BreastScreeningAI,
 FRESNA,Repository of FRESNA (FIAS Renewable Energy Systems & Network Analysis)
 EpicGames,
 NVIDIAGameWorks,NVIDIA Technologies for game and application developers
-EddieHubCommunity,"Community of inclusive Open Source people - Collaboration 1st, Code 2nd! Join our GitHub Org 👇 "
+EddieHubCommunity,"Community of inclusive Open Source people - Collaboration 1st, Code 2nd! Join our GitHub Org 👇"
 AccessibleForAll,Making accessibility accessible for everyone!
 Posh-Pixel-Studio,Software Company
 UIU-Developers-Hub,"A collaborative developers community at United International University, fostering innovation and skill development."
 Kognifyy,
 Opexilo,Software Company
-CREA-ETSIDI,"Somos una asociación de estudiantes en la ETSIDI, UPM. Nos apasiona el mundo tecnológico y la programación."
-LEEM-UPM,
-Cyber-Edux,
-Dobslit-projects,
-OpenEnergyPlatform,The Open Energy Family and Open Energy Platform
-NFDI4Energy,National Research Data Infrastructure for the Interdisciplinary Energy System Research
-open-pv,Building the open source website openpv.de to evaluate the solar potential of your building :sunny:
-SkyImageNet,
 RAMP-project,Stochastic multi-energy load profiles
 oemof,Open Energy Modelling Framework - A modular open source framework to model energy supply systems
 teambi0s,"Indian Security & CTF team from Amrita Vishwa Vidyapeetham, Amritapuri"
@@ -199,8 +107,7 @@ government,"A collaborative community for sharing best practices in furtherance 
 NREL-Sienna,Open Source Tools for Scientific Energy Systems Analysis
 PKU-MARL,"RL Research Group, Institute for AI @ Peking University"
 PKU-Alignment,"Loves Sharing and Open-Source, Making AI Safer."
-zkjs,WE DO PUSH UPS
-pylogic,
+open-energy-transition,Non-profit that accelerates the energy transition with open data and open source software solutions.
 Ouch-Metaverse-Dao,"Ouch is an upcoming sensorial metaverse project leveraging web3, AI and VR tools (OVR, haptics, etc) for creating social and dating experiences"
 CDC-UI,Cyber Defense Club at the University of Idaho
 RADICL,Reconfigurable Attack Defend Instructional Computing Laboratory
@@ -209,22 +116,14 @@ tsinghua-TEEP,An educational program aiming to resolve the Tsien's question.
 powsybl,Power System Blocks
 Baltic-RCC,Baltic RCC is an Electricity grid security service provider for Baltic System Operation Region (SOR)
 chargebyte,
+gm2sc-ifpa,Gradiente Research Group of Mathematical Modeling and Computational Simulation of the Federal Institute of Science and Technology of Pará - Ananindeua Campus.
 BBHConsulting,
-hiba-awad-phd,
+BBH-Consulting-collaboration,
 UniK-INES,"Department Integrated Energy Systems, University of Kassel"
 DNAProject,
 ontio,A New High-Performance Public Chain Infrastructure & A Distributed Trust Collaboration Platform
-numfocus,Non-profit organization promoting accessible and reproducible scientific and technical computing
-OpenMined,
-oahmedlab,
-NeuroHackademy2024,
 openego,open electricity Grid optimization
-acm-uiuc,University of Illinois Urbana-Champaign ACM Chapter @reflectionsprojections @hackillinois @sigmusic @sigpwny @SIGMobileUIUC @sigaida @gnulug
-ChoateProgrammingUnion,A student-run club at Choate Rosemary Hall dedicated to all thing programming.
-mggg,A nonpartisan research organization studying applications of geometry and computing to U.S. redistricting. See also @mggg-states for data and @gerrymandr.
-open-source-at-illinois,"Official GitHub organization of Open-Source @ Illinois, a student-run club at the University of Illinois at Urbana-Champaign"
-Illinois-Theorem-Provers,
-Athena-Types,Wiser types for numerical analysis.
+Peer-Code-Review,
 BTU-EnerEcon,BTU Chair of Energy Economics
 GreenDealUkraina,"Berlin and Kyiv-based climate and energy think tank that supports Ukrainian governmental institutions, policymakers, experts, and wider society."
 GeoNode,
@@ -245,6 +144,9 @@ gridlab-d,GridLAB-D is a distribution level power system simulator designed to a
 rnajena,
 MechatronicsBlog,"Artificial intelligence, programming and embedded devices"
 Energies-citoyennes-en-Pays-de-Vilaine,
+JuliaLang,The Julia Programming Language
+JuliaComputing,
+JuliaStrings,
 llvm,This is the LLVM organization on GitHub for the LLVM Project: a collection of modular and reusable compiler and toolchain technologies.
 Infopy,Study group for functional and object oriented programming (FOP)
 evemondevteam,
@@ -253,16 +155,7 @@ xenia-project,Xbox 360 Emulator Research Project
 FreeOpcUa,Open Source Rust and Python OPC-UA Libraries
 ZeroTwentyFifty,ZeroTwentyFifty is a Commercial Open Source Software (COSS) company building solutions for the exchange of product-level carbon accounting data.
 codecentric,
-llvm,This is the LLVM organization on GitHub for the LLVM Project: a collection of modular and reusable compiler and toolchain technologies.
-curiositas-books,
-Alliander,Alliander werkt aan de energie van vandaag en morgen
-alliander-opensource,Open Source repositories from Alliander. Interested? Send us an e-mail!
-NBility-Model,
-lfenergyarchitecturemodel,
-ospo-nl,"Open Source Program Office collaboration, best practices of NL parties"
-PowerGridModel,Steady-state distribution power system analysis
 sysmodel,System-Level Model Development Engineering Lab: Bringing Clarity to Complex Systems
-EnergyModelsX,
 flipdot,"CCC-Erfa, Hackspace"
 ListenerApproved,
 typed-typings,"Deprecated, use @types. The collection of TypeScript definitions"
@@ -281,11 +174,7 @@ JuliaRegistries,
 JuliaStrings,
 JuliaDebug,
 JuliaTesting,Testing tools for the Julia language
-rezometz,The association in charge of providing an Internet access to CentraleSupélec (Metz) students
-comet-robot,
-bible-sacy,Sources du site https://bible.sacy.be qui permet de consulter des numérisations effectuées par Google de la Bible de Sacy (ou de Port-Royal)
 ChaosSchulInformatiker,Some very cool guys from the school class Q12
-Valama,
 Cedgetec,
 flojoy-ai,Joyful visual programming in Python
 latenthost,
@@ -301,7 +190,7 @@ WebSearchMol,
 HartreeFoca,A computational chemistry software based on McMurchie Davidson and Neural Networks
 ENVIRO-Module,
 LIVENlab,"These are the research and education repositories of the Research lab on environmental assessment for the energy transition, based at ICTA-UAB"
-OrganizacaoRamalho,
+PIK-ICoNe,"Dynamics, stability and resilience of complex hybrid infrastructure networks"
 openego,open electricity Grid optimization
 rl-institut,
 ReeemProject,Role of technologies in an energy efficient economy – model based analysis policy measures and transformation pathways to a sustainable energy system
@@ -325,15 +214,11 @@ CCSI-Toolset,The Carbon Capture Simulation Initiative (CCSI) Toolset is a suite 
 frdedynamics,Robotics research at HVL Førde.
 energy-modelling-toolkit,A fully open inter-institutional energy modelling group. It serves as an umbrella organization that hosts open datasets and models.
 IIT-EnergySystemModels,
-PythoningCLUB,
 coala,
-ALSETLab,"This organization hosts projects of ALSETLab, Prof. Luigi Vanfretti's research team @ RPI"
+cire-thk,Open source projects: Team Cologne Institute for Renewable Energy of University of Applied Sciences of Cologne (TH Köln)
+th-koeln-iet,
 ISFH,
 Treecom,
-eclipse,
-EIPStackGroup,Open Source EtherNet/IP implementations
-eclipse-4diac,
-SENECA-UDEA,
 microsoft,Open source projects and samples from Microsoft
 dotnet,Home of the open source .NET platform
 MicrosoftEdge,"Microsoft Edge open source projects - demos, tools, data"
@@ -341,6 +226,7 @@ MicrosoftWHATWGContributors,
 NREL,
 BuildingPerformanceSimulation,Community discussion and development of building performance simulation topics and tools.
 InteragencyHotshotCrews,
+DOGANA-EU,
 itesla,
 OpenIPSL,An team of collaborators developing the OpenIPSL Modelica library for power system simulations and other related oss projects in power system modeling and sim.
 groupoasys,
@@ -349,51 +235,29 @@ NREL,
 OST-Stud,"Wenn du das erste mal auf @OST-Stud bist, sieh dir das Repo Willkommen an. Bei Fragen, E-Mail an  fachschaft-e@ost.ch"
 openhsr,Wir fördern die Open Source Community und alternative Betriebssysteme an der HSR.
 UNSW-CEEM,
-Tithibots,Python Bots
-TrashMate,
-Indian-Online-Education-Environment,
 NLeSC,
 DeepRank,
 TUfast-TUD,Project for TUfast Browser Extension
 ex-1-610B,fantastic dorm full of nerds and neet
 xmake-io,🔥 Xmake is a cross-platform build utility based on Lua
 CloudPSS,CloudPSS 团队
-EddieHubCommunity,"Community of inclusive Open Source people - Collaboration 1st, Code 2nd! Join our GitHub Org 👇 "
-sciflydev,
+EddieHubCommunity,"Community of inclusive Open Source people - Collaboration 1st, Code 2nd! Join our GitHub Org 👇"
 dss-extensions,Language interfaces and extensions for an alternative implementation of EPRI's OpenDSS
 Porake,
 RWTH-EBC,
 opendilab,Open-source Decision Intelligence (DI) Platform
-NonlinearArtificialIntelligenceLab,
+TemoaProject,An open source energy system model
 BONSAMURAIS,An organisation dedicated to create and maintain a truly global Open Source Database for product footprinting
-Uverciti,
-opensistemas-hub,
-aereset,
-cloudpipe,
-CojoCompany,
-Soundphy,
-markdownreveal,
-Bulebots,
-sphinx-contrib,A collection of Sphinx extensions maintained by their respective authors. It is not an official part of Sphinx.
-open-robosports,
-micromouseworld,
+switch-model,Optimal planning model for power systems with large shares of renewable energy
 picopod,"Suonare male, vivere meglio."
 mobility2consumer,The safest service to move you and everything you want #EUvsVirus
-cvut,"This GitHub organization is currently managed by FEE (jirutjak), but any other faculty is welcome to join it and propose their admin(s)."
-eForceDriverless,
-whadoo,
-eforcefee,Formula Student Electric Team 🔋🔋 | 🇨🇿Czech Technical University in Prague | Faculty of Electrical Engineering
-coding-competition-2019,
-Covirusd,Worldwide COVID-19 Coronavirus Disease collaboration
-Military-Tactical-Graphics,
-tedai-hackathon,This org will host the code produced by the participants of the TED AI Hackathon 2023 in collaboration with the LF AI & Data Foundation.
-LIMESS-Sustainability-Lab,LIMESS Sustainability Lab at CTU in Prague
 SUSTC,"SUSTech, Shenzhen, China"
 KSP-CKAN,
 CoreRC,Yet another robot middleware in Rust.
 RoundPegs9,
+pvlib,
 drorlab,Ron Dror's computational biology laboratory at Stanford University
-agoenergy,"Agora Energiewende is a think tank that develops evidence-based and politically viable strategies to advance the goal of climate neutrality in Germany, Europe, "
+agoenergy,"Agora Energiewende is a think tank that develops evidence-based and politically viable strategies to advance the goal of climate neutrality in Germany, Europe,"
 startable,
 RITRedteam,Various public projects from RITSEC Redteam members. ALL PROJECTS ARE PROVIDED AS IS WITH NO WARRANTY.
 ritsec,"RITSEC is a student run club at Rochester Institute of Technology. For the redteam repositories, check out https://github.com/ritredteam/"
@@ -416,7 +280,6 @@ CaroleBaskin,
 JuliaEnergy,
 oemof,Open Energy Modelling Framework - A modular open source framework to model energy supply systems
 wind-python,
-Kozea,We build open source software that you will love.
 DAISEE,Open design program for people who consider energy as a commons. We're going to build the 'internets of energy'.
 UW-SASWE,"Sustainability, Satellites, Water and Environment"
 NetbeheerNederland,Netbeheer Nederland is de brancheorganisatie van alle elektriciteit- en gasnetbeheerders van Nederland.
@@ -425,12 +288,29 @@ com-pas,61850 SCL management and configuration tool
 openscd,
 netlogix,Digital Platform Architects
 confluentinc,Real-time streams powered by Apache Kafka®
+open-energy-transition,Non-profit that accelerates the energy transition with open data and open source software solutions.
 carbonplan,Data and science for climate action
 cdrxiv,Preprints and Data for Carbon Dioxide Removal
 GreatTM,
 JabRef,
+HaxeFoundation,
+vshaxe,Everything about the Haxe-VSCode tandem
+JuliaGPU,GPU Computing in Julia
+NVIDIAGameWorks,NVIDIA Technologies for game and application developers
+JuliaGraphics,
+JuliaGL,Julia packages for the OpenGL API and ecosystem.
+JuliaGraphs,Graph modeling and analysis packages for the Julia programming language
+JuliaGeometry,Computational Geometry with Julia
+JuliaIO,A collection of Julia packages for unified IO infrastructure
+JuliaImages,Julia packages for image processing
+JuliaPlots,Data visualization in Julia
+JuliaPackaging,Tooling for Julia's binary packages and dependencies
+JuliaArrays,Custom array types (and utilities for building array types) for Julia
+JuliaGizmos,A garage in dimension c-137
+MakieOrg,Organization for the Makie plotting ecosystem
 moja-global,Open source tools to support sustainable land use
 powsybl,Power System Blocks
+JuliaSparse,Sparse matrix capabilties in the Julia Programming Language
 RISPLab,"With RISP, no RISK. Do Planning, to prevent Killing."
 modelica,Projects of the Modelica Association
 glugnith,"GNU/Linux Users Group is the open-source community of the National Institute of Technology, Hamirpur, India."
@@ -442,34 +322,13 @@ Resurgencenithamirpur,Esports Club NIT Hamirpur
 EpicGames,
 NVIDIAGameWorks,NVIDIA Technologies for game and application developers
 starmatrixtech,Advancing the field of deep technology
-JuliaLang,The Julia Programming Language
-recursecenter,
-JuliaQuant,
-JuliaDatabases,Various database drivers for Julia
-JuliaComputing,
-JuliaIO,A collection of Julia packages for unified IO infrastructure
-NYU-MSDSE-SWG,
-JuliaML,Julia packages for Machine Learning
-JuliaTime,Date and Time libraries for the Julia Language
-JuliaData,"Data manipulation, storage, and I/O in Julia"
-JuliaCrypto,Cryptography made easy in Julia
-JuliaCloud,Cloud service interfaces for Julia
-JuliaStrings,
-JuliaActuary,Actuarial science and modeling packages.
-JuliaLangSlack,Projects built to enable the Julia Lang community Slack workspace
-JuliaActions,Please visit https://github.com/julia-actions
-JuliaTesting,Testing tools for the Julia language
-JuliaRNGs,
-JuliaVersionControl,
-JuliaFolds2," JuliaFolds2 is the forked successor to JuliaFolds, and hosts Julia packages for sequential and parallel fold (aka reduce) algorithms"
 googlers,Googlers on GitHub
-MicroGridsPy,
-Ubar,
-lab10-coop,Sustainable blockchain solutions to co-create a zero-carbon society.
-artis-eco,
+emhTrade-ltd,emhTrade Account
 nsec,Applied Security Competition
 pnfsoftware,"Sample code, scripts and plugins for JEB Decompiler - Twitter @jebdec"
 powsybl,Power System Blocks
+datadrivenenvirolab,
+EEYale,
 OrderlyNetwork,The permissionless liquidity layer for Web3 trading
 spine-tools,Open source modelling tools
 acep-uaf,ACEP is based at University of Alaska Fairbanks and is dedicated to applied energy research and testing focused on lowering the cost of energy.
@@ -490,91 +349,28 @@ arras-energy,
 syncpoint,
 dodevops,Tools by DevOps architects for DevOps architects
 EXXETA,"Exxeta challenges the traditional concept of consulting and tech. We love making an impact, with digital services powered by passion and new perspectives."
-NIFVentures,
-voytekresearch,Code & projects from the Voytek lab at UC San Diego.
-COGS108,Course materials for Data Science in Practice
-COGS18,COGS18: Introduction to Python
-fooof-tools,Parameterizing Neural Power Spectra
-lisc-tools,Automated collection & analysis of scientific literature.
-neurodsp-tools,Digital signal processing for neuroscience.
-bycycle-tools,Cycle-by-Cycle analyses of neural oscillations.
-openlists,Curated lists of Open Resources.
-structuredscience,"Tools, templates, tips & tricks for organized science."
-ERPscanr,Automated analysis of the ERP literature.
-DataScienceInPractice,Materials for learning the introductory hands-on data science.
-IntroductoryPython,Materials for learning the Python programming language.
-OscillationMethods,Methodological considerations for neural oscillations.
-AperiodicMethods,Investigating methods for analyzing aperiodic neural activity.
-HSUPipeline,Pipeline for single neuron tasks & analyses with human subjects.
-spiketools,Analysis tools for single unit data.
 SPSUnipi,
-pydata,
-xgcm,xarray-based tools for general circulation model analysis
-pyqg,
-pangeo-data,A community effort for big data geoscience
-zarr-developers,Contributors to the Zarr open source project.
-xarray-contrib,xarray compatible projects
-ocean-transport,LDEO Ocean Transport Group
-leap-stc,Learning the Earth with AI and Physics
-cubed-dev,
-benchmarking-rl,
 PowerGridModel,Steady-state distribution power system analysis
+open-energy-transition,Non-profit that accelerates the energy transition with open data and open source software solutions.
 ejm-programming-club,A high school programming club
 Mapioi,
+powsybl,Power System Blocks
 bluehands,
 fnxt-js,
 RESTyard,
-TribeMC,
-fhac-ewi,"This organization contains projects managed by students from the Master ""Energiewirtschaft und Informatik"" @FH Aachen."
 electricitymaps,Mapping the carbon footprint of electricity worldwide
 SciML,Open source software for scientific machine learning
-BoxLib-Codes,A collection of codes built around the BoxLib adaptive mesh refinement library
-AMReX-Codes,AMReX-Codes: Block-Structured AMR Software Framework and Applications
-spack,"A flexible package manager that supports multiple versions, configurations, platforms, and compilers."
-AMReX-Astro,The AMReX Astrophysics Suite: adaptive mesh refinement hydrodynamics codes for astrophysical flows.
-ECP-WarpX,NOTE: We moved to https://github.com/BLAST-WarpX
-AMReX-FHD,
-Hi-PACE,
-AMReX-Fluids,
-BLAST-ImpactX,high-performance modeling of beam dynamics in particle accelerators with collective effects
-BLAST-WarpX,WarpX is an advanced electromagnetic & electrostatic Particle-In-Cell code.
+open-energy-transition,Non-profit that accelerates the energy transition with open data and open source software solutions.
+KuantumBS,KuantumBS: Kuantum Bilgi Sistemleri (KBSr): Quantum Information Systems: QISs
 lanl-ansi,Los Alamos Advanced Network Science Initiative
 JuliaAnimators,Easily construct informative and winsome animated graphics in Julia
-python-spain,Asociación Python España
-hackathongi,
-GNUites,
-securipy,
-devnullteam,
-pygrn,Som Gironins apassionats pel llenguatge de programació Python! 🐍🐍🐍
-geekapalooza,
-PyCampES,"El PyCamp es un evento sin fines de lucro que consiste en apoderarse de un lugar, nos juntamos a programar y divertirnos durante 4 días completos."
-Andorra-Makers,
-JuliaDiff,Differentiation Tools in Julia
-JuliaMath,Mathematics made easy in Julia
-JuliaLabs,
-SciML,Open source software for scientific machine learning
-JuliaLinearAlgebra,A collection of linear algebra packages for the Julia Programming Language.
-JuliaBLAS,
-JuliaSymbolics,A fast and modern CAS for a fast and modern language
-JuliaPerf,
-JuliaCommunity,Organizing Julia Community Initiatives
-JuliaHealth,"Using the Julia programming language to improve medicine, health care, public health, and biomedical research."
-JuliaStaging,"utilities to analyze, generate and evaluate julia code for multi-stage scenarios "
-JuliaSIMD,
+MATPOWER,
+HACEOS,
 CNHOMO,这里聚集着所有中国的HOMO哦~！如果你是，快加入我们吧！可以随便上传代码哦~！这里放着中国HOMO们的成果！
-robofit,
 3S-Academy-NJTech,南京工业大学测绘科学与技术学院3S学社
-aws,
-awslabs,AWS Labs
-aws-samples,
-DestructHub,"This group focuses on developing solutions for problems on: computer science, mathematics, hacking and mystery."
-kubernetes,Production-Grade Container Scheduling and Management
-aws-controllers-k8s,
-eksctl-io,Home for eksctl - The official CLI of Amazon EKS
-llmnetes,
-gdt-dev,Go Declarative Testing
-kro-run,
+firestartorg,
 energy-solution,
+uwblueprint,UW Blueprint is a student-run non-profit organization at the University of Waterloo dedicated to building technology for social good.
 NREL-Sienna,Open Source Tools for Scientific Energy Systems Analysis
 NLeSC,
 lpoo,Repositório do Laboratório de Pesquisa Operacional e Otimização - LPOO
@@ -583,31 +379,24 @@ JuliaSmoothOptimizers,Infrastructure and Solvers for Continuous Optimization in 
 CiDAMO,"Grupo de Ciência de Dados, Aprendizagem de Máquina e Otimização"
 jso-docs,
 TulipaEnergy,Energy System Optimization Tools from TNO and eScience
+mathworks,A diverse selection of MathWorks Open Source projects and resources.
+matlab-actions,"Automatically build, test, package, and deploy MATLAB code and Simulink models"
 wsp-sag,
 patsec,
 django-commons,
-BoxLib-Codes,A collection of codes built around the BoxLib adaptive mesh refinement library
-pynucastro,a python library for nuclear astrophysics
-starkiller-astro,
-AMReX-Astro,The AMReX Astrophysics Suite: adaptive mesh refinement hydrodynamics codes for astrophysical flows.
-kepler-tools,"A github organization for collecting, sharing, and collaborating on tools facilitating use and analysis of the Kepler stellar evolution code."
 thermocycle,
+nephio-project,Cloud Native Network Automation
 Pyomo,
 ESTIASYSTEM,"Association ESTIA de robotique et mécatronique, participant à la Coupe de France de Robotique, à la Robocup et au Dassault UAV Challenge"
 genai-impact,
 pvlib,
-dynawo,
-PowerGrids,
 OpenModelica,
-atizo,
-djng,Django & AngularJS Boilerplate
-loladotdev,
 AeroPython,
 catalyst-cooperative,Catalyst is a small data engineering cooperative working on electricity regulation and climate change.
 FGV-Energia,Centro de Estudos em Energia da Fundação Getúlio Vargas
 gridlab-d,GridLAB-D is a distribution level power system simulator designed to allow users to create and analyze smart grid technologies.
 GMLC-TDC,Repository for the GMLC TDC tool suite - HELICS
-diesimo-ai,Simplifying vision technology to solve complex industrial challenges—one solution at a time 🤖
+diesimo-ai,An Open Lab for Edge Intelligence.
 lab-101010,Open-Techlab for Makers.
 rdmorganiser,
 open-source-uc,"Community of students, alumni and professors from the Catholic University of Chile working together to create and maintain awesome open-source projects."
@@ -622,11 +411,15 @@ ocra-recipes,Optimization-based Control for Robotics Applications
 syroco,SYROCO Team at Institut des Systèmes Intelligents et de Robotique (ISIR)
 kuka-isir,Code developed for the Kuka LWR 4+/IIWA at Institut des systèmes intelligents et de robotique
 phlowers,Physics based librairies for power lines studies
-AIEADA,
-Flash-X,All things related to Flash-X multiphysics software
-Box-Tools,Forks and helper tools for block-structured datasets
-CROCUS-Urban,CROCUS Project
-Lab-Notebooks,Reproducibility capsules and execution environments for computational experiments
+firechip,"System software developers, hardware designers, and application developers."
+EpicGames,
+livery-project,Pide y te lo entregamos
+Xtromba,"XTROMBA® is a discipline where emotional intelligence is fused with physical activity in a positive and joyful way, through Dance"
+fitfighttraining,Unique training method! We merge combatsport with other disciplines
+busherscom,40 years contributing to the development and promotion of the Electronic Technician...
+pursangmotorcycles,Electric motorcycles
+difesaonline,La Casa del Carpintero
+thaqua,
 godotengine,Godot is a popular Free and Open Source game development engine and toolset.
 OpenDungeons,
 KOBUGE-Games,Development team for libre games using Godot Engine
@@ -640,6 +433,7 @@ NixOS,
 emacs-twist,Reproducible package and configuration management for Emacs
 elpa-mirrors,An unofficial public mirror of Emacs-related repositories (GNU/non-GNU ELPA and org-mode) on GNU Savannah
 cvxgrp,
+ODINN-SciML,Global climate-glacier interactions modelling with Universal Differential Equations
 erasmus-mundus-geotech-master,"Students, professors and graduates of the Erasmus Mundus Master of Science in Geospatial Technologies."
 palma-ice,
 Human-Lambdas,
@@ -647,41 +441,15 @@ treebeardtech,Scaling machine learning operations in Kubernetes
 flexiblepower,FAN is open standard and implementation that connects devices with energy management services.
 3dptv,
 OpenPIV,Open Source Particle Image Velocimetry
-choochoohq,ChooChoo HQ
+choochoohq,ChooChoo 🚂
 unamfi,Open Source Community : 🚀
 Switch-Mexico,
 NREL,
-mit,"For students/alumni/staff/MIT affiliates! To join, email with GitHub+Athena usernames."
-JuliaLabs,
-project-lovelace,"Project lovelace development repositories, including website/server/backend code and submission engine development."
-JuliaClimate,
-CliMA,"An alliance of scientists, engineers and applied mathematicians, dedicated to pioneering a new, data-informed approach to climate modeling"
-MoeMusic,
-atdepth,
 AUT-NLP,Natural Language Processing (NLP) Lab is part of the Artificial Intelligence Group at Computer Engineering Department at Amirkabir University of Technology.
-redcar,
-gocql,A fast and robust Cassandra client for the Go programming language.
 Ingenieria-Electrica-UdeA,
 citiususc,Centro Singular de Investigación en Tecnoloxías Intelixenteas da Universidade de Santiago de Compostela
 magnasco,Development initiatives & technical assistance
-battle-io,
-zerotired,
-crate,The Database for Real-Time Analytics and Hybrid Search
-conda-forge,"A community led collection of recipes, build infrastructure and distributions for the conda package manager."
-hiveeyes,"A flexible beehive monitoring system based on affordable hardware, wireless telemetry and modern software. Open source, open hardware and a friendly community."
-ip-tools,Open source patent data processing software
-daq-tools,"Open source data acquisition, processing and visualization software"
-tunfish,A VPN infrastructure based on WireGuard.
-posterkit,Your lovely poster production toolkit
-media-toolbox,
-panodata,"Open data, beautiful visualizations, sensible discussions."
-earthobservations,
-cicerops,Little programs for sweet operations.
-mqtt-tools,
-wireviz,
-pyveci,"Python, mostly."
-singer-contrib,A few components adhering to the Singer specification for composable open source ETL.
-tech-writing,"Discourse, GitHub, Sphinx, mostly."
+PreIntelligence,Learning and Development of Research Projects
 switch-model,Optimal planning model for power systems with large shares of renewable energy
 blue-marble,
 evcc-io,Sonne tanken ☀️🚗
@@ -691,7 +459,7 @@ WaterFutures,Repository for the ERC SyG Water Futures Team
 rubygems,
 bundler,The Ruby language dependency manager
 typhoeus,
-embark-framework, Moved to http://github.com/embarklabs
+embark-framework,Moved to http://github.com/embarklabs
 IDAES,Institute for the Design of Advanced Energy Systems
 CCSI-Toolset,The Carbon Capture Simulation Initiative (CCSI) Toolset is a suite of computational models for carbon capture equipment and design processes.
 LAMPSPUC,"Laboratory for research and development on mathematical programming (optimization) and statistics. Electrical and Industrial Engineering departments, PUC-Rio."
@@ -705,153 +473,52 @@ powsybl,Power System Blocks
 phlowers,Physics based librairies for power lines studies
 hilbertquantum,"At Hilbert Quantum, we research AI, Quantum, and Mathematics."
 QuTLab,Quantum |Theoretical⟩ ⨂ |Tolerant⟩ ⨂ ∣Topological⟩ Lab
+MemePAC,Based.
+Socratica-Org,We host weekly co-working sessions for you to work on your passion projects with likeminded people.
 airboxlab,
-FormTracer,
-ampeersenergy,Einfache & Profitable CO2-Minderung für die Immobilienwirtschaft
 JuliaEnergy,
 Shopify,
-flipdot,"CCC-Erfa, Hackspace"
-apertus-open-source-cinema, Open Technology for Professional Film Production
-Jugendhackt,
-freifunkks,
-SFNKassel,
-EspIt,
-soundlocate,
-ipv4map,
-icerink,An FPGA ecosystem for absolute newbies
-axiom-micro,"Deprecated, integrated with https://github.com/apertus-open-source-cinema"
-bugbakery,building software for spoken-word audio with automatic transcription
-transcribee,"transcribee moved under the umbrella of ""The Vegan Bug Bakery"""
 Makerville,
 pik-piam,Tools developed for use with data and models related to PIK's research.
-bitcoinaustria,
-novid20org,
 SPS-L,
+janklab,The Janklab suite of little FLOSS libraries for Matlab
 XGraph-Team,Research Behaviors over Graphs
 DLR-RM,German Aerospace Center (DLR) - Institute of Robotics and Mechatronics (RM) - open source projects
 Stable-Baselines-Team,Developement team of the Stable-Baselines project
-JuliaLang,The Julia Programming Language
-numfocus,Non-profit organization promoting accessible and reproducible scientific and technical computing
-JuliaStats,Statistics and Machine Learning made easy in Julia
-JuliaOpt,(Obsolete organization; see github.com/jump-dev) Mathematical Optimization in Julia
-JuliaDSP,
-JuliaCon,The Julia Conference
-JuliaDiff,Differentiation Tools in Julia
-JuliaSparse,Sparse matrix capabilties in the Julia Programming Language
-JuliaWeb,Web technologies in the Julia Programming Language
-JuliaCI,Continuous integration (CI) support for the Julia programming language
-JuliaIO,A collection of Julia packages for unified IO infrastructure
-JuliaAttic,An umbrella organization for unmaintained/fully deprecated Julia packages/repositories
-JuliaPackaging,Tooling for Julia's binary packages and dependencies
-JuliaMath,Mathematics made easy in Julia
-JuliaEditorSupport,This organization hosts julia extensions for various text editors and IDEs
-JuliaDocs,Documentation-related packages for Julia.
-JuliaTime,Date and Time libraries for the Julia Language
-JuliaData,"Data manipulation, storage, and I/O in Julia"
-JuliaInterop,Easy interoperability between Julia and other languages
-JuliaMatrices,
-JuliaCloud,Cloud service interfaces for Julia
-JuliaArrays,Custom array types (and utilities for building array types) for Julia
-JuliaPy,Software that connects the Julia and Python languages.
-JuliaCollections,"Collections, Data Structures, and Algorithms for Julia"
-JuliaRegistries,
-JuliaStrings,
-JuliaLinearAlgebra,A collection of linear algebra packages for the Julia Programming Language.
-beacon-biosignals,
-JuliaAI,Home for repositories of the MLJ (Machine Learning in Julia) project
 4-geeks,"We are 4 Geeks. We love AI, python and technology."
 Pandas-Team,
 OM4A-Training-Material,"This platform hosts the training materials for the use of the OM4A Models Toolbox, developed under Horizon Europe Energy project 101118123 – OpenMod4Africa."
-BikunApp,
-fwui,
-IEEE-UI,
 alpyca,
 AMReX-Codes,AMReX-Codes: Block-Structured AMR Software Framework and Applications
 seahorce-scidac,
 conda-forge,"A community led collection of recipes, build infrastructure and distributions for the conda package manager."
-astropy,
-python-madrid,
-python-spain,Asociación Python España
-Pybonacci,Python y Ciencia
-AeroPython,
-CAChemE,CAChemE is a nonprofit organization of chemical engineers aiming to encourage the new process engineering software possibilities
-OpenAstronomy,
-conda-forge,"A community led collection of recipes, build infrastructure and distributions for the conda package manager."
-poliastro,Astrodynamics in Python
-python-astrodynamics,
-PyDataMadrid,"Nos reunimos el tercer o cuarto jueves de cada mes para hablar de Python, Datos, Visualización, Inteligencia Artificial, ¡y lo que surja!"
-Mercado-Social-de-Madrid,
-PyCampES,"El PyCamp es un evento sin fines de lucro que consiste en apoderarse de un lugar, nos juntamos a programar y divertirnos durante 4 días completos."
-McK-Private,
-python-discord-es,Comunidad de Python en Español en Discord
-kedro-org,"Kedro is an open-source Python framework for creating reproducible, maintainable and modular data science code. It is hosted in incubation in LF AI & Data."
+groupoasys,
 yt-project,A toolkit for analysis and visualization of volumetric data
 AMReX-Codes,AMReX-Codes: Block-Structured AMR Software Framework and Applications
 ECP-WarpX,NOTE: We moved to https://github.com/BLAST-WarpX
 seahorce-scidac,
+BLAST-ImpactX,high-performance modeling of beam dynamics in particle accelerators with collective effects
 BLAST-WarpX,WarpX is an advanced electromagnetic & electrostatic Particle-In-Cell code.
 RoboticsTeam4904,"FRC Team 4904 ""Bot Provoking"""
 powsybl,Power System Blocks
 15-150,
 15-317,Carnegie Mellon's 15-317: Constructive Logic
 SolarArbiter,
-ComputationalRadiationPhysics,
-pngwriter,
-conda-forge,"A community led collection of recipes, build infrastructure and distributions for the conda package manager."
-openPMD,Open Standard for Particle-Mesh Data
-eucall-software,EUCALL will build bridges between major laser and X-ray research centres
-fbpic,"A spectral, quasi-3D Particle-In-Cell code, for CPU and GPU "
-AMReX-Codes,AMReX-Codes: Block-Structured AMR Software Framework and Applications
-gcoe-dresden,GPU Center of Excellence Dresden
-spack,"A flexible package manager that supports multiple versions, configurations, platforms, and compilers."
-ECP-WarpX,NOTE: We moved to https://github.com/BLAST-WarpX
-MPILander,
-picmi-standard,
-ideas-productivity,Software productivity and sustainability for computational science and engineering on high-performance computers
-alpaka-group,Abstraction Library for Parallel Kernel Acceleration
-Hi-PACE,
-GEECS-BELLA,
-snowmass-compf2-accbeammodel,Interest group in Theoretical Calculations and Simulation (CompF2) of the APS DPF Snowmass21 process
-campa-consortium,Collaboration for Advanced Modeling of Particle Accelerators
-LASY-org,
-hpsfoundation,High Performance Software Foundation
-BLAST-ImpactX,high-performance modeling of beam dynamics in particle accelerators with collective effects
-BLAST-WarpX,WarpX is an advanced electromagnetic & electrostatic Particle-In-Cell code.
-BLAST-codes,"Beam, Plasma & Accelerator Simulation Toolkit (BLAST)"
 uo-cdux,Computing and Data Understanding at eXtreme Scale (CDUX)
+conda-forge,"A community led collection of recipes, build infrastructure and distributions for the conda package manager."
 PythonMilano,Developers and Beyond in Milan
+xsdk-project,Organization for the Extreme-scale Scientific Software Development Kit (xSDK)
+betterscientificsoftware,Dedicated to improving the quality of scientific software
 gafusion,Theory group code repository
 LLNL,"For over 70 years, the Lawrence Livermore National Laboratory has applied science and technology to make the world a safer place."
 xsdk-project,Organization for the Extreme-scale Scientific Software Development Kit (xSDK)
 spack,"A flexible package manager that supports multiple versions, configurations, platforms, and compilers."
 sundials-codes,https://computing.llnl.gov/projects/sundials
-genesisproject,
-pokerevs,
-glitch-soc,
-dbwg,
-rustodon,
-hecke-rs,
-sparkle-os,
-gcnhax,
-delta-7,
-miskitml,Constructed Intelligence
-rust-native-ui,"A group for the libui-rs, Improved User Interface, and other Rust native UI crates."
 shinyblink,"Shiny things and blinkenlights! Icon by twitter.com/rakujira, many thanks!"
 frama19,
 dipko-gmbh,DIPKO – Digitale Plattform für kommunale Services
-heroku,
-Metalab,"Metalab is a hackspace in Vienna, Austria — an open center for people who do creative things with technology."
-hackerbeach,
-rails-girls-summer-of-code,
-farbsucht,
-interagent,Tools and docs for building and using HTTP APIs
-rossconf, ROSS conft aims to convince more people to contribute to the open source projects on top of which the Ruby developer community builds.
-LedOverkill,
 oemof,Open Energy Modelling Framework - A modular open source framework to model energy supply systems
 catalyst-cooperative,Catalyst is a small data engineering cooperative working on electricity regulation and climate change.
-openstate,Open State Foundation promotes digital transparency by unlocking open data and stimulates development of innovative & creative applications
-karmaresearch,KARMA is a research unit in the computer science dept. at the Vrije Universiteit of Amsterdam
-kai-vu,
 NixOS,
 AsteroidOS,Open-source operating system for smartwatches
 epri-dev,
@@ -860,10 +527,6 @@ opensourcedesign,Connecting open source & design! 🎨 Join our forum at https:/
 unibz,
 nextcloud,"📱☁️💻 A safe home for all your data – community-driven, free & open source 👏"
 terion-io,
-Geodan,
-strivewire,
-sipgate,"sipgate isn’t your typical telephony provider. With 300 colleagues, we work together on extraordinary landline and telephony services just for you."
-bytebus,
 eager-dev,Developers of the EAGERx project
 oemof,Open Energy Modelling Framework - A modular open source framework to model energy supply systems
 wind-python,
@@ -888,9 +551,7 @@ nodeschool,Open source workshops that teach web software skills
 conc-at,The web development conference in Austria
 semantic-release,
 greenkeeperio,"🌴 Your software, up to date, all the time."
-rails,
-slash-lang,
-terraform-industries,Automating on-site construction with robotics and software.
+uw-windc,The Wisconsin National Data Consortium (WiNDC) facilitates the creation and documentation of open source multisectoral economic datasets for US states.
 statnett,Norway's electricity transmission system operator
 BrainBuilders,plug 'n play intelligence
 calliope-project,A multi-scale energy systems modelling framework
@@ -913,7 +574,6 @@ powsybl,Power System Blocks
 Cog-Creators,
 tamuctf,
 Avalice,Various Freedom Planet-related things. Not formally associated with @GalaxyTrail or its employees.
-trusthsbremen,
 tengen-io,
 pygod-team,Maintaining A Python Library for Graph Outlier Detection (Anomaly Detection)
 microformats,
@@ -936,16 +596,8 @@ JuliaRegistries,
 JuliaHPC,High-Performance Computing in Julia
 JuliaLinearAlgebra,A collection of linear algebra packages for the Julia Programming Language.
 JuliaPerf,
-JuliaFolds2," JuliaFolds2 is the forked successor to JuliaFolds, and hosts Julia packages for sequential and parallel fold (aka reduce) algorithms"
-sealuzh,
-HASEL-UZH,
-PowerGrids,
+JuliaFolds2,"JuliaFolds2 is the forked successor to JuliaFolds, and hosts Julia packages for sequential and parallel fold (aka reduce) algorithms"
 indieweb,"The IndieWeb is a people-focused alternative to the ""corporate web""."
-sternSargentRA,
-EconForge,
-QuantEcon,Open source code for quantitative economic modeling
-NYUEcon,
-NYUDataBootcamp,
 ai4energy,数智能源研究组
 lanl,
 MiniZinc,MiniZinc is a free and open-source constraint modeling language
@@ -953,11 +605,14 @@ discreteoptimization,Open Source Materials for Discrete Optimization on Coursera
 ieee-pes-amps,Analytical Methods for Power Systems Technical Committee (AMPS) of the IEEE Power and Energy Society
 lanl-ansi,Los Alamos Advanced Network Science Initiative
 power-grid-lib,
+open-energy-transition,Non-profit that accelerates the energy transition with open data and open source software solutions.
 Veebor,
 rust-scraper,
 Tivix,
+addit-app,Add your opinion. Rate and discuss anywhere on the Internet. Addit is decentralized application running on EOS Network.
+lazystance,"The secret society, against every works"
+chann,Let's do something.
 uos3,University of Southampton Small Satellite Project
-SEUEEARDUINO,
 zaphiro-technologies,The leading Swiss deep tech company in Smart Grid solutions
 CrivelliLab,Repository for projects conducted by interns at Lawrence Berkeley National Lab under the mentoring of Dr. Silvia Crivelli
 thunder,
@@ -965,15 +620,12 @@ BurdaMagazinOrg,
 plotly,
 JuliaOpt,(Obsolete organization; see github.com/jump-dev) Mathematical Optimization in Julia
 RelationalAI,
-CodeLabs-Hubble-gl,
-rubyireland,
 building-envelope-data,buildingenvelopedata.org offers you access to a network of databases with building envelope data
 SESMG,Open source energy system modeling tool developed at Münster University of Applied Sciences
 oemof,Open Energy Modelling Framework - A modular open source framework to model energy supply systems
 znes,For legal notices see http://www.uni-flensburg.de/en/legal-notice and http://www.hs-flensburg.de/impressum
+pism,"An open source, parallel, high-resolution ice sheet model"
 ie3-institute,Official github account of the ie3 - one of the leading German higher education research institutes in the field of energy
-GridMod,
-NREL-Sienna,Open Source Tools for Scientific Energy Systems Analysis
 collective,Plone/Volto add-ons shared code repositories
 iwlearn,IW:LEARN is the Global Environment Facility's (GEF) International Waters Learning Exchange and Resource Network.
 jazzband,We are all part of this
@@ -982,10 +634,8 @@ electify-eu,
 spine-tools,Open source modelling tools
 TulipaEnergy,Energy System Optimization Tools from TNO and eScience
 catalyst-cooperative,Catalyst is a small data engineering cooperative working on electricity regulation and climate change.
+sandialabs,Exceptional service in the national interest.
 venmurasu,
-OcelotProject,
-PoutineAndRosti,
-brightway-lca,Open source framework for Brightway framework
 KAPSARC,
 techhub-community,"At TechHub, we've developed a huge community around solving programming challenges, building exciting real-world projects in every stack, and daily discussions."
 speedovation,"Open source, from Speedovation with love"
@@ -993,46 +643,21 @@ samitsol,
 flexiblepower,FAN is open standard and implementation that connects devices with energy management services.
 powsybl,Power System Blocks
 orrors,
-jupyter,Interactive Computing
-jupyterhub,Official JupyterHub-related repositories
-jupyterlab,JupyterLab: The Next Generation UI for Project Jupyter
-pangeo-data,A community effort for big data geoscience
-neurohackademy,
-ThoriumEnergyWorld,
-learning-2-learn,
-hack-for-sweden,Sweden's new platform for citizen-driven innovation
 digineo,
 FreifunkBremen,
 FRESNA,Repository of FRESNA (FIAS Renewable Energy Systems & Network Analysis)
 PyPSA,Python for Power System Analysis
+open-energy-transition,Non-profit that accelerates the energy transition with open data and open source software solutions.
 Seg-Faults,Tectonics-related web application development
 GEM-Active-Faults,"Global Active Faults project of the Global Earthquake Model (GEM) Foundation, headed by Richard Styron"
+coverallsapp,DELIVER BETTER CODE
+TuringLang,Bayesian inference with probabilistic programming
 arya-upm,
 automacoin,To whoever computes for science the world is revealed
 cscale-io,
-UBCEnvision,The UBC AIChE Student Chapter
-thebiofoundry,
-Gnucash,
-libofx,
 znes,For legal notices see http://www.uni-flensburg.de/en/legal-notice and http://www.hs-flensburg.de/impressum
 Bulebots,
 sanyuankexie,GUET Student Association of Science and Technical
-psygrammer,
-reinforcement-learning-kr,
-geultto,
-betastarcraft,
-kpmg-ppap,
-BNM2h,
-TUBerlin-project,
-mutQoin,mutQoin team @Qiskit Hackaton KR
-Effithon-Project,
-CS285-KOR,
-CS224W-KOR,
-TINYML-KOR,
-BeyondStepsRL,Beyond Steps RL
-pvlib,
-SolarPerformanceInsight,
-chenxu2024,
 entropyparadox,
 Jugendhackt,
 Chaostreff-Potsdam,
@@ -1041,59 +666,40 @@ hiqs-gmbh,Your partner for the digital transformation.
 gridlab-d,GridLAB-D is a distribution level power system simulator designed to allow users to create and analyze smart grid technologies.
 SmartGridLab,
 GWLAB2015-summer-campus,Gridwiz campus
-ITsysCOM,
 materialsproject,
 IDAES,Institute for the Design of Advanced Energy Systems
+roboterclubaachen,We build awesome robots for the Eurobot competition.
+RIOT-OS,The friendly Operating System for the Internet of Things
+RWTH-OS,Part of the Institute for Automation of Complex Power Systems
+enlyze,The enlyze company account
+open-energy-transition,Non-profit that accelerates the energy transition with open data and open source software solutions.
 IBM,
-railsgirls,
-natura-cosmeticos,
-fablabjoinville,Repositório de código da Associação Fab Lab Joinville
-data-science-joinville,Data Science Joinville Community.
-TODXS,
-python-joinville,Python Joinville
-ruby-joinville,Comunidade Ruby de Joinville
-icei-pucminas,Instituto de Ciências Exatas e Informática
-NEAR-Portuguese-Community,Comunidade falante português do protocolo NEAR!
-KappaSigmaMu,Kappa Sigma Mu is a membership club using the Substrate Society pallet.
-baiomaps,O primeiro site completo de consulta a cadastros de imóveis rurais no Brasil.
-soprodecarnaval,
+open-energy-transition,Non-profit that accelerates the energy transition with open data and open source software solutions.
 ie3-institute,Official github account of the ie3 - one of the leading German higher education research institutes in the field of energy
 iiasa,International Institute for Applied Systems Analysis
 IAMconsortium,
 openENTRANCE,"openENTRANCE develops an open, transparent & integrated modelling platform for low-carbon transition pathways in Europe, funded by the EU Horizon 2020 programme"
 graphdesigngroup,An academic group to discuss issues of graph design problems.
-ncsa,National Center for Supercomputing Applications
-applicationskeleton,
-Parsl,"Parsl: Enabling easy parallelism on clusters, clouds and supercomputers."
-iris-hep,Institute for Research and Innovation in Software for High Energy Physics
-scailfin,Scalable CyberInfrastructure for Artificial Intelligence and Likelihood Free Inference
-researchsoft,
-funcx-faas,funcX: High Performance Function Serving for Science
-illinois-ceesd,
-bbThemis,
-rse-council,The International Council of RSE Associations provides a formal open forum for established national and multinational RSE associations to talk and collaborate.
 EASYRES,EASY-RES is a Horizon 2020 project devoted to improve EU energy security by allowing very high penetration (up to 100%) of renewables in the grid.
-llir,Unofficial libraries for interacting with LLVM IR.
-racket-tw,Promote Racket in Taiwan
-WasmEdge,"A cloud native WebAssembly runtime. A secure, lightweight, portable and high-performance alternative to Linux containers."
-dannypsnl-fork,
 anaconda,Anaconda Data Science - please see https://github.com/ContinuumIO for our open-source repositories
 ContinuumIO,"Advanced data processing, analysis, and visualization tools for Python & R."
 tremor-rs,The Tremor Project
 JuliaPlots,Data visualization in Julia
+spine-tools,Open source modelling tools
+TulipaEnergy,Energy System Optimization Tools from TNO and eScience
 pypsa-meets-earth,An open source energy system model initiative for our Earth
 SPSUnipi,
+open-energy-transition,Non-profit that accelerates the energy transition with open data and open source software solutions.
 gisce,IT for Energy utilities
 CLIMADA-project,Research group at ETH Zurich
-radiant,
-repoforge,
-acep-uaf,ACEP is based at University of Alaska Fairbanks and is dedicated to applied energy research and testing focused on lowering the cost of energy.
 gridlab-d,GridLAB-D is a distribution level power system simulator designed to allow users to create and analyze smart grid technologies.
 eudoxys,"Electricity load data, analytics, forecasting, modeling, and simulation"
 arras-energy,
 gridlabd-tutorials,Tutorials to guide newcomers to GridLAB-D on the use of Arras Energy as a simulation tool in GitHub.
-likestream,
 CCSI-Toolset,The Carbon Capture Simulation Initiative (CCSI) Toolset is a suite of computational models for carbon capture equipment and design processes.
+CivicTechTO,civic hacknight for everyone.
+datatogether,Data Together seeks to build a better future for data.
+ournetworks,
 jazzband,We are all part of this
 ttygroup,"A community for Textual creators making tools, widgets, and reusable UI components"
 fossasia,Open Technologies developed in Asia and Around the Globe
@@ -1104,7 +710,6 @@ mila-iqia,Quebec Artificial Intelligence Institute
 deeptechlabs,@dendisuhubdy's private investments
 grokvideo,
 darkpools,Matching with minimum liquidity impact
-SEAMS-Project,
 civic-interconnect,
 wikimedia,Wikimedia is a global movement whose mission is to bring free educational content to the world.
 collective,Plone/Volto add-ons shared code repositories
@@ -1124,34 +729,11 @@ archlinuxmx,Comunidad de Arch Linux México
 da-edra,"This is my old GitHub profile, my new nickname is 'denisse-dev'"
 LibrePhotos,
 QSCTech,一入潮门，终生潮人
-sahana,
-fossasia,Open Technologies developed in Asia and Around the Globe
-OpenMined,
-gsoc-cn,Summer of Code SIG 编程之夏兴趣组（中国）
-PremiLab-XJTLU,Pattern Recognition and Machine Intelligence Laboratory
-xjtlu-lug,Lɪɴᴜx Usᴇʀ Gʀᴏᴜᴘ @XJTLU
-cse208-foxtrot,
-mercurius-hackathon,
-servicemesher,Service Mesh Community
-Acappella-dream,
-xjtlu-hackathon,
-HyperLedgerChain,Hyperledger Chain
-ntu-aiot,Artificial Intelligence of Things (AIoT)
-cloudnativeto,云原生社区（中国）
-aegis-readers,
-HMUniversity,Mendacium plana sit vera scientia.
-wenshu-tech,
-WecoAI,
 recursecenter,
 GeoDaCenter,"A joint initiative of the Division of Social Sciences and the Computation Institute, the Center for Spatial Data Science (CSDS) develops state-of-the-art method"
 turquoisehealth,
 Python-Devs-Brasil,Repositório do grupo Python Brasil com o propósito de criar projetos open-source.
 Brutalab,
-skilld-labs,Skilld is an open-source community for IT services.
-pianity,Make Music Matter
-launchrctl,
-cloud-ctl,
-perplex-labs,
 cocologics,
 modelica,Projects of the Modelica Association
 modelica-3rdparty,
@@ -1164,23 +746,16 @@ ahab-io,
 atcomputing,The AT Computing Open Source Repositories
 zavalab,The Scalable Systems Lab at UW-Madison
 planet-os,
-gollum,
-UtrechtUniversity,The central place for managing code and software for Utrecht University researchers and employees
-grackorg,
 jmp-app,User and event management software
 plapadoo,
 GENeSYS-MOD,
 switch-model,Optimal planning model for power systems with large shares of renewable energy
-geigercrowd,
-projectivetech,
+TidierOrg,Making Julia a Tidier Place for Data Analysis
+AMReX-Codes,AMReX-Codes: Block-Structured AMR Software Framework and Applications
 WebEngDUS,Web Engineering Meetup Düsseldorf
 jdevlabs,"A group of students, hacking out stuff."
 Immediate-Mode-UI,"We review all PRs before merging. We require backwards compatibility of nuklear.h (unlike of backends/demos/examples), but we also like major version bumps."
 cypht-org,Lightweight Open Source webmail written in PHP and JavaScript
-pynucastro,a python library for nuclear astrophysics
-starkiller-astro,
-AMReX-Astro,The AMReX Astrophysics Suite: adaptive mesh refinement hydrodynamics codes for astrophysical flows.
-Flash-Star,Collection of scripts and analysis code useful for igniting MESA models in FLASH to study stellar explosions.
 opennem,"Formerly OpenNEM, Open Electricity aims to make the wealth of public energy data more accessible"
 Open-ISP,An accessible and transparent electricity system model based on the Australian Energy Market Operator’s ‘Integrated System Plan’
 PIK-ICoNe,"Dynamics, stability and resilience of complex hybrid infrastructure networks"
@@ -1189,25 +764,28 @@ wurstmineberg,"whitelisted, highly customized but vanilla Minecraft server"
 BuergerbautStadt,
 codeforberlin,OK Lab Berlin
 osm-mx,OpenStreetMap es un mapa gratuito y editable del mundo entero que es construido por voluntarios y lanzado con una licencia de contenido abierto.
-LimeProject,
-Electril-Power-System-Tools,"Open source, free tools for Electric Power Systems. Design, analysis, simulation, study."
+open-energy-transition,Non-profit that accelerates the energy transition with open data and open source software solutions.
 gridlab-d,GridLAB-D is a distribution level power system simulator designed to allow users to create and analyze smart grid technologies.
 GMLC-TDC,Repository for the GMLC TDC tool suite - HELICS
 Gregor-Mendel-Institute,
+gisce,IT for Energy utilities
+pygrn,Som Gironins apassionats pel llenguatge de programació Python! 🐍🐍🐍
+podlinker,Podcast Social Network
 nuflang,
-bitdances,
 ICESAT-2HackWeek,
 mit,"For students/alumni/staff/MIT affiliates! To join, email with GitHub+Athena usernames."
-EnergyTransition,
 montefiore-ms,"Our research concerns the modeling, analysis, optimal design and control of electric power and energy systems."
+eggzec,"Science, Computing and Automation."
 crs-org,On the edge of research in automatic speech recognition for telephony.
-tulp,
 pypsa-meets-earth,An open source energy system model initiative for our Earth
+open-energy-transition,Non-profit that accelerates the energy transition with open data and open source software solutions.
 orelyx,climate policy analysis; open-source development of analysis datasets and tools
 github,How people build software.
 microsoft,Open source projects and samples from Microsoft
 team529nl,
 arrobalytics,FinTech | Accounting | Software Development
+PromptExecution,
+app4dog,
 serlo,"We build technology to provide high quality education for free, all open source and without any ads."
 edtr-io,"We build Edtr.io, a WYSIWYG in-line web editor written in React"
 goodmap,Repositories have been moved to https://github.com/future-coop/
@@ -1215,17 +793,6 @@ JuliaGeometry,Computational Geometry with Julia
 JuliaML,Julia packages for Machine Learning
 JuliaEarth,Fostering geospatial data science and geostatistical modeling in Earth sciences
 DeltaE,ΔE+ (Delta-E-plus) explores the synergies and trade-offs at the nexus of energy+ to support effective policy development.
-sbhackerspace,
-noisebridge,
-noisetor,
-thecloakproject,
-securepollingsystem,
-cryptag,"End-to-end encrypted, censorship-resistant, privacy-enhancing apps for activists, journalists, and you"
-cpunkswritecode,SF Bay Area Meetup group galvanizing developers & designers everywhere to contribute to open source software that protects human privacy
-EffectiveAF,"Fun, simple, empowering task management software for activists and human rights organizations"
-vlang,"Simple, fast, safe, compiled language for developing maintainable software"
-SpringACT,Our vision is to empower people to take action through innovative technologies to help eliminate social injustices anywhere in the world.
-AutonomousUnited,
 korlibs,KorGE Game Engine & Korlibs Kotlin Multiplatform Libraries
 InterImm,Interplanetary Immigration as a service; Building IT services for our space-faring civilization; 一家从事星际移民的机构。
 NeuPhysics,Neutrino Physics Research
@@ -1236,38 +803,17 @@ DataHerb,Get datasets in a blink of an eye | Experimenting with simple modular s
 kausalflow,We automate scientific research
 pry,Pry is a powerful runtime developer console and IRB alternative for Ruby.
 fohr,
-JamboTechUFPB,
 telecomcraft,"Telecommunications engineering and automation tools and home lab learning content on networks, servers, security, and fiber optics."
 democrobot,"Purpose-built software designed for supporting grassroot efforts to pass pro-democracy, anti-corruption laws everywhere, for everyone."
 eigenmo-de,
-EnergyModelsX,
 AOS573-2017,This is a nexus of Computational Methods in Atmospheric and Oceanic Sciences.
 UW-AOS,
-KitchenTableCoders,
-recursecenter,
-alumNY,This is an older github org we used to use for hackNY stuff. We now use github.com/hackny.
+open-energy-transition,Non-profit that accelerates the energy transition with open data and open source software solutions.
 numenta,Biologically inspired machine intelligence
-rapidsms,
-unicef,
-unicefuganda,
-flexiblepower,FAN is open standard and implementation that connects devices with energy management services.
-EnergyTransition,
-apple,
-swift-server,
-networkit,
+CodeHuntersLab,"Comunidad que desarrolla actividades orientadas a la formación en investigación y creación tecnológica, dirigidas a jóvenes entre 15 y 20 años."
 worlddevelopment,Towards an epic world.
 HAMAG-honey-gem,
 ripl,Robot Intelligence through Perception Laboratory
-ngcm,EPSRC Centre for Doctoral Training in Next Generation Computational Modelling
-computationalmodelling,Max Planck Institute for the Structure and Dynamics of Matter / University of Southampton (UK) / European XFEL
-OpenDreamKit,Open Digital Research Environment Toolkit for the Advancement of Mathematics: a Horizon 2020 European Research Infrastructure project
-spack,"A flexible package manager that supports multiple versions, configurations, platforms, and compilers."
-panosc-eu,Photon and Neutron Open Science Cloud
-ubermag,Computational (micro)magnetism tools
-reproducible-micromagnetics,
-oscovida,Open Science Tracking COVID19 cases and deaths: all code and data available
-nmag-project,NMAG is a Micromagnetic modelling tool based on finite elements
-MaMMoS-project,
 Marketcloud,"Marketcloud, ecommerce backend api as a service"
 infiniteuny,Let's Make Infinite Technology!
 ampl,A modeling language for mathematical programming
@@ -1278,6 +824,7 @@ MetaVisage,
 FuzzyMonkeyCo,QuickCheck your APIs using Swagger/OpenAPI
 OpenScienceWorkshops,
 infrasenselabs,Engineering resilient water supply systems for smarter cities
+open-energy-transition,Non-profit that accelerates the energy transition with open data and open source software solutions.
 PDP-10,
 skidvision,"Vision and Touch Research, Computational Modeling"
 AntaresSimulatorTeam,
@@ -1301,15 +848,15 @@ mitmath,educational materials for MIT math courses
 JuliaCommunity,Organizing Julia Community Initiatives
 ClimateMARGO,Workspace for all software related to the ClimateMARGO simple economic model
 JuliaPluto,🎈 Simple reactive notebooks for Julia — https://github.com/fonsp/Pluto.jl
+bmlip,taught at TU Eindhoven
 machbarschaft,
 Colivery,
+JuliaControl,Control Systems Design in Julia
 flybywiresim,FlyByWire Simulations is a community-driven group currently focused on creating the A320 family and the A380 for MSFS.
-DestinE-Climate-DT,
 JuliaOpt,(Obsolete organization; see github.com/jump-dev) Mathematical Optimization in Julia
 JuliaStochOpt,Stochastic Optimization in Julia
 exanauts,An eclectic collection of ECP ExaSGD project codes
 MadNLP,
-futuremarinefuels,
 codeneuro,
 lightning-viz,
 thunder-project,
@@ -1320,24 +867,11 @@ carbonplan,Data and science for climate action
 ckb-next,
 neuronika,
 Rust-GPU,Fast GPU computing for the Rust language
-OpenNewsLabs,"An org for OpenNews fellows, alums, and community collaborators to use for experiments and collaboration on projects, tools, and conference sessions."
-publicscience,
-ml4a,machine learning for artists
-learning-gardens,Learning Platform and Support Structure
-dark-industries,synergistic management solutions: we got 'em
-thenewinquiry,
-SAP,"SAP SE, a global software company, is one of the largest vendors of ERP and other enterprise applications."
-ffgtso,Public repository for kreisgt.freifunk.net
-osism,The European cloud for critical infrastructures.
-SovereignCloudStack,"One platform — standardized, built and operated by many."
-OpenOperations,
 gridlab-d,GridLAB-D is a distribution level power system simulator designed to allow users to create and analyze smart grid technologies.
 oemof,Open Energy Modelling Framework - A modular open source framework to model energy supply systems
 openego,open electricity Grid optimization
 znes,For legal notices see http://www.uni-flensburg.de/en/legal-notice and http://www.hs-flensburg.de/impressum
 project-angus,
-DTUWindEnergy,
-FUSED-Wind,
 apachecn,由 iBooker 建立的公益性文档和教程翻译项目
 doocs,Doocs Open Source Community.
 LLNL,"For over 70 years, the Lawrence Livermore National Laboratory has applied science and technology to make the world a safer place."
@@ -1347,41 +881,28 @@ spack,"A flexible package manager that supports multiple versions, configuration
 sundials-codes,https://computing.llnl.gov/projects/sundials
 powsybl,Power System Blocks
 dynawo,
-diylogos,
-fullstackenviormentss,
 WSU-DS,Washington State University
 WISDEM,The Wind-Plant Integrated System Design and Engineering Model (WISDEM (TM)) set
+ScaleMicrogridSolutions,
 JuliaDiff,Differentiation Tools in Julia
 JuliaGraphs,Graph modeling and analysis packages for the Julia programming language
 JuliaConstraints,
 JuliaEpi,Computational epidemiology in @JuliaLang.
 JuliaEPFL,Community of Julia enthusiasts at École polytechnique fédérale de Lausanne
 JuliaDecisionFocusedLearning,
-climate-analytics,
 meritisgroup,Meritis est un cabinet de conseil spécialisé en systèmes d'informations
 rte-france,
 powsybl,Power System Blocks
 gridsuite,
+powsybl,Power System Blocks
 ellak-monades-aristeias,Ανάπτυξη έργων ανοιχτών τεχνολογιών των  Μονάδων Αριστείας
 KyFax,
 iSheero-AI,A Non-profit Organization Offering Expert-led AI Advancement in Benin and Francophone Africa
-Pyomo,
-PyUtilib,
-spotify,
-UCBerkeleySETI,
-ska-sa,South African Radio Astronomy Observatory
-ratt-ru,
-common-workflow-language,
-astro-informatics,
-casacore,
-cyberintelframework,
-kernsuite,
+open-energy-transition,Non-profit that accelerates the energy transition with open data and open source software solutions.
+open-energy-transition,Non-profit that accelerates the energy transition with open data and open source software solutions.
 ULHPC,High Performance Computing @ University of Luxembourg
 greeklug,Greek Association of Free Software / Open Source Software Users
 CaPaD-cutting-and-packing,Software and test data continuing the CaPaD site of the Dresden University
-energyscope,
-Renewable-Energy-Hub-Optimizer,
-FEDECOM-Project,
 ovh,
 ovhlabs,The OVH group labs
 TulipaEnergy,Energy System Optimization Tools from TNO and eScience
@@ -1404,57 +925,28 @@ Imperial-Wiki,A student-led initiative at Imperial College London aimed at formi
 BoostGSoC20,
 oxfordcontrol,
 energy2market,
+keyboard-ergonomics,Miscellaneous efforts for making the computer keyboard more oriented on usage by the human.
+grafana-tools,Tools and libraries for helping work with Grafana (http://grafana.org). This is a community effort with no official relations to Grafana project.
 NREL,
-BioInf-Wuerzburg,"Department of Bioinformatics, University of Wuerzburg"
-BioInf-Wuerzburg-teaching,
-TBroTeam,
-bioconda,
-HackyHour,Code - Tools - Science - Help - Social
-CCTB-UW,
-cctb-it-wuerzburg,
-AliTVTeam,
-chloroExtractorTeam,
-ime-tools,Tools needed for our work; Logo derived from https://openclipart.org/detail/19214/tools
-ag-computational-bio,
-microPIECE-team,
-AnimalVenomics,
-arunaengine,The Data Orchestration Engine
 myunimol,La nuova applicazione per la gestione della propria carriera universitaria unimol.
 stakelab,
-9King-Club,
-heartdancetech,"Heart or Byte, there is always one at dance."
-godbus,
-grid-x,
 LAMPSPUC,"Laboratory for research and development on mathematical programming (optimization) and statistics. Electrical and Industrial Engineering departments, PUC-Rio."
 psrenergy,PSR has been a global provider of technological solutions and consulting services in the areas of electricity and natural gas (E&G) since 1987.
 group9ine,0100011100111001
-OttoStruve,The University of Texas at Austin Department of Astronomy Organization
-SPIE-hack-day-2014,A repository for the Montreal 2014 SPIE Astronomical Telescopes and Instrumentation Hack day
-igrins,
-BrownDwarf,Research about astrophysics with a focus on low mass stars
-Echelle,Silicon diffractive optics research at the University of Texas at Austin
-NSCNA,"North Shoal Creek Neighborhood Association, in Austin TX, serves the residents living in the area bounded by MoPac, Research, Burnet, and Anderson Lane."
 earthobservations,
 powsybl,Power System Blocks
-0w1club,XJTU 0w1 Cyber Security Club
-xjtuCPES,西安交大信息物理融合实验室能源优化组核心代码开发团队
-CPES-EMS,
 com-lab,"COM(COMmunity user modeling) Lab, 세종대학교 데이터사이언스과 학과장님의 연구실."
 forus-ai,We are Open AGI
-Cirice,
-Pixel-Clover,
 matterpoll,
 r-spark,"R extensions, tools and resources for Apache Spark"
 experience-experiments,Source of alumni OSS projects.
+open-energy-transition,Non-profit that accelerates the energy transition with open data and open source software solutions.
 JuliaDynamics,"A Julia-based software organization for dynamical systems, nonlinear dynamics, complex systems and the complexities of the scientific life"
 grossmann-group,
 AntaresSimulatorTeam,
 CodeandoMexico,"Fortalecemos a gobiernos, organizaciones y personas trabajando en lo público con proyectos de tecnología y datos."
 CodeandoMonterrey,Comunidad de programadores enfocada al cambio social en Monterrey
 tdelta,
-JagsJulia,
-EnergyModelsX,
-sintefore,An organization for the public available software developed by the research group
 dataAt,
 SInApSE-INPE,Sistemas Inteligentes Aplicados ao Setor Espacial
 ardc-brazil,Atmospheric Big Data and Data Science Research Group in Brazil
@@ -1464,12 +956,13 @@ ad-freiburg,Code from our various research projects and publications
 JuliaDynamics,"A Julia-based software organization for dynamical systems, nonlinear dynamics, complex systems and the complexities of the scientific life"
 JuliaEnergy,
 LLNL,"For over 70 years, the Lawrence Livermore National Laboratory has applied science and technology to make the world a safer place."
+Gurobi,
+lanl-ansi,Los Alamos Advanced Network Science Initiative
 pytub,
 IUNO-TDM,
 Future-Power-Networks,An inter-university research union for theories and techonologies to support renewable power networks.
 modelica,Projects of the Modelica Association
 ld4mbse,
-hzspeed,
 ANL-CEEESA,"Argonne National Laboratory's Center for Energy, Environmental, and Economic Systems Analysis (CEEESA)"
 LAMPSPUC,"Laboratory for research and development on mathematical programming (optimization) and statistics. Electrical and Industrial Engineering departments, PUC-Rio."
 IBM,
@@ -1481,57 +974,28 @@ JuliaCloud,Cloud service interfaces for Julia
 beacon-biosignals,
 IJHack,IJhack is a hacker collective. We teach people to understand how their technology works.
 mogrene,
-idorosen,
-NetFPGA,
-irosen,
-OpenFabrics,
-ir2002,
-graphviz4matlab,
-probml,"Material to accompany my book series ""Probabilistic Machine Learning"" (Software, Data, Exercises, Figures, etc)"
-bayesnet,
-lz4,
-NetworkConfiguration,Programs to make Network Configuration easy
 f3-factory,"Less hype, more meat. Providing lightweight and fast packages."
 Fair-Squares,Fair Housing for all built on substrate
 OCA,The GitHub repos for all Open Source work around Odoo
 ssec-jhu,Accelerating Software Development for Science Research
 JH-DSAI,
-nodejitsu,
-nko,
-tc39,"Ecma International, Technical Committee 39 - ECMAScript"
-EmpireJS,
-LXJS,A not-for-profit by-the-community and for-the-community international conference about the New Worlds of JavaScript.
-winstonjs,A logger for just about everything
-foreversd,An elegant process monitor for anything.
-http-party,Who says networking can't be fun?
-gatherscript,Non-profit tech events advisement
 crosscompute,"Create and Share Runnable Tools Across Your Organization: Distributed Computing for Scenario Planning, Electricity Infrastructure, Hazard Mitigation"
 AmericanPublicPowerAssociation,
 python-organizers,
-RoburDB,
-CascabelUA,
-FaaSForward,
-OctavoLabs,
-Promise-Mapping,
-b3log,请大家尽快迁移仓库，江湖再见！
-apachecn,由 iBooker 建立的公益性文档和教程翻译项目
-datascicamp,
-Programming-With-Love,🇨🇳 开源爱好者组织
-BNUGW,
 calliope-project,A multi-scale energy systems modelling framework
 HivemindTechnologies,
 CodeandoMonterrey,Comunidad de programadores enfocada al cambio social en Monterrey
 ZapopanLab,"Civic innovation lab that advocates community entrepreneurship, open government and digital inclusion."
 ColimaHacklab,
 alturin,
-synx-ai," We simplify the adoption of Artificial Intelligence, using cutting-edge technology that allows to automate processes and extract more value from their data."
+synx-ai,"We simplify the adoption of Artificial Intelligence, using cutting-edge technology that allows to automate processes and extract more value from their data."
 ForetagInc,A collective open source group.
 master-co,An ecosystem of UI
 arras-energy,
-BC-EESC4464-SP21,
 dssg,
+insdim,insdim design office
+open-energy-transition,Non-profit that accelerates the energy transition with open data and open source software solutions.
 witch-team,
-RMI-PACTA,
 ERGO-Code,
 oemof-heat,Modelling energy systems with focus on heat and power-to-heat using oemof
 rte-antares-rpackage,RTE ANTARES R PACKAGE
@@ -1539,8 +1003,6 @@ zavalab,The Scalable Systems Lab at UW-Madison
 kahypar,KaHyPar (Karlsruhe Hypergraph Partitioning) is a high-quality multilevel k-way hypergraph partitioning framework.
 plasmo-dev,An organization for Plasmo and related Julia packages
 esma-cu,
-SciTools,SciTools is a collaborative effort to produce powerful Python-based open-source tools for Earth scientists
-SciTools-incubator,
 facebook,We are working to build community through open source technology. NB: members must have two-factor auth.
 HewlettPackard,Hewlett Packard Enterprise on github; please contact github@hpe.com for access
 fossasia,Open Technologies developed in Asia and Around the Globe
@@ -1557,18 +1019,14 @@ SymMotion,SUTD Capstone 2022 - Group S35
 Krypto-Hashers-Community,KHC — A collective of coders and crypto geeks building open-source tools and breaking limits.
 genn-team,The GeNN Development Team
 arpra-project,The Arpra Project creates tools for analyzing numerical error in floating-point software.
-teamr3,
-VectorInstitute,
-IEEE-TMU,Student Chapter Repositories.
 hackutk,"The University of Tennessee, Knoxville's resident computer security organization."
 php-csas,Context-Sensitive Auto-Sanitization for PHP
 volhacks,VolHacks: the University of Tennessee - Knoxville's official student-organized hackathon
 VolSec,"Computer Security Research Lab at the University of Tennessee, Knoxville"
 uncategorizedexpense,Solving Uncategorized Transactions one firm at a time
 ivoryshoulder,
-valuedeliberation-tudelft,
-wedoco,
 MaREI-EPMG,
+gridlab-d,GridLAB-D is a distribution level power system simulator designed to allow users to create and analyze smart grid technologies.
 SCMStandz,Single column standartisation
 Energy-MAC,EMAC does research to advance decarbonization pathways for the electric grid.  Our members work and study at UC Berkeley and Lawrence Berkeley National Lab.
 NREL-Sienna,Open Source Tools for Scientific Energy Systems Analysis
@@ -1583,35 +1041,20 @@ ROCmSoftwarePlatform,ROCm Software Platform Repository
 matex-org,
 JuliaReinforcementLearning,A collection of tools for reinforcement learning research in Julia
 trr266,"SFB/Transregio 266 ""Accounting for Transparency"""
-Krv-Analytics,New startup passionate about using SOA machine learning research to align sustainable development goals and industry!
+Krv-Analytics,"Agentic Data Engineering for The Modern Stack 📚  Using graphs to solve the biggest headaches in data engineering: curating, cleaning, and preparing."
 pywr,A collection of repositories related to the Pywr ngeneralised network resource allocation modelling library.
 kimetrica,
 IDAES,Institute for the Design of Advanced Energy Systems
 Open-Power-System-Data,
-alternaDev,
-LittleRolf,
-Puut,
-HappyCarl,
-MoinApp,
-PedaAutomation,
-sociallayer-im,
-shanhaiwoo,
 coggeshall,
 CURENT,CURENT Large Scale Testbed
-cocoaheads-hh,
-milchundzucker,eRecruiting Solutions and Recruitment Advertising. Creator of the BeeSite Talent Management Suite.
-jaleel22,
-akashchan,
-spine-tools,Open source modelling tools
-TradeRES,
-irena-flextool,
 NREL,
 iitis,"Institute of Theoretical and Applied Informatics, Polish Academy of Sciences"
 COST-IC1405,ICT COST Action IC1405: Reversible computation - extending horizons of computing
 QuantumWalks,Julia modules for quantum walks and their applications
 QPoland,
 euro-hpc-pl,
-BiOSS-Group,"Biopolimes, Software for Simulation and Statistics "
+BiOSS-Group,"Biopolimes, Software for Simulation and Statistics"
 seahorce-scidac,
 oemof,Open Energy Modelling Framework - A modular open source framework to model energy supply systems
 oemof-heat,Modelling energy systems with focus on heat and power-to-heat using oemof
@@ -1621,14 +1064,11 @@ LAMPSPUC,"Laboratory for research and development on mathematical programming (o
 jump-dev,An organization for the JuMP modeling language and related repositories.
 psrenergy,PSR has been a global provider of technological solutions and consulting services in the areas of electricity and natural gas (E&G) since 1987.
 JuliaQUBO,"QUBO modelling, solvers & tools. A joint work of @psrenergy and @SECQUOIA"
-NumberSensei,
 Project60,A collection of CiviCRM extensions that were missing for European users
 HochschuleHofStundenplanapp,
 foodsharing-dev,Please see gitlab for active development of foodsharing.de - https://gitlab.com/foodsharing-dev
 ie3-institute,Official github account of the ie3 - one of the leading German higher education research institutes in the field of energy
 coverified,We build AI-based software applications for the public sector - to make information easily accessible and searching more efficient.
-arbncoltd,
-OpenMDAO,
 oemof,Open Energy Modelling Framework - A modular open source framework to model energy supply systems
 pommes-public,POMMES - a cosmos for bottom-up linear fundamental power market modeling
 radical-data,"Repurposing tech for liberation + joy ✨ We are a studio 💻, educational platform 📖 & community 🪢"
@@ -1638,11 +1078,6 @@ OpenRouting,
 opentraildata,
 paidmappers,
 gilligan-ees-3310-2021,
-Telecom-Robotics,
-100km,
-lutece-platform,Open Source Content Management Framework
-lutece-secteur-public,"Applications Métiers LUTECE destinées au Secteur Public. Ne contient pas les modules standards Lutece (moteur de formulaire, ...) hébergés sur lutece-platform"
-rte-france,
 quintel,
 oemof,Open Energy Modelling Framework - A modular open source framework to model energy supply systems
 quarree100,
@@ -1651,18 +1086,17 @@ hermit-os,"A Rust-based, lightweight unikernel."
 PowerProfile,⌨️ A usable PowerShell profile for Cloud Admins and DevSecOps.
 powerframes,Expert Framework for Power Systems
 flexiblepower,FAN is open standard and implementation that connects devices with energy management services.
+spack,"A flexible package manager that supports multiple versions, configurations, platforms, and compilers."
 rukzuk,simply powerful web design
+knime,
 kajona,
 jenkinsci,Jenkins is an open source automation server with an unparalleled plugin ecosystem to support practically every tool as part of your delivery pipelines
 Pyomo,
 offgridlab,
 kalkspace,Coworking Community in Köln-Kalk
-retoflow,
 SESMG,Open source energy system modeling tool developed at Münster University of Applied Sciences
-Orion-Solar-Car,
 enosi,"A community energy platform providing consumers with choice, transparency and efficiency."
 ace-teknologi,"Quietly and slowly, then loudly and quickly working on changing the world."
-Companion-energy,
 IWUGERMANY,
 PROTECO,Programa de Tecnología en Cómputo
 UNAMMobile,El laboratorio de innovación móvil de la UNAM
@@ -1670,25 +1104,8 @@ rl-institut,
 orkestra-energy,
 ipunkt,We are closed forever.
 RocHack,"A group of hackers, programmers, and entrepreneurs at the University of Rochester"
-JuliaGeo,Geospatial packages for Julia
-JuliaObjects,
-JuliaFunctional,
 websvnphp,Fork from WebSVN
-OpenWaterAnalytics,
-sandialabs,Exceptional service in the national interest.
-Pyomo,
-IDAES,Institute for the Design of Advanced Energy Systems
 minerva-ml,
-NREL,
-sandialabs,Exceptional service in the national interest.
-pvlib,
-conda-forge,"A community led collection of recipes, build infrastructure and distributions for the conda package manager."
-openpvtools,
-AssessingSolar,
-PVSC48-Clipping-loss-validation,
-PV-Tutorials,Tutorial materials for open-source python packages for simulating and analyzing photovoltaic power systems
-HRVIP,
-hcisummerproject,
 EnvironmentalSystemsLab,
 Frankenslot,
 Urbano-io,
@@ -1697,8 +1114,9 @@ VIP-SMUR,A Vertically Integrated Project at Georgia Tech.
 SustainableUrbanSystemsLab,"Decision-making tools for sustainable urban planning, design, and architecture at Georgia Tech."
 KonScience,Der Wissenschaftspodcast aus Konstanz | PGP-ID: 0x76B000F1 fingerprint: A9F8 35E2 6130 BCA2 0C98 7E14 A61B 4065 76B0 00F1
 energy-modelling-toolkit,A fully open inter-institutional energy modelling group. It serves as an umbrella organization that hosts open datasets and models.
+lapras-inc,
+type-challenges,Collection of TypeScript type challenges
 hnei,"A department of the University of Hawaii focused on developing, testing, and evaluating novel renewable energy technologies"
-pelican-plugins,
 NREL,
 dss-extensions,Language interfaces and extensions for an alternative implementation of EPRI's OpenDSS
 EventGhost,"An advanced, yet easy-to-use extensible automation tool."
@@ -1707,7 +1125,6 @@ cc-api,Reduce the complexity of various cloud frameworks and TEE engines
 TrustAgentPlatform,Build a Robust GenAI Agent Platform for Diverse Industry Applications
 mhlabCodingTeam,
 ViennaTools,
-GTkernel,
 plone,Core of the enterprise CMS Plone and related projects. For add-ons visit: https://github.com/collective
 collective,Plone/Volto add-ons shared code repositories
 bopen,
@@ -1717,20 +1134,12 @@ common-workflow-language,
 pyauth,Python Web Authentication Libraries
 XML-Security,"Implementations of the W3C XML Signature and ETSI XAdES standards, and their key uses such as SAML"
 HumanCellAtlas,An open international collaboration to create comprehensive reference maps of all human cells
+FuckSrun3K,This is an collection for 3rd-party client designed for Srun3K & Srun4K
+open-xchange,
 rte-france,
 rte-antares-rpackage,RTE ANTARES R PACKAGE
 cantbloom,
 dutchconnectomelab,
-freifunk-mwu,"Freifunk in Mainz, Wiesbaden & Umgebung"
-freifunk-hessen,
-neulandcamp,
-EpicGames,
-github-beta,
-NVIDIAGameWorks,NVIDIA Technologies for game and application developers
-ruHaskell,Русскоязычное сообщество Haskell-разработчиков
-OpenGenus,[Internship 🌱] Connecting the World through knowledge | We have a role for everyone. Join our Internship program: internship.opengenus.org
-artemis-project,"A swift, modern, and unified desktop environment"
-DeskX11,Remote access software from a remote client to a computer. The program is aimed at the maximum speed of transfering.
 FreifunkMYK,Freifunk in der Mitte von Rheinland-Pfalz
 ito-org,"[project abandoned] track infections, not people."
 tagspaces,Take back control of your files
@@ -1752,32 +1161,18 @@ sqe-simulation-modelling,"A TU Berlin master's project about simulating an emerg
 hyperpartisan-nlp,
 lightning-sprinkle,Automatic universal in-browser payments over the lightning protcoll as an alternative model to web advertising
 Power-Systems-Textbook,
-NHaml,
-webkitdotnet,
-psake,
-luggages,
 kalispera,Hannes & Lasse Diercks creating open source software
 patternsonio,
-uzh-rpg,
-HULKs,"RoboCup SPL Team TU Hamburg, Germany"
-JuliaPOMDP,POMDP packages for Julia
-PRBonn,Photogrammetry & Robotics Lab at the University of Bonn
-tud-amr,
-CU-ADCL,
-R2CLab,
-CMU-IntentLab,Interactive and Trustworthy Robotics Lab at Carnegie Mellon University
-JuliaGameTheoreticPlanning,
-cor-mobile-robotics,
 pachterlab,
 gridlab-d,GridLAB-D is a distribution level power system simulator designed to allow users to create and analyze smart grid technologies.
 zoondka,DevOps and Blockchain experts!
+kul-optec,KU Leuven Center of Excellence: Optimization in Engineering
 MyTFG,MyTFG Open Source Project
 PyVRP,The PyVRP project develops open-source tools to efficiently solve vehicle routing problems.
-PyJobShop,
+PyJobShop,Solve scheduling problems in Python
 levitation-opensource,"An independent AI safety researcher. I studied psychology, have 20 years of experience in modelling natural intelligence and in designing various AI algorithms."
 udw-io,
 make-or-break,projects created by friends
-Duke-PL-Course,
 SCRFMembers,Stanford Center for Reservoir Forecasting
 nabla,Build engaging relationships with your patients through our machine learning-powered care platform
 k9mail,K-9 Mail – Open Source Email App for Android
@@ -1809,71 +1204,26 @@ blockchainweek,
 PIK-ICoNe,"Dynamics, stability and resilience of complex hybrid infrastructure networks"
 yourdpm,
 MutilatedPeripherals,Based solutions for a based future
-Meteroi,
-OpenFPGAduino,
-JavaScriptIOT,
-SparkDL,
 PyPSA,Python for Power System Analysis
-baratito,"Comprá inteligente, comprá baratito 😎"
-poly-blockchain,
 spin-systems,
 facet-rs,"Reflection, introspection, serialization, deserialization for Rust"
-pydata,
-waselucht,
 GENeSYS-MOD,
-django,
-JuliaLang,The Julia Programming Language
-google,Google ❤️ Open Source
-numfocus,Non-profit organization promoting accessible and reproducible scientific and technical computing
-djangocon,"International Django conferences held in North America, Europe, Australia, and Africa."
-JuliaCon,The Julia Conference
-NVIDIAGameWorks,NVIDIA Technologies for game and application developers
-JuliaML,Julia packages for Machine Learning
-me50,
-FluxML,The Elegant Machine Learning Stack
-vault50,@CS50's lesson plans and sample solutions
-JuliaClimate,
-JuliaReinforcementLearning,A collection of tools for reinforcement learning research in Julia
-JuliaEs,Translating Julia stuff into Spanish!
-julia-vscode,The Julia extension for Visual Studio Code provides rich support for the Julia programming language
-googlers,Googlers on GitHub
-JuliaIntro,
-JuliaLangSlack,Projects built to enable the Julia Lang community Slack workspace
-JuliaGaming,Open source games built in the Julia Programming Language.
-JuliaAcademy,The definitive source for learning all things Julia. Prepared by core Julia developers in collaboration with Julia Computing.
-JuliaCommunity,Organizing Julia Community Initiatives
-JuliaHealth,"Using the Julia programming language to improve medicine, health care, public health, and biomedical research."
-Julia-Streamers,The official organization for the Julia Streaming community!
-CA-Beaches,
-UGJL,
-HarvardUniversity-FoodinSociety,
-JuliaSleep,Open source tools for sleep research using Julia
-Julia-Blockchain,
-E-118-Spring21,
-packaging-con,"A conference for Developers of package management software, software packagers, and communities."
-JuliaBooks,Create books with Julia
-Hugging-Face-Supporter,Thank you for helping out Hugging Face!
-JuliaZoid,The best place to learn the Julia programming language.
-OpenSourceForStudents,The definitive Open Source Guide for Students.
-google-gemini,Get started building with the Gemini API
 witch-team,
-psi4,
 KratosMultiphysics,
 jsoxford,
 ampeersenergy,Einfache & Profitable CO2-Minderung für die Immobilienwirtschaft
-JuliaSurv,
+JuliaSurv,Tools and packages around survival analysis in pure Julia
+FormingWorlds,
+ExPlanetology,Experimental Planetology (ETH Zurich)
 KitesForFuture,
 PIK-ICoNe,"Dynamics, stability and resilience of complex hybrid infrastructure networks"
 macro-cosm,A Better Economics for a Better World.
-assaultcube,
 phpmaranhao,
 pug-ma,Python User Group - Maranhão
 sciencepub,Evento mensal de divulgação científica
 Lambda-MA,Spreading the Functional Paradigm in our tiny island.
-openego,open electricity Grid optimization
+open-energy-transition,Non-profit that accelerates the energy transition with open data and open source software solutions.
 UNSW-CEEM,
-elage,
-Adaptricity,
 modelica,Projects of the Modelica Association
 ALSETLab,"This organization hosts projects of ALSETLab, Prof. Luigi Vanfretti's research team @ RPI"
 OpenIPSL,An team of collaborators developing the OpenIPSL Modelica library for power system simulations and other related oss projects in power system modeling and sim.
@@ -1884,10 +1234,6 @@ Baltic-RCC,Baltic RCC is an Electricity grid security service provider for Balti
 RWTH-ACS,
 lfenergyarchitecturemodel,
 quintel,
-Ascendos,
-voltgrid,
-panubo,
-fastcast-io,
 madiko-gitcrew,Lebens- & Arbeitswelten mit Zukunft
 namespace-ee,"Software engineers from Tallinn, Estonia"
 greco-project,
@@ -1900,47 +1246,27 @@ open-gitops,"CNCF Sandbox project for lasting programs, documents and code from 
 associmates,
 e13-tech,
 coppersoft-dev,Solid Software for Critical Infrastructure
-iRail,Open transport data in Belgium
-JuliaLang,The Julia Programming Language
-JuliaGPU,GPU Computing in Julia
-JuliaCI,Continuous integration (CI) support for the Julia programming language
-JuliaParallel,Parallel programming in Julia
-JuliaComputing,
-JuliaMath,Mathematics made easy in Julia
-JuliaInterop,Easy interoperability between Julia and other languages
-JuliaBinaryWrappers,Autogenerated Julia packages for usage with BinaryBuilder and Pkg
-JuliaPerf,
-JuliaTelecom,Julia packages for Telecommunications
-JuliaConcurrent,
 sehrings-landlaedchen,
-Scilab-India,
-Oscad,
 tailhq,Cutting edge AI platforms for science and industry
-tech4germany,We work on a more innovative government using design and technology.
-Reasonance-GmbH,Making Data Reasonate
-we-Travel,
-e-loq,Recognizing obstacles in 3d point cloud data
 OpenIPSL,An team of collaborators developing the OpenIPSL Modelica library for power system simulations and other related oss projects in power system modeling and sim.
 empuxa,
-raddatz-io,
+raddatz-org,
 eniqo-energy,
 Chemios,
 Skunk-Brothers,
 slide-share-spot,筑波大学情報学群組み込みキャンパスOJT / 12期生 / ソフトウェアコース / Slide Share Spot チーム
 LAMPSPUC,"Laboratory for research and development on mathematical programming (optimization) and statistics. Electrical and Industrial Engineering departments, PUC-Rio."
+AlternateLife,Alternate-Life GTA RP Server Projekt
 VIDI-Projections,
 CIRAIG,
 PyPSA,Python for Power System Analysis
 PyPSA,Python for Power System Analysis
-FoxBaja,
-inspermileage,Projeto acadêmico formado por alunos do Insper que tem como objetivo desenvolver um protótipo de veículo elétrico de alta eficiência energética.
 CurrySoftware,
 callista-software,
 python-spain,Asociación Python España
 docBase,
 DeepKernelLabs,
 FreeBSDCloudTech,FreeBSD Containers and Cloud Native Tech Projects
-PortScanX,
 FariSoftware,Fari Software GmbH
 MAHTEP,Modeling of Advanced Heat Transfer and Energy Problems
 oresat,Artisanally hand-built open source satellites from Oregon!
@@ -1958,38 +1284,28 @@ leftwm,
 upb-lea,Department of power electronics and electrical drives
 soztag,Data Science at the Chair for Sociology Prof. Dr. Sabine Pfeiffer at Friedrich-Alexander University Erlangen-Nürnberg
 r-lib,
-JCMSK,Jupyter Community | MusculoSKeletal imaging
-FEZ-Finite-Element-Zurich,An initiative to promote open sharing of Finite Element resources for biomechanists
-TuxRiders,
 pykeen,Predictions for the People
 BieglersGroup,
-kLabUM,
-open-storm,
+OpenSourceCornell,
 deepsphere,"Learning on the sphere (with a graph-based ConvNet). Used so far for cosmology, geophysics, 3D object recognition."
-mantidproject,
-neutrons,
-kguei,
 OpenGridMap,Open community crowdsourcing power grid data
+iiasa,International Institute for Applied Systems Analysis
+emlab-ucsb,The Environmental Markets Lab (emLab) is an interdisciplinary team of scientists based at the University of California Santa Barbara.
+cetlab-ucsb,
+open-energy-transition,Non-profit that accelerates the energy transition with open data and open source software solutions.
 graphql-brasil,Awesome GraphQL developers from Brazil
+power-flow-analyzer,Toolbox for power system analysis
 z-shell,Open-source society passionate about Zsh
 siege-green,EVE ONLINE - Siege Green Alliance
-tianxianbaobao,
-GPM-lib,
-PyladiesSthlm,
 coin-or,Computational Infrastructure for Operations Research.
 PSORLab,The PSOR Laboratory at UConn develops numerical analysis methods and software for process systems engineering applications.
-Meytik11,
 DrafProject,"Home of Demand Response Analysis Framework (DRAF), it's modules, and showcases."
 switch-model,Optimal planning model for power systems with large shares of renewable energy
 robotology,Group software repositories of the iCub eco-system (but code developed is not necessarily iCub specific!).
 ami-iit,
 icub-tech-iit,iCub Tech Facility at Istituto Italiano di Tecnologia
-TeamJ19ROADEF2012,
-combogenomics,Florence Computational Biology Group
-RunnerPyzza,
 PowerGridModel,Steady-state distribution power system analysis
 faktaoklimatu,Iniciativa veřejných infografik o změně klimatu
-jCoderZ,
 Aalto-Electric-Drives,
 sbmlteam,The team supports SBML infrastructure & the SBML community.  Note: additional team projects are located in SourceForge at https://sourceforge.net/projects/sbml/
 tensorflow,
@@ -2006,19 +1322,9 @@ JuBiotech,
 sustainableaviation,Sustainable Aviation Research at ETH Zurich and Paul Scherrer Institute
 zynaddsubfx,A Musical Software Synthesizer
 mruby-zest,The Zest Framework Used In ZynAddSubFX's UI
+hsf-training,Training and educational material for the high energy physics community.
 gridsuite,
 googlers,Googlers on GitHub
-vidibus,
-msysgit,This organization has been superseded by https://github.com/git-for-windows
-thehackerwithin,
-numfocus,Non-profit organization promoting accessible and reproducible scientific and technical computing
-BreakingBytes,
-pvlib,
-conda-forge,"A community led collection of recipes, build infrastructure and distributions for the conda package manager."
-PVSC48-Clipping-loss-validation,
-PV-Tutorials,Tutorial materials for open-source python packages for simulating and analyzing photovoltaic power systems
-NixOS,
-doritool,
 rwth-acis,
 learning-layers,Scaling up Technologies for Informal Learning in SME Clusters
 shahriarspace,
@@ -2026,15 +1332,6 @@ ai4energy,数智能源研究组
 IDAES,Institute for the Design of Advanced Energy Systems
 ldbc,
 SiLab-Bonn,"Silicon Lab Bonn, Detector Physics Group"
-LabellersGuild,
-RWTH-OS,Part of the Institute for Automation of Complex Power Systems
-RWTH-ACS,
-hermit-os,"A Rust-based, lightweight unikernel."
-rust-osdev,Operating System Development in Rust
-threeten-jaxb,
-unikraft,A Unikernel Development Kit. Extreme Specialization for Security and Performance.
-rosenpass,
-unikernelalliance,
 metro-nom,Setting the pace for food and technology
 smart-energy-di,
 ProjectBabbage,Building things within a weekend timespan. New edition every six month. On invitation.
@@ -2042,8 +1339,12 @@ IMT-Atlantique-FIL-2020-2023,School work from students doing a Master's degree i
 qualeus,Physics-engine and visualisation software
 naomesh,Distributed computing orchestrator for green photogrammetry
 tablatures,Online guitar sheet player and database aggregator
+newtpeakbits,
 RobotiXX,
 openego,open electricity Grid optimization
+JuliaLang,The Julia Programming Language
+JuliaOpt,(Obsolete organization; see github.com/jump-dev) Mathematical Optimization in Julia
+jump-dev,An organization for the JuMP modeling language and related repositories.
 chapman-biol302,Introduction to Bioinformatics
 NREL-Sienna,Open Source Tools for Scientific Energy Systems Analysis
 OpenSourceEconomics,"A platform for transdisciplinary collaboration in the development, analysis, and application of computational economic models."
@@ -2059,11 +1360,6 @@ rl-institut,
 sintefmath,
 BattMoTeam,Models for batteries and electrochemical devices.
 box-id,
-cleanweb-uk,
-productscience,
-thegreenwebfoundation,The Green Web Foundation - Let's make the web green
-researchops,
-Greening-Digital,Sustainability for digital teams
 bosondata,BosonData Inc
 amd,
 openPMD,Open Standard for Particle-Mesh Data
@@ -2072,21 +1368,18 @@ AMReX-Codes,AMReX-Codes: Block-Structured AMR Software Framework and Application
 ECP-WarpX,NOTE: We moved to https://github.com/BLAST-WarpX
 AMD-HPC,
 BLAST-WarpX,WarpX is an advanced electromagnetic & electrostatic Particle-In-Cell code.
-LocPrivFogSim,
-VirtualWatershed,
+DeskX11,Remote access software from a remote client to a computer. The program is aimed at the maximum speed of transfering.
 ds4dm,
 CCT-JunITer,We are a IT-Consultancy // Software Development Team run by TU Berlin students of various academic backgrounds
+JuliaDiff,Differentiation Tools in Julia
 RWTH-ACS,
 VILLASframework,VILLASframework is a toolset for local and geographically distributed real-time co-simulation.
-dfirtrack,
 neuland,
 evcc-io,Sonne tanken ☀️🚗
 aileagueio,
 needbrasil,
 kubis-ai,
 Zenmo,
-foss4good,Free and open source software for good
-jointhesong,
 oemof,Open Energy Modelling Framework - A modular open source framework to model energy supply systems
 openego,open electricity Grid optimization
 rl-institut,
@@ -2095,27 +1388,13 @@ GRASS-GIS,"Outdated here, use https://github.com/OSGeo/grass"
 mundialis,free data with free software
 Open-EO,"openEO develops an open API to connect R, Python, JavaScript and other clients to EO cloud back-ends in a simple and unified way."
 actinia-org,The geoprocessing platform actinia analyses large volumes of Earth-observation and geodata in the cloud. Repo overview at https://actinia-org.github.io/
-stuvusIT,stuvus IT Team - Studierendenvertretung Universität Stuttgart
-FIUS,Student association of computer science
-c-hack,C-Hack: Der Calwer Hackerspace
-AmyAssist,
-Schall-Rauch,"The ""schall&rauch"" festival"
 architecture-building-systems,Research group at ETH Zürich with a focus on active and passive systems for the energy supply and climate control of buildings and cities.
 IndEcol,Open source software and other material for industrial ecology
 YaleCIE,
-ieeeupsb,IEEE Student Branch - University of Porto (UP)
-reunb,
-cosseno-com,A plataforma oficial do estudante.
-magnusIQ,
-gatherly-eu,
 NZMSA,
 UNSW-CEEM,
 Open-ISP,An accessible and transparent electricity system model based on the Australian Energy Market Operator’s ‘Integrated System Plan’
 assume-framework,Agent based market model toolbox
-JuliaCollections,"Collections, Data Structures, and Algorithms for Julia"
-RelationalAI,
-JuliaServices,
-JuliaEcosystem,
 morgansolar,
 todogroup,TODO Group
 freedomvote,
@@ -2128,26 +1407,12 @@ ospo-nl,"Open Source Program Office collaboration, best practices of NL parties"
 GMLC-TDC,Repository for the GMLC TDC tool suite - HELICS
 Enapter,Shaping the energy systems of the future.
 openhab,
+heilongjianguniversity,
 PowerGridModel,Steady-state distribution power system analysis
-NREL,
-NREL-cookbooks,
-SEED-platform,Standard data platform for aggregating and managing building energy performance data
-HoneyPatch,
-ASHRAE,"Repos for the American Society of Heating, Refrigerating, and Air-Conditioning Engineers"
-BuildingSync,
-ibpsa,International Building Performance Simulation Association
-OpenEfficiencyPlatform,
-urbanopt,URBANopt
-henze-research-group,This organization contains repositories of ongoing research projects in Gregor Henze's Research Group at the University of Colorado Boulder
-BuildingEnergyTools,
 ClimAg,"Repositories for the EPA Research Project ""ClimAg: Multifactorial causes of fodder crises in Ireland and risks due to climate change"" and other related projects"
 wind-to-hydrogen-toolkit,"Tools to study the integration of offshore wind with the production, storage, and utilisation of hydrogen"
 spine-tools,Open source modelling tools
 WISPO-POP,
-fs-geofs,
-sensebox,The senseBox is a Citizen Science DIY Toolbox for schools and citizens.
-sitcomlab,"Working group of the Situated Computing Lab (Institute of Geoinformatics, Muenster)"
-go-gitea,Git with a cup of tea
 itesla,
 Artelys,Optimization solutions
 powsybl,Power System Blocks
@@ -2168,14 +1433,6 @@ JuliaStochOpt,Stochastic Optimization in Julia
 jump-dev,An organization for the JuMP modeling language and related repositories.
 robotmoose,ITEST: Being There telepresence robotics software
 UAFRMC,The University of Alaska Fairbanks team's entry in the NASA Robotic Mining Competition
-balmorelcommunity,
-ReeemProject,Role of technologies in an energy efficient economy – model based analysis policy measures and transformation pathways to a sustainable energy system
-energy-modelling-club,
-etsap-TIMES,
-Modelling-Team-GR,
-MaREI-EPMG,
-esma-cu,
-times-ukraine,
 lanl,
 powsybl,Power System Blocks
 panocomputer,Implementing computers on FPGA in Pano Logic thin clients
@@ -2186,14 +1443,6 @@ JuliaData,"Data manipulation, storage, and I/O in Julia"
 JuliaCloud,Cloud service interfaces for Julia
 beacon-biosignals,
 JuliaTesting,Testing tools for the Julia language
-AltruismeEfficaceQuebec,
-Macroscope-House,Intentional community from the rationalist / effective altruist community
-commonpool,
-HorizonEventsAgency,
-CoincidenceNetwork,Flexible and private matchmaking protocol and apps
-CovalenceNetwork,
-provablysafeai,
-HorizonOmega,
 openjournals,"Open Journals is a collection of open source, open access journals"
 data2people,
 Yello-Solar-Hub,"A Yello Solar Hub revoluciona o mercado solar, oferecendo uma experiência 100% digital e sob demanda. Do cálculo do seu projeto à instalação, tudo acontece de f"
@@ -2217,14 +1466,6 @@ JuliaTesting,Testing tools for the Julia language
 JuliaLogging,
 powsybl,Power System Blocks
 rosmod,
-oemof,Open Energy Modelling Framework - A modular open source framework to model energy supply systems
-Inovesa,
-kmi,
-hipster4j,An Open Source Java Library for Heuristic Search
-saezlab,Julio Saez-Rodriguez's group @ EMBL-EBI and Heidelberg University
-MetExplore,
-covid19-modeling,
-scapeML,
 nodeschool,Open source workshops that teach web software skills
 lucpod,
 nuqleartech,
@@ -2240,12 +1481,6 @@ telescopio-montemayor,
 fm-futura,
 ParOne,AI-Powered Video Solutions for Golf
 WattRex,
-organicmaps,"Detailed Offline Maps for Travellers, Tourists, Hikers and Cyclists "
-saec-dresden,
-AC-Fernglas,
-codez-one,
-WirVsVirusCovidTestProcess,
-HMP-Solutions,
 CircuitVerse,
 BlockchainClimateInstitute,Non-for-profit working on Data Technologies
 LLNL,"For over 70 years, the Lawrence Livermore National Laboratory has applied science and technology to make the world a safer place."
@@ -2263,32 +1498,18 @@ uf-mil,
 judou,20 年前挖的NLP的坑，现在填一下
 NREL-Sienna,Open Source Tools for Scientific Energy Systems Analysis
 UNH-CORE,UNH Center for Ocean Renewable Energy
+CliMA,"An alliance of scientists, engineers and applied mathematicians, dedicated to pioneering a new, data-informed approach to climate modeling"
 calkit,Reproducibility = productivity
-phpbrew,The PHPBrew Headquarters
-SeLite,Reuse navigation scripts in Selenium IDE
-BeautyInfo,Provide Beauty information
-NTTU-Open,
-ar2labs,Community & Collaboration
-linna,PHP Tools for Web Applications.
-thank-you-php,An open letter of gratitude to PHP
-PayCrypto,
-sunrise-php,"Simple, yet effective solutions."
-alphazframework,AlphaZ is a simple yet powerful PHP MVC framework for rapid application development that is suited for small to medium scale apps and APIs.
-antidot-framework,Antidot Framework and Component Development
-selective-php,Collection of awesome PHP packages
-free-open-source,
-open-source-contributions,
-lazzard,We Make Things That Do Stuff
-Pharaonic,Pharaonic provides a variety of packages. Our goal is helping every developer around the world finish their project as quickly as possible and with no effort.
-iii-api-platform,
 softavnetworks,
 PowerGridModel,Steady-state distribution power system analysis
 GMLC-TDC,Repository for the GMLC TDC tool suite - HELICS
 tis-innovation-park,TIS innovation park has been merged into the new service agency IDM-Südtirol. The repos can be found under new organisazion https://github.com/idm-suedtirol
 NexdApp,
 GWI-UMSICHT,
-Critical-Infrastructure-Systems-Lab," Connecting climate, water, and energy"
+Critical-Infrastructure-Systems-Lab,"Connecting climate, water, and energy"
 nimib-land,
+CMCRobotics,
+CosmicPi,Cosmic Pi low cost cosmic ray detector project
 NVIDIAGameWorks,NVIDIA Technologies for game and application developers
 JuliaGraphs,Graph modeling and analysis packages for the Julia programming language
 JuliaDynamics,"A Julia-based software organization for dynamical systems, nonlinear dynamics, complex systems and the complexities of the scientific life"
@@ -2309,9 +1530,6 @@ bionnx,"Bringing bionic capabilities to you through machine learning, Rust, WebG
 powsybl,Power System Blocks
 keedrop,Secure secrets transfer
 IS3UniCologne,Git Repository of the Chair for Information Systems for Sustainable Society at the University of Cologne
-interactiveinstitute,
-sp-etx,
-YanziNetworks,
 MESAHub,Modules for Experiments in Stellar Astrophysics
 flatironinstitute,@SimonsFoundation
 scientific-computing-handbook,"Your definitive guide to implementing algorithms for scientific computing in C++, Python, and Julia"
@@ -2323,32 +1541,13 @@ xsdk-project,Organization for the Extreme-scale Scientific Software Development 
 ginkgo-project,Informal organization steering the development of the Ginkgo library and related software.
 locuslab,Zico Kolter's Research Group
 gridlab-d,GridLAB-D is a distribution level power system simulator designed to allow users to create and analyze smart grid technologies.
-vagrant-libvirt,
 OpenLeo,OpenLeo is a collective that aims to create an opensource car electronics and software ecosystem.
 litestar-org,Effortlessly Build Performant APIs
 jolt-org,Just Jolt.
-znc,
-awesomeWM,
-CvO-Theory,
 spine-tools,Open source modelling tools
 pypsa-meets-earth,An open source energy system model initiative for our Earth
-doctolib,Our mission is to build together the healthcare we all dream of. Learn more about our engineering team on our career page.
-RhobanProject,
+open-energy-transition,Non-profit that accelerates the energy transition with open data and open source software solutions.
 KwangIO,
-apache,
-JuliaLang,The Julia Programming Language
-JuliaStats,Statistics and Machine Learning made easy in Julia
-JuliaDatabases,Various database drivers for Julia
-JuliaWeb,Web technologies in the Julia Programming Language
-JuliaIO,A collection of Julia packages for unified IO infrastructure
-JuliaData,"Data manipulation, storage, and I/O in Julia"
-JuliaCloud,Cloud service interfaces for Julia
-JuliaStrings,
-JuliaServices,
-JuliaLogging,
-appministry,
-gossiperl,"Gossiperl is a language agnostic, Apache Thrift based gossip middleware and message bus."
-combust-labs,
 jmscslgroup,The Compositional Systems Lab (CSL) is located within the Institute for Software Integrated Systems at Vanderbilt University
 CIRCLES-consortium,
 AARC-lab,"AI, Autonomy, Resilience, and Control Lab"
@@ -2356,16 +1555,18 @@ apache,
 SkyAPMTest,
 SkyAPM,
 mosn,The Cloud-Native Network Proxy Platform
-scultura-org,
 OpenFunction,OpenFunction is a cloud-native open source FaaS (Function as a Service) platform
 NovvumHacks,
+qtile,
+mkbdfr,Communauté française des claviéristes :fr:
+formalco,
+Refty,
 Circuitscape,Circuit-theoretic computations for landscape ecology
 JuliaDatabases,Various database drivers for Julia
 cetlab-ucsb,
 invenia,
 LAMPSPUC,"Laboratory for research and development on mathematical programming (optimization) and statistics. Electrical and Industrial Engineering departments, PUC-Rio."
 psrenergy,PSR has been a global provider of technological solutions and consulting services in the areas of electricity and natural gas (E&G) since 1987.
-zndx,
 powsybl,Power System Blocks
 MATPOWER,
 KSA-Oepites-Zomergem,
@@ -2384,14 +1585,10 @@ Exposify,"Checkout our API product for real estate plattforms, EstateSync:"
 containernet,A Mininet fork that allows to use Docker containers as hosts to emulated networks.
 HPI-Information-Systems-Teaching,
 EstateSync,
-csvsoundsystem,
-browninstitute,Story + Technology
-thaneyriordan,
 rlai-lab,
 conda-forge,"A community led collection of recipes, build infrastructure and distributions for the conda package manager."
 rmax-archive,The repositories here are kept for historical or backup reasons. They will be no longer maintained whatsoever.
 rmax-contrib,The repositories here are forks of open-source projects where I made or plan to make contributions to.
-Barunastra-ITS,
 Rackow-Schulen,Higher education company based in Berlin and Frankfurt
 Farama-Foundation,The Farama foundation is a nonprofit organization working to develop and maintain open source reinforcement learning tools.
 Energy-MAC,EMAC does research to advance decarbonization pathways for the electric grid.  Our members work and study at UC Berkeley and Lawrence Berkeley National Lab.
@@ -2403,6 +1600,9 @@ JuliaData,"Data manipulation, storage, and I/O in Julia"
 JuliaCloud,Cloud service interfaces for Julia
 JuliaPy,Software that connects the Julia and Python languages.
 JuliaHealth,"Using the Julia programming language to improve medicine, health care, public health, and biomedical research."
+Flutter-Global,The home of inner source at Flutter.
+FlutterInt,
+StreamNest,"Real time streaming , drop in replacement for kafka"
 powsybl,Power System Blocks
 MERLCenter,"Exploring the use of technology for monitoring, evaluation, research, and learning."
 INATECH-CIG,
@@ -2412,60 +1612,47 @@ isi-ies-group,Instruments and Systems Integration group - Solar Energy Institute
 ETSIDI-py,Promoción de la programación práctica y divertida en la ETISID-UPM (basada en Python)
 DAXGRID,DAX is a specialist in software solutions tailored for utility companies involved in electricity and fiber distribution.
 strnx,
-NOVAGIS,
-isegimap,
-MapLesotho,
-cgmes,CIM profiles for TSO system development and system operation data exchanges
-caseformat,Power flow case data file format
-cktcsv,Unbalanced multi-phase circuit data in CSV format
-powe-rs,
+ladda-js,
+the-road-to-learn-react,Free ebook to learn the fundamentals of React in a practical way by building an application yourself.
+javascript-machine-learning,A place for machine learning projects in JavaScript. Learn more about ML in JS on the official website.
+taming-the-state-in-react,Ebook to learn the fundamentals of State in React in a practical way by building applications yourself.
+the-road-to-graphql,GraphQL book to learn the fundamentals about GraphQL in JavaScript with React and Node.
+the-road-to-react-with-firebase,A Firebase in React book that teaches you how to build business applications.
+the-road-to-gatsby,Gatsby book to learn the fundamentals about Blogging with React in JavaScript.
 aximgeo,Clarity Through Geography
-tweetbill,
 byuflowlab,"Fight, Learning, Optimization, and Wind"
-wgu-101,
-smallbunnies,
-ES-DOC,"Earth System Documentation (ES-DOC) project supplies high-quality tools & services in support of earth system documentation creation, analysis and dissemination"
-cf-convention,Source code repository for CF Conventions documents at http://cf-convention.github.io
-ES-DOC-INSTITUTIONAL,
-NCAS-CMS,Useful tools to support NERC weather and climate research
-torusa,"Tom, Ruby & Sadie"
-2021-Energy-Climate-Hackathon,
-IS-ENES3,Infrastructure for the European Network for Earth System Modelling
-GreenScheduler,
-NCAS-VISION,"VISION: Virtual Integration of Satellite and In-Situ Observation Networks, a project by NCAS: National Centre for Atmospheric Science"
 urbanopt,URBANopt
 railslove,"We're an agile team building new products for the web. And oh boy, we're kind of good at it. Want to work with us?"
 e4st-dev,"Projects for the Engineering, Economic, and Environmental Simulation Tool"
 groupoasys,
 tud-energy-economics,Chair of Energy Economics at TU Dresden
-agoenergy,"Agora Energiewende is a think tank that develops evidence-based and politically viable strategies to advance the goal of climate neutrality in Germany, Europe, "
+agoenergy,"Agora Energiewende is a think tank that develops evidence-based and politically viable strategies to advance the goal of climate neutrality in Germany, Europe,"
 learning-gardens,Learning Platform and Support Structure
 new-computers,"a group of people interested in “What’s After Now”, the alternative form, A New Spirit of Computation, PC Futures, etc..."
+ansuiuc,
+ucsusa,Science for a healthy planet and safer world.
 go-schwab,building go wrappers & tools for schwab's api products
 JuliaBayesianOptimization,
 Boavizta,
 Hugging-Face-Helping-Hand,
 genai-impact,
-RSE-TGM,
 grueneschweiz,
 jungegruene,Giovani Verdi Svizzera ፨ Jeunes Vert·e·x·s Suisse ፨ Junge Grüne Schweiz ፨ jungegrüne
 E3SM-Project,Repositories associated with the E3SM Project
-agoenergy,"Agora Energiewende is a think tank that develops evidence-based and politically viable strategies to advance the goal of climate neutrality in Germany, Europe, "
+agoenergy,"Agora Energiewende is a think tank that develops evidence-based and politically viable strategies to advance the goal of climate neutrality in Germany, Europe,"
 open-source-uc,"Community of students, alumni and professors from the Catholic University of Chile working together to create and maintain awesome open-source projects."
 ieeh-tu-dresden,Official github account of the IEEH (@ TU Dresden) - one of the leading German higher education research institutes in the field of power systems
 LivGen,
 esgf-nimbus,
 levigo,Wir sind Hersteller leistungsstarker Software für den Plattform-unabhängigen Zugriff auf Dokumentenmanagement-Systeme.
-ComputationalRadiationPhysics,
-openPMD,Open Standard for Particle-Mesh Data
-alpaka-group,Abstraction Library for Parallel Kernel Acceleration
 U-QASAR,
 typhon-project,Polyglot and Hybrid Persistence Architectures for Big Data Analytics
 survemobility,Europe’s No 1 for intelligent shared mobility operations.
 sophisticates,
 ampeersenergy,Einfache & Profitable CO2-Minderung für die Immobilienwirtschaft
 ARM-DOE,
-MLabUofA,
+datarootsio,Supporting your data driven strategy.
+dbt-msft,dbt projects for MSFT data ecosystem. Not affiliated with Microsoft. Original creators of dbt-synapse and dbt-fabric which have been transferred to Microsoft.
 ie3-institute,Official github account of the ie3 - one of the leading German higher education research institutes in the field of energy
 dspace-group,Your Partner in Simulation and Validation
 oemof,Open Energy Modelling Framework - A modular open source framework to model energy supply systems
@@ -2489,42 +1676,18 @@ best-practicers,Best practicing our way to a better Ethereum
 WrappedBasketz,"ERC20 into ERC721, Chainlink Hackathon project"
 tdcosim,PSSE + OpenDSS + DER co-simulation project
 solventx,A repository for solvent extraction process design and simulation.
-NixOS,
-AllThing,We are the AllThing. You will love us.
-scirate,
-OpenScienceWorkshops,
-hahayes,creative group based in austin texas and melbourne australia.
-SexMonad,
-stupidhackathonmelbourne,
-internet-high-five-machine,
-ml-lab,forks of interesting repos relating to machine learning
-MachineLearningUniversity,
-composeconference,
-DataHaskell,The home of Haskell data science
-ComputingVisions,
-QuantixManifold,
-Quantum-AI-Blockchain,
-MFPAI,
-vandersilk,
-BraneShop,
-BetweenBooks,
-rowtype-yoga,
-QuantumHaskell,
-FixPlanet,Supporting you to find a sustainable fixed point for the planet :)
+open-energy-transition,Non-profit that accelerates the energy transition with open data and open source software solutions.
 HEPTACOM,
 oemof,Open Energy Modelling Framework - A modular open source framework to model energy supply systems
 corticalsim,
 IEPG,
+JuliaGaussianProcesses,
+Theoretical-Neuroscience-Group,
 FiniteVolumeTransportPhenomena,Modeling of transport phenomena using the finite volume method
 calculix,Developers area of CalculiX Finite Element Software
 rendercv,Our mission is to build the best tools for academics and engineers to write and maintain their Typst-based professional CVs.
-calliope-project,A multi-scale energy systems modelling framework
-openmod-initiative,
-renewables-ninja,"Renewable energy simulations, ninja style."
-conda-forge,"A community led collection of recipes, build infrastructure and distributions for the conda package manager."
-Open-Power-System-Data,
-sentinel-energy,Sustainable Energy Transitions
-liacs-EDA,
+modelica,Projects of the Modelica Association
+OpenModelica,
 alohaeditor,A JavaScript library to replace contentEditable with better capability
 sandstorm,sandstorm - building great web applications
 neos,Neos is a Content Application Platform with a CMS and an application framework at its core.
@@ -2562,6 +1725,7 @@ WhitestormJS,3D Web framework (engine)
 Shyran-Systems,"Community, Services, Consulting"
 wallo-archive,modern access control
 ait-energy,
+wattcarbon,"Procure clean energy in the places, times and communities that are important to your business. Go distributed."
 redaxo,c/o Yakamara Media GmbH & Co. KG
 propelorm,
 amphp,"AMPHP is a collection of high-quality, event-driven libraries for PHP designed with fibers and concurrency in mind."
@@ -2571,24 +1735,14 @@ jquery-validation,people and sources arround the jquery validation plugin projec
 sabre-io,
 Bravos-Power,Bravos Power builds next-generation analytical systems for trading financial products across different power markets in North America.
 ie3-institute,Official github account of the ie3 - one of the leading German higher education research institutes in the field of energy
+open-energy-transition,Non-profit that accelerates the energy transition with open data and open source software solutions.
 Dartroom,Curated NFT marketplace on the Algorand network.
 Fox-Stone-Projects,Makers of Dorpel Op Maat
 w3c,We are an international community that develops open standards to ensure the long-term growth of the Web. Most of our groups do their work here.
 aio-libs,The set of asyncio-based libraries built with high quality
 home-assistant,Open source home automation that puts local control and privacy first. Powered by a worldwide community of tinkerers and DIY enthusiasts.
 lowvisiongeek,
-bazzline,Place for free as in freedom free software components. Its an organization so every one can join :-).
-MediaLibrary,
-Sektion9,
-time-registration,
-saxony,
-be-excellent-to-each-other,
-elbzone,
-phpugfg,
-in-your-face-productions,
-billoboys,
-the-g-attitude,
-gescheid,
+pynbody,
 RWTH-OS,Part of the Institute for Automation of Complex Power Systems
 nak-sued-webmasters,Community of webmasters of New Apostolic Church in South Germany. Goal: CMS solution for websites of church districts.
 Sybit-Education,Educational projects at Sybit GmbH to power up our youngsters - www.sybit.com
@@ -2600,6 +1754,7 @@ cunicu,zeroconf • p2p • mesh • vpn
 caltech-netlab,
 Pure-Driving-School,
 mHealthBuet,
+QSCTech,一入潮门，终生潮人
 NLeSC,
 calliope-project,A multi-scale energy systems modelling framework
 simplefit,
@@ -2609,19 +1764,18 @@ MUnique,
 AntaresSimulatorTeam,
 virianproject,
 dielibel,
+igraph,
 microfocusbbn,
 decc,Department for Energy Security & Net Zero
 greenonblack,"We are a software consultancy based in Brighton, England. Our strengths are in solving complex problems and in visualising data."
-cookbooks,
 lanl,
 lanl-ansi,Los Alamos Advanced Network Science Initiative
 C4Coin,Building a carbon-negative public blockchain providing the first viable economic incentive to retire voluntary carbon credits.
 Exiv2,Image metadata library and tools
 GENeSYS-MOD,
 gridlab-d,GridLAB-D is a distribution level power system simulator designed to allow users to create and analyze smart grid technologies.
-a-team,
-remoteoss,"Remote helps with international payroll, benefits, taxes, stock options, and compliance for businesses big and small!"
 Climact,Empowering you to act on climate change
+open-energy-transition,Non-profit that accelerates the energy transition with open data and open source software solutions.
 indibit-eu,
 DARC-e-V,
 puzzle,
@@ -2632,43 +1786,11 @@ openclimatefix,Using open science to mitigate climate change
 Digitalized-Energy-Systems,We are a research group of the University of Oldenburg in Germany dedicated to the resilient operation of digitalized energy systems.
 ibpsa,International Building Performance Simulation Association
 OpenHybridSim,OpenHybridSim:An open source tool for Electromagnetic Transient (EMT)-Transient Stability (TS) hybrid simulation
-codeformuenster,
-Green-Wave,
 tibeerorg,Just a test organization of @tibeer
 terraformbuch,
-JerichoCompany,
-TheProject004,
-GridFlex,
-thomas-server,
-Flexus-Energy,
 Azure,"APIs, SDKs and open source projects from Microsoft Azure"
-JuliaLang,The Julia Programming Language
-JuliaGPU,GPU Computing in Julia
-JuliaGraphics,
-JuliaCI,Continuous integration (CI) support for the Julia programming language
-JuliaGeometry,Computational Geometry with Julia
-JuliaIO,A collection of Julia packages for unified IO infrastructure
-HolyLab,None
-JuliaImages,Julia packages for image processing
-JuliaPackaging,Tooling for Julia's binary packages and dependencies
-JuliaMath,Mathematics made easy in Julia
-JuliaArrays,Custom array types (and utilities for building array types) for Julia
-JuliaGizmos,A garage in dimension c-137
-JuliaCollections,"Collections, Data Structures, and Algorithms for Julia"
-JuliaRegistries,
-JuliaLinearAlgebra,A collection of linear algebra packages for the Julia Programming Language.
-JuliaDebug,
-JuliaGtk,
-juliamatlab,Includes everything that is related between Julia and Matlab!
-julia-actions,An organisation to host and maintain GitHub Actions useful for Julia projects.
-JuliaPerf,
-JuliaNeuroscience,Flexible neuroinformatics tools built on high performance computational tools.
-JuliaHealth,"Using the Julia programming language to improve medicine, health care, public health, and biomedical research."
-AdvancedScientificComputingInJuliaWashU,
-calliope-project,A multi-scale energy systems modelling framework
-openmod-initiative,
-repolicy,
 JuliaEnergy,
+gisce,IT for Energy utilities
 itesla,
 thehackerwithin,
 SoftwareDefinedBuildings,
@@ -2680,12 +1802,9 @@ jso-docs,
 SolverStoppingJulia,Packages related to using Stopping for iterative solvers in Julia
 microsoft,Open source projects and samples from Microsoft
 codelayerhq,
-kinicles,
-BlocksInMotion,
-openborders,
-CPS-IT,
-aspec-german,
-internationalasexualityday,
+makers-upv,La comunidad de estudiantes en movimiento
+cossan-working-group,
+Institute-for-Risk-and-Uncertainty,
 DataKind-UK,
 nismod,
 colouring-london,"Now under ""Colouring Cities"""
@@ -2696,13 +1815,13 @@ ES-Tec,
 rweekly,
 ok-dk,Danish local group of Open Knowledge
 LibratechAI,AI for the legal system of tomorrow
-ClojureBridgeAmsterdam,
-mediquest-nl,Improving healthcare with data
 robotology,Group software repositories of the iCub eco-system (but code developed is not necessarily iCub specific!).
 robotology-playground,"🚧 experimental, not stable and not mantained repositories that may be eventually hosted in the robotology GitHub organization 🚧"
 RoboStack,Maintaining cross-platform ROS packages for conda and mamba
 icub-tech-iit,iCub Tech Facility at Istituto Italiano di Tecnologia
 mamba-org,
+OSeMOSYS,Open-source Energy Modelling System
+DeltaE,ΔE+ (Delta-E-plus) explores the synergies and trade-offs at the nexus of energy+ to support effective policy development.
 gridlab-d,GridLAB-D is a distribution level power system simulator designed to allow users to create and analyze smart grid technologies.
 JuliaStochOpt,Stochastic Optimization in Julia
 sintefore,An organization for the public available software developed by the research group
@@ -2713,8 +1832,6 @@ powsybl,Power System Blocks
 ImperialCollegeLondon,Imperial College London main code repository
 FrancisCrickInstitute,
 goehringlab,Polarity and Patterning Networks Lab at the Francis Crick Institute
-Fuinn,
-f3l,
 Kinovarobotics,
 RoboticsDesignLab,The Robotics Design Lab
 trinity-tech,
@@ -2734,8 +1851,8 @@ JuliaGraphics,
 awegroup,
 aenarete,
 OpenSourceAWE,
+MOSEK,One of the world-leading supplier of software for mathematical optimization.
 ICT4SD,Coding together for the Sustainable Development Goals
-MYZAI,Seeking new ways through mathematical AI
 ginmon,
 oemof,Open Energy Modelling Framework - A modular open source framework to model energy supply systems
 wind-python,
@@ -2746,69 +1863,30 @@ ScienceBasedTargets,
 UniDank,Progetti del corso di Informatica L-31 ad UniPa
 cheshire-cat-ai,
 STEllAR-GROUP,
-RDCEP,
-alumNY,This is an older github org we used to use for hackNY stuff. We now use github.com/hackny.
-elm-lang,Official organization for developing Elm's compiler and core tools
-hack-at-uchicago,
+matlab-deep-learning,"Deep learning resources, including pretrained neural network models."
 SecCEN,Machine learning to Cyber security tasks at Scale
 cen-labs,
-Fum-Tech,
 powsybl,Power System Blocks
 MaREI-EPMG,
 r-spatial,"For packages raster, terra, dismo & geosphere visit the rspatial github organisation (mind the missing '-')"
 ls1intum,"Technical University of Munich - School of Computation, Information and Technology"
 seapath,
-igsegg,The Early-career Glaciologists Group (EGG) of the International Glaciological Society (IGS)
-GEUS-Glaciology-and-Climate,GEUS Department of Glaciology and Climate
-GEUS-SICE,Pre-operational Sentinel-3 snow and ice products (SICE)
-GlacioHack,
-AMAP-Arctic,
-cryo-data,Cryospheric data acess via Git and DataLad
-APECS-Earth-Observation,
-autonomous-phase-sensitive-radar,A community of users of ApRES (autnonomous phase-sensitive radio-echo sounder)
-Machine-Learning-in-Glaciology-Workshop,"Workshop on Machine Learning applied to Glaciology, hosted at the Finse research station (Norway)"
-CryoInTheCloud,
-openosmia,
 Open-Power-System-Data,
 Joulia-jl,We moved to JuliaEnergy
 JuliaEnergy,
 ARM-DOE,
-CxxTest,
-gcovr,
-Pyomo,
 SpeedyWeather,We reinvent atmospheric modelling.
 TUM-PIK-ESM,Earth System Modelling Group at TUM / Future Lab Artificial Intelligence in the Anthropocene at PIK
-UARENForecasting,
-pvlib,
-conda-forge,"A community led collection of recipes, build infrastructure and distributions for the conda package manager."
-DandI-Group,
-CastroRegionalClimateGroup,
-CLIMAS-UA,
-openpvtools,
-SolarArbiter,
-SolarPerformanceInsight,
-GridOptiSolutions,
 redite,we just got bored
 damarseta,@widnyana's playground
-Dakarlug,
-flexiblepower,FAN is open standard and implementation that connects devices with energy management services.
-sensorstorm,
+widnyana-archive,"Archiving @widnyana's greates magic spell, and brewing recipes"
+guwenLab,构建一个基于PC + 移动端 + App + 小程序的全生态浏览体系 ，最后的目标是做一个免费 开源的古文社区
+varletjs,varletjs organization
 grassrootseconomics,Grassroots Economics facilitates the development of resilient economies and thriving communities through the creation of community asset vouchers
 atto-byte,
 ordino-ai,
 Harambee-Dev,:building_construction:
 tydoc,The TypeScript documenter that meets you where you are
-ermongroup,
-sailinglab,
-dragonfly,
-fusion-ml,
-self-optimizing-systems,
-naszilla,
-realworldml,
-uncertainty-toolbox,"A python toolbox for predictive uncertainty quantification, calibration, metrics, and visualization."
-TorchUQ,
-LLM360,
-willjschmitt-codeu-2018,
 UCL,To join the organisation contact UCL's Advanced Research Computing Centre via MyServices
 SALib,Sensitivity analysis library for systems modeling
 OSeMOSYS,Open-source Energy Modelling System
@@ -2819,9 +1897,7 @@ Spilett-new-technologies-GmbH,"Projekten in den Bereichen Erneuerbare Energien, 
 GoodSpeech,
 kpn,Official GitHub for the Koninklijke KPN N.V.
 commitizen-tools,Manage your projects easily with the set of commitizen tools
-openego,open electricity Grid optimization
 juliakorea,Julia Korea organization
-GridOPTICS,
 golangid,
 musobarlab,Powered by Musobar Media
 telkomdev,Telkom DEV (Digital Product Engineering) open source projects (Powered By Telkom Indonesia)
@@ -2831,7 +1907,6 @@ lowlevelid,
 TJU-DRL-LAB,Offiical account of Tianjin University Deep Reinforcement Learning Lab
 CADWR-Climate-Change-Program,DWR Climate Change Program addresses climate change impacts through mitigation and adaptation measures to ensure that Californians have an adequate water supply
 zavalab,The Scalable Systems Lab at UW-Madison
-grifflug,
 PPOE,
 my-stage,
 AcubeSAT,AcubeSAT is a CubeSat nanosatellite to culture cells in-orbit and probe changes in gene expression
@@ -2839,13 +1914,15 @@ EMTech-AUTh,The Hellenic Space Dawn space mission involving a constellation of n
 julia-lang-athens,"This organization is about the Julia users group based in Athens, Greece."
 gafusion,Theory group code repository
 Parsl,"Parsl: Enabling easy parallelism on clusters, clouds and supercomputers."
-UGM-EPSLab,
 refugeetech,
 JuliaOpt,(Obsolete organization; see github.com/jump-dev) Mathematical Optimization in Julia
 JuliaGeo,Geospatial packages for Julia
+pypsa-meets-earth,An open source energy system model initiative for our Earth
+open-energy-transition,Non-profit that accelerates the energy transition with open data and open source software solutions.
 Digital-Structures,
 tdcosim,PSSE + OpenDSS + DER co-simulation project
-monatized,
+Future-Power-Networks,An inter-university research union for theories and techonologies to support renewable power networks.
+Future-Power-Networks,An inter-university research union for theories and techonologies to support renewable power networks.
 powsybl,Power System Blocks
 pangeo-data,A community effort for big data geoscience
 catalyst-cooperative,Catalyst is a small data engineering cooperative working on electricity regulation and climate change.
@@ -2857,42 +1934,6 @@ sait-data-475,
 GWA-grid-team,Goldwind Australia grid team enterprise workspace
 CPES-Power-and-Energy-Systems,"INESC TEC’s leading actor in the decarbonization of the energy system, electrification of the society, and increased energy efficiency."
 sanyuankexie,GUET Student Association of Science and Technical
-bioperl,"Free and Open Source Perl tools for bioinformatics, genomics, and life science"
-PDLPorters,"PDL (""Perl Data Language"") gives standard Perl the ability to compactly store and speedily manipulate large N-dimensional data arrays"
-CougarCS,CougarCS ❤️ Computer Science
-SnapSyllabus,
-eclectic-extractions,
-Perl5-Alien,"This is the old home of alienfile + Alien::Base + Alien::Build, please see the new org: https://github.com/PerlAlien"
-HoustonHackers,
-oh-uhouston,
-perl-grimoire,
-project-renard,
-EntropyOrg,
-orbital-transfer,
-primordial-soup,"Scraping, transformation, etc."
-EntropyOrg-staging,
-bluebonnet,"remote storage / VFS (rclone, freenet)"
-EntropyOrg-web,
-EntropyOrg-data,
-UHCodeRED,
-NacrePerl,
-CBL-ORION,
-wearehx,
-project-renard-survey,Survey of software for @project-renard
-ikiwiki-dakine,
-orbital-transfer-survey,Survey of software for @orbital-transfer
-zmughal-CPAN,CPAN modules (Perl 5/7) maintained by @zmughal
-perl-actions,actions helper for Github workflows
-PerlAlien,Create and use non-Perl dependencies for CPAN
-PerlFFI,Libraries and tools for developing FFI bindings in Perl
-zmughal-contrib,Contributions by @zmughal
-DesmosomeOrg,A binding body
-Perl-OpenMP,Perl and OpenMP. What could possibly go right.
-perlrdf,Modules for working with RDF using Perl
-Perl-GPU,"Perl, OpenGL, and other hardware acceleration libraries"
+devcontrol,
 Estivador,CloudOps afficiados
 ARMfarm,Modular multiple Arm® Cortex® 64-bit CPUs based server system running Linux and scalable Kubernetes cluster
-Team-Neighborhood,All We Are Neighborhood
-wakanda-ai,
-geultto,
-MLOpsKR,

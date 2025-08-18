@@ -31,10 +31,7 @@ CLASSIFICATION = util.read_yaml("classification")
 ORG_MAPPING = util.read_yaml("org_mapping")
 EMAIL_DOMAIN_MAPPING = util.read_yaml("email_domains")
 COUNTRY_MAPPING = util.read_yaml("country_mapping")
-try:
-    GECODE_CACHE = util.read_yaml("geocode_cache")
-except FileNotFoundError:
-    GECODE_CACHE = {}
+GECODE_CACHE = util.read_yaml("geocode_cache", exists=False)
 
 ACADEMIC_EMAIL_DOMAINS = requests.get(
     "https://raw.githubusercontent.com/Hipo/university-domains-list/refs/heads/master/world_universities_and_domains.json"
@@ -269,19 +266,25 @@ def geocode_locations(locations: Iterable[str]):
     # Process locations
     geocode_locations = set(locations) - GECODE_CACHE.keys()
     # First try to extract countries using pattern matching
+    disable_tqdm = len(geocode_locations) < 2
     if geocode_locations:
         for location in tqdm(
-            geocode_locations, desc="Extracting countries by string matching"
+            geocode_locations,
+            desc="Extracting countries by string matching",
+            disable=disable_tqdm,
         ):
             country = extract_country(location)
             if country is not None:
                 GECODE_CACHE[location] = country
 
     geocode_locations -= GECODE_CACHE.keys()
+    disable_tqdm = len(geocode_locations) < 2
     # Then try geocoding for locations without a country
     if geocode_locations:
         for location in tqdm(
-            geocode_locations, desc="Extracting countries by geocoding"
+            geocode_locations,
+            desc="Extracting countries by geocoding",
+            disable=disable_tqdm,
         ):
             start = int(time.time())
             try:
@@ -356,7 +359,9 @@ def cli(user_details: Path, out_path: Path):
     user_df = pd.read_csv(user_details, index_col=0)
     geocode_locations(user_df.location.dropna().unique())
     user_dict = []
-    for username, user_data in tqdm(user_df.iterrows(), desc="Classifying users"):
+    for username, user_data in tqdm(
+        user_df.iterrows(), desc="Classifying users", total=len(user_df)
+    ):
         company = user_data["company"]
         if pd.isnull(company) and pd.notnull(user_data["email_domain"]):
             # For simplicity, we just take the first result (there _could_ be several)
@@ -381,7 +386,7 @@ def cli(user_details: Path, out_path: Path):
         )
     util.dump_yaml("geocode_cache", GECODE_CACHE)
     classification_df = pd.DataFrame(user_dict)
-    classification_df.to_csv(out_path, index=False)
+    classification_df.sort_values("username").to_csv(out_path, index=False)
 
 
 if __name__ == "__main__":

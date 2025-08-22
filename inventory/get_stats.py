@@ -74,7 +74,7 @@ def get_ecosystems_entry_data(
         if repo_data is None:
             if tool.id in existing_data.index:
                 suffix = "; using older data"
-                repo_dfs.append(existing_data.loc[[id]])
+                repo_dfs.append(existing_data.loc[[tool.id]])
             else:
                 suffix = ""
             LOGGER.warning(

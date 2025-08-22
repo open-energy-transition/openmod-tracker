@@ -1,0 +1,24 @@
+name: App test CI
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  serve-app:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5.6.0
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r website/requirements.txt pytest
+
+      - name: Run app tests
+        run: pytest tests/test_app.py

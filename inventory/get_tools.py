@@ -266,7 +266,7 @@ def cli(outfile: Path):
     )
 
     entries["id"] = entries.name.map(
-        lambda x: re.sub(r"\s|\-|\.", "_", str(x).strip().lower())
+        lambda x: re.sub(r"\s|\-|\.|\,", "_", str(x).strip().lower())
     )
 
     entries = add_categories(entries)

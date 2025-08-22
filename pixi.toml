@@ -22,6 +22,12 @@ inputs = ["inventory/output/filtered.csv", "inventory/get_stats.py"]
 outputs = ["inventory/output/stats.csv"]
 depends-on = ["filter-tools"]
 
+[tasks.get-docs]
+cmd = "python $PIXI_PROJECT_ROOT/inventory/get_docs.py inventory/output/stats.csv inventory/output/docs.csv"
+inputs = ["inventory/output/stats.csv", "inventory/get_docs.py"]
+outputs = ["inventory/output/docs.csv"]
+depends-on = ["get-stats"]
+
 [tasks.get-repo-users]
 cmd = "python $PIXI_PROJECT_ROOT/user_analysis/get_repo_users.py --stats-file inventory/output/stats.csv --out-path user_analysis/output/user_interactions.csv"
 inputs = ["inventory/output/stats.csv", "user_analysis/get_repo_users.py"]

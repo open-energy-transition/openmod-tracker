@@ -86,11 +86,11 @@ def create_vis_table(tool_stats_dir: Path, user_stats_dir: Path) -> pd.DataFrame
     Returns:
         pd.DataFrame: Filtered and column renamed tool table.
     """
-    stats_df = pd.read_csv(tool_stats_dir / "stats.csv", index_col="url")
-    tools_df = pd.read_csv(tool_stats_dir / "filtered.csv", index_col="url")
-    df = pd.merge(
-        left=stats_df, right=tools_df, right_index=True, left_index=True
-    ).reset_index()
+    stats_df = pd.read_csv(tool_stats_dir / "stats.csv", index_col="id")
+    tools_df = pd.read_csv(tool_stats_dir / "filtered.csv", index_col="id")
+    docs_df = pd.read_csv(tool_stats_dir / "docs.csv", index_col="id")
+
+    df = pd.merge(left=stats_df, right=tools_df, right_index=True, left_index=True)
     df["Interactions"] = (
         _create_user_interactions_timeseries(user_stats_dir)
         .reindex(df.url.values)
@@ -109,7 +109,13 @@ def create_vis_table(tool_stats_dir: Path, user_stats_dir: Path) -> pd.DataFrame
 
     for col, dtype_func in COLUMN_DTYPES.items():
         df[col] = dtype_func(df[col])
-    df["Docs"] = df["pages"].fillna(df["rtd"]).fillna(df["wiki"]).fillna(df["homepage"])
+    df["Docs"] = (
+        docs_df["pages"]
+        .fillna(docs_df["rtd"])
+        .fillna(docs_df["wiki"])
+        .fillna(df["homepage"])
+    )
+    breakpoint()
     df["Score"] = pd.Series(
         np.random.choice([0, 100], size=len(df.index)), index=df.index
     )

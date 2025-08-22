@@ -1,21 +1,18 @@
 """Get ecosyste.ms stats for defined projects."""
 
 import logging
-from collections.abc import Iterable
 from datetime import datetime
 from pathlib import Path
-from urllib.parse import urlparse
 
 import click
 import pandas as pd
-import requests
 import util
-import yaml
 from tqdm import tqdm
 
 NOW = datetime.now()
 LOGGER = logging.getLogger(__name__)
 ENTRIES_TO_KEEP = [
+    "html_url",
     "owner",
     "archived",
     "stargazers_count",
@@ -32,9 +29,6 @@ EXTRA_COLS = [
     "last_month_downloads",
     "dependent_repos_count",
     "latest_release_published_at",
-    "rtd",
-    "pages",
-    "wiki",
 ]
 LAST_MONTH = NOW.month - 1
 try:
@@ -49,16 +43,10 @@ except FileNotFoundError:
     )
 
 JULIA_STATS_API = "https://juliapkgstats.com/api/v1/monthly_downloads/"
-ECOSYSTEMS_CACHE_FILE = Path(__file__).parent / "ecosystems_urls.yaml"
-ECOSYSTEMS_CACHE = (
-    yaml.safe_load(ECOSYSTEMS_CACHE_FILE.read_text())
-    if ECOSYSTEMS_CACHE_FILE.exists()
-    else {}
-)
 
 
 def get_ecosystems_entry_data(
-    urls: Iterable, existing_data: pd.DataFrame
+    tools: pd.DataFrame, existing_data: pd.DataFrame
 ) -> pd.DataFrame:
     """Get data about repositories and associated packages from ecosyste.ms.
 
@@ -70,26 +58,28 @@ def get_ecosystems_entry_data(
     - PyPi downloads statistics are for last month (or _the_ last month?) only, not total.
 
     Args:
-        urls (Iterable): URLs (index) of tools (name = values) to search.
+        tools (pd.DataFrame): tools to search. `id` & `url` columns are used.
         existing_data (pd.DataFrame): Existing data for all / most URLs, to fill in for server-side errors (which are common).
 
     Returns:
         pd.DataFrame: Collated data from ecosyste.ms for the given URLs
     """
     repo_dfs = []
-    for url in tqdm(urls):
-        repo_data = util.get_ecosystems_repo_data(url)
+    for _, tool in tqdm(tools.iterrows(), total=len(tools)):
+        repo_data = util.get_ecosystems_repo_data(tool.url)
 
         if repo_data == "not-found":
-            LOGGER.warning(f"No ecosyste.ms entry for {url}")
+            LOGGER.warning(f"No ecosyste.ms entry for {tool.id} ({tool.url})")
             continue
         if repo_data is None:
-            if url in existing_data.index:
+            if tool.id in existing_data.index:
                 suffix = "; using older data"
-                repo_dfs.append(existing_data.loc[[url]])
+                repo_dfs.append(existing_data.loc[[id]])
             else:
                 suffix = ""
-            LOGGER.warning(f"Could not access ecosyste.ms entry for {url}{suffix}.")
+            LOGGER.warning(
+                f"Could not access ecosyste.ms entry for {tool.id} ({tool.url}){suffix}."
+            )
             continue
 
         repo_data_to_keep = {}
@@ -99,11 +89,10 @@ def get_ecosystems_entry_data(
             else:
                 val = repo_data[entry]
             repo_data_to_keep[entry] = val
-        repo_df = pd.DataFrame(repo_data_to_keep, index=pd.Index([url], name="url"))
+        repo_df = pd.DataFrame(repo_data_to_keep, index=pd.Index([tool.id], name="id"))
 
-        package_data = _get_package_data(url)
-        docs_data = _get_docs_data(repo_data["html_url"])
-        repo_dfs.append(repo_df.assign(**package_data).assign(**docs_data))
+        package_data = _get_package_data(repo_data["html_url"])
+        repo_dfs.append(repo_df.assign(**package_data))
 
     if repo_dfs:
         return pd.concat(repo_dfs)
@@ -143,10 +132,11 @@ def _get_nested_dict_entry(
 
 
 def _get_package_data(url: str) -> dict:
-    package_response = util.get_ecosystems_package_data(url)
-    if package_response.ok and (
-        package_data := yaml.safe_load(package_response.content.decode("utf-8"))
-    ):
+    package_data = util.get_ecosystems_package_data(url)
+    if package_data is None or package_data == "not-found":
+        LOGGER.warning(f"Could not find ecosyste.ms package entry for {url}")
+        filtered_package_data = {}
+    else:
         download_count_all = 0
         latest_release_all = None
         dependent_repos_count_all = 0
@@ -190,109 +180,7 @@ def _get_package_data(url: str) -> dict:
             filtered_package_data["latest_release_published_at"] = (
                 latest_release_all.strftime("%Y-%m-%d")
             )
-    else:
-        LOGGER.warning(f"Could not find ecosyste.ms package entry for {url}")
-        filtered_package_data = {}
     return filtered_package_data
-
-
-def _get_docs_data(url: str) -> dict:
-    """Get most likely URLs for project documentation.
-
-    We make some strong assumptions here:
-    1. Projects are most likely hosted on readthedocs, github/gitlab pages, or a repo wiki.
-    2. If a project name is already taken on readthedocs, the most likely alternative is `<org>-<project>`, but could also be <project> underscores replaced with dashes or `<project>-documentation` (1 known instance).
-    3. Pages docs redirect to `stable` docs but may need directly requesting a `stable` page if not redirected automatically.
-
-    Still, we don't catch everything.
-    For instance, some projects have docs directories in their repositories but require manual builds or refer directly to the markdown files in that directory from their README.
-
-    Args:
-        url (str): project URL to act as the basis for docs searching
-
-    Returns:
-        dict: Dict mapping docs sources (rtd, pages, wiki) to links, if those links exist.
-    """
-    parsed = urlparse(url)
-    host, owner, repo = (
-        parsed.netloc,
-        parsed.path.strip("/").split("/")[0],
-        parsed.path.strip("/").split("/")[-1],
-    )
-    rtd_doc = f"http://{repo}.readthedocs.io"
-    rtd_dash_doc = f"http://{repo.replace('_', '-')}.readthedocs.io"
-    rtd_owner_doc = f"http://{owner}-{repo}.readthedocs.io"
-    rtd_docs_doc = f"http://{repo}-documentation.readthedocs.io"
-    rtd = (
-        rtd_doc
-        if _check_header(rtd_doc) and _verify_rtd(repo, url)
-        else rtd_dash_doc
-        if _check_header(rtd_dash_doc) and _verify_rtd(repo.replace("_", "-"), url)
-        else rtd_owner_doc
-        if _check_header(rtd_owner_doc) and _verify_rtd(f"{repo}-documentation", url)
-        else rtd_docs_doc
-        if _check_header(rtd_docs_doc) and _verify_rtd(f"{repo}-documentation", url)
-        else None
-    )
-
-    pages_doc = f"http://{owner}.{host.replace('.com', '.io')}/{repo}"
-    pages_doc_stable = f"http://{owner}.{host.replace('.com', '.io')}/{repo}/stable"
-    pages = (
-        pages_doc
-        if _check_header(pages_doc)
-        else pages_doc_stable
-        if _check_header(pages_doc_stable)
-        else None
-    )
-
-    bb_wiki_doc = f"{url}.git/wiki"
-    other_wiki_doc = f"{url}.wiki.git"
-    wiki = (
-        bb_wiki_doc
-        if (host == "bitbucket.org" and _check_header(bb_wiki_doc))
-        else other_wiki_doc
-        if _check_header(other_wiki_doc)
-        else None
-    )
-
-    docs = {"rtd": rtd, "pages": pages, "wiki": wiki}
-    if all(doc is None for doc in docs.values()):
-        LOGGER.warning(f"No documentation found for {url}")
-    return docs
-
-
-def _check_header(url: str) -> bool:
-    """Check that a `url` exists by querying the header (allowing for redirects)."""
-    try:
-        response = requests.head(url, allow_redirects=True)
-        return response.ok
-    except (requests.exceptions.HTTPError, requests.exceptions.ConnectionError):
-        return False
-
-
-def _verify_rtd(slug: str, url: str) -> bool:
-    """Verify that a successful readthedocs find actually refers to the Git repo we're expecting.
-
-    We achieve this by querying the RTD API for the found docs site and checking the git repo used to generate that site against the Git repo URL we believe it should be.
-
-    In some cases, the RTD Git URL is a redirect
-
-    Args:
-        slug (str): `readthedocs` slug, i.e. <slug>.readthedocs.io
-        url (str): Git repo URL to check.
-
-    Returns:
-        bool: True if RTD Git URL linked to the `slug` site matches the `url`, False otherwise.
-    """
-    response = util.get_url_json_content(
-        f"https://readthedocs.org/api/v3/projects/{slug.lower()}"
-    )
-    rtd_git_url = response.get("repository", {}).get("url", None)
-    if rtd_git_url is not None:
-        rtd_git_url_cleaned = requests.head(rtd_git_url, allow_redirects=True).url
-        return rtd_git_url_cleaned == url
-    else:
-        return False
 
 
 @click.command()
@@ -309,14 +197,14 @@ def cli(infile: Path, outfile: Path, find_missing: bool):
     """Get ecosyste.ms stats for all entries."""
     entries = pd.read_csv(infile)
     if outfile.exists():
-        existing_stats_df = pd.read_csv(outfile, index_col="url")
+        existing_stats_df = pd.read_csv(outfile, index_col="id")
     else:
         existing_stats_df = pd.DataFrame()
 
     if find_missing:
-        entries = entries[~entries.url.isin(existing_stats_df.index)]
+        entries = entries[~entries.id.isin(existing_stats_df.index)]
 
-    stats_df = get_ecosystems_entry_data(entries.url.unique(), existing_stats_df)
+    stats_df = get_ecosystems_entry_data(entries, existing_stats_df)
 
     if find_missing:
         stats_df = pd.concat([stats_df, existing_stats_df])

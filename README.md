@@ -34,11 +34,20 @@ The result of the analysis is available in an [online dashboard](https://open-es
 
 ## Serve app locally
 
-To serve the streamlit app, call `pixi run serve` from the command line.
+To serve the streamlit app, call `pixi run -e app serve` from the command line.
 
 ## Test
 
 You can run our minimal test suite by calling `pixi run test`.
+
+## Troubleshooting
+
+If the [app](https://open-esm-analysis.streamlit.app/) is not loading then you can try a few things:
+
+1. Delete the site data for <https://open-esm-analysis.streamlit.app> in your browser and refresh the page.
+1. Clone this repository locally and run `pixi run test` from the terminal (having followed our [installation instructions](#installation)).
+1. If the tests fail, you can debug by setting [traces/breakpoints](https://docs.python.org/3/library/pdb.html) in the app python scripts (`website/**/*.py`) and then running `pixi run -e app serve` in the terminal.
+1. If the tests pass and you are a repository maintainer, you can reboot the app from [the streamlit dashboard](https://share.streamlit.io/).
 
 ## Refreshing data
 

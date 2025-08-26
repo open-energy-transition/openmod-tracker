@@ -20,6 +20,20 @@ repos:
           "--skip=*.csv"
         ]
 
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      # Check for debugger imports and py37+ breakpoint() calls
+      - id: debug-statements
+      - id: check-yaml
+        args: [--unsafe]
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        args: [--enforce-all --maxkb=100000]
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+
+
 ci: # https://pre-commit.ci/
   autofix_prs: false
   autoupdate_schedule: monthly

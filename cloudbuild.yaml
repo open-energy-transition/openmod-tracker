@@ -12,6 +12,7 @@ steps:
         'run', 'deploy', 'openmod-tracker',
         '--image', 'gcr.io/$PROJECT_ID/openmod-tracker',
         '--platform', 'managed',
+        '--region', 'europe-west2',
         '--allow-unauthenticated'
       ]
 options:

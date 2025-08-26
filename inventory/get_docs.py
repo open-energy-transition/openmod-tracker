@@ -128,14 +128,14 @@ def cli(tool_stats: Path, outfile: Path):
     """Get ecosyste.ms stats for all entries."""
     entries = pd.read_csv(tool_stats, index_col="id")
     if outfile.exists():
-        existing_stats_df = pd.read_csv(outfile, index_col="id")
+        existing_docs_df = pd.read_csv(outfile, index_col="id")
     else:
-        existing_stats_df = pd.DataFrame()
+        existing_docs_df = pd.DataFrame()
 
     docs_df = pd.DataFrame(columns=COLS, index=entries.index)
     for id, entry in tqdm(entries.iterrows(), total=len(entries)):
-        if existing_stats_df.get(id, pd.Series()).notnull().any():
-            docs_df.loc[id] = existing_stats_df.loc[id]
+        if id in existing_docs_df.index and existing_docs_df.loc[id].notnull().any():
+            docs_df.loc[id] = existing_docs_df.loc[id]
         else:
             docs_df.loc[id] = pd.Series(_get_docs_data(entry.html_url))
 

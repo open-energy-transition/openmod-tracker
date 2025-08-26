@@ -94,7 +94,7 @@ def user_locations_map(
         .to_frame("Number of Users")
         .reset_index(),
         locations="country",
-        locationmode="country names",
+        locationmode="ISO-3",
         color="Number of Users",
         hover_name="country",
         color_continuous_scale=px.colors.sequential.Viridis,

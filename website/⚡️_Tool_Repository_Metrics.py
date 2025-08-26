@@ -115,7 +115,6 @@ def create_vis_table(tool_stats_dir: Path, user_stats_dir: Path) -> pd.DataFrame
         .fillna(docs_df["wiki"])
         .fillna(df["homepage"])
     )
-    breakpoint()
     df["Score"] = pd.Series(
         np.random.choice([0, 100], size=len(df.index)), index=df.index
     )

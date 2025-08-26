@@ -1,0 +1,21 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/openmod-tracker', '.']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/openmod-tracker']
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args:
+      [
+        'run', 'deploy', 'openmod-tracker',
+        '--image', 'gcr.io/$PROJECT_ID/openmod-tracker',
+        '--platform', 'managed',
+        '--region', 'europe-west2',
+        '--allow-unauthenticated'
+      ]
+options:
+  logging: CLOUD_LOGGING_ONLY
+images:
+  - 'gcr.io/$PROJECT_ID/openmod-tracker'

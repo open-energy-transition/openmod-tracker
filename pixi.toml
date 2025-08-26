@@ -2,7 +2,7 @@
 authors = ["Bryn Pickering <17178478+brynpickering@users.noreply.github.com>", "Markus Groissböck <markus.groissbock@openenergytransition.org>"]
 channels = ["conda-forge"]
 name = "open-esm-analysis"
-platforms = ["win-64", "linux-64", "osx-64", "osx-arm64"]
+platforms = ["win-64", "linux-64", "osx-64", "osx-arm64", "linux-aarch64"]
 version = "0.1.0"
 
 [tasks.get-tools]

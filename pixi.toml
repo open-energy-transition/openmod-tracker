@@ -95,4 +95,4 @@ pycountry = "*"
 app = ["app"]
 vis = ["vis"]
 geo = ["geo"]
-test = ["app", "test"]
+test = ["test", "app"]

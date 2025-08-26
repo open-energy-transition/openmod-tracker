@@ -122,19 +122,17 @@ def _repo_to_tool_map(user_stats_df: pd.DataFrame) -> list[dict]:
     tools_df = pd.read_csv(
         Path(__file__).parent.parent.parent / "inventory" / "output" / "filtered.csv"
     )
-
+    urls = {repo: "https://github.com/" + repo.lower() for repo in available_repos}
     repo_to_tool_map = [
         {
             "repo": repo,
-            "name": tools_df.loc[
-                tools_df.url == "https://github.com/" + repo.lower(), "name"
-            ]
+            "name": tools_df.loc[tools_df.url == urls[repo], "name"]
             .item()
             .split(",")[0],
         }
-        for repo in available_repos
+        for repo, url in urls.items()
+        if url in tools_df.url.values
     ]
-
     return repo_to_tool_map
 
 

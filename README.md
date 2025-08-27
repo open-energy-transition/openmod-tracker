@@ -122,3 +122,22 @@ Further to data from <https://ecosyste.ms>, we rely on other sources to (1) link
    However, they don't store user data unless a user is also a repository owner.
    Direct use of the GitHub API is time intensive due to hourly request limits.
    Therefore, this data (e.g. informing the rate of user interactions over the past 6 months) is updated less frequently than other tools stats.
+
+## Release guideline
+
+We follow calendar versioning (CalVer) in this project.
+To deploy new versions of the dashboard to <https://openmod-tracker.org>, follow these steps:
+
+- Update the changelog with changes since the previous release under a heading with the current date in `YYYY-MM-DD` format.
+- Update the version in the `pixi.toml` to the current date.
+- Open a Pull Request with this change.
+- Once status checks pass and the PR is approved and merged, create a tag locally on the latest commit in the main branch with the same name as the changelog heading, e.g.:
+
+  ```sh
+  git checkout main
+  git pull
+  git tag -a 2025-09-01
+  git push --tag
+  ```
+
+- Create a release in the GitHub web console linked to the tag with the title `Release YYYY-MM-DD` and list the changes since the previous release.

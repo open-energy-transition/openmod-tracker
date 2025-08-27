@@ -1,0 +1,18 @@
+# List of repositories to fork
+# Format:
+#   - owner: <GitHub organization or user name>
+#     name: <repository name>
+#     description: <optional description of the repository>
+#
+# Example:
+#   - owner: openai
+#     name: whisper
+#     description: Speech recognition model
+#
+# Notes:
+# - 'owner' and 'name' fields are required
+# - 'description' field is optional and will be logged during forking
+repositories:
+  - owner: PyPSA
+    name: PyPSA
+    description: The classic example repository

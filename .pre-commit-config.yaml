@@ -28,6 +28,7 @@ repos:
       - id: check-yaml
         args: [--unsafe]
       - id: check-merge-conflict
+      - id: check-illegal-windows-names
       - id: check-added-large-files
         args: [--enforce-all --maxkb=100000]
       - id: trailing-whitespace

@@ -1,21 +1,27 @@
-import os
+"""GitHub API utility functions for repository management.
+
+This module provides functions to interact with the GitHub API,
+including forking repositories, syncing forks, and retrieving repository details.
+"""
+
 import datetime
+import os
+
+from dotenv import load_dotenv
 from github import Github
 from github.GithubException import GithubException
-from dotenv import load_dotenv
 
 load_dotenv()
 
-GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')
-GITHUB_ORG = os.getenv('GITHUB_ORG', 'openmod-tracker')
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+GITHUB_ORG = os.getenv("GITHUB_ORG", "openmod-tracker")
 
 # Initialize the GitHub client
 _github_client = None
 
 
 def get_github_client():
-    """
-    Get or create a GitHub client instance.
+    """Get or create a GitHub client instance.
 
     Returns:
         Github: A GitHub client instance
@@ -27,8 +33,7 @@ def get_github_client():
 
 
 def check_existing_fork(owner, repo_name, org=None):
-    """
-    Check if the repository is already forked by the organization.
+    """Check if the repository is already forked by the organization.
 
     Args:
         owner (str): Owner of the original repository
@@ -65,8 +70,7 @@ def check_existing_fork(owner, repo_name, org=None):
 
 
 def sync_fork(owner, repo_name, branch, org=None, log_file=None):
-    """
-    Sync a fork with its upstream repository.
+    """Sync a fork with its upstream repository.
 
     Args:
         owner (str): Owner of the original repository
@@ -82,8 +86,7 @@ def sync_fork(owner, repo_name, branch, org=None, log_file=None):
     organization = org or GITHUB_ORG
     github = get_github_client()
 
-    print(f"Syncing {organization}/{repo_name} with upstream "
-          f"{owner}/{repo_name}...")
+    print(f"Syncing {organization}/{repo_name} with upstream {owner}/{repo_name}...")
 
     try:
         fork_repo = None
@@ -93,10 +96,8 @@ def sync_fork(owner, repo_name, branch, org=None, log_file=None):
         except GithubException as e:
             print(f"Error getting fork repository: {e}")
             if log_file:
-                with open(log_file, 'a') as log:
-                    timestamp = datetime.datetime.now().strftime(
-                        "%Y-%m-%d %H:%M:%S"
-                    )
+                with open(log_file, "a") as log:
+                    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                     log.write(
                         f"[SYNC-FAILED] {organization}/{repo_name} sync with "
                         f"{owner}/{repo_name} failed: {e}\n"
@@ -109,17 +110,19 @@ def sync_fork(owner, repo_name, branch, org=None, log_file=None):
         # Check if merge was successful
         if result:
             merged = True
-            if hasattr(result, 'commits'):
+            if hasattr(result, "commits"):
                 for commit in result.commits:
-                    if hasattr(commit, 'status') and commit.status == 'error':
+                    if hasattr(commit, "status") and commit.status == "error":
                         merged = False
                         break
 
             if merged:
-                print(f"Successfully synced {organization}/{repo_name} with "
-                      f"upstream {owner}/{repo_name}")
+                print(
+                    f"Successfully synced {organization}/{repo_name} with "
+                    f"upstream {owner}/{repo_name}"
+                )
                 if log_file:
-                    with open(log_file, 'a') as log:
+                    with open(log_file, "a") as log:
                         timestamp = datetime.datetime.now().strftime(
                             "%Y-%m-%d %H:%M:%S"
                         )
@@ -128,33 +131,27 @@ def sync_fork(owner, repo_name, branch, org=None, log_file=None):
                             f"{owner}/{repo_name} at {timestamp}\n"
                         )
                         # Get branches from the result object
-                        base_branch = getattr(result, 'base_branch', None)
-                        head_branch = getattr(result, 'head_branch', None)
+                        base_branch = getattr(result, "base_branch", None)
+                        head_branch = getattr(result, "head_branch", None)
                         if base_branch and head_branch:
-                            log.write(
-                                f"  Merged {head_branch} into "
-                                f"{base_branch}\n"
-                            )
+                            log.write(f"  Merged {head_branch} into {base_branch}\n")
                 return True
             else:
                 print(f"Failed to sync {organization}/{repo_name}")
                 if log_file:
-                    with open(log_file, 'a') as log:
+                    with open(log_file, "a") as log:
                         timestamp = datetime.datetime.now().strftime(
                             "%Y-%m-%d %H:%M:%S"
                         )
                         log.write(
-                            f"[SYNC-FAILED] {organization}/{repo_name} "
-                            f"sync failed\n"
+                            f"[SYNC-FAILED] {organization}/{repo_name} sync failed\n"
                         )
                 return False
         else:
             print(f"Fork {organization}/{repo_name} is already up to date")
             if log_file:
-                with open(log_file, 'a') as log:
-                    timestamp = datetime.datetime.now().strftime(
-                        "%Y-%m-%d %H:%M:%S"
-                    )
+                with open(log_file, "a") as log:
+                    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                     log.write(
                         f"[UP-TO-DATE] {organization}/{repo_name} "
                         f"already in sync with {owner}/{repo_name} "
@@ -165,10 +162,8 @@ def sync_fork(owner, repo_name, branch, org=None, log_file=None):
     except GithubException as e:
         print(f"GitHub API error syncing {organization}/{repo_name}: {e}")
         if log_file:
-            with open(log_file, 'a') as log:
-                timestamp = datetime.datetime.now().strftime(
-                    "%Y-%m-%d %H:%M:%S"
-                )
+            with open(log_file, "a") as log:
+                timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 log.write(
                     f"[SYNC-FAILED] {organization}/{repo_name} sync with "
                     f"{owner}/{repo_name} failed: {e}\n"
@@ -178,20 +173,16 @@ def sync_fork(owner, repo_name, branch, org=None, log_file=None):
     except Exception as e:
         print(f"Unexpected error syncing {organization}/{repo_name}: {e}")
         if log_file:
-            with open(log_file, 'a') as log:
-                timestamp = datetime.datetime.now().strftime(
-                    "%Y-%m-%d %H:%M:%S"
-                )
+            with open(log_file, "a") as log:
+                timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 log.write(
-                    f"[SYNC-ERROR] {organization}/{repo_name} - "
-                    f"Unexpected error: {e}\n"
+                    f"[SYNC-ERROR] {organization}/{repo_name} - Unexpected error: {e}\n"
                 )
         return False
 
 
 def get_repository_details(owner, repo_name, org=None):
-    """
-    Get details of a repository.
+    """Get details of a repository.
 
     Args:
         owner (str): Owner of the repository
@@ -223,8 +214,7 @@ def get_repository_details(owner, repo_name, org=None):
 
 
 def fork_repository(owner, repo_name, org=None, description=None):
-    """
-    Fork a GitHub repository using the GitHub API.
+    """Fork a GitHub repository using the GitHub API.
 
     Args:
         owner (str): Owner of the original repository
@@ -257,10 +247,8 @@ def fork_repository(owner, repo_name, org=None, description=None):
         print(f"Failed to fork {owner}/{repo_name}: {e}")
 
         if e.status == 403:  # Forbidden
-            print("\nERROR: Your GitHub token doesn't have the necessary"
-                  " permissions.")
-            print("You need to create a new token with the 'repo' scope"
-                  " enabled.")
+            print("\nERROR: Your GitHub token doesn't have the necessary permissions.")
+            print("You need to create a new token with the 'repo' scope enabled.")
             print("1. Go to: https://github.com/settings/tokens")
             print("2. Generate a new token with the 'repo' scope")
             print("3. Set the token in your .env file as GITHUB_TOKEN")

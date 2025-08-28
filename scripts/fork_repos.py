@@ -1,207 +1,243 @@
 """
 GitHub Repository Forking Script
-This script automates forking GitHub repositories using the GitHub API
+This script automates forking GitHub repositories using the GitHub API.
+It reads repositories from the CSV file in inventory/output/stats.csv
+and forks them to the organization specified in the .env file.
 """
 
-import argparse
+import csv
 import datetime
 import os
-import requests
+import re
 import sys
 import time
-import yaml
+from dotenv import load_dotenv
+
+# Import helper functions
+from github_api import (
+    GITHUB_TOKEN, GITHUB_ORG, check_existing_fork, sync_fork,
+    get_repository_details, fork_repository as github_fork_repository
+)
+
+# Load environment variables from .env file
+load_dotenv()
+
+# Configuration - set defaults and load from .env
+CSV_FILE = 'inventory/output/stats.csv'
+LOG_FILE = 'scripts/fork_results.log'
 
 
-def parse_arguments():
-    """Parse command line arguments."""
-    # Get default values from environment variables
-    default_token = os.environ.get('GITHUB_TOKEN', '')
-    default_org = os.environ.get('GITHUB_ORG', '')
-
-    parser = argparse.ArgumentParser(
-        description='Fork GitHub repositories automatically')
-    parser.add_argument('-t', '--token', default=default_token,
-                        help='GitHub Personal Access Token with repo scope (or set GITHUB_TOKEN env var)')
-    parser.add_argument('-o', '--org', default=default_org,
-                        help='Target GitHub organization name (or set GITHUB_ORG env var)')
-    parser.add_argument('-f', '--file', default='repos_to_fork.yaml',
-                        help='YAML file containing repositories to fork')
-    parser.add_argument('-l', '--log', default='fork_results.log',
-                        help='Log file path')
-
-    args = parser.parse_args()
-
-    # Validate that token is provided either via args or env vars
-    if not args.token:
-        print("Error: GitHub token is required. Provide it with -t/--token or set GITHUB_TOKEN environment variable.")
+def validate_config():
+    """Validate the configuration."""
+    if not GITHUB_TOKEN:
+        print("Error: GITHUB_TOKEN environment variable is not set.")
+        print("Please set it in your .env file.")
         sys.exit(1)
 
-    # Organization is required
-    if not args.org:
-        print("Error: GitHub organization is required. Provide it with -o/--org or set GITHUB_ORG environment variable.")
+    if not GITHUB_ORG:
+        print("Error: GITHUB_ORG environment variable is not set.")
+        print("Please set it in your .env file.")
         sys.exit(1)
 
-    return args
+    if not os.path.isfile(CSV_FILE):
+        print(f"Error: CSV file '{CSV_FILE}' not found.")
+        print("Please ensure the file exists or set CSV_FILE")
+        print("in your .env file.")
+        sys.exit(1)
 
 
-def read_yaml_file(file_path):
-    """Read repositories from the YAML file."""
+def read_repos_from_csv():
+    """Read repositories from the CSV file."""
+    repos = []
     try:
-        with open(file_path, 'r') as file:
-            data = yaml.safe_load(file)
-        return data
+        with open(CSV_FILE, 'r', encoding='utf-8') as file:
+            reader = csv.DictReader(file)
+
+            # Check if the CSV has the required column
+            if 'html_url' not in reader.fieldnames:
+                print("Error: CSV file must contain a 'html_url' column.")
+                sys.exit(1)
+
+            for row in reader:
+                url = row.get('html_url', '')
+                if not url or not url.startswith('https://github.com/'):
+                    continue
+
+                # Extract owner and repo name from GitHub URL
+                match = re.match(r'https://github.com/([^/]+)/([^/]+)', url)
+                if match:
+                    owner, name = match.groups()
+                    repos.append({
+                        'owner': owner,
+                        'name': name,
+                        'description': row.get(
+                            'description', f"Fork of {owner}/{name}"
+                        )
+                    })
+
+        return repos
+
     except Exception as e:
-        print(f"Error reading YAML file: {e}")
+        print(f"Error reading CSV file: {e}")
         sys.exit(1)
 
 
-def check_existing_fork(owner, repo_name, org, token):
-    """Check if the repository is already forked by the organization."""
-    url = f"https://api.github.com/repos/{org}/{repo_name}"
-    headers = {
-        "Accept": "application/vnd.github+json",
-        "Authorization": f"token {token}",
-        "X-GitHub-Api-Version": "2022-11-28"
-    }
-
-    try:
-        response = requests.get(url, headers=headers)
-        if response.status_code == 200:
-            repo_data = response.json()
-            source_repo = f"{owner}/{repo_name}"
-            if (repo_data.get('fork', False) and
-                    repo_data.get('source', {}).get('full_name') == source_repo):
-                return True
-        return False
-    except Exception as e:
-        print(f"Error checking existing fork: {e}")
-        return False
-
-
-def fork_repository(owner, repo_name, description, token, org, log_file):
-    """Fork a GitHub repository using the GitHub API."""
+def process_repository(owner, repo_name, description):
+    """Fork a GitHub repository using the GitHub API and sync if needed."""
     print(f"Checking if {owner}/{repo_name} is already forked...")
 
     # Check if already forked
-    if check_existing_fork(owner, repo_name, org, token):
-        fork_url = f"https://github.com/{org}/{repo_name}"
-        print(f"Repository {owner}/{repo_name} is already forked to {org}")
-        print(f"Fork URL: {fork_url}")
-        with open(log_file, 'a') as log:
-            timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            log.write(
-                f"[SKIPPED] {owner}/{repo_name} - Already forked at {timestamp}\n")
-            log.write(f"  Fork URL: {fork_url}\n")
-        return True, fork_url
+    exists = check_existing_fork(owner, repo_name)
 
-    print(f"Attempting to fork {owner}/{repo_name}...")
-
-    url = f"https://api.github.com/repos/{owner}/{repo_name}/forks"
-    headers = {
-        "Accept": "application/vnd.github+json",
-        "Authorization": f"token {token}",
-        "X-GitHub-Api-Version": "2022-11-28"
-    }
-
-    # Add organization parameter
-    data = {"organization": org}
-    print(f"Target organization: {org}")
-
-    try:
-        response = requests.post(url, headers=headers, json=data)
-        response.raise_for_status()
-
-        # Extract fork information from response
-        fork_data = response.json()
-        fork_url = fork_data.get('html_url')
-
-        print(f"Successfully forked {owner}/{repo_name} to {org}")
+    if exists:
+        fork_url = f"https://github.com/{GITHUB_ORG}/{repo_name}"
+        print(f"Repository {owner}/{repo_name} is already forked "
+              f"to {GITHUB_ORG}")
         print(f"Fork URL: {fork_url}")
 
-        with open(log_file, 'a') as log:
+        # If fork exists, sync it
+        print(f"Syncing fork with upstream {owner}/{repo_name}...")
+
+        # Get default branch from repository
+        repo_data = get_repository_details(GITHUB_ORG, repo_name)
+        if repo_data:
+            if hasattr(repo_data, 'default_branch'):
+                default_branch = repo_data.default_branch
+            else:
+                default_branch = 'main'
+
+            # Sync the fork
+            sync_result = sync_fork(
+                owner, repo_name, default_branch,
+                org=GITHUB_ORG, log_file=LOG_FILE
+            )
+            sync_status = "synced" if sync_result else "sync failed"
+
+            with open(LOG_FILE, 'a') as log:
+                timestamp = datetime.datetime.now().strftime(
+                    "%Y-%m-%d %H:%M:%S"
+                )
+                log.write(
+                    f"[FORK-EXISTS] {owner}/{repo_name} - Fork exists and "
+                    f"was {sync_status} at {timestamp}\n"
+                )
+                log.write(f"  Fork URL: {fork_url}\n")
+
+            return True, f"{fork_url} ({sync_status})", sync_result
+        else:
+            print("Error getting repository details")
+
+            with open(LOG_FILE, 'a') as log:
+                timestamp = datetime.datetime.now().strftime(
+                    "%Y-%m-%d %H:%M:%S"
+                )
+                log.write(
+                    f"[SKIPPED] {owner}/{repo_name} - Already forked "
+                    f"but sync failed at {timestamp}\n"
+                )
+                log.write(f"  Fork URL: {fork_url}\n")
+                log.write("  Sync error: Could not get repository details\n")
+
+            return True, fork_url, False
+
+    # Fork the repository
+    success, fork_url = github_fork_repository(
+        owner, repo_name, org=GITHUB_ORG, description=description
+    )
+
+    if success:
+        print(f"Successfully forked {owner}/{repo_name} to {GITHUB_ORG}")
+        print(f"Fork URL: {fork_url}")
+
+        with open(LOG_FILE, 'a') as log:
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             log.write(f"[SUCCESS] {owner}/{repo_name} forked at {timestamp}\n")
             log.write(f"  Fork URL: {fork_url}\n")
             if description:
                 log.write(f"  Description: {description}\n")
-        return True, fork_url
-
-    except requests.exceptions.HTTPError as e:
-        print(f"Failed to fork {owner}/{repo_name}: {e}")
-
-        try:
-            error_details = e.response.json()
-            print(f"Error details: {error_details}")
-
-            # Special handling for token permission errors
-            if error_details.get('message') == 'Resource not accessible by personal access token':
-                print(
-                    "\nERROR: Your GitHub token doesn't have the necessary permissions.")
-                print("You need to create a new token with the 'repo' scope enabled.")
-                print("1. Go to: https://github.com/settings/tokens")
-                print("2. Generate a new token with the 'repo' scope")
-                print("3. Run this script again with the new token")
-        except Exception:
-            pass
-
-        with open(log_file, 'a') as log:
+        return True, fork_url, False
+    else:
+        with open(LOG_FILE, 'a') as log:
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            log.write(f"[FAILED] {owner}/{repo_name} - Error: {e}\n")
-        return False, None
-
-    except Exception as e:
-        print(f"Unexpected error: {e}")
-        with open(log_file, 'a') as log:
-            timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            log.write(f"[ERROR] {owner}/{repo_name} - Unexpected error: {e}\n")
-        return False, None
+            log.write(f"[FAILED] {owner}/{repo_name} - Forking failed\n")
+        return False, None, False
 
 
 def main():
     """Main function to process repositories and fork them."""
-    args = parse_arguments()
+    # Validate configuration
+    validate_config()
 
-    # Check if YAML file exists
-    if not os.path.isfile(args.file):
-        print(f"Error: Repositories file '{args.file}' not found")
-        sys.exit(1)
+    # Ensure the directory for the log file exists
+    os.makedirs(os.path.dirname(LOG_FILE), exist_ok=True)
 
     # Initialize log file
-    with open(args.log, 'w') as log:
+    with open(LOG_FILE, 'w') as log:
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         log.write(f"Fork operation started at {timestamp}\n")
+        log.write(f"Organization: {GITHUB_ORG}\n")
+        log.write(f"CSV File: {CSV_FILE}\n")
         log.write("-----------------------------------\n")
 
-    # Read repositories from YAML file
-    data = read_yaml_file(args.file)
+    # Read repositories from CSV file
+    repos = read_repos_from_csv()
 
-    # Check if the YAML has the expected structure
-    if not data or 'repositories' not in data:
-        print(
-            "Error: Invalid YAML structure. The file should contain a 'repositories' list.")
+    if not repos:
+        print("No repositories found in the CSV file.")
         sys.exit(1)
+
+    print(f"Found {len(repos)} repositories to fork.")
 
     # Process each repository
     print("Starting to fork repositories...")
-    for repo in data['repositories']:
-        # Check if repository has required fields
-        if 'owner' not in repo or 'name' not in repo:
-            print("Warning: Skipping repository with missing owner or name")
-            continue
+    successful_forks = 0
+    skipped_forks = 0
+    failed_forks = 0
+    synced_forks = 0
 
+    for repo in repos:
         owner = repo['owner']
         name = repo['name']
         description = repo.get('description', '')
 
-        # Fork the repository
-        fork_repository(
-            owner, name, description, args.token, args.org, args.log
-        )
+        # Process the repository
+        result, url, synced = process_repository(owner, name, description)
+
+        if result:
+            has_fork_text = (
+                "already forked" in str(url).lower() or
+                "fork exists" in str(url).lower()
+            )
+            if has_fork_text:
+                skipped_forks += 1
+                if synced:
+                    synced_forks += 1
+            else:
+                successful_forks += 1
+        else:
+            failed_forks += 1
 
         # GitHub recommends waiting between API requests to avoid rate limiting
         time.sleep(2)
 
-    print(f"Forking process completed. See {args.log} for details.")
+    # Write summary to log
+    with open(LOG_FILE, 'a') as log:
+        log.write("\n-----------------------------------\n")
+        current_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        log.write(f"Forking process completed at {current_time}\n")
+        log.write(f"Total repositories processed: {len(repos)}\n")
+        log.write(f"Successfully forked: {successful_forks}\n")
+        log.write(f"Already existed (skipped): {skipped_forks}\n")
+        log.write(f"Successfully synced: {synced_forks}\n")
+        log.write(f"Failed to fork: {failed_forks}\n")
+
+    print("\nForking process completed.")
+    print(f"Total repositories processed: {len(repos)}")
+    print(f"Successfully forked: {successful_forks}")
+    print(f"Already existed (skipped): {skipped_forks}")
+    print(f"Successfully synced: {synced_forks}")
+    print(f"Failed to fork: {failed_forks}")
+    print(f"See {LOG_FILE} for details.")
 
 
 if __name__ == "__main__":

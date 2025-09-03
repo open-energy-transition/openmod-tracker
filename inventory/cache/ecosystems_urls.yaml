@@ -169,6 +169,7 @@ https://github.com/powsybl/powsybl-core: https://repos.ecosyste.ms/api/v1/hosts/
 https://github.com/powsybl/powsybl-open-loadflow: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/powsybl%2Fpowsybl-open-loadflow
 https://github.com/powsybl/pypowsybl: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/powsybl%2Fpypowsybl
 https://github.com/prep-next/prep-shot: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/PREP-NexT%2FPREP-SHOT
+https://github.com/project-origin/registry: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/project-origin%2Fregistry
 https://github.com/psrenergy/sddpdso.jl: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/psrenergy%2FSDDPDSO.jl
 https://github.com/pypsa/pypsa: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/PyPSA%2FPyPSA
 https://github.com/quasi-software: not-found
@@ -186,6 +187,7 @@ https://github.com/romulus97/capow_py36: https://repos.ecosyste.ms/api/v1/hosts/
 https://github.com/roseautechnologies/roseau_load_flow: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/RoseauTechnologies%2FRoseau_Load_Flow
 https://github.com/rwl/pypower: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/rwl%2FPYPOWER
 https://github.com/sanpen/gridcal: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/SanPen%2FGridCal
+https://github.com/sanpen/veragrid: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/SanPen%2FVeraGrid
 https://github.com/sei-international/nemomod.jl: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/sei-international%2FNemoMod.jl
 https://github.com/sesam-polimi/microgridspy-sesam: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/SESAM-Polimi%2FMicroGridsPy-SESAM
 https://github.com/simjunky/leelo: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/simjunky%2FLeelo

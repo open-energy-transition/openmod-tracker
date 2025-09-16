@@ -25,6 +25,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - SonarCloud project creator and analysed project stats getter (#81).
 
+### Fixed
+
+- Country map in user interaction analysis missing all data (#94).
+
 ## 2025-08-27
 
 Initial release.

@@ -701,6 +701,25 @@ def conclusion():
     )
 
 
+def footer():
+    """Footer content for the Streamlit app."""
+    st.divider()
+    col1, col2, col3 = st.columns([1, 1, 1])
+    col1.image(
+        "https://open-energy-transition.github.io/handbook/assets/images/oet_standard_red_svg-98226ab63d508270469c5c8deaf1ab03.svg",
+        width=300,
+    )
+    col2.markdown(
+        "© 2025 Open Energy Transition. Dashboard content licensed under the MIT License. Dashboard source code licensed under the MIT License. All rights reserved."
+    )
+    col3.markdown(
+        """
+        The information provided in this dashboard is for informational purposes only and does not constitute professional advice.
+        The Open Energy Transition is not responsible for any actions taken based on the information provided herein.
+        """
+    )
+
+
 def main(df: pd.DataFrame):
     """Main streamlit app generator.
 
@@ -850,3 +869,4 @@ if __name__ == "__main__":
     preamble(latest_changes, len(df_vis), data_processing_approach_string)
     main(df_vis.copy())
     conclusion()
+    footer()

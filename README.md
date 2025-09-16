@@ -141,3 +141,8 @@ To deploy new versions of the dashboard to <https://openmod-tracker.org>, follow
   ```
 
 - Create a release in the GitHub web console linked to the tag with the title `Release YYYY-MM-DD` and list the changes since the previous release.
+
+## License
+
+All generated data files in this repository (`inventory/output`, `user_analysis/output`) as well as the generated dashboard are under the [Creative Commons Attribution 4.0 license](https://creativecommons.org/licenses/by/4.0/).
+All other files are under [the MIT license](./LICENSE).

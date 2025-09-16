@@ -20,6 +20,7 @@ import util
 from bs4 import BeautifulSoup
 from st_keyup import st_keyup
 
+OET_LOGO = "https://open-energy-transition.github.io/handbook/assets/images/oet_standard_red_svg-98226ab63d508270469c5c8deaf1ab03.svg"
 COLUMN_NAME_MAPPING: dict[str, str] = {
     "created_at": "Created",
     "updated_at": "Updated",
@@ -704,18 +705,19 @@ def conclusion():
 def footer():
     """Footer content for the Streamlit app."""
     st.divider()
-    col1, col2, col3 = st.columns([1, 1, 1])
-    col1.image(
-        "https://open-energy-transition.github.io/handbook/assets/images/oet_standard_red_svg-98226ab63d508270469c5c8deaf1ab03.svg",
-        width=300,
-    )
+    _, col1, col2, col3, _ = st.columns([2, 1, 1, 1, 2])
+    col1.image(OET_LOGO, width=300)
     col2.markdown(
-        "© 2025 Open Energy Transition. Dashboard content licensed under the MIT License. Dashboard source code licensed under the MIT License. All rights reserved."
+        """
+        (c) Open Energy Transition gGmbH.
+        The dashboard content is licensed under [CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/deed.en).
+        The dashboard source code is licensed under [MIT license](https://opensource.org/license/mit).
+        """
     )
     col3.markdown(
         """
+        Built by [Open Energy Transition](https://openenergytransition.org/), with support by [Breakthrough Energy](https://www.breakthroughenergy.org/).
         The information provided in this dashboard is for informational purposes only and does not constitute professional advice.
-        The Open Energy Transition is not responsible for any actions taken based on the information provided herein.
         """
     )
 
@@ -857,6 +859,12 @@ if __name__ == "__main__":
 
     st.set_page_config(
         page_title="Tool Repository Metrics", page_icon="⚡️", layout="wide"
+    )
+    st.logo(
+        OET_LOGO,
+        size="large",
+        link="https://openenergytransition.org/",
+        icon_image=None,
     )
 
     df_vis = create_vis_table(tool_stats_dir, user_stats_dir)

@@ -144,5 +144,5 @@ To deploy new versions of the dashboard to <https://openmod-tracker.org>, follow
 
 ## License
 
-All generated data files in this repository (`inventory/output`, `user_analysis/output`) as well as the generated dashboard are under the [Creative Commons Attribution 4.0 license](https://creativecommons.org/licenses/by/4.0/).
-All other files are under [the MIT license](./LICENSE).
+This repository is licensed under the [MIT license](LICENSES/MIT.txt).
+In addition the generated data files in this repository (`inventory/output`, `user_analysis/output`) are licensed under the [Creative Commons Attribution 4.0 license](LICENSES/CC-BY-4.0.txt).

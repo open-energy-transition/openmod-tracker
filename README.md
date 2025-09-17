@@ -130,6 +130,33 @@ Further to data from <https://ecosyste.ms>, we rely on other sources to (1) link
    Direct use of the GitHub API is time intensive due to hourly request limits.
    Therefore, this data (e.g. informing the rate of user interactions over the past 6 months) is updated less frequently than other tools stats.
 
+## GitHub Repository Management
+
+The repository includes scripts for managing GitHub repositories, including forking repositories and keeping them in sync with their upstream sources.
+
+### Forking Repositories
+
+The `fork_repos.py` script in the `scripts` directory forks GitHub repositories to the specified organization and keeps existing forks in sync with their upstream repositories.
+
+#### Usage
+
+```bash
+python scripts/fork_repos.py [OPTIONS]
+```
+
+Options:
+- `--csv, -c PATH`: Path to the CSV file containing repository information [default: inventory/output/stats.csv]
+- `--org, -o TEXT`: GitHub organization name where repositories will be forked [default: "openmod-tracker"]
+- `--log, -l PATH`: Path to the log file [default: log/fork_repos.log]
+- `--token, -t TEXT`: GitHub token (required)
+
+The script will:
+1. Read repository information from the CSV file (which must contain an `html_url` column with GitHub repository URLs)
+2. Check if each repository is already forked to the organization
+3. Fork repositories that haven't been forked yet
+4. Sync existing forks with their upstream repositories
+5. Log all operations to the specified log file
+
 ## Release guideline
 
 We follow calendar versioning (CalVer) in this project.

@@ -20,7 +20,9 @@ import util
 from bs4 import BeautifulSoup
 from st_keyup import st_keyup
 
-OET_LOGO = "https://open-energy-transition.github.io/handbook/assets/images/oet_standard_red_svg-98226ab63d508270469c5c8deaf1ab03.svg"
+OET_LOGO_FULL_NAME = "https://raw.githubusercontent.com/open-energy-transition/handbook/a8c0a9d55a543093008c7b58e7ed9efa6d9d633f/static/img/oet_standard_red_svg.svg"
+OET_LOGO_ABBREVIATED = "https://raw.githubusercontent.com/open-energy-transition/handbook/a8c0a9d55a543093008c7b58e7ed9efa6d9d633f/static/img/oet_standard_red_png.png"
+
 COLUMN_NAME_MAPPING: dict[str, str] = {
     "created_at": "Created",
     "updated_at": "Updated",
@@ -705,11 +707,11 @@ def conclusion():
 def footer():
     """Footer content for the Streamlit app."""
     st.divider()
-    _, col1, col2, col3, _ = st.columns([2, 1, 1, 1, 2])
-    col1.image(OET_LOGO, width=300)
+    _, col1, col2, col3, _ = st.columns([1, 1, 1, 1, 1])
+    col1.image(OET_LOGO_FULL_NAME, width=300)
     col2.markdown(
         """
-        (c) Open Energy Transition gGmbH.
+        © Open Energy Transition gGmbH.
         The dashboard content is licensed under [CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/deed.en).
         The dashboard source code is licensed under [MIT license](https://opensource.org/license/mit).
         """
@@ -861,10 +863,10 @@ if __name__ == "__main__":
         page_title="Tool Repository Metrics", page_icon="⚡️", layout="wide"
     )
     st.logo(
-        OET_LOGO,
+        OET_LOGO_FULL_NAME,
         size="large",
         link="https://openenergytransition.org/",
-        icon_image=None,
+        icon_image=OET_LOGO_ABBREVIATED,
     )
 
     df_vis = create_vis_table(tool_stats_dir, user_stats_dir)

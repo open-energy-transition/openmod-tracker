@@ -251,13 +251,19 @@ def add_scoring(cols: list[str]) -> float:
     Returns:
         float: Column score weighting
     """
+    st.toggle(
+        "Add score column to table",
+        value=util.get_state("score_toggle", False),
+        key="score_toggle",
+    )
     selectbox_cols = st.columns(len(cols))
     selectbox_cols[0].selectbox(
         "Metric scaling method",
-        ("min-max", "rank"),
+        ("rank", "min-max"),
         help="""Select the method by which metrics should be scaled to bring them to a similar range.
-    `min-max` uses [min-max normalisation](https://en.wikipedia.org/wiki/Feature_scaling#Rescaling_(min-max_normalization)).
-    `rank` uses the absolute rank of a tool for each metric.""",
+        `rank` uses the absolute rank of a tool for each metric.
+        `min-max` uses [min-max normalisation](https://en.wikipedia.org/wiki/Feature_scaling#Rescaling_(min-max_normalization)).
+        """,
         key="scoring_method",
     )
     score_cols = st.columns(len(cols))
@@ -287,7 +293,7 @@ def update_score_col(df: pd.DataFrame) -> pd.Series:
     """
     # Add tool score by combining metrics with the provided weightings
     scores = {col: util.get_state(f"scoring_{col}", 0.5) for col in df.columns}
-    scoring_method = util.get_state("scoring_method", "min-max")
+    scoring_method = util.get_state("scoring_method", "rank")
     normalised_data = normalise(df, scoring_method)
     score = normalised_data.mul(scores).div(sum(scores.values())).sum(axis=1).mul(100)
     return score
@@ -754,8 +760,9 @@ def main(df: pd.DataFrame):
         filters.append(util.nan_filter(df["Docs"]))
 
     # Add score filtering first.
-    st.sidebar.subheader("Score", help=COLUMN_HELP["Score"])
-    score_slider_range = slider(df["Score"], reset_mode, plot_dist=False)
+    if util.get_state("score_toggle", False):
+        st.sidebar.subheader("Score", help=COLUMN_HELP["Score"])
+        score_slider_range = slider(df["Score"], reset_mode, plot_dist=False)
 
     for col in COLUMN_NAME_MAPPING.values():
         # Show missing data info and toggle for each column
@@ -794,8 +801,17 @@ def main(df: pd.DataFrame):
 
     # Add tool score by combining metrics with the provided weightings
     df["Score"] = update_score_col(df[numeric_cols])
-    filters.append(numeric_range_filter(df["Score"], *score_slider_range))
-
+    if util.get_state("score_toggle", False):
+        filters.append(numeric_range_filter(df["Score"], *score_slider_range))
+        score_col_config = st.column_config.ProgressColumn(
+            "Score",
+            min_value=0,
+            max_value=100,
+            format="%.0f%%",
+            help=COLUMN_HELP["Score"],
+        )
+    else:
+        score_col_config = None
     # Display options
     col1, col2 = st.columns([3, 2])
     with col2:
@@ -819,13 +835,7 @@ def main(df: pd.DataFrame):
         "Docs": st.column_config.LinkColumn(
             "Docs", display_text="📖", help=COLUMN_HELP["Docs"]
         ),
-        "Score": st.column_config.ProgressColumn(
-            "Score",
-            min_value=0,
-            max_value=100,
-            format="%.0f%%",
-            help=COLUMN_HELP["Score"],
-        ),
+        "Score": score_col_config,
         "Interactions": st.column_config.BarChartColumn(
             "6 Month Interactions",
             y_min=0,
@@ -853,9 +863,12 @@ def main(df: pd.DataFrame):
         st.warning(
             "No data matches the current filter criteria. Try adjusting your filters."
         )
-    st.subheader("📊 Adjust tool scoring")
+    st.subheader("📊 Score tools your way")
     st.markdown(
-        "You can create your own tool scores by adjusting the weights applied to each numeric metric."
+        """
+        You can create your own tool scores by combining the metrics that matter most to you.
+        First, toggle the scoring column.
+        Then, adjust the weights applied to each numeric metric to fit your preferences."""
     )
     add_scoring(numeric_cols)
 

@@ -25,6 +25,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - SonarCloud project creator and analysed project stats getter (#81).
 
+### Changed
+
+- Updated exclusion list to remove newly added `project-origin`, as it isn't an ESM tool.
+
 ## 2025-08-27
 
 Initial release.

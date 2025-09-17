@@ -1,0 +1,29 @@
+version = 1
+SPDX-PackageName = "openmod-tracker"
+SPDX-PackageSupplier = "Open Energy Transition gGmbH <info@openenergytransition.org>"
+SPDX-PackageDownloadLocation = "https://github.com/open-energy-transition/openmod-tracker"
+
+[[annotations]]
+path = [
+    "inventory/output/**",
+    "user_analysis/output/**",
+]
+SPDX-FileCopyrightText = "openmod-tracker contributors"
+SPDX-License-Identifier = "CC-BY-4.0"
+
+[[annotations]]
+path = [
+    "pixi.lock",
+    "website/requirements.txt"
+]
+SPDX-FileCopyrightText = "openmod-tracker contributors"
+SPDX-License-Identifier = "MIT"
+
+# This picks up all non-python files in the top-level of each script directory without specifying them individually.
+[[annotations]]
+path = [
+    "inventory/*",
+    "user_analysis/*",
+]
+SPDX-FileCopyrightText = "openmod-tracker contributors"
+SPDX-License-Identifier = "MIT"

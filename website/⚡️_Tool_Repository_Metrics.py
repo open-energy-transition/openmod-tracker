@@ -1,8 +1,9 @@
-"""Create Streamlit web app to visualise tool inventory data.
+# SPDX-FileCopyrightText: openmod-tracker contributors
+#
+# SPDX-License-Identifier: MIT
 
-(C) Open Energy Transition (OET)
-License: MIT / CC0 1.0
-"""
+
+"""Create Streamlit web app to visualise tool inventory data."""
 
 import datetime
 from collections.abc import Callable, Iterable
@@ -19,6 +20,9 @@ import streamlit as st
 import util
 from bs4 import BeautifulSoup
 from st_keyup import st_keyup
+
+OET_LOGO_FULL_NAME = "https://raw.githubusercontent.com/open-energy-transition/handbook/a8c0a9d55a543093008c7b58e7ed9efa6d9d633f/static/img/oet_standard_red_svg.svg"
+OET_LOGO_ABBREVIATED = "https://raw.githubusercontent.com/open-energy-transition/handbook/a8c0a9d55a543093008c7b58e7ed9efa6d9d633f/static/img/oet_standard_red_png.png"
 
 COLUMN_NAME_MAPPING: dict[str, str] = {
     "created_at": "Created",
@@ -740,6 +744,26 @@ def conclusion():
     )
 
 
+def footer():
+    """Footer content for the Streamlit app."""
+    st.divider()
+    _, col1, col2, col3, _ = st.columns([1, 1, 1, 1, 1])
+    col1.image(OET_LOGO_FULL_NAME, width=300)
+    col2.markdown(
+        """
+        © Open Energy Transition gGmbH.
+        The dashboard content is licensed under [CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/deed.en).
+        The dashboard source code is licensed under [MIT license](https://opensource.org/license/mit).
+        """
+    )
+    col3.markdown(
+        """
+        Built by [Open Energy Transition](https://openenergytransition.org/), with support by [Breakthrough Energy](https://www.breakthroughenergy.org/).
+        The information provided in this dashboard is for informational purposes only and does not constitute professional advice.
+        """
+    )
+
+
 def main(df: pd.DataFrame):
     """Main streamlit app generator.
 
@@ -885,6 +909,12 @@ if __name__ == "__main__":
     st.set_page_config(
         page_title="Tool Repository Metrics", page_icon="⚡️", layout="wide"
     )
+    st.logo(
+        OET_LOGO_FULL_NAME,
+        size="large",
+        link="https://openenergytransition.org/",
+        icon_image=OET_LOGO_ABBREVIATED,
+    )
 
     df_vis = create_vis_table(tool_stats_dir, user_stats_dir)
     g = git.cmd.Git()
@@ -896,3 +926,4 @@ if __name__ == "__main__":
     preamble(latest_changes, len(df_vis), data_processing_approach_string)
     main(df_vis.copy())
     conclusion()
+    footer()

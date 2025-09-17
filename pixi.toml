@@ -1,5 +1,9 @@
+# SPDX-FileCopyrightText: openmod-tracker contributors
+#
+# SPDX-License-Identifier: MIT
+
 [project]
-authors = ["Bryn Pickering <17178478+brynpickering@users.noreply.github.com>", "Markus Groissböck <markus.groissbock@openenergytransition.org>"]
+authors = ["Bryn Pickering <bryn.pickering@openenergytransition.org>", "Markus Groissböck <markus.groissbock@openenergytransition.org>"]
 channels = ["conda-forge"]
 name = "openmod-tracker"
 platforms = ["win-64", "linux-64", "osx-64", "osx-arm64", "linux-aarch64"]
@@ -64,6 +68,7 @@ gitpython = ">=3.1.44,<4"
 pygithub = ">=2.6.1,<3"
 python-dotenv = ">=1.1.1,<2"
 unidecode = ">=1.3.8,<2"
+reuse = ">=5.1.1,<6"
 
 [feature.app.dependencies]
 streamlit = "*"

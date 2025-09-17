@@ -1,3 +1,8 @@
+# SPDX-FileCopyrightText: openmod-tracker contributors
+#
+# SPDX-License-Identifier: MIT
+
+
 """Utility functions to support rendering the web app."""
 
 import pandas as pd

@@ -1,3 +1,8 @@
+# SPDX-FileCopyrightText: openmod-tracker contributors
+#
+# SPDX-License-Identifier: MIT
+
+
 """Get detailed information about GitHub users who interacted with a repository."""
 
 import logging

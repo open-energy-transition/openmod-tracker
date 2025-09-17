@@ -1,3 +1,8 @@
+# SPDX-FileCopyrightText: openmod-tracker contributors
+#
+# SPDX-License-Identifier: MIT
+
+
 """Scripts and CLI to create SonarCloud projects and to retrieve statistics from analysed projects."""
 
 import logging

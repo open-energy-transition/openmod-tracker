@@ -1,3 +1,8 @@
+# SPDX-FileCopyrightText: openmod-tracker contributors
+#
+# SPDX-License-Identifier: MIT
+
+
 """Get ecosyste.ms stats for defined projects."""
 
 import logging

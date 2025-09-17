@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: openmod-tracker contributors listed in AUTHORS.md
+
+SPDX-License-Identifier: CC0-1.0
+-->
+
 # Contributing guidelines
 
 We're really glad you're reading this, because we rely on the community to help maintain this project.
@@ -8,8 +14,10 @@ Some of the resources to look at if you're interested in contributing:
 
 ## Licensing
 
-Copyright (C) Open Energy Transition (OET)
-License: MIT / CC0 1.0
+This project uses [reuse](https://reuse.software/) to handle its licensing.
+See their documentation for further details on how to ensure any new files are appropriately licensed.
+
+Add your name to `AUTHORS.md` when making a contribution to be recognised in the general repository copyright.
 
 ## Reporting bugs and requesting features
 

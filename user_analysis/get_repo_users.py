@@ -1,3 +1,8 @@
+# SPDX-FileCopyrightText: openmod-tracker contributors listed in AUTHORS.md
+#
+# SPDX-License-Identifier: MIT
+
+
 """GitHub Repository Interaction Collector.
 
 This script fetches comprehensive repository interaction data using GitHub's GraphQL API with rate limiting, pagination, and error handling.

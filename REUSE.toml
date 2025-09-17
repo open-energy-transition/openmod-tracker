@@ -1,0 +1,39 @@
+version = 1
+SPDX-PackageName = "openmod-tracker"
+SPDX-PackageSupplier = "Open Energy Transition gGmbH <info@openenergytransition.org>"
+SPDX-PackageDownloadLocation = "https://github.com/open-energy-transition/openmod-tracker"
+
+[[annotations]]
+path = [
+    "inventory/output/**",
+    "user_analysis/output/**",
+]
+SPDX-FileCopyrightText = [
+    "openmod-tracker contributors listed in AUTHORS.md",
+]
+SPDX-License-Identifier = "CC-BY-4.0"
+
+[[annotations]]
+path = [
+    "pixi.lock",
+    ".editorconfig",
+    ".gitattributes",
+    ".dockerignore",
+    "**/.gitignore",
+    "website/.devcontainer/devcontainer.json",
+    "website/requirements.txt"
+]
+SPDX-FileCopyrightText = [
+    "openmod-tracker contributors listed in AUTHORS.md",
+]
+SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = [
+    "inventory/*.csv",
+    "inventory/*.ipynb",
+]
+SPDX-FileCopyrightText = [
+    "Open Energy Transition gGmbH",
+]
+SPDX-License-Identifier = "MIT"

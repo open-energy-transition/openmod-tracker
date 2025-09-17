@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: openmod-tracker contributors listed in AUTHORS.md
+
+SPDX-License-Identifier: CC0-1.0
+-->
+
 # Contributor Covenant Code of Conduct
 
 ## Our Pledge

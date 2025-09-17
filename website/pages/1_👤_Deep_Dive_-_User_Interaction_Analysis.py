@@ -1,3 +1,8 @@
+# SPDX-FileCopyrightText: openmod-tracker contributors listed in AUTHORS.md
+#
+# SPDX-License-Identifier: MIT
+
+
 """Create Streamlit web app sub-page to visualise tool user data.
 
 (C) Open Energy Transition (OET)

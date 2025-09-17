@@ -1,3 +1,8 @@
+# SPDX-FileCopyrightText: openmod-tracker contributors listed in AUTHORS.md
+#
+# SPDX-License-Identifier: MIT
+
+
 """Streamlit app test suite."""
 
 import sys

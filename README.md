@@ -1,5 +1,12 @@
+<!--
+SPDX-FileCopyrightText: openmod-tracker contributors listed in AUTHORS.md
+
+SPDX-License-Identifier: CC-BY-4.0
+-->
 
 # Open Energy Modelling Tool Tracker (openmod-tracker)
+
+[![REUSE status](https://api.reuse.software/badge/github.com/open-energy-transition/openmod-tracker/)](https://api.reuse.software/info/github.com/open-energy-transition/openmod-tracker/)
 
 Repository for analyzing the maturity and adoption of open-source Energy System Modelling (ESM) tools using Git and other publicly available data.
 The result of the analysis is available in an [online dashboard](https://open-esm-analysis.streamlit.app/).
@@ -144,5 +151,8 @@ To deploy new versions of the dashboard to <https://openmod-tracker.org>, follow
 
 ## License
 
-This repository is licensed under the [MIT license](LICENSES/MIT.txt).
-In addition the generated data files in this repository (`inventory/output`, `user_analysis/output`) are licensed under the [Creative Commons Attribution 4.0 license](LICENSES/CC-BY-4.0.txt).
+This project uses [REUSE](https://reuse.software/) to manage its licensing.
+
+The scripts in this repository are licensed under the [MIT license](LICENSES/MIT.txt).
+The generated data files in this repository (`inventory/output`, `user_analysis/output`) are licensed under the [Creative Commons Attribution 4.0 license](LICENSES/CC-BY-4.0.txt).
+All other files are licensed under the [CC0 1.0 Universal license](LICENSES/CC0-1.0.txt).

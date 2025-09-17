@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: openmod-tracker contributors listed in AUTHORS.md
+#
+# SPDX-License-Identifier: CC0-1.0
+
 name: Report a missing or incorrectly included tool
 description: Missing or incorrectly included tools in the inventory? Report them here.
 labels:

@@ -1,8 +1,9 @@
-"""Create Streamlit web app to visualise tool inventory data.
+# SPDX-FileCopyrightText: openmod-tracker contributors listed in AUTHORS.md
+#
+# SPDX-License-Identifier: MIT
 
-(C) Open Energy Transition (OET)
-License: MIT / CC0 1.0
-"""
+
+"""Create Streamlit web app to visualise tool inventory data."""
 
 import datetime
 from collections.abc import Callable, Iterable

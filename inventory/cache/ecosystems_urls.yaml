@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: openmod-tracker contributors listed in AUTHORS.md
+#
+# SPDX-License-Identifier: CC0-1.0
+
 http://github.com/osemosys/osemosys: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/OSeMOSYS%2FOSeMOSYS
 https://bitbucket.org/harald_g_svendsen/powergama: https://repos.ecosyste.ms/api/v1/hosts/Bitbucket.org/repositories/harald_g_svendsen%2Fpowergama
 https://git-ce.rwth-aachen.de/ltt/secmod: not-found

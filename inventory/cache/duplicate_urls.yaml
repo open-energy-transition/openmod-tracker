@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: openmod-tracker contributors listed in AUTHORS.md
+#
+# SPDX-License-Identifier: CC0-1.0
+
 energy_policy_simulator: https://github.com/energyinnovation/eps-us
 energyrt: https://github.com/optimal2050/energyrt
 exago: https://github.com/pnnl/exago

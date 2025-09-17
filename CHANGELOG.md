@@ -31,7 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Updated exclusion list to remove newly added `project-origin`, as it isn't an ESM tool.
+- Updated exclusion list to remove newly added `project-origin` & `mapyourgrid` as they aren't ESM tools.
 
 ## 2025-08-27
 

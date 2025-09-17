@@ -30,6 +30,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - SonarCloud project creator and analysed project stats getter (#81).
+- License specific to generated data + `reuse` to manage per-file licensing (#92).
+- OET logo and license information in deployed dashboard.
 
 ## 2025-08-27
 

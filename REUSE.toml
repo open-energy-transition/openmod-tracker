@@ -8,9 +8,7 @@ path = [
     "inventory/output/**",
     "user_analysis/output/**",
 ]
-SPDX-FileCopyrightText = [
-    "openmod-tracker contributors",
-]
+SPDX-FileCopyrightText = "openmod-tracker contributors"
 SPDX-License-Identifier = "CC-BY-4.0"
 
 [[annotations]]

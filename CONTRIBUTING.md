@@ -4,7 +4,7 @@ We're really glad you're reading this, because we rely on the community to help 
 
 Some of the resources to look at if you're interested in contributing:
 
-- Look at open issues tagged with ["help wanted"](https://github.com/open-energy-transition/open-esm-analysis/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) and ["good first issue"](https://github.com/open-energy-transition/open-esm-analysis/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
+- Look at open issues tagged with ["help wanted"](https://github.com/open-energy-transition/openmod-tracker/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) and ["good first issue"](https://github.com/open-energy-transition/openmod-tracker/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
 
 ## Licensing
 
@@ -16,14 +16,14 @@ License: MIT / CC0 1.0
 You can open an issue on GitHub to report bugs, request new openmod-tracker features, or to add/remove tools from the inventory.
 Follow these links to submit your issue:
 
-- [Report bugs or other problems while running openmod-tracker locally](https://github.com/open-energy-transition/open-esm-analysis/issues/new?template=BUG-REPORT.yml).
+- [Report bugs or other problems while running openmod-tracker locally](https://github.com/open-energy-transition/openmod-tracker/issues/new?template=BUG-REPORT.yml).
   If reporting an error, please include a full traceback in your issue.
 
-- [Request features that openmod-tracker does not already include](https://github.com/open-energy-transition/open-esm-analysis/issues/new?template=FEATURE-REQUEST.yml).
+- [Request features that openmod-tracker does not already include](https://github.com/open-energy-transition/openmod-tracker/issues/new?template=FEATURE-REQUEST.yml).
 
-- [Report missing or incorrectly included tools](https://github.com/open-energy-transition/open-esm-analysis/issues/new?template=TOOLS.yml).
+- [Report missing or incorrectly included tools](https://github.com/open-energy-transition/openmod-tracker/issues/new?template=TOOLS.yml).
 
-- [Any other issue](https://github.com/open-energy-transition/open-esm-analysis/issues/new).
+- [Any other issue](https://github.com/open-energy-transition/openmod-tracker/issues/new).
 
 ## Submitting changes
 
@@ -52,7 +52,7 @@ To contribute changes:
 1. Generate new datasets and test serving the website with `pixi run serve`.
 1. Commit your changes to the feature branch (you should have `pre-commit` installed to ensure your code is correctly formatted when you commit changes).
 1. Push the branch to GitHub (`git push origin new-fix-or-feature`).
-1. On GitHub, create a new [pull request](https://github.com/open-energy-transition/open-esm-analysis/pull/new/main) from the feature branch to the `main` branch.
+1. On GitHub, create a new [pull request](https://github.com/open-energy-transition/openmod-tracker/pull/new/main) from the feature branch to the `main` branch.
 
 ### Pull requests
 

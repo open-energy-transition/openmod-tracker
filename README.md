@@ -2,7 +2,7 @@
 # Open Energy Modelling Tool Tracker (openmod-tracker)
 
 Repository for analyzing the maturity and adoption of open-source Energy System Modelling (ESM) tools using Git and other publicly available data.
-The result of the analysis is available in an [online dashboard](https://open-esm-analysis.streamlit.app/).
+The result of the analysis is available in an [online dashboard](https://openmod-tracker.org/).
 
 ## Features
 
@@ -20,7 +20,7 @@ The result of the analysis is available in an [online dashboard](https://open-es
   - Downloads
   - development distribution score (DDS)
 - Fetches repository interactions and interacting user data using the [GitHub REST API](https://docs.github.com/en/rest) and classifies users based on string matching.
-- Visualises ESM tool statistics using in a [Streamlit](https://streamlit.io/) application: <https://open-esm-analysis.streamlit.app/>
+- Visualises ESM tool statistics in a [Streamlit](https://streamlit.io/)-powered dashboard: <https://openmod-tracker.org/>
 
 ## Installation
 
@@ -42,11 +42,11 @@ You can run our minimal test suite by calling `pixi run test`.
 
 ## Troubleshooting
 
-If the [app](https://open-esm-analysis.streamlit.app/) is not loading then you can try a few things:
+If the [development version dashboard](https://openmod-tracker.streamlit.app/) is not loading then you can try a few things:
 
-1. Delete the site data for <https://open-esm-analysis.streamlit.app> in your browser and refresh the page.
+1. Delete the site data for <https://openmod-tracker.streamlit.app> in your browser and refresh the page.
 1. Clone this repository locally and run `pixi run test` from the terminal (having followed our [installation instructions](#installation)).
-1. If the tests fail, you can debug by setting [traces/breakpoints](https://docs.python.org/3/library/pdb.html) in the app python scripts (`website/**/*.py`) and then running `pixi run -e app serve` in the terminal.
+1. If the tests fail, you can debug by setting [traces/breakpoints](https://docs.python.org/3/library/pdb.html) in the app python scripts (`website/**/*.py`) and then run `pixi run -e app serve` in the terminal.
 1. If the tests pass and you are a repository maintainer, you can reboot the app from [the streamlit dashboard](https://share.streamlit.io/).
 
 ## Refreshing data
@@ -94,14 +94,14 @@ We collect tools listed in the following inventories:
 - [Open Sustainable Technology](https://github.com/protontypes/open-sustainable-technology)
 - [Open Energy Modelling Initiative](https://wiki.openmod-initiative.org/wiki/Open_Models)
 
-Alongside a [pre-compiled list](https://github.com/open-energy-transition/open-esm-analysis/blob/main/inventory/pre_compiled_esm_list.csv) of tools (based on [DOI:10.1016/j.rser.2018.11.020](https://doi.org/10.1016/j.rser.2018.11.020) and subsequent searches), we filter the collection to:
+Alongside a [pre-compiled list](https://github.com/open-energy-transition/openmod-tracker/blob/main/inventory/pre_compiled_esm_list.csv) of tools (based on [DOI:10.1016/j.rser.2018.11.020](https://doi.org/10.1016/j.rser.2018.11.020) and subsequent searches), we filter the collection to:
 
 - Remove duplicates according to tool name, after normalising the string to lower case and converting all special characters to underscores.
 - Remove duplicates according to tool source code URL, after normalising the string to lower case.
 - Remove tools without a valid Git repository for their source code (hosted on e.g. GitHub, GitLab, Bitbucket, or a custom domain).
 - Remove tools that we know, from manual inspection, are not appropriate for including in our inventory.
   This may be because they are duplicates of the same tool that we cannot catch with our simple detection methods, are supporting tools for another listed tool, or have been catalogued erroneously in the upstream inventory.
-  We give the reason for manually excluding a tool in our [list of exclusions](https://github.com/open-energy-transition/open-esm-analysis/blob/main/inventory/exclusions.csv).
+  We give the reason for manually excluding a tool in our [list of exclusions](https://github.com/open-energy-transition/openmod-tracker/blob/main/inventory/exclusions.csv).
 
 For the remaining tools, we collect source code repository and package data using <https://ecosyste.ms> APIs.
 At this stage, some tools will be filtered out for lack of any data.

@@ -29,6 +29,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Country map in user interaction analysis missing all data (#94).
 
+### Changed
+
+- Updated exclusion list to remove newly added `project-origin`, as it isn't an ESM tool.
+
 ## 2025-08-27
 
 Initial release.

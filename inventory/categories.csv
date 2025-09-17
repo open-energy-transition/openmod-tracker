@@ -5,7 +5,7 @@ energy_system_simulation_and_optimization,"production-cost","possibly exclude as
 fine,"capacity-expansion","possibly also production-cost"
 genx,"capacity-expansion,production-cost",
 grid2op,"power-flow",
-gridcal,"capacity-expansion,production-cost,power-flow","power grid only"
+gridcal,"power-flow",
 hopp,"capacity-expansion,production-cost",
 oemof_solph,"capacity-expansion,production-cost",
 open_modeling_framework,"production-cost,power-flow",

@@ -1,7 +1,3 @@
-# SPDX-FileCopyrightText: openmod-tracker contributors
-#
-# SPDX-License-Identifier: MIT
-
 energy_policy_simulator: https://github.com/energyinnovation/eps-us
 energyrt: https://github.com/optimal2050/energyrt
 exago: https://github.com/pnnl/exago

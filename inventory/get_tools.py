@@ -1,3 +1,8 @@
+# SPDX-FileCopyrightText: openmod-tracker contributors
+#
+# SPDX-License-Identifier: MIT
+
+
 """Scripts to grab data from different sources and process them to a common format."""
 
 import logging

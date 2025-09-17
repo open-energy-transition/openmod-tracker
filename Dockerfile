@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: openmod-tracker contributors
+#
+# SPDX-License-Identifier: MIT
+
 FROM python:3.13-slim
 
 COPY . ./

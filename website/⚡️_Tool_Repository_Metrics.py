@@ -1,8 +1,9 @@
-"""Create Streamlit web app to visualise tool inventory data.
+# SPDX-FileCopyrightText: openmod-tracker contributors
+#
+# SPDX-License-Identifier: MIT
 
-(C) Open Energy Transition (OET)
-License: MIT / CC0 1.0
-"""
+
+"""Create Streamlit web app to visualise tool inventory data."""
 
 import datetime
 from collections.abc import Callable, Iterable
@@ -19,6 +20,9 @@ import streamlit as st
 import util
 from bs4 import BeautifulSoup
 from st_keyup import st_keyup
+
+OET_LOGO_FULL_NAME = "https://raw.githubusercontent.com/open-energy-transition/handbook/a8c0a9d55a543093008c7b58e7ed9efa6d9d633f/static/img/oet_standard_red_svg.svg"
+OET_LOGO_ABBREVIATED = "https://raw.githubusercontent.com/open-energy-transition/handbook/a8c0a9d55a543093008c7b58e7ed9efa6d9d633f/static/img/oet_standard_red_png.png"
 
 COLUMN_NAME_MAPPING: dict[str, str] = {
     "created_at": "Created",
@@ -251,13 +255,19 @@ def add_scoring(cols: list[str]) -> float:
     Returns:
         float: Column score weighting
     """
+    st.toggle(
+        "Add score column to table",
+        value=util.get_state("score_toggle", False),
+        key="score_toggle",
+    )
     selectbox_cols = st.columns(len(cols))
     selectbox_cols[0].selectbox(
         "Metric scaling method",
-        ("min-max", "rank"),
+        ("rank", "min-max"),
         help="""Select the method by which metrics should be scaled to bring them to a similar range.
-    `min-max` uses [min-max normalisation](https://en.wikipedia.org/wiki/Feature_scaling#Rescaling_(min-max_normalization)).
-    `rank` uses the absolute rank of a tool for each metric.""",
+        `rank` uses the absolute rank of a tool for each metric.
+        `min-max` uses [min-max normalisation](https://en.wikipedia.org/wiki/Feature_scaling#Rescaling_(min-max_normalization)).
+        """,
         key="scoring_method",
     )
     score_cols = st.columns(len(cols))
@@ -287,7 +297,7 @@ def update_score_col(df: pd.DataFrame) -> pd.Series:
     """
     # Add tool score by combining metrics with the provided weightings
     scores = {col: util.get_state(f"scoring_{col}", 0.5) for col in df.columns}
-    scoring_method = util.get_state("scoring_method", "min-max")
+    scoring_method = util.get_state("scoring_method", "rank")
     normalised_data = normalise(df, scoring_method)
     score = normalised_data.mul(scores).div(sum(scores.values())).sum(axis=1).mul(100)
     return score
@@ -605,9 +615,42 @@ def preamble(latest_changes: str, n_tools: int, data_processing_text: str):
         data_processing_text (str): HTML text snippet to drop into the data processing explainer box.
     """
     st.markdown(
-        f"""
+        """
         # Open Energy Modelling Tool Tracker
+        """
+    )
 
+    # Custom styles to make the beta expander more prominent
+    st.html(
+        """
+        <style>
+            div.st-key-beta-expander [data-testid=stExpander] details summary{
+                background-color: rgba(255, 165, 0, 0.3);
+            }
+            div.st-key-beta-expander [data-testid=stExpander] details summary p{
+                font-size: 1rem;
+            }
+        </style>
+        """
+    )
+    with st.container(key="beta-expander"):
+        with st.expander("We're still in beta", icon="🚧"):
+            st.markdown(
+                """
+                This dashboard is still a work in progress.
+                We are continuously working to improve the user experience and add new features.
+
+                Features we have in the pipeline include:
+
+                - a tool feature matrix to compare the capabilities of different tools.
+                - more detailed source code quality metrics using [SonarQube Cloud](https://www.sonarsource.com/products/sonarcloud/).
+                - linked publication citations, for those tools with associated peer-reviewed publications.
+
+                If you have any feedback or suggestions, please don't hesitate to reach out by [opening an issue on GitHub](https://github.com/open-energy-transition/openmod-tracker/issues/new) or [sending us an email](mailto:info@openenergytransition.org).
+                """
+            )
+    st.markdown(
+        f"""
         The global energy transition accelerating.
         Given the inherent complexity of energy system planning, planners rely heavily on software tools to provide quantitative evidence to support decisions.
         Open source tools are becoming increasingly prevalent and are beginning to gain traction in industry and the public sector (e.g. at [ENTSO-E](https://www.linkedin.com/posts/entso-e_energytransition-opensource-innovation-activity-7293296246813851649-2ynL)).
@@ -629,8 +672,8 @@ def preamble(latest_changes: str, n_tools: int, data_processing_text: str):
 
         ❓ Which tools have the strongest and broadest community support?
 
-        To do so, we provide an overview of metrics associated with the source code repositories of {n_tools} open energy planning tools.
-        These tools have been collated from various publicly accessible tool inventories (see [our project homepage](https://github.com/open-energy-transition/open-esm-analysis/) for the full list!) and filtered for only those that have accessible Git repositories.
+        To do so, we provide an overview of metrics associated with the source code repositories of {n_tools} open energy planning tools, inspired by [an initial prototype by David Paolella](https://github.com/dpaolella/open-model-analysis/).
+        These tools have been collated from various publicly accessible tool inventories (see [our project homepage](https://github.com/open-energy-transition/openmod-tracker/) for the full list!) and filtered for only those that have accessible Git repositories.
         You can explore the tools in the table below and filter them using the sliders in the sidebar.
         """
     )
@@ -644,7 +687,7 @@ def preamble(latest_changes: str, n_tools: int, data_processing_text: str):
             1. We rely on third parties to enable us to collate tools and their metrics.
                Where we undertake the data collection directly from the tool repositories, our heuristics may not capture some things (e.g. documentation sites).
                This means some tools and / or metrics may be missing.
-               If you notice this is the case, [raise an issue on our project homepage](https://github.com/open-energy-transition/open-esm-analysis/issues/new).
+               If you notice this is the case, [raise an issue on our project homepage](https://github.com/open-energy-transition/openmod-tracker/issues/new).
 
             2. These metrics do not tell the whole story.
                For instance, a project may have documentation but we have not reviewed how comprehensive it is!
@@ -657,7 +700,7 @@ def preamble(latest_changes: str, n_tools: int, data_processing_text: str):
             4. We have had to manually exclude some tools from our list that have been mis-categorised in the upstream inventories.
                New, mis-categorised tools may slip through our manual exclusion net, so don't be surprised if you see a tool that doesn't seem to be useful for energy system planning.
                Conversely, you may have reason to believe a tool has been manually excluded in error.
-               If that's the case, [raise an issue on our project homepage](https://github.com/open-energy-transition/open-esm-analysis/issues/new).
+               If that's the case, [raise an issue on our project homepage](https://github.com/open-energy-transition/openmod-tracker/issues/new).
             """
         )
     st.markdown(
@@ -696,7 +739,27 @@ def conclusion():
 
         **By combining live data tracking with structured qualitative evaluation**, the energy community can reduce wasted investments and ensure the best tools remain available for researchers, grid operators, project developers, investors and policymakers.
 
-        **Have you found this platform useful, or want to see it grow in any specific way?** Share your thoughts and suggestions on our [project homepage](https://github.com/open-energy-transition/open-esm-analysis/issues)!
+        **Have you found this platform useful, or want to see it grow in any specific way?** Share your thoughts and suggestions on our [project homepage](https://github.com/open-energy-transition/openmod-tracker/issues)!
+        """
+    )
+
+
+def footer():
+    """Footer content for the Streamlit app."""
+    st.divider()
+    _, col1, col2, col3, _ = st.columns([1, 1, 1, 1, 1])
+    col1.image(OET_LOGO_FULL_NAME, width=300)
+    col2.markdown(
+        """
+        © Open Energy Transition gGmbH.
+        The dashboard content is licensed under [CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/deed.en).
+        The dashboard source code is licensed under [MIT license](https://opensource.org/license/mit).
+        """
+    )
+    col3.markdown(
+        """
+        Built by [Open Energy Transition](https://openenergytransition.org/), with support by [Breakthrough Energy](https://www.breakthroughenergy.org/).
+        The information provided in this dashboard is for informational purposes only and does not constitute professional advice.
         """
     )
 
@@ -721,8 +784,9 @@ def main(df: pd.DataFrame):
         filters.append(util.nan_filter(df["Docs"]))
 
     # Add score filtering first.
-    st.sidebar.subheader("Score", help=COLUMN_HELP["Score"])
-    score_slider_range = slider(df["Score"], reset_mode, plot_dist=False)
+    if util.get_state("score_toggle", False):
+        st.sidebar.subheader("Score", help=COLUMN_HELP["Score"])
+        score_slider_range = slider(df["Score"], reset_mode, plot_dist=False)
 
     for col in COLUMN_NAME_MAPPING.values():
         # Show missing data info and toggle for each column
@@ -761,8 +825,17 @@ def main(df: pd.DataFrame):
 
     # Add tool score by combining metrics with the provided weightings
     df["Score"] = update_score_col(df[numeric_cols])
-    filters.append(numeric_range_filter(df["Score"], *score_slider_range))
-
+    if util.get_state("score_toggle", False):
+        filters.append(numeric_range_filter(df["Score"], *score_slider_range))
+        score_col_config = st.column_config.ProgressColumn(
+            "Score",
+            min_value=0,
+            max_value=100,
+            format="%.0f%%",
+            help=COLUMN_HELP["Score"],
+        )
+    else:
+        score_col_config = None
     # Display options
     col1, col2 = st.columns([3, 2])
     with col2:
@@ -786,13 +859,7 @@ def main(df: pd.DataFrame):
         "Docs": st.column_config.LinkColumn(
             "Docs", display_text="📖", help=COLUMN_HELP["Docs"]
         ),
-        "Score": st.column_config.ProgressColumn(
-            "Score",
-            min_value=0,
-            max_value=100,
-            format="%.0f%%",
-            help=COLUMN_HELP["Score"],
-        ),
+        "Score": score_col_config,
         "Interactions": st.column_config.BarChartColumn(
             "6 Month Interactions",
             y_min=0,
@@ -820,9 +887,12 @@ def main(df: pd.DataFrame):
         st.warning(
             "No data matches the current filter criteria. Try adjusting your filters."
         )
-    st.subheader("📊 Adjust tool scoring")
+    st.subheader("📊 Score tools your way")
     st.markdown(
-        "You can create your own tool scores by adjusting the weights applied to each numeric metric."
+        """
+        You can create your own tool scores by combining the metrics that matter most to you.
+        First, toggle the scoring column.
+        Then, adjust the weights applied to each numeric metric to fit your preferences."""
     )
     add_scoring(numeric_cols)
 
@@ -839,6 +909,12 @@ if __name__ == "__main__":
     st.set_page_config(
         page_title="Tool Repository Metrics", page_icon="⚡️", layout="wide"
     )
+    st.logo(
+        OET_LOGO_FULL_NAME,
+        size="large",
+        link="https://openenergytransition.org/",
+        icon_image=OET_LOGO_ABBREVIATED,
+    )
 
     df_vis = create_vis_table(tool_stats_dir, user_stats_dir)
     g = git.cmd.Git()
@@ -850,3 +926,4 @@ if __name__ == "__main__":
     preamble(latest_changes, len(df_vis), data_processing_approach_string)
     main(df_vis.copy())
     conclusion()
+    footer()

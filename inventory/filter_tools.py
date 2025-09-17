@@ -1,3 +1,8 @@
+# SPDX-FileCopyrightText: openmod-tracker contributors
+#
+# SPDX-License-Identifier: MIT
+
+
 """Filter collected ESM tools to remove duplicates and non-Git source URLs."""
 
 import logging

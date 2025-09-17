@@ -605,9 +605,42 @@ def preamble(latest_changes: str, n_tools: int, data_processing_text: str):
         data_processing_text (str): HTML text snippet to drop into the data processing explainer box.
     """
     st.markdown(
-        f"""
+        """
         # Open Energy Modelling Tool Tracker
+        """
+    )
 
+    # Custom styles to make the beta expander more prominent
+    st.html(
+        """
+        <style>
+            div.st-key-beta-expander [data-testid=stExpander] details summary{
+                background-color: rgba(255, 165, 0, 0.3);
+            }
+            div.st-key-beta-expander [data-testid=stExpander] details summary p{
+                font-size: 1rem;
+            }
+        </style>
+        """
+    )
+    with st.container(key="beta-expander"):
+        with st.expander("We're still in beta", icon="🚧"):
+            st.markdown(
+                """
+                This dashboard is still a work in progress.
+                We are continuously working to improve the user experience and add new features.
+
+                Features we have in the pipeline include:
+
+                - a tool feature matrix to compare the capabilities of different tools.
+                - more detailed source code quality metrics using [SonarQube Cloud](https://www.sonarsource.com/products/sonarcloud/).
+                - linked publication citations, for those tools with associated peer-reviewed publications.
+
+                If you have any feedback or suggestions, please don't hesitate to reach out by [opening an issue on GitHub](https://github.com/open-energy-transition/openmod-tracker/issues/new) or [sending us an email](mailto:info@openenergytransition.org).
+                """
+            )
+    st.markdown(
+        f"""
         The global energy transition accelerating.
         Given the inherent complexity of energy system planning, planners rely heavily on software tools to provide quantitative evidence to support decisions.
         Open source tools are becoming increasingly prevalent and are beginning to gain traction in industry and the public sector (e.g. at [ENTSO-E](https://www.linkedin.com/posts/entso-e_energytransition-opensource-innovation-activity-7293296246813851649-2ynL)).
@@ -629,8 +662,8 @@ def preamble(latest_changes: str, n_tools: int, data_processing_text: str):
 
         ❓ Which tools have the strongest and broadest community support?
 
-        To do so, we provide an overview of metrics associated with the source code repositories of {n_tools} open energy planning tools.
-        These tools have been collated from various publicly accessible tool inventories (see [our project homepage](https://github.com/open-energy-transition/open-esm-analysis/) for the full list!) and filtered for only those that have accessible Git repositories.
+        To do so, we provide an overview of metrics associated with the source code repositories of {n_tools} open energy planning tools, inspired by [an initial prototype by David Paolella](https://github.com/dpaolella/open-model-analysis/).
+        These tools have been collated from various publicly accessible tool inventories (see [our project homepage](https://github.com/open-energy-transition/openmod-tracker/) for the full list!) and filtered for only those that have accessible Git repositories.
         You can explore the tools in the table below and filter them using the sliders in the sidebar.
         """
     )
@@ -644,7 +677,7 @@ def preamble(latest_changes: str, n_tools: int, data_processing_text: str):
             1. We rely on third parties to enable us to collate tools and their metrics.
                Where we undertake the data collection directly from the tool repositories, our heuristics may not capture some things (e.g. documentation sites).
                This means some tools and / or metrics may be missing.
-               If you notice this is the case, [raise an issue on our project homepage](https://github.com/open-energy-transition/open-esm-analysis/issues/new).
+               If you notice this is the case, [raise an issue on our project homepage](https://github.com/open-energy-transition/openmod-tracker/issues/new).
 
             2. These metrics do not tell the whole story.
                For instance, a project may have documentation but we have not reviewed how comprehensive it is!
@@ -657,7 +690,7 @@ def preamble(latest_changes: str, n_tools: int, data_processing_text: str):
             4. We have had to manually exclude some tools from our list that have been mis-categorised in the upstream inventories.
                New, mis-categorised tools may slip through our manual exclusion net, so don't be surprised if you see a tool that doesn't seem to be useful for energy system planning.
                Conversely, you may have reason to believe a tool has been manually excluded in error.
-               If that's the case, [raise an issue on our project homepage](https://github.com/open-energy-transition/open-esm-analysis/issues/new).
+               If that's the case, [raise an issue on our project homepage](https://github.com/open-energy-transition/openmod-tracker/issues/new).
             """
         )
     st.markdown(
@@ -696,7 +729,7 @@ def conclusion():
 
         **By combining live data tracking with structured qualitative evaluation**, the energy community can reduce wasted investments and ensure the best tools remain available for researchers, grid operators, project developers, investors and policymakers.
 
-        **Have you found this platform useful, or want to see it grow in any specific way?** Share your thoughts and suggestions on our [project homepage](https://github.com/open-energy-transition/open-esm-analysis/issues)!
+        **Have you found this platform useful, or want to see it grow in any specific way?** Share your thoughts and suggestions on our [project homepage](https://github.com/open-energy-transition/openmod-tracker/issues)!
         """
     )
 

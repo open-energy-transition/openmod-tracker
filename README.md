@@ -1,5 +1,5 @@
 <!--
-SPDX-FileCopyrightText: openmod-tracker contributors listed in AUTHORS.md
+SPDX-FileCopyrightText: openmod-tracker contributors
 
 SPDX-License-Identifier: MIT
 -->
@@ -152,6 +152,8 @@ To deploy new versions of the dashboard to <https://openmod-tracker.org>, follow
 ## License
 
 This project uses [REUSE](https://reuse.software/) to manage its licensing.
+
+For a list of all `openmod-tracker contributors`, see [AUTHORS.md](AUTHORS.md).
 
 The scripts in this repository are licensed under the [MIT license](LICENSES/MIT.txt).
 The generated data files in this repository (`inventory/output`, `user_analysis/output`) are licensed under the [Creative Commons Attribution 4.0 license](LICENSES/CC-BY-4.0.txt).

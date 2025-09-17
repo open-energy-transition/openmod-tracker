@@ -9,7 +9,7 @@ path = [
     "user_analysis/output/**",
 ]
 SPDX-FileCopyrightText = [
-    "openmod-tracker contributors listed in AUTHORS.md",
+    "openmod-tracker contributors",
 ]
 SPDX-License-Identifier = "CC-BY-4.0"
 
@@ -18,7 +18,7 @@ path = [
     "pixi.lock",
     "website/requirements.txt"
 ]
-SPDX-FileCopyrightText = "openmod-tracker contributors listed in AUTHORS.md"
+SPDX-FileCopyrightText = "openmod-tracker contributors"
 SPDX-License-Identifier = "MIT"
 
 # This picks up all non-python files in the top-level of each script directory without specifying them individually.
@@ -27,5 +27,5 @@ path = [
     "inventory/*",
     "user_analysis/*",
 ]
-SPDX-FileCopyrightText = "openmod-tracker contributors listed in AUTHORS.md"
+SPDX-FileCopyrightText = "openmod-tracker contributors"
 SPDX-License-Identifier = "MIT"

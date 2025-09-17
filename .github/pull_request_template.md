@@ -1,5 +1,5 @@
 <!--
-SPDX-FileCopyrightText: openmod-tracker contributors listed in AUTHORS.md
+SPDX-FileCopyrightText: openmod-tracker contributors
 
 SPDX-License-Identifier: CC0-1.0
 -->

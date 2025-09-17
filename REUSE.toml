@@ -21,9 +21,11 @@ path = [
 SPDX-FileCopyrightText = "openmod-tracker contributors listed in AUTHORS.md"
 SPDX-License-Identifier = "MIT"
 
+# This picks up all non-python files in the top-level of each script directory without specifying them individually.
 [[annotations]]
 path = [
-    "inventory/*"
+    "inventory/*",
+    "user_analysis/*",
 ]
-SPDX-FileCopyrightText = "Open Energy Transition gGmbH"
+SPDX-FileCopyrightText = "openmod-tracker contributors listed in AUTHORS.md"
 SPDX-License-Identifier = "MIT"

@@ -157,4 +157,4 @@ For a list of all `openmod-tracker contributors`, see [AUTHORS.md](AUTHORS.md).
 
 The software in this repository is licensed under the [MIT license](LICENSES/MIT.txt).
 The generated output data (`inventory/output/*`, `user_analysis/output/*`) are licensed under the [Creative Commons Attribution 4.0 license](LICENSES/CC-BY-4.0.txt) for easier reuse.
-Individual configuration or generic files may be licensed [CC0 1.0 Universal](LICENSES/CC0-1.0.txt) and [Creative Commons Attribution ShareAlike 4.0](LICENSES/CC-BY-SA-4.0.txt); these files are marked explicitly either in the file header or in the (REUSE.toml)[REUSE.toml] file.
+Individual configuration or generic files may be licensed [CC0 1.0 Universal](LICENSES/CC0-1.0.txt) and [Creative Commons Attribution ShareAlike 4.0](LICENSES/CC-BY-SA-4.0.txt); these files are marked explicitly either in the file header or in the [REUSE.toml](REUSE.toml) file.

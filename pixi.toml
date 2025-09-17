@@ -1,9 +1,9 @@
 # SPDX-FileCopyrightText: openmod-tracker contributors listed in AUTHORS.md
 #
-# SPDX-License-Identifier: CC0-1.0
+# SPDX-License-Identifier: MIT
 
 [project]
-authors = ["Bryn Pickering <17178478+brynpickering@users.noreply.github.com>", "Markus Groissböck <markus.groissbock@openenergytransition.org>"]
+authors = ["Bryn Pickering <bryn.pickering@openenergytransition.org>", "Markus Groissböck <markus.groissbock@openenergytransition.org>"]
 channels = ["conda-forge"]
 name = "open-esm-analysis"
 platforms = ["win-64", "linux-64", "osx-64", "osx-arm64", "linux-aarch64"]

@@ -16,23 +16,14 @@ SPDX-License-Identifier = "CC-BY-4.0"
 [[annotations]]
 path = [
     "pixi.lock",
-    ".editorconfig",
-    ".gitattributes",
-    ".dockerignore",
-    ".gitignore",
     "website/requirements.txt"
 ]
-SPDX-FileCopyrightText = [
-    "openmod-tracker contributors listed in AUTHORS.md",
-]
-SPDX-License-Identifier = "CC0-1.0"
+SPDX-FileCopyrightText = "openmod-tracker contributors listed in AUTHORS.md"
+SPDX-License-Identifier = "MIT"
 
 [[annotations]]
 path = [
-    "inventory/*.csv",
-    "inventory/*.ipynb",
+    "inventory/*"
 ]
-SPDX-FileCopyrightText = [
-    "Open Energy Transition gGmbH",
-]
+SPDX-FileCopyrightText = "Open Energy Transition gGmbH"
 SPDX-License-Identifier = "MIT"

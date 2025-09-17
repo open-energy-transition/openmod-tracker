@@ -235,11 +235,11 @@ grid2op,Grid2Op,A testbed platform to model sequential decision making in power 
 grid2op,grid2op,,https://github.com/grid2op/grid2op,pre-compiled,power-flow
 gridcal,GridCal,"GridCal, a cross-platform power systems software written in Python with user interface, used in academia and industry.
 
-GridCal does all sort of static analysis of power systems with or without time series (power flow, short circuit, linear and non linear optimization, ..., you name it)",https://github.com/sanpen/gridcal,lf-energy-landscape,"capacity-expansion,production-cost,power-flow"
-gridcal,GridCal,Aims to be a complete platform for power systems research and simulation.,https://github.com/sanpen/gridcal,opensustain-tech,"capacity-expansion,production-cost,power-flow"
+GridCal does all sort of static analysis of power systems with or without time series (power flow, short circuit, linear and non linear optimization, ..., you name it)",https://github.com/sanpen/gridcal,lf-energy-landscape,power-flow
+gridcal,GridCal,Aims to be a complete platform for power systems research and simulation.,https://github.com/sanpen/veragrid,opensustain-tech,power-flow
 gridcal,GridCal,"GridCal is a research oriented power systems software.
-Research oriented? How? Well, it is a fruit of research. It is designed to be modular. As a researcher I found that the available software (not even talking about commercial options) are hard to expand or adapt to achieve complex simulations. GridCal is designed to allow you to build and reuse modules, which eventually will boost your productivity and the possibilities that are at hand.ty and the possibilities that are at hand.",https://github.com/sanpen/gridcal,openmod,"capacity-expansion,production-cost,power-flow"
-gridcal,GridCal,,https://github.com/sanpen/gridcal,pre-compiled,"capacity-expansion,production-cost,power-flow"
+Research oriented? How? Well, it is a fruit of research. It is designed to be modular. As a researcher I found that the available software (not even talking about commercial options) are hard to expand or adapt to achieve complex simulations. GridCal is designed to allow you to build and reuse modules, which eventually will boost your productivity and the possibilities that are at hand.ty and the possibilities that are at hand.",https://github.com/sanpen/gridcal,openmod,power-flow
+gridcal,GridCal,,https://github.com/sanpen/gridcal,pre-compiled,power-flow
 gridlab_d,GridLAB-D,A simulation platform for future electricity distribution power systems.,https://github.com/arras-energy/gridlabd,opensustain-tech,
 gridlab_d,gridlab-d ,,https://github.com/gridlab-d/gridlab-d ,pre-compiled,
 gridpack,GridPACK,An open-source high-performance package for simulation of large-scale electrical grids.,https://github.com/gridoptics/gridpack,opensustain-tech,power-flow
@@ -298,6 +298,7 @@ maon,Maon,"Maon is a market simulation for fundamental electricity wholesale mar
 Web browsers provide access to the data management, simulation, and analysis environment. It enables high-speed, high-resolution, and large-scale foresights. Scenarios can be parameterized by multiple users at the same time, calculated by one click, and collaboratively visually analyzed.
 
 Users get support by work-leveraging parameterization tools, comprehensive quality checks, and interactive visualizations. Maon provides not only results like prices, dispatches, and capacities, but also capture rates, costs, price distributions, revenues, utilizations, and many other measures.es, utilizations, and many other measures.",,openmod,
+mapyourgrid,MapYourGrid,"We empower individuals, communities, and nations around the world to map the global electrical grid.",https://github.com/open-energy-transition/mapyourgrid,lf-energy-landscape,
 marmot,Marmot,,https://github.com/nrel/marmot,lf-energy-landscape,
 match_model,MATCH-model,,https://github.com/pencleanenergy/match-model,pre-compiled,
 matpower,MATPOWER,"Free, open-source tools for electric power system simulation and optimization. Multiple formulations of AC and DC models for power flow, continuation power flow, optimal power flow, deterministic and stochastic unit commitment and more.",https://matpower.org/doc,g-pst,"power-flow,production-cost"
@@ -391,7 +392,7 @@ open_energy_system_models,Open Energy System Models,Used to explore future energ
 open_energy_system_models,Open Energy System Models,Used to explore future energy systems and are often applied to questions involving energy and climate policy.,https://en.wikipedia.org/wiki/open_energy_system_models,opensustain-tech,
 open_infrastructure_map,Open Infrastructure Map,A view of the world's energy and water infrastructure mapped in the OpenStreetMap database.,https://github.com/openinframap/openinframap,opensustain-tech,
 open_modeling_framework,Open Modeling Framework,A set of Python libraries for simulating power systems behavior with an emphasis on cost-benefit analysis of emerging technologies.,https://github.com/dpinney/omf,lf-energy-landscape,"production-cost,power-flow"
-open_modeling_framework,Open Modeling Framework,A set of Python libraries for simulating power systems behavior with an emphasis on cost-benefit analysis of emerging technologies.,https://github.com/nreca-bts/omf,opensustain-tech,"production-cost,power-flow"
+open_modeling_framework,Open Modeling Framework,"A set of Python libraries for simulating power systems behavior with an emphasis on cost-benefit analysis of emerging technologies: distributed generation, storage, networked controls, etc.",https://github.com/nreca-bts/omf,opensustain-tech,"production-cost,power-flow"
 open_models,Open Models,This page lists energy models published under open source licenses.,,lf-energy-landscape,
 open_plan,open_plan,,https://github.com/open-plan-tool/gui,lf-energy-landscape,
 opencem,openCEM,Capacity Expansion Model and Optimiser for the Australian National Energy Market.,https://github.com/opencemorg/opencem,lf-energy-landscape,
@@ -468,6 +469,7 @@ powsybl,powsybl,,https://github.com/powsybl,pre-compiled,power-flow
 powsybl_open_load_flow,PowSyBl Open Load Flow,"An open source library written in Java, that makes it easy to write complex software for power systems simulations and analysis.",https://github.com/powsybl/powsybl-open-loadflow,opensustain-tech,
 pras,PRAS,,https://github.com/nrel/pras,pre-compiled,
 prep_shot,PREP-SHOT,"A transparent, modular, and open-source Energy Capacity Expansion Model.",https://github.com/prep-next/prep-shot,opensustain-tech,capacity-expansion
+project_origin,Project Origin,Project-Origin is an open source collaboration that aims to create a public federated network where everyone can validate the origin of their electricity.,https://github.com/project-origin/registry,lf-energy-landscape,
 psatools_python,PSATools-Python,,https://github.com/yanzhaochang/psatools-python,pre-compiled,
 psp_ufu,PSP-UFU,Open-Source Software with advanced GUI features and CAD tools for electrical power system studies.,https://github.com/thales1330/psp,lf-energy-landscape,
 psp_ufu,PSP-UFU,Open-Source Software with advanced GUI features and CAD tools for electrical power system studies.,https://github.com/thales1330/psp,opensustain-tech,

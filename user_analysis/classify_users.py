@@ -1,3 +1,4 @@
+# SPDX-FileCopyrightText: David Paolella
 # SPDX-FileCopyrightText: openmod-tracker contributors
 #
 # SPDX-License-Identifier: MIT
@@ -7,11 +8,6 @@
 
 Modified from https://github.com/dpaolella/open-model-analysis/blob/76201927de5a64ed4b6cd20e197e4b58abe7095b/github_user_analyzer.py
 
-(C) David Paolella
-License: MIT
-
-(C) Open Energy Transition (OET)
-License: MIT / CC0 1.0
 """
 
 import re

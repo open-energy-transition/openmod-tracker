@@ -19,8 +19,7 @@ path = [
     ".editorconfig",
     ".gitattributes",
     ".dockerignore",
-    "**/.gitignore",
-    "website/.devcontainer/devcontainer.json",
+    ".gitignore",
     "website/requirements.txt"
 ]
 SPDX-FileCopyrightText = [

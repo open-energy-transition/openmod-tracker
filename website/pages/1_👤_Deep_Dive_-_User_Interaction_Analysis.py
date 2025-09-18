@@ -3,11 +3,7 @@
 # SPDX-License-Identifier: MIT
 
 
-"""Create Streamlit web app sub-page to visualise tool user data.
-
-(C) Open Energy Transition (OET)
-License: MIT / CC0 1.0
-"""
+"""Create Streamlit web app sub-page to visualise tool user data."""
 
 from pathlib import Path
 

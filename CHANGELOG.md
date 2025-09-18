@@ -39,9 +39,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Updated exclusion list to remove newly added `project-origin`, as it isn't an ESM tool.
+- Updated exclusion list to remove newly added `project-origin` & `mapyourgrid` as they aren't ESM tools.
 - Tool score column is optional and toggled _off_ by default.
 - Rebrand project: `open-esm-analysis` -> `openmod-tracker`.
+- Added banner text in deployed dashboard to clarify that this is still a work in progress (#93).
 
 ## 2025-08-27
 

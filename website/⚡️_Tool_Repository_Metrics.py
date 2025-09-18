@@ -758,7 +758,7 @@ def footer():
     )
     col3.markdown(
         """
-        Built by [Open Energy Transition](https://openenergytransition.org/), with support by [Breakthrough Energy](https://www.breakthroughenergy.org/).
+        Built by [Open Energy Transition](https://openenergytransition.org/), with support by [Breakthrough Energy GRIDS](https://www.breakthroughenergy.org/).
         The information provided in this dashboard is for informational purposes only and does not constitute professional advice.
         """
     )

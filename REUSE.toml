@@ -5,6 +5,13 @@ SPDX-PackageDownloadLocation = "https://github.com/open-energy-transition/openmo
 
 [[annotations]]
 path = [
+    ".github/pull_request_template.md",
+]
+SPDX-FileCopyrightText = "openmod-tracker contributors"
+SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = [
     "inventory/output/**",
     "user_analysis/output/**",
 ]
@@ -22,6 +29,8 @@ SPDX-License-Identifier = "MIT"
 # This picks up all non-python files in the top-level of each script directory without specifying them individually.
 [[annotations]]
 path = [
+    "inventory/cache/*",
+    "user_analysis/config/*_cache.yaml",
     "inventory/*",
     "user_analysis/*",
 ]

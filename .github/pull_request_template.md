@@ -1,9 +1,3 @@
-<!--
-SPDX-FileCopyrightText: openmod-tracker contributors
-
-SPDX-License-Identifier: CC0-1.0
--->
-
 Fixes #
 
 ## Summary of changes in this pull request

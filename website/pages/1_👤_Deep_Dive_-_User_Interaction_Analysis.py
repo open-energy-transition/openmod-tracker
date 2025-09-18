@@ -158,9 +158,9 @@ def preamble():
 
         👩‍💻 **professional** - a consultancy / professional interest group (incl. self-employed).
 
-        🔎 **research** - a non-academic research institution (e.g. a US national lab).
+        🔎 **research** - a non-academic research institution (e.g., a US national lab).
 
-        💡 **utility** - an energy industry public/private utility company or system operator (e.g. a transmission system operator)
+        💡 **utility** - an energy industry public/private utility company or system operator (e.g., a transmission system operator)
 
 
         Here, you can explore the result of our user interaction analysis for each tool (or any set of tools).

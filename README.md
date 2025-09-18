@@ -63,8 +63,8 @@ These are automated with a Github action but you can force a manual update local
 
 >[!NOTE]
 >The below steps leverage [pixi tasks](https://pixi.sh/dev/workspace/advanced_tasks/) which will run all steps in the sequence if there have been changes to the source code or it is the first time you are running the command.
->If you want to just run one step in isolation you will need to call the Python script directly, e.g. `pixi run python inventory/get-stats.py inventory/output/filtered.csv inventory/output/stats.csv`.
->[User statistics](#user-stats) runs will require extra dependencies provided by the "geo" environment, e.g. `pixi run -e geo python user_analysis/classify_users.py`.
+>If you want to just run one step in isolation you will need to call the Python script directly, e.g., `pixi run python inventory/get-stats.py inventory/output/filtered.csv inventory/output/stats.csv`.
+>[User statistics](#user-stats) runs will require extra dependencies provided by the "geo" environment, e.g., `pixi run -e geo python user_analysis/classify_users.py`.
 >See `pixi.toml` for the command to run for each step.
 
 >[!WARNING]
@@ -105,7 +105,7 @@ Alongside a [pre-compiled list](https://github.com/open-energy-transition/openmo
 
 - Remove duplicates according to tool name, after normalising the string to lower case and converting all special characters to underscores.
 - Remove duplicates according to tool source code URL, after normalising the string to lower case.
-- Remove tools without a valid Git repository for their source code (hosted on e.g. GitHub, GitLab, Bitbucket, or a custom domain).
+- Remove tools without a valid Git repository for their source code (hosted on e.g., GitHub, GitLab, Bitbucket, or a custom domain).
 - Remove tools that we know, from manual inspection, are not appropriate for including in our inventory.
   This may be because they are duplicates of the same tool that we cannot catch with our simple detection methods, are supporting tools for another listed tool, or have been catalogued erroneously in the upstream inventory.
   We give the reason for manually excluding a tool in our [list of exclusions](https://github.com/open-energy-transition/openmod-tracker/blob/main/inventory/exclusions.csv).
@@ -121,14 +121,14 @@ Further to data from <https://ecosyste.ms>, we rely on other sources to (1) link
 1. The most likely hosts for documentation are readthedocs.org, Github/Gitlab Pages, or repository Wikis.
    For each repository, we check the most likely URL for each of these as they follow a pre-defined structure.
    If we get a positive match, we link that to the repository.
-   This is not perfect as sometimes a project uses an unexpected site URL for their documentation.
+   This is not perfect; sometimes a project uses an unexpected site URL for their documentation.
 1. Most packages are indexed on PyPI, conda-forge or on public Julia package servers.
    For each of these, since <https://ecosyste.ms> data is often missing here, we use direct or third party APIs to query the downloads for the previous month.
 1. User interaction data utilises the direct GitHub API.
    This is the API with which much of the <https://ecosyste.ms> database is generated.
    However, they don't store user data unless a user is also a repository owner.
    Direct use of the GitHub API is time intensive due to hourly request limits.
-   Therefore, this data (e.g. informing the rate of user interactions over the past 6 months) is updated less frequently than other tools stats.
+   Therefore, this data (e.g., informing the rate of user interactions over the past 6 months) is updated less frequently than other tools stats.
 
 ## Release guideline
 

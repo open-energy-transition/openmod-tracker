@@ -651,9 +651,9 @@ def preamble(latest_changes: str, n_tools: int, data_processing_text: str):
             )
     st.markdown(
         f"""
-        The global energy transition accelerating.
+        The global energy transition is accelerating.
         Given the inherent complexity of energy system planning, planners rely heavily on software tools to provide quantitative evidence to support decisions.
-        Open source tools are becoming increasingly prevalent and are beginning to gain traction in industry and the public sector (e.g. at [ENTSO-E](https://www.linkedin.com/posts/entso-e_energytransition-opensource-innovation-activity-7293296246813851649-2ynL)).
+        Open source tools are becoming increasingly prevalent and are beginning to gain traction in industry and the public sector (e.g., at [ENTSO-E](https://www.linkedin.com/posts/entso-e_energytransition-opensource-innovation-activity-7293296246813851649-2ynL)).
         It's no wonder; they are:
 
         ✅ freely available,
@@ -685,7 +685,7 @@ def preamble(latest_changes: str, n_tools: int, data_processing_text: str):
             """
 
             1. We rely on third parties to enable us to collate tools and their metrics.
-               Where we undertake the data collection directly from the tool repositories, our heuristics may not capture some things (e.g. documentation sites).
+               Where we undertake the data collection directly from the tool repositories, our heuristics may not capture some things (e.g., documentation sites).
                This means some tools and / or metrics may be missing.
                If you notice this is the case, [raise an issue on our project homepage](https://github.com/open-energy-transition/openmod-tracker/issues/new).
 
@@ -719,10 +719,10 @@ def conclusion():
         ## Key Takeaways from the Data
 
         - **Adoption Signals Matter**: High download counts, active contributors, and ongoing issue resolutions suggest healthy, well-maintained projects.
-          However, source code activity alone can be misleading — some highly starred projects have stalled development and some with limited source code development are in heavy use in supporting planning decisions."
+          However, source code activity alone can be misleading — some highly starred projects have stalled development and some with limited source code development are in heavy use in supporting planning decisions.
         - **Sustainability Risks**: Projects with fewer than 10 contributors face a higher risk of abandonment.
           A committed and broad contributor base can be hard to come by and may need to be cultivated with financial support rather than relying on it to grow naturally.
-        - **Usability Gaps**: Some projects do not have builds of their tools indexed online (e.g. on PyPI or conda-forge), which may indicate poor release management and hinder long-term usability.
+        - **Usability Gaps**: Some projects do not have builds of their tools indexed online (e.g., on PyPI or conda-forge), which may indicate poor release management and hinder long-term usability.
         - **Interoperability Potential**: Many tools serve niche roles and may only be suitable for supporting decision-making as part of a tool suite.
           This requires tools to be interoperable, using common nomenclature and data structures.
 
@@ -737,7 +737,7 @@ def conclusion():
         - **Licensing & Governance**: Is it permissively licensed (e.g., MIT) or does it enforce restrictions (e.g., GPL)?
         - **Collaboration Potential**: Can multiple stakeholders contribute effectively?
 
-        **By combining live data tracking with structured qualitative evaluation**, the energy community can reduce wasted investments and ensure the best tools remain available for researchers, grid operators, project developers, investors and policymakers.
+        **By combining live data tracking with structured qualitative evaluation**, the energy community can reduce wasted investments and ensure the best tools remain available for researchers, grid operators, project developers, investors and policymakers alike.
 
         **Have you found this platform useful, or want to see it grow in any specific way?** Share your thoughts and suggestions on our [project homepage](https://github.com/open-energy-transition/openmod-tracker/issues)!
         """

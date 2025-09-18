@@ -138,7 +138,7 @@ def _get_nested_dict_entry(
 
 def _get_package_data(url: str) -> dict:
     package_data = util.get_ecosystems_package_data(url)
-    if package_data is None or package_data == "not-found":
+    if not package_data or package_data == "not-found":
         LOGGER.warning(f"Could not find ecosyste.ms package entry for {url}")
         filtered_package_data = {}
     else:

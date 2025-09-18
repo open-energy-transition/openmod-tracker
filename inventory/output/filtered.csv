@@ -77,7 +77,7 @@ gelectrical,https://github.com/manuvarkey/gelectrical,GElectrical,opensustain-te
 genesys_mod,https://git.tu-berlin.de/genesysmod/genesys-mod-public,"GENeSYS-MOD,GENeSYS-MOD,genesys-mod-public","lf-energy-landscape,opensustain-tech,pre-compiled,openmod",
 genx,https://github.com/genxproject/genx.jl,"GenX,GenX,GenX.jl","lf-energy-landscape,opensustain-tech,pre-compiled","capacity-expansion,production-cost"
 grid2op,https://github.com/grid2op/grid2op,"Grid2Op,grid2op","opensustain-tech,pre-compiled",power-flow
-gridcal,https://github.com/sanpen/veragrid,GridCal,"lf-energy-landscape,openmod,pre-compiled,opensustain-tech",power-flow
+gridcal,https://github.com/sanpen/veragrid,GridCal,opensustain-tech,power-flow
 gridlab_d,https://github.com/arras-energy/gridlabd,"GridLAB-D,gridlab-d ","opensustain-tech,pre-compiled",
 gridpack,https://github.com/gridoptics/gridpack,GridPACK,opensustain-tech,power-flow
 gridpath,https://github.com/blue-marble/gridpath,"GridPath,gridpath","lf-energy-landscape,opensustain-tech,pre-compiled","capacity-expansion,production-cost"

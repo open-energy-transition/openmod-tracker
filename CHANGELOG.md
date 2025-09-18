@@ -36,6 +36,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Country map in user interaction analysis missing all data (#94).
+- Package download data shown as zero when it should be empty.
+- Tools shown as having an associated package due to erroneous reference to a "Go" package that should only exist for tools written in Go.
 
 ### Changed
 

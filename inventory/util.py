@@ -34,7 +34,7 @@ def get_url_json_content(url: str) -> dict:
     return yaml.safe_load(content)
 
 
-def get_ecosystems_data(url: str) -> dict | str | None:
+def get_ecosystems_data(url: str) -> list[dict] | dict | str | None:
     """Get repository API string from ecosyste.ms based on the provided repo URL.
 
     Args:
@@ -95,7 +95,18 @@ def get_ecosystems_package_data(url: str) -> requests.Response:
         requests.Response: Content of data for packages linked to `url`.
     """
     safe_query = get_safe_url_string(url)
-    return get_ecosystems_data(ECOSYSTEMS_PACKAGES_LOOKUP_API + safe_query)
+    package_data = get_ecosystems_data(ECOSYSTEMS_PACKAGES_LOOKUP_API + safe_query)
+    if package_data and package_data != "not-found":
+        package_data = [
+            src
+            for src in package_data
+            if (
+                src["ecosystem"] != "go"
+                or src.get("repo_metadata", {}).get("language", "").lower() == "go"
+            )
+        ]
+
+    return package_data
 
 
 def get_safe_url_string(url: str) -> str:

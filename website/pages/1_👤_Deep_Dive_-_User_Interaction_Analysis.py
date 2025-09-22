@@ -141,11 +141,6 @@ def preamble():
     """Text to show before the user data plots."""
     st.markdown(
         """
-        # Tool User Interaction Analysis
-
-        A wide variety of users interact with the hosted repositories of each of our tracked energy modelling tools.
-        These interactions generally come in the form of [stars](https://docs.github.com/en/get-started/exploring-projects-on-github/saving-repositories-with-stars), [forks](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/about-forks), [watches](https://dl.acm.org/doi/10.1145/2597073.2597114), [issues](https://docs.github.com/en/issues/tracking-your-work-with-issues/about-issues), and [contributions](https://docs.github.com/en/repositories/viewing-activity-and-data-for-your-repository/viewing-a-projects-contributors#about-contributors).
-        On this page, we have collated all these interactions for all GitHub-hosted tools.
         We have then gathered data on the GitHub users linked to those interactions to find their origin country and attempted to classify them as being from one of 5 main groups:
 
         🎓 **academic** - an academic institution (e.g., university).
@@ -229,6 +224,18 @@ if __name__ == "__main__":
     # define the path of the CSV file listing the packages to assess
     st.set_page_config(
         page_title="User Interaction Analysis", page_icon="👤", layout="wide"
+    )
+
+    st.title("Tool User Interaction Analysis")
+    st.markdown(
+        """
+        <div style="padding-bottom:0;">
+            A wide variety of users interact with the hosted repositories of each of our tracked energy modelling tools.
+            These interactions generally come in the form of <a href="https://docs.github.com/en/get-started/exploring-projects-on-github/saving-repositories-with-stars">stars</a>, <a href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/about-forks">forks</a>, <a href="https://dl.acm.org/doi/10.1145/2597073.2597114">watches</a>, <a href="https://docs.github.com/en/issues/tracking-your-work-with-issues/about-issues">issues</a>, and <a href="https://docs.github.com/en/repositories/viewing-activity-and-data-for-your-repository/viewing-a-projects-contributors#about-contributors">contributions</a>.
+            On this page, we have collated all these interactions for all GitHub-hosted tools.
+        </div>
+        """,
+        unsafe_allow_html=True
     )
 
     user_stats_dir = Path(__file__).parent.parent.parent / "user_analysis" / "output"

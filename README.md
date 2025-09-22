@@ -92,6 +92,28 @@ As we have already prepared the initial set of users, this should be relatively 
 
 Finally, our heuristic user classification approach can be applied to the updated user details by calling `pixi run classify-users`.
 
+### Code quality assessment
+
+We manage forks of all GitHub repositories within our own GitHub organisation in order to have the necessary permissions to undertake code quality assessments.
+
+#### Forking Repositories
+
+The `code_quality/fork_repos.py` script forks GitHub repositories to the specified organization and keeps existing forks in sync with their upstream repositories.
+An appropriate GitHub token for the organisation, with write access, must be provided at runtime.
+
+The script will:
+
+1. Read repository information from the CSV file (which must contain an `html_url` column with GitHub repository URLs)
+2. Check if each repository is already forked to the organization
+3. Fork repositories that haven't been forked yet
+4. Sync existing forks with their upstream repositories
+5. Log all operations to the specified log file
+
+#### Running code quality assessment
+
+The `code_quality/sonarcloud.py create` method will create SonarQube cloud platform projects for each of the forked repositories.
+The `code_quality/sonarcloud.py get-stats` method will access the code quality statistics for all existing SonarQube cloud platform projects.
+
 ### Our data processing approach
 
 We collect tools listed in the following inventories:

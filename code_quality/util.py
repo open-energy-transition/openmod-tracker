@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: openmod-tracker contributors
+#
+# SPDX-License-Identifier: MIT
+
 """Utility functions for the scripts.
 
 Common helper functions shared across multiple scripts in the project.

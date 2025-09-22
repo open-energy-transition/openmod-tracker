@@ -92,6 +92,28 @@ As we have already prepared the initial set of users, this should be relatively 
 
 Finally, our heuristic user classification approach can be applied to the updated user details by calling `pixi run classify-users`.
 
+### Code quality assessment
+
+We manage forks of all GitHub repositories within our own GitHub organisation in order to have the necessary permissions to undertake code quality assessments.
+
+#### Forking Repositories
+
+The `code_quality/fork_repos.py` script forks GitHub repositories to the specified organization and keeps existing forks in sync with their upstream repositories.
+An appropriate GitHub token for the organisation, with write access, must be provided at runtime.
+
+The script will:
+
+1. Read repository information from the CSV file (which must contain an `html_url` column with GitHub repository URLs)
+2. Check if each repository is already forked to the organization
+3. Fork repositories that haven't been forked yet
+4. Sync existing forks with their upstream repositories
+5. Log all operations to the specified log file
+
+#### Running code quality assessment
+
+The `code_quality/sonarcloud.py create` method will create SonarQube cloud platform projects for each of the forked repositories.
+The `code_quality/sonarcloud.py get-stats` method will access the code quality statistics for all existing SonarQube cloud platform projects.
+
 ### Our data processing approach
 
 We collect tools listed in the following inventories:
@@ -129,33 +151,6 @@ Further to data from <https://ecosyste.ms>, we rely on other sources to (1) link
    However, they don't store user data unless a user is also a repository owner.
    Direct use of the GitHub API is time intensive due to hourly request limits.
    Therefore, this data (e.g. informing the rate of user interactions over the past 6 months) is updated less frequently than other tools stats.
-
-## GitHub Repository Management
-
-The repository includes scripts for managing GitHub repositories, including forking repositories and keeping them in sync with their upstream sources.
-
-### Forking Repositories
-
-The `fork_repos.py` script in the `scripts` directory forks GitHub repositories to the specified organization and keeps existing forks in sync with their upstream repositories.
-
-#### Usage
-
-```bash
-python scripts/fork_repos.py [OPTIONS]
-```
-
-Options:
-- `--csv, -c PATH`: Path to the CSV file containing repository information [default: inventory/output/stats.csv]
-- `--org, -o TEXT`: GitHub organization name where repositories will be forked [default: "openmod-tracker"]
-- `--log, -l PATH`: Path to the log file [default: log/fork_repos.log]
-- `--token, -t TEXT`: GitHub token (required)
-
-The script will:
-1. Read repository information from the CSV file (which must contain an `html_url` column with GitHub repository URLs)
-2. Check if each repository is already forked to the organization
-3. Fork repositories that haven't been forked yet
-4. Sync existing forks with their upstream repositories
-5. Log all operations to the specified log file
 
 ## Release guideline
 

@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: openmod-tracker contributors
+#
+# SPDX-License-Identifier: MIT
+
 """GitHub API utility functions for repository management.
 
 This module provides a class to interact with the GitHub API,
@@ -6,6 +10,7 @@ repository details.
 """
 
 import logging
+
 from github import Github
 from github.GithubException import GithubException
 from util import log_to_file
@@ -80,8 +85,7 @@ class GitHubAPI:
             except GithubException:
                 # Repository doesn't exist in the organization
                 LOGGER.info(
-                    f"Repository {repo_name} not found in "
-                    f"organization {organization}"
+                    f"Repository {repo_name} not found in organization {organization}"
                 )
                 pass
 
@@ -107,8 +111,7 @@ class GitHubAPI:
         organization = org or self.org
 
         LOGGER.info(
-            f"Syncing {organization}/{repo_name} with upstream "
-            f"{owner}/{repo_name}..."
+            f"Syncing {organization}/{repo_name} with upstream {owner}/{repo_name}..."
         )
 
         try:
@@ -122,7 +125,7 @@ class GitHubAPI:
                     log_file,
                     "SYNC-FAILED",
                     f"{organization}/{repo_name} sync with "
-                    f"{owner}/{repo_name} failed: {e}"
+                    f"{owner}/{repo_name} failed: {e}",
                 )
                 return False
 
@@ -134,8 +137,7 @@ class GitHubAPI:
                 merged = True
                 if hasattr(result, "commits"):
                     for commit in result.commits:
-                        if (hasattr(commit, "status")
-                                and commit.status == "error"):
+                        if hasattr(commit, "status") and commit.status == "error":
                             merged = False
                             break
 
@@ -147,58 +149,48 @@ class GitHubAPI:
                     log_to_file(
                         log_file,
                         "SYNC",
-                        f"{organization}/{repo_name} synced with "
-                        f"{owner}/{repo_name}"
+                        f"{organization}/{repo_name} synced with {owner}/{repo_name}",
                     )
                     # Get branches from the result object and log them
                     base_branch = getattr(result, "base_branch", None)
                     head_branch = getattr(result, "head_branch", None)
                     if log_file and base_branch and head_branch:
                         with open(log_file, "a") as log:
-                            log.write(
-                                f"  Merged {head_branch} into {base_branch}\n"
-                            )
+                            log.write(f"  Merged {head_branch} into {base_branch}\n")
                     return True
                 else:
                     LOGGER.error(f"Failed to sync {organization}/{repo_name}")
                     log_to_file(
                         log_file,
                         "SYNC-FAILED",
-                        f"{organization}/{repo_name} sync failed"
+                        f"{organization}/{repo_name} sync failed",
                     )
                     return False
             else:
-                LOGGER.info(
-                    f"Fork {organization}/{repo_name} is already up to date"
-                )
+                LOGGER.info(f"Fork {organization}/{repo_name} is already up to date")
                 log_to_file(
                     log_file,
                     "UP-TO-DATE",
                     f"{organization}/{repo_name} already in sync with "
-                    f"{owner}/{repo_name}"
+                    f"{owner}/{repo_name}",
                 )
                 return True
 
         except GithubException as e:
-            LOGGER.error(
-                f"GitHub API error syncing {organization}/{repo_name}: {e}"
-            )
+            LOGGER.error(f"GitHub API error syncing {organization}/{repo_name}: {e}")
             log_to_file(
                 log_file,
                 "SYNC-FAILED",
-                f"{organization}/{repo_name} sync with "
-                f"{owner}/{repo_name} failed: {e}"
+                f"{organization}/{repo_name} sync with {owner}/{repo_name} failed: {e}",
             )
             return False
 
         except Exception as e:
-            LOGGER.error(
-                f"Unexpected error syncing {organization}/{repo_name}: {e}"
-            )
+            LOGGER.error(f"Unexpected error syncing {organization}/{repo_name}: {e}")
             log_to_file(
                 log_file,
                 "SYNC-ERROR",
-                f"{organization}/{repo_name} - Unexpected error: {e}"
+                f"{organization}/{repo_name} - Unexpected error: {e}",
             )
             return False
 
@@ -223,10 +215,7 @@ class GitHubAPI:
             LOGGER.error(f"Unexpected error getting repository details: {e}")
             return None
 
-    def fork_repository(
-            self, source_owner, repo_name,
-            destination_org=None
-    ):
+    def fork_repository(self, source_owner, repo_name, destination_org=None):
         """Fork a GitHub repository using the GitHub API.
 
         Args:
@@ -244,17 +233,14 @@ class GitHubAPI:
         organization = destination_org or self.org
 
         try:
-            source_repo = self.github_client.get_repo(
-                f"{source_owner}/{repo_name}"
-            )
+            source_repo = self.github_client.get_repo(f"{source_owner}/{repo_name}")
 
             org_obj = self.github_client.get_organization(organization)
 
             fork = source_repo.create_fork(org_obj)
 
             LOGGER.info(
-                f"Successfully forked {source_owner}/{repo_name} "
-                f"to {organization}"
+                f"Successfully forked {source_owner}/{repo_name} to {organization}"
             )
             LOGGER.info(f"Fork URL: {fork.html_url}")
 
@@ -265,8 +251,7 @@ class GitHubAPI:
 
             if e.status == 403:  # Forbidden
                 LOGGER.error(
-                    "\nERROR: Your GitHub token doesn't have the necessary "
-                    "permissions."
+                    "\nERROR: Your GitHub token doesn't have the necessary permissions."
                 )
 
             return False, None

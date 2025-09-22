@@ -227,15 +227,14 @@ if __name__ == "__main__":
     )
 
     st.title("Tool User Interaction Analysis")
+    st.text(
+        "A wide variety of users interact with the hosted repositories of each of our tracked energy modelling tools."
+    )
     st.markdown(
-        """
-        <div style="padding-bottom:0;">
-            A wide variety of users interact with the hosted repositories of each of our tracked energy modelling tools.
-            These interactions generally come in the form of <a href="https://docs.github.com/en/get-started/exploring-projects-on-github/saving-repositories-with-stars">stars</a>, <a href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/about-forks">forks</a>, <a href="https://dl.acm.org/doi/10.1145/2597073.2597114">watches</a>, <a href="https://docs.github.com/en/issues/tracking-your-work-with-issues/about-issues">issues</a>, and <a href="https://docs.github.com/en/repositories/viewing-activity-and-data-for-your-repository/viewing-a-projects-contributors#about-contributors">contributions</a>.
-            On this page, we have collated all these interactions for all GitHub-hosted tools.
-        </div>
-        """,
-        unsafe_allow_html=True
+        "These interactions generally come in the form of [stars](https://docs.github.com/en/get-started/exploring-projects-on-github/saving-repositories-with-stars), [forks](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/about-forks), [watches](https://dl.acm.org/doi/10.1145/2597073.2597114), [issues](https://docs.github.com/en/issues/tracking-your-work-with-issues/about-issues), and [contributions](https://docs.github.com/en/repositories/viewing-activity-and-data-for-your-repository/viewing-a-projects-contributors#about-contributors)."
+    )
+    st.text(
+        "On this page, we have collated all these interactions for all GitHub-hosted tools."
     )
 
     user_stats_dir = Path(__file__).parent.parent.parent / "user_analysis" / "output"

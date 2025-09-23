@@ -614,7 +614,6 @@ def preamble(latest_changes: str, n_tools: int, data_processing_text: str):
         n_tools (int): Number of tools shown in the table.
         data_processing_text (str): HTML text snippet to drop into the data processing explainer box.
     """
-
     # Custom styles to make the beta expander more prominent
     st.html(
         """

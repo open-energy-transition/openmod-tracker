@@ -614,12 +614,6 @@ def preamble(latest_changes: str, n_tools: int, data_processing_text: str):
         n_tools (int): Number of tools shown in the table.
         data_processing_text (str): HTML text snippet to drop into the data processing explainer box.
     """
-    st.markdown(
-        """
-        # Open Energy Modelling Tool Tracker
-        """
-    )
-
     # Custom styles to make the beta expander more prominent
     st.html(
         """
@@ -909,6 +903,13 @@ if __name__ == "__main__":
     st.set_page_config(
         page_title="Tool Repository Metrics", page_icon="⚡️", layout="wide"
     )
+
+    st.title("Open Energy Modelling Tool Tracker")
+    st.text(
+        "Explore and compare open-source energy modeling tools. "
+        "Find metrics, documentation, and community activity for tools used in energy transition planning."
+    )
+
     st.logo(
         OET_LOGO_FULL_NAME,
         size="large",

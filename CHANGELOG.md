@@ -25,6 +25,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2025-09-23
+
+### Added
+
+- Repository forking/upstream syncing scripts to maintain forks of all tracked tools within the `openmod-tracker` organisation (#80).
+
+### Changed
+
+- Dashboard text to improve SEO header and body text.
+
 ## 2025-09-18
 
 ### Added

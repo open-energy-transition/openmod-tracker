@@ -3,11 +3,11 @@
 # SPDX-License-Identifier: MIT
 
 [project]
-authors = ["Bryn Pickering <bryn.pickering@openenergytransition.org>", "Markus Groissböck <markus.groissbock@openenergytransition.org>"]
+authors = ["Bryn Pickering <bryn.pickering@openenergytransition.org>", "Markus Groissböck <markus.groissbock@openenergytransition.org>", "Jacek Bendig <jacek.bendig@openenergytransition.org>"]
 channels = ["conda-forge"]
 name = "openmod-tracker"
 platforms = ["win-64", "linux-64", "osx-64", "osx-arm64", "linux-aarch64"]
-version = "2025-09-18"
+version = "2025-09-23"
 
 [tasks.get-tools]
 cmd = "python $PIXI_PROJECT_ROOT/inventory/get_tools.py inventory/output/tools.csv"

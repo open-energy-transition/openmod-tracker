@@ -65,6 +65,7 @@ erf,https://github.com/erf-model/erf,ERF,lf-energy-landscape,
 esdl,https://github.com/energytransition/esdl,ESDL,"lf-energy-landscape,opensustain-tech",
 etm_pro,https://github.com/quintel/etmodel,ETM Pro,opensustain-tech,
 exago,https://github.com/pnnl/exago,ExaGO,"g-pst,lf-energy-landscape,opensustain-tech,pre-compiled",power-flow
+exerpy,https://github.com/oemof/exerpy,ExerPy,opensustain-tech,
 fame,https://gitlab.com/fame-framework/fame-core,FAME,"lf-energy-landscape,opensustain-tech",
 ficus,https://github.com/tum-ewk/ficus,"Ficus,ficus","openmod,pre-compiled",
 fine,https://github.com/fzj-iek3-vsa/fine,FINE,"lf-energy-landscape,opensustain-tech,pre-compiled",capacity-expansion
@@ -78,7 +79,8 @@ gelectrical,https://github.com/manuvarkey/gelectrical,GElectrical,opensustain-te
 genesys_mod,https://git.tu-berlin.de/genesysmod/genesys-mod-public,"GENeSYS-MOD,GENeSYS-MOD,genesys-mod-public","lf-energy-landscape,opensustain-tech,pre-compiled,openmod",
 genx,https://github.com/genxproject/genx.jl,"GenX,GenX,GenX.jl","lf-energy-landscape,opensustain-tech,pre-compiled","capacity-expansion,production-cost"
 grid2op,https://github.com/grid2op/grid2op,"Grid2Op,grid2op","opensustain-tech,pre-compiled",power-flow
-gridcal,https://github.com/sanpen/veragrid,GridCal,"lf-energy-landscape,openmod,pre-compiled,opensustain-tech",power-flow
+gridcal,https://github.com/sanpen/gridcal,GridCal,"lf-energy-landscape,openmod,pre-compiled",power-flow
+gridfm,https://github.com/gridfm/gridfm-graphkit,GridFM,opensustain-tech,
 gridlab_d,https://github.com/arras-energy/gridlabd,"GridLAB-D,gridlab-d ","opensustain-tech,pre-compiled",
 gridpack,https://github.com/gridoptics/gridpack,GridPACK,opensustain-tech,power-flow
 gridpath,https://github.com/blue-marble/gridpath,"GridPath,gridpath","lf-energy-landscape,opensustain-tech,pre-compiled","capacity-expansion,production-cost"
@@ -218,6 +220,7 @@ transient_lib,https://github.com/transient-official/transient-lib,transient-lib,
 tulipa_energy_model,https://github.com/tulipaenergy/tulipaenergymodel.jl,"Tulipa Energy Model,TulipaEnergyModel.jl","opensustain-tech,pre-compiled",
 urbs,https://github.com/tum-ens/urbs,"URBS,urbs","lf-energy-landscape,openmod,opensustain-tech,pre-compiled",capacity-expansion
 usensys,https://github.com/usensys/usensys,USENSYS,openmod,
+veragrid,https://github.com/sanpen/veragrid,VeraGrid,opensustain-tech,
 villasframework,https://github.com/villasframework/node,VILLASframework,"lf-energy-landscape,pre-compiled",
 wpgnn_and_playgen,https://github.com/nrel/wpgnn,WPGNN and PLayGen,lf-energy-landscape,
 zen_garden,https://github.com/zen-universe/zen-garden,ZEN-garden,pre-compiled,

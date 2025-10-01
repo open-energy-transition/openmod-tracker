@@ -187,6 +187,7 @@ exago,ExaGO,"ExaGO provides applications to solve stochastic, security-constrain
 exago,ExaGO,"ExaGO is a library for solving large-scale alternating current optimal power flow (ACOPF) problems including stochastic effects, security constraints and multi-period constraints.",https://gitlab.pnnl.gov/exasgd/frameworks/exago,lf-energy-landscape,
 exago,ExaGO,"High-performance power grid optimization for stochastic, security-constrained, and multi-period ACOPF problems.",https://github.com/pnnl/exago,opensustain-tech,
 exago,ExaGO,,https://github.com/pnnl/exago,pre-compiled,
+exerpy,ExerPy,A Python library designed to perform detailed exergy analysis of energy conversion systems.,https://github.com/oemof/exerpy,opensustain-tech,
 fame,FAME,,https://gitlab.com/fame-framework,lf-energy-landscape,
 fame,FAME,Its purpose is supporting the rapid development and fast execution of complex agent-based energy system simulations.,https://gitlab.com/fame-framework/fame-core,opensustain-tech,
 ficus,Ficus,A (mixed integer) linear optimisation model for local energy systems,https://github.com/yabata/ficus,openmod,
@@ -237,10 +238,10 @@ grid2op,grid2op,,https://github.com/grid2op/grid2op,pre-compiled,power-flow
 gridcal,GridCal,"GridCal, a cross-platform power systems software written in Python with user interface, used in academia and industry.
 
 GridCal does all sort of static analysis of power systems with or without time series (power flow, short circuit, linear and non linear optimization, ..., you name it)",https://github.com/sanpen/gridcal,lf-energy-landscape,power-flow
-gridcal,GridCal,Aims to be a complete platform for power systems research and simulation.,https://github.com/sanpen/veragrid,opensustain-tech,power-flow
 gridcal,GridCal,"GridCal is a research oriented power systems software.
 Research oriented? How? Well, it is a fruit of research. It is designed to be modular. As a researcher I found that the available software (not even talking about commercial options) are hard to expand or adapt to achieve complex simulations. GridCal is designed to allow you to build and reuse modules, which eventually will boost your productivity and the possibilities that are at hand.ty and the possibilities that are at hand.",https://github.com/sanpen/gridcal,openmod,power-flow
 gridcal,GridCal,,https://github.com/sanpen/gridcal,pre-compiled,power-flow
+gridfm,GridFM,"Train, finetune and interact with a foundation model for the electric power grid.",https://github.com/gridfm/gridfm-graphkit,opensustain-tech,
 gridlab_d,GridLAB-D,A simulation platform for future electricity distribution power systems.,https://github.com/arras-energy/gridlabd,opensustain-tech,
 gridlab_d,gridlab-d ,,https://github.com/gridlab-d/gridlab-d ,pre-compiled,
 gridpack,GridPACK,An open-source high-performance package for simulation of large-scale electrical grids.,https://github.com/gridoptics/gridpack,opensustain-tech,power-flow
@@ -663,6 +664,7 @@ urbs,URBS,"urbs is a linear programming optimisation model for capacity expansio
 urbs,urbs,,https://github.com/tum-ens/urbs,pre-compiled,capacity-expansion
 uselectricity,USelectricity,Forecast the US demand for electricity.,https://github.com/ramikrispin/uselectricity,lf-energy-landscape,
 usensys,USENSYS,"United States Energy SYStem (USENSYS) is an open source capacity expansion model (CEM, also knows as Reference Energy System model, RES), developped based on energyRt package for R.",https://github.com/usensys/usensys,openmod,
+veragrid,VeraGrid,Aims to be a complete platform for power systems research and simulation.,https://github.com/sanpen/veragrid,opensustain-tech,
 villasframework,VILLASframework,,https://github.com/villasframework/node,lf-energy-landscape,
 villasframework,VILLASframework,,https://github.com/villasframework,pre-compiled,
 villasnode,VILLASnode,Connecting real-time power grid simulation equipment.,https://git.rwth-aachen.de/acs/public/villas/node,opensustain-tech,

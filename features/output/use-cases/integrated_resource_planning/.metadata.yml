@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: use-cases/integrated_resource_planning/features.yaml CODEOWNERS
+# SPDX-FileCopyrightText: openmod-features contributors
+#
+# SPDX-License-Identifier: CC-BY-4.0
+
+# Changes here will be overwritten by Copier
+# DO NOT MANUALLY MODIFY THIS FILE
+_commit: d831de9
+_src_path: gh:open-energy-transition/openmod-features
+description: Create a set of high-level scenarios of e.g. 2050 decarbonised energy
+    system designs for use in guiding policy implementation, creating procurement
+    plans, and providing boundary conditions for investors, utilities, and local authorities
+    to develop their own plans. Future scenarios account for full sector coupling
+    and GHG emission accounting.
+list_type: use-case
+maintainers: brynpickering
+name: Integrated Resource Planning (IRP)
+shortname: integrated_resource_planning

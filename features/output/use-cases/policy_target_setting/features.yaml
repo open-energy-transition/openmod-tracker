@@ -1,0 +1,245 @@
+
+# SPDX-FileCopyrightText: use-cases/policy_target_setting/features.yaml CODEOWNERS
+# SPDX-FileCopyrightText: openmod-features contributors
+#
+# SPDX-License-Identifier: CC-BY-4.0
+
+# yaml-language-server: $schema=https://raw.githubusercontent.com/open-energy-transition/openmod-features/d831de9/schema/use-case-schema.yaml
+
+assumptions: []
+features:
+  asset__candidates:
+    converters:
+      value: y
+    electricity_transmission:
+      value: n
+    endogenous:
+      value: y
+    exogenous:
+      value: y
+    fluid_or_gas_distribution:
+      value: n
+    generators:
+      value: y
+    loads:
+      value: y
+    storage:
+      value: y
+  asset__capacity_representation:
+    grouped:
+      value: y
+    partial_grouped:
+      value: n
+    units:
+      value: n
+  asset__chaining:
+    asset_linking:
+      value: n
+    stockpiling:
+      value: y
+  asset__cost__investment:
+    annuitisation:
+      value: y
+    linear:
+      value: y
+    piecewise:
+      value: n
+    subsidy/penalty:
+      value: n
+    unit:
+      value: n
+  asset__cost__operation:
+    linear:
+      value: y
+    piecewise:
+      value: n
+    subsidy/penalty:
+      value: n
+    unit:
+      value: n
+  asset__operating_characteristics:
+    iterative:
+      value: n
+    linear:
+      value: y
+    piecewise:
+      value: n
+    static non_dimensional:
+      value: y
+    static_dimensional:
+      value: y
+  asset__operating_constraints:
+    inter_spatial:
+      value: n
+    inter_temporal:
+      value: y
+    operating:
+      value: n
+    total:
+      value: y
+  asset__operating_representation:
+    ed:
+      value: y
+    uced:
+      value: n
+  competition:
+    distributed_objectives:
+      value: n
+    portfolio:
+      value: n
+  edge_effects:
+    energy_balance:
+      value: y
+    spatial:
+      value: y
+    time_financial:
+      value: y
+    time_operational:
+      value: n
+  interface__input:
+    cli:
+      value: n
+    gui:
+      value: y
+    no_code:
+      value: n
+    scripting:
+      value: n
+    standardised:
+      value: n
+  interface__output:
+    gui:
+      value: y
+    logs:
+      value: y
+    reports:
+      value: y
+    standardised:
+      value: n
+    tables:
+      value: y
+  optimisation_problem:
+    configuration:
+      value: y
+    decomposition:
+      value: n
+    near_optimal:
+      value: n
+    sim + opt:
+      value: n
+    user_defined_constraints:
+      value: y
+    user_defined_variables:
+      value: y
+  postprocessing:
+    aggregation:
+      value: y
+    curtailment:
+      value: n
+    financial:
+      value: n
+    future_cost_function:
+      value: n
+    gtc:
+      value: n
+    impact_assessment:
+      value: y
+    lcoe:
+      value: y
+    lodf:
+      value: n
+    ptdf:
+      value: n
+    shadow_prices:
+      value: y
+  preprocessing:
+    download:
+      value: y
+    forecasting:
+      value: y
+    spatial_distribution:
+      value: n
+  resource_adequacy:
+    eens:
+      value: n
+    lolp:
+      value: n
+    maintenance_scheduling:
+      value: n
+    monte_carlo:
+      value: n
+    sampling:
+      value: n
+  robustness:
+    asset_outages:
+      value: y
+    eens_limit:
+      value: n
+    lolp_limit:
+      value: n
+    multi_stage_stochastic:
+      value: n
+    ram:
+      value: n
+    reserve_limit:
+      value: y
+    two_stage_stochastic:
+      value: n
+    voll:
+      value: y
+  spatial__resolution__simplification:
+    network:
+      value: n
+    resampling:
+      value: n
+  system__carriers:
+    coupled:
+      value: y
+    decoupled:
+      value: n
+  system__limits:
+    capacity:
+      value: y
+    operation:
+      value: y
+  time__foresight:
+    myopic:
+      value: n
+    perfect:
+      value: y
+  time__horizon:
+    multi_year:
+      value: y
+    single_year:
+      value: n
+    sub_day:
+      value: y
+    sub_year:
+      value: y
+  time__resolution__simplification:
+    distortion_mitigation:
+      value: y
+    load_duration_curves:
+      value: n
+    resampling:
+      value: n
+    typical_periods:
+      value: y
+  transmission__limits:
+    gtc:
+      value: n
+    phase_angle:
+      value: n
+    ptdf:
+      value: n
+    thermal:
+      value: n
+  transmission__opf:
+    ac_opf:
+      value: n
+    dc_opf:
+      value: n
+    sec_opf:
+      value: n
+    transport:
+      value: y

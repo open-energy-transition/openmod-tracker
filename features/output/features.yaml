@@ -1,0 +1,186 @@
+# SPDX-FileCopyrightText: openmod-features contributors
+#
+# SPDX-License-Identifier: MIT
+
+time__horizon:
+  description: "The modelled time horizon"
+  members:
+    multi_year: "multiple years"
+    single_year: "single year"
+    sub_year: "between one day and one year"
+    sub_day: "less than one day"
+time__foresight:
+  description: "The modelling horizon per optimisation iteration"
+  members:
+    perfect: "perfect foresight"
+    myopic: "myopic foresight"
+edge_effects:
+  description: "Distortive effects of system boundaries and linearising model components can be mitigated against"
+  members:
+    time_operational: "start/end-of-horizon operational effects (e.g. storage level wrapping)"
+    time_financial: "start/end-of-horizon financial effects (e.g. asset investment annuitisation)"
+    spatial: "energy flows into/out of the modelled region"
+    energy_balance: "energy 'destruction' caused by simultaneous in- & out-flow from a lossy transmission/storage asset"
+time__resolution__simplification:
+  description: "Temporal resolution adjustment options"
+  members:
+    resampling: "temporal up/down-sampling"
+    typical_periods: "full timeseries is represented by typical periods (days, weeks, months)"
+    load_duration_curves: "full timeseries is represented by load duration curves"
+    distortion_mitigation: "methods to manage inter-temporal model features in a temporally simplified model"
+spatial__resolution__simplification:
+  description: "Spatial resolution adjustment options"
+  members:
+    resampling: "spatial zone aggregation/disaggregation. Usually from nodal (bus) level to regional/bidding zone level"
+    network: "network element equivalencing"
+asset__candidates:
+  description: "Asset types and whether or not assets capacity decisions are decision variables in the model"
+  members:
+    generators: "carrier generator, consuming resources from outside the system boundary "
+    converters: "carrier generator, consuming other carriers from inside the system boundary. Necessary for coupled carrier optimisation"
+    storage: "carrier storage, to delay carrier flows in time"
+    fluid_or_gas_distribution: "carrier distribution through pressurised pipework"
+    electricity_transmission: "carrier distribution through electrical transmission lines"
+    loads: "carrier consumers, explicitly defined to allow for e.g. demand-side management"
+    endogenous: "asset candidates can be constructed, sold, retired, mothballed, and retrofit as the model sees fit"
+    exogenous: "asset candidates construction, sale, retirement, mothballing, and retrofit is pre-defined by the user"
+asset__capacity_representation:
+  description: "The resolution of asset capacity representation in the model"
+  members:
+    units: "assets are individually defined; if asset candidates are endogenous, their purchase is an integer decision variable"
+    grouped: "assets are grouped; if asset candidates are endogenous, their purchase is a continuous decision variable"
+    partial_grouped: "assets are grouped for some of the time horizon, individually defined otherwise; the decision variable switches from continuous to integer between these phases."
+asset__operating_representation:
+  description: "The resolution of asset operation representation in the model"
+  members:
+    uced: "assets can be committed as units and then economically dispatched. This requires unit-level asset capacity representation"
+    ed: "assets can only be economically dispatched. This is possible with unit-level or grouped asset capacity representation"
+asset__operating_constraints:
+  description: "Upper/lower limits on asset operation"
+  members:
+    inter_temporal: "limits that link time periods (e.g., ramping, run up, load shifting)"
+    inter_spatial: "limits that link geographic regions"
+    operating: "limits applied to operating time periods (maintenance schedule) or when operating (load rate). Usually requires unit-level asset capacity representation."
+    total: "limit on total asset carrier in-/out-flow over a subset or the entire time horizon / spatial scope. This can represent real contract arrangements / regulation."
+asset__operating_characteristics:
+  description: "Asset operating characteristics representation (e.g. efficiency, resource availability)"
+  members:
+    static non_dimensional: "asset characteristics are independent of decision variables and model dimensions (e.g. space, time)"
+    static_dimensional: "asset characteristics are independent of decision variables but dependent on model dimensions (e.g. space, time)"
+    linear: "asset characteristics vary linearly with a single decision variable (e.g. resource availability increasing with asset capacity)"
+    piecewise: "asset characteristics vary depending on operating decision variables creating a non-linear relationship that can be described by a piecewise linear curve (e.g., part-load efficiency, linked to capacity, storage head effects)"
+    iterative: "asset characteristics vary depending on operating decision variables creating a non-linear relationship that can only be converged upon iteratively (e.g. transmission line losses)"
+asset__chaining:
+  description: "Options to explicitly chain / link specific assets or asset types such that certain carrier flows can only occur between each other"
+  members:
+    stockpiling: "a generation asset can be given storage asset characteristics to stockpile resources/carriers (e.g. CSP heat storage buffer, fuel stocks)."
+    asset_linking: "carrier out-flow from one asset can be reserved as an in-flow in a specific subset of other assets (e.g. hydropower cascading, CCGT asset internal steam flow considerations)"
+asset__cost__investment:
+  description: "Asset investment cost representation"
+  members:
+    linear: "initial asset capital cost which varies linearly with asset nameplate capacity (e.g. EUR/MW)"
+    unit: "initial asset capital cost which is incurred on asset purchase, irrespective of capacity (e.g. land purchase)."
+    piecewise: |
+      initial asset capital cost which varies non-linearly, represented by a piecewise linear curve (e.g. economies of scale, where cost per capacity decreases with increasing capacity).
+      This may be represented by multiple assets of the same class (e.g. "wind turbine") but with different costs and maximum capacities.
+    annuitisation: "an asset's capital investment can be annuitised to account for factors linked to its expected economic life and financing arrangements, such as weighted cost of capital, inflation and tax rates, and other sources of depreciation"
+    subsidy/penalty: "costs to (dis)incentivise investment above/below given thresholds, representing soft constraints (e.g. rebate for providing firm capacity, penalty for exceeding land use limits)"
+asset__cost__operation:
+  description: "Asset operating cost representation"
+  members:
+    linear: "operating costs which vary linearly with unit in-/out-flow (e.g. EUR/MWh)"
+    unit: "operating costs which are incurred on unit commitment (e.g. start-up costs)"
+    piecewise: "operating costs which vary non-linearly, represented by a piecewise linear curve (e.g. generation bid increment / decrement levels)"
+    subsidy/penalty: "costs to (dis)incentivise operating above/below given thresholds, representing soft constraints (e.g. feed-in tariff, emissions)"
+transmission__opf:
+  description: "Transmission network optimal power flow representation"
+  members:
+    transport: "energy transport only (no Kirchhoff's laws defined)"
+    dc_opf: "linearised DC optimal power flow"
+    ac_opf: "linearised AC optimal power flow"
+    sec_opf: "security-constrained AC optimal power flow"
+transmission__limits:
+  description: "Transmission capacity limit representation"
+  members:
+    gtc: "grid transfer capacities"
+    ptdf: "power transfer distribution factors"
+    thermal: "thermal limits"
+    phase_angle: "phase angles"
+system__carriers:
+  description: "Energy carrier representation"
+  members:
+    decoupled: "only one energy carrier (e.g. electricity, gas, water) represented at a time or, if represented simultaneously, do not interact."
+    coupled: "multiple energy carriers represented with the ability to interact via carrier converting assets. Usually used in multi-vector/sector co-optimisation (e.g. power & gas systems; power, transport, & building sectors)"
+system__limits:
+  description: "System-wide limits to represent physical or policy constraints"
+  members:
+    capacity: "limit multi-asset capacity decisions  (e.g. land availability, procurement plans)"
+    operation: "limit multi-asset operational factors  (e.g. max emissions, fuel availability, capacity factor)"
+robustness:
+  description: "Methods to embed robustness into system design & operation"
+  members:
+    asset_outages: "asset outages represented by fixed downtime periods or capacity derating"
+    reserve_limit: "minimum requirement on firm capacity available in reserve"
+    lolp_limit: "loss of load probability limit"
+    eens_limit: "expected energy not served limit"
+    voll: "value of lost load, to place a soft constraint on load shedding that will be included in the optimisation"
+    ram: "remaining Available Margins over an element or a corridor"
+    two_stage_stochastic: "two-stage stochastic optimisation; used in investment decision making under uncertainty"
+    multi_stage_stochastic: "multi-stage stochastic optimisation; used in UCED decision making under uncertainty"
+resource_adequacy:
+  description: "Methods to quantify resource adequacy / system robustness"
+  members:
+    maintenance_scheduling: "model-derived asset maintenance schedule"
+    lolp: "loss of load probability calculated in postprocessing"
+    eens: "expected energy not served calculated in postprocessing"
+    monte_carlo: "uncertainty space explored with Monte Carlo analysis"
+    sampling: "techniques to sample the uncertainty space"
+preprocessing:
+  description: "Options to generate parameters derived from user-defined input data before running the model."
+  members:
+    forecasting: "a user-defined generation / load profile can be automatically updated given user-defined forecasting parameters (e.g. change in total or peak)"
+    spatial_distribution: "a user-defined parameter can be automatically distributed spatially using other spatial parameters (e.g. nodal demand distribution, transmission line distances, distributed slack)"
+    download: "data can be downloaded directly within the tool from an open or proprietary source rather than being specified by the user"
+postprocessing:
+  description: "Postprocessing analyses that can be triggered by the tool based on model outputs, on a per-asset or system-wide basis."
+  members:
+    impact_assessment: "auxiliary impacts (e.g., GHG emissions, water consumption, job creation)"
+    lcoe: "levelised cost of electricity (or other carriers)"
+    curtailment: "asset generation curtailment"
+    shadow_prices: "optimisation problem shadow prices (e.g. to approximate wholesale market prices)"
+    financial: "financial analyses for business cases"
+    gtc: "grid transfer capacities between nodes/zones/regions"
+    ptdf: "power transfer distribution factors"
+    lodf: "line Outage Distribution Factor, used in contingency flow constraints"
+    future_cost_function: "future cost function (water value) used to forecast the marginal cost of hydro and other seasonal storage devices for use in shorter term scheduling, given uncertain input parameters"
+    aggregation: Method to aggregate modelled components into broader classifications for analysis and dissemination (e.g., separately costed "wind turbine" assets aggregated back to "wind turbine")
+interface__input:
+  description: "Available options for configuring model inputs and running models"
+  members:
+    gui: "graphical user interface"
+    no_code: "configurable without knowledge of the programming language in which the tool has been written."
+    cli: "command line interface"
+    scripting: "can be configured and run using scripting specific to the tool programming language."
+    standardised: "accepts data in an ISO standard input data format."
+interface__output:
+  description: "Available options for interacting with model outputs"
+  members:
+    gui: "graphical user interface"
+    reports: "static reports consolidating model outputs"
+    tables: "pre-prepared tables that can be analysed in a spreadsheet application such as Excel."
+    logs: "run logs available in text files, for use in debugging failing model runs"
+    standardised: "outputs are in an ISO standard output data format, for regulatory reporting or for frictionless data transfer with a downstream process."
+competition:
+  description: "Asset-owning agents (e.g. private utility companies) can be represented in the model with their own constraints and/or objectives"
+  members:
+    portfolio: "agent asset portfolios and associated constraints and cost considerations (e.g. limited cross-portfolio capital investment, risk appetite)"
+    distributed_objectives: "per-agent profit maximising / risk minimising bidding in day-ahead / intra-day markets"
+optimisation_problem:
+  description: "Available options for interacting with the optimisation problem"
+  members:
+    decomposition: "decompose the problem into different stages that can be optimised in parallel with outputs of one stage acting as inputs to another. The different stages tend to represent the same system at different levels of complexity (higher/lower temporal resolution, unit commitment vs.  continuous dispatch). The process is iterated until solutions converge within a pre-defined tolerance."
+    sim + opt: "iterate between a simulation and optimisation phase until convergence with respect to operational constraints (e.g. competitive market simulation, optimal power flow)."
+    near_optimal: "generate a near-optimal solution set by relaxing constraints / objectives in the optimisation problem. Includes Modelling to Generate Alternatives (MGA)"
+    user_defined_constraints: "users can define their own constraints to the optimisation problem, applied to existing decision variables."
+    user_defined_variables: "users can define their own decision variables to the optimisation problem."
+    configuration: "optimiser parameters can be directly configured, including convergence parameters & warm-starting options"

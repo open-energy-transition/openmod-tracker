@@ -1,0 +1,525 @@
+<!--
+SPDX-FileCopyrightText: openmod-tracker contributors
+
+SPDX-License-Identifier: MIT
+-->
+<style>
+    .feature-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        font-size: 14px;
+        background-color: #ffffff;
+        border: 1px solid rgba(49, 51, 63, 0.2);
+        border-radius: 4px;
+        overflow: hidden;
+    }
+    .feature-table th {
+        background-color: rgba(151, 166, 195, 0.15);
+        padding: 0.5rem 1rem;
+        text-align: left;
+        border-bottom: 1px solid rgba(49, 51, 63, 0.2);
+        font-weight: 600;
+        color: rgba(49, 51, 63, 1);
+        font-size: 14px;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+    .feature-table th:first-child {
+        text-align: left;
+        width: 400px;
+        min-width: 400px;
+        max-width: 400px;
+    }
+    .feature-table th:not(:first-child) {
+        text-align: center;
+    }
+    .feature-table td {
+        padding: 0.5rem 1rem;
+        border-bottom: 1px solid rgba(49, 51, 63, 0.1);
+        text-align: center;
+        color: rgba(49, 51, 63, 0.8);
+        background-color: #ffffff;
+    }
+    .feature-table td:first-child {
+        width: 400px;
+        min-width: 400px;
+        max-width: 400px;
+        text-align: left;
+    }
+    .feature-table tbody tr:hover td {
+        background-color: rgba(151, 166, 195, 0.05);
+    }
+    .feature-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+    .feature-table .feature-name {
+        text-align: left;
+        font-weight: 400;
+        color: rgba(49, 51, 63, 0.8);
+    }
+    .feature-name-with-tooltip {
+        cursor: help;
+        position: relative;
+        display: inline-block;
+    }
+    .feature-name-with-tooltip .tooltip-text {
+        visibility: hidden;
+        width: 300px;
+        background-color: rgba(49, 51, 63, 0.95);
+        color: #ffffff;
+        text-align: left;
+        border-radius: 4px;
+        padding: 8px 12px;
+        position: absolute;
+        z-index: 1000;
+        left: 105%;
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: 0;
+        transition: opacity 0.2s ease-in-out;
+        font-size: 13px;
+        line-height: 1.4;
+        white-space: normal;
+        word-wrap: break-word;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .feature-name-with-tooltip:hover .tooltip-text {
+        visibility: visible;
+        opacity: 1;
+    }
+    .feature-table .category-row {
+        background-color: rgba(240, 242, 246, 0.5);
+        font-weight: 600;
+        border-top: 8px solid white;
+    }
+    .feature-table .category-row:hover td {
+        background-color: rgba(151, 166, 195, 0.1);
+    }
+    .feature-table .category-name {
+        cursor: pointer;
+        user-select: none;
+        text-align: left;
+        color: rgba(49, 51, 63, 1);
+    }
+    .feature-table .overall-row {
+        background-color: rgba(151, 166, 195, 0.2);
+        font-weight: 700;
+        font-size: 14px;
+        cursor: pointer;
+        user-select: none;
+    }
+    .feature-table .overall-row:hover td {
+        background-color: rgba(151, 166, 195, 0.25);
+    }
+    .feature-table .overall-row td {
+        color: rgba(49, 51, 63, 1);
+    }
+    .feature-table .overall-row td:first-child::before {
+        content: '▶ ';
+        display: inline-block;
+        transition: transform 0.2s;
+        color: #ff4b4b;
+        margin-right: 4px;
+    }
+    .feature-table .overall-row.expanded td:first-child::before {
+        transform: rotate(90deg);
+    }
+    .feature-table .percentage-cell {
+        font-weight: 600;
+        color: #333;
+    }
+    .hidden {
+        display: none !important;
+    }
+    .no-match {
+        display: none !important;
+    }
+    .feature-table a {
+        color: #007bff;
+        text-decoration: none;
+    }
+    .feature-table a:hover {
+        text-decoration: underline;
+    }
+    .control-button {
+        margin: 10px 5px;
+        padding: 8px 16px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+    .control-button:hover {
+        background-color: #0056b3;
+    }
+    .search-input {
+        width: 300px;
+        padding: 8px 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 14px;
+        font-family: sans-serif;
+    }
+    .search-input:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 0 2px rgba(0,123,255,0.1);
+    }
+</style>
+<script>
+    // Global variable to track if search is active
+    var isSearchActive = false;
+
+    // Save state to localStorage
+    function saveState() {
+        var state = {
+            overallExpanded: document.querySelector('.overall-row').classList.contains('expanded'),
+            expandedCategories: []
+        };
+
+        var categoryNames = document.querySelectorAll('.category-name');
+        categoryNames.forEach(function(cat, index) {
+            if (cat.classList.contains('expanded')) {
+                state.expandedCategories.push(index);
+            }
+        });
+
+        localStorage.setItem('tableState', JSON.stringify(state));
+    }
+
+    // Restore state from localStorage
+    function restoreState() {
+        var stateStr = localStorage.getItem('tableState');
+        if (!stateStr) return;
+
+        try {
+            var state = JSON.parse(stateStr);
+            var overallRow = document.querySelector('.overall-row');
+            var categoryRows = document.querySelectorAll('.category-row');
+            var categoryNames = document.querySelectorAll('.category-name');
+
+            // Restore overall state
+            if (state.overallExpanded) {
+                overallRow.classList.add('expanded');
+                categoryRows.forEach(function(row) {
+                    row.classList.remove('hidden');
+                });
+            }
+
+            // Restore category states
+            state.expandedCategories.forEach(function(index) {
+                if (categoryNames[index]) {
+                    categoryNames[index].classList.add('expanded');
+                    var className = 'cat_' + index;
+                    var rows = document.querySelectorAll('.' + className);
+                    rows.forEach(function(row) {
+                        row.classList.remove('hidden');
+                    });
+                }
+            });
+        } catch (e) {
+            console.error('Error restoring state:', e);
+        }
+    }
+
+    function toggleOverall() {
+        var categoryRows = document.querySelectorAll('.category-row');
+        var featureRows = document.querySelectorAll('.feature-row');
+        var overallRow = document.querySelector('.overall-row');
+        var isExpanded = overallRow.classList.contains('expanded');
+
+        categoryRows.forEach(function(row) {
+            // Don't show/hide rows that are filtered out
+            if (row.classList.contains('no-match')) return;
+
+            if (isExpanded) {
+                row.classList.add('hidden');
+            } else {
+                row.classList.remove('hidden');
+            }
+        });
+
+        // Always hide feature rows when collapsing overall
+        if (isExpanded) {
+            featureRows.forEach(function(row) {
+                if (!row.classList.contains('no-match')) {
+                    row.classList.add('hidden');
+                }
+            });
+            // Reset category expanded states
+            var categoryNames = document.querySelectorAll('.category-name');
+            categoryNames.forEach(function(cat) {
+                cat.classList.remove('expanded');
+            });
+        }
+
+        if (isExpanded) {
+            overallRow.classList.remove('expanded');
+        } else {
+            overallRow.classList.add('expanded');
+        }
+
+        saveState();
+    }
+
+    function toggleRows(className) {
+        var rows = document.querySelectorAll('.' + className);
+        var trigger = event.target;
+        var isExpanded = trigger.classList.contains('expanded');
+
+        rows.forEach(function(row) {
+            // Don't toggle rows that are filtered out by search
+            if (row.classList.contains('no-match')) return;
+
+            // Never toggle category rows - they should stay visible
+            // Only toggle feature rows
+            if (row.classList.contains('category-row')) {
+                return;
+            }
+
+            if (isExpanded) {
+                row.classList.add('hidden');
+            } else {
+                row.classList.remove('hidden');
+            }
+        });
+
+        if (isExpanded) {
+            trigger.classList.remove('expanded');
+        } else {
+            trigger.classList.add('expanded');
+        }
+
+        saveState();
+    }
+
+    function expandAll() {
+        var overallRow = document.querySelector('.overall-row');
+        var categoryRows = document.querySelectorAll('.category-row');
+        var featureRows = document.querySelectorAll('.feature-row');
+        var categoryNames = document.querySelectorAll('.category-name');
+
+        overallRow.classList.add('expanded');
+        categoryRows.forEach(function(row) {
+            if (!row.classList.contains('no-match')) {
+                row.classList.remove('hidden');
+            }
+        });
+        featureRows.forEach(function(row) {
+            if (!row.classList.contains('no-match')) {
+                row.classList.remove('hidden');
+            }
+        });
+        categoryNames.forEach(function(cat) {
+            // Only expand categories that aren't filtered out
+            var parentRow = cat.closest('.category-row');
+            if (!parentRow.classList.contains('no-match')) {
+                cat.classList.add('expanded');
+            }
+        });
+
+        saveState();
+    }
+
+    function collapseAll() {
+        var overallRow = document.querySelector('.overall-row');
+        var categoryRows = document.querySelectorAll('.category-row');
+        var featureRows = document.querySelectorAll('.feature-row');
+        var categoryNames = document.querySelectorAll('.category-name');
+
+        overallRow.classList.remove('expanded');
+        categoryRows.forEach(function(row) {
+            row.classList.add('hidden');
+        });
+        featureRows.forEach(function(row) {
+            row.classList.add('hidden');
+        });
+        categoryNames.forEach(function(cat) {
+            cat.classList.remove('expanded');
+        });
+
+        saveState();
+    }
+
+    function filterTable(searchQuery) {
+        var query = searchQuery.toLowerCase().trim();
+        var categoryRows = document.querySelectorAll('.category-row');
+        var featureRows = document.querySelectorAll('.feature-row');
+        var overallRow = document.querySelector('.overall-row');
+        var categoryNames = document.querySelectorAll('.category-name');
+
+        if (query === '') {
+            // Show all rows if search is empty - restore normal state
+            isSearchActive = false;
+            categoryRows.forEach(function(row) {
+                row.classList.remove('no-match');
+            });
+            featureRows.forEach(function(row) {
+                row.classList.remove('no-match');
+            });
+            return;
+        }
+
+        // Mark that search is active
+        isSearchActive = true;
+
+        // When searching, expand overall to show categories
+        overallRow.classList.add('expanded');
+
+        // First pass: filter feature rows based on search query
+        featureRows.forEach(function(featureRow) {
+            var featureNameCell = featureRow.querySelector('.feature-name');
+            if (!featureNameCell) {
+                featureRow.classList.add('no-match');
+                return;
+            }
+            var featureText = featureNameCell.textContent.toLowerCase().trim();
+            var featureMatches = featureText.includes(query);
+
+            if (featureMatches) {
+                featureRow.classList.remove('no-match');
+                featureRow.classList.remove('hidden');  // Show matching features
+            } else {
+                featureRow.classList.add('no-match');
+            }
+        });
+
+        // Second pass: show/hide categories based on whether they have matching features
+        categoryRows.forEach(function(catRow, index) {
+            // Find all feature rows for this category
+            var categoryClass = null;
+            catRow.classList.forEach(function(cls) {
+                if (cls.startsWith('cat_')) {
+                    categoryClass = cls;
+                }
+            });
+
+            if (!categoryClass) {
+                catRow.classList.add('no-match');
+                return;
+            }
+
+            // Check if category name itself matches
+            var categoryNameCell = catRow.querySelector('.category-name');
+            var categoryText = categoryNameCell ? categoryNameCell.textContent.toLowerCase().trim() : '';
+            var categoryMatches = categoryText.includes(query);
+
+            // Get only feature rows for this category (not the category row itself)
+            var catFeatureRows = document.querySelectorAll('.' + categoryClass + '.feature-row');
+            var hasMatchingFeature = false;
+
+            // Check if any feature in this category matches
+            catFeatureRows.forEach(function(featureRow) {
+                if (!featureRow.classList.contains('no-match')) {
+                    hasMatchingFeature = true;
+                }
+            });
+
+            // Show category if: (1) category name matches, OR (2) it has at least one matching feature
+            if (categoryMatches || hasMatchingFeature) {
+                catRow.classList.remove('no-match');
+                catRow.classList.remove('hidden');  // IMPORTANT: Remove hidden class to make category visible
+
+                // Expand the category to show its features
+                if (categoryNames[index]) {
+                    categoryNames[index].classList.add('expanded');
+                }
+
+                // If category name matches, show all its features
+                if (categoryMatches) {
+                    catFeatureRows.forEach(function(featureRow) {
+                        featureRow.classList.remove('no-match');
+                        featureRow.classList.remove('hidden');
+                    });
+                }
+            } else {
+                catRow.classList.add('no-match');
+            }
+        });
+    }
+
+    // Restore state when page loads
+    window.addEventListener('load', function() {
+        setTimeout(restoreState, 100);
+    });
+</script>
+
+<div style="margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+    <div>
+        <button class="control-button" onclick="expandAll()">Expand All</button>
+        <button class="control-button" onclick="collapseAll()">Collapse All</button>
+    </div>
+    <div>
+        <input type="text" id="searchInput" class="search-input" placeholder="🔍 Type to filter features..." value="{{ search_query | e }}" oninput="filterTable(this.value)">
+    </div>
+</div>
+
+<table class="feature-table">
+    <thead>
+        <tr>
+            <th>Feature</th>
+            {% for tool in tool_names %}
+            <th>{{ tool | title }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {# Overall row #}
+        <tr class="overall-row" onclick="toggleOverall()">
+            <td>Overall</td>
+            {% for tool in tool_names %}
+            {% set pct = overall_percentages[tool] %}
+            {% set color = pct | get_color_for_percentage %}
+            <td class="percentage-cell" style="background-color: {{ color }};">{{ "%.1f" | format(pct) }}%</td>
+            {% endfor %}
+        </tr>
+
+        {# Categories and features #}
+        {% for category in categories_data %}
+        {# Category row #}
+        <tr class="{{ category.id }} category-row hidden">
+            <td class="category-name" onclick="toggleRows('{{ category.id }}')">
+                {% if category.description %}
+                <span class="feature-name-with-tooltip">
+                    {{ category.name | format_category_name }}
+                    <span class="tooltip-text">{{ category.description }}</span>
+                </span>
+                {% else %}
+                {{ category.name | format_category_name }}
+                {% endif %}
+            </td>
+            {% for tool in tool_names %}
+            {% set pct = category.percentages[tool] %}
+            {% set color = pct | get_color_for_percentage %}
+            <td class="percentage-cell" style="background-color: {{ color }};">{{ "%.1f" | format(pct) }}%</td>
+            {% endfor %}
+        </tr>
+
+        {# Feature rows #}
+        {% for feature in category.features %}
+        <tr class="{{ category.id }} feature-row hidden">
+            <td class="feature-name">
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                {% if feature.description %}
+                <span class="feature-name-with-tooltip">
+                    {{ feature.name | format_feature_name }}
+                    <span class="tooltip-text">{{ feature.description }}</span>
+                </span>
+                {% else %}
+                {{ feature.name | format_feature_name }}
+                {% endif %}
+            </td>
+            {% for tool in tool_names %}
+            {% set feature_val = feature['values'][tool] %}
+            <td>{{ format_value_with_sources(feature_val['value'], feature_val['sources']) }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+        {% endfor %}
+    </tbody>
+</table>

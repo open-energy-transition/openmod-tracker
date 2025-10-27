@@ -1,0 +1,17 @@
+# SPDX-FileCopyrightText: use-cases/portfolio_plan/features.yaml CODEOWNERS
+# SPDX-FileCopyrightText: openmod-features contributors
+#
+# SPDX-License-Identifier: CC-BY-4.0
+
+# Changes here will be overwritten by Copier
+# DO NOT MANUALLY MODIFY THIS FILE
+_commit: d831de9
+_src_path: gh:open-energy-transition/openmod-features
+description: 'Create an asset portfolio investment plan as a private / public utility
+    company. This plan will be guided by national / regional plans (IRPs, NDPs, etc.),
+    the company''s   current risk appetite, and any upcoming changes to market mechanisms
+    / subsidies which may impact revenue. '
+list_type: use-case
+maintainers: brynpickering
+name: Asset portfolio investment plan
+shortname: portfolio_plan

@@ -1,0 +1,377 @@
+# SPDX-FileCopyrightText: tools/pypsa/features.yaml CODEOWNERS
+# SPDX-FileCopyrightText: openmod-features contributors
+#
+# SPDX-License-Identifier: CC-BY-4.0
+
+# yaml-language-server: $schema=https://raw.githubusercontent.com/open-energy-transition/openmod-features/6fd6237/schema/schema.yaml
+features:
+  asset__candidates:
+    converters:
+      source: []
+      value: n
+    electricity_transmission:
+      source: []
+      value: n
+    endogenous:
+      source: []
+      value: n
+    exogenous:
+      source: []
+      value: n
+    fluid_or_gas_distribution:
+      source: []
+      value: n
+    generators:
+      source: []
+      value: n
+    loads:
+      source: []
+      value: n
+    storage:
+      value: y
+      source:
+        - https://pypsa.readthedocs.io/en/latest/user-guide/optimal-power-flow.html#storage-unit-constraints
+  asset__capacity_representation:
+    grouped:
+      source: []
+      value: n
+    partial_grouped:
+      source: []
+      value: n
+    units:
+      source: []
+      value: n
+  asset__chaining:
+    asset_linking:
+      value: y
+      source:
+        - https://pypsa.readthedocs.io/en/latest/examples/chained-hydro-reservoirs.html
+    stockpiling:
+      source: []
+      value: n
+  asset__cost__investment:
+    annuitisation:
+      source: []
+      value: n
+    linear:
+      source: []
+      value: n
+    piecewise:
+      source: []
+      value: n
+    subsidy/penalty:
+      source: []
+      value: n
+    unit:
+      source: []
+      value: n
+  asset__cost__operation:
+    linear:
+      source: []
+      value: n
+    piecewise:
+      source: []
+      value: n
+    subsidy/penalty:
+      source: []
+      value: n
+    unit:
+      value: y
+      source:
+        - https://pypsa.readthedocs.io/en/latest/examples/unit-commitment.html#Start-up-and-shut-down-costs
+  asset__operating_characteristics:
+    iterative:
+      source: []
+      value: n
+    linear:
+      source: []
+      value: n
+    piecewise:
+      source: []
+      value: n
+    static non_dimensional:
+      source: []
+      value: n
+    static_dimensional:
+      source: []
+      value: n
+  asset__operating_constraints:
+    inter_spatial:
+      source: []
+      value: n
+    inter_temporal:
+      value: y
+      source:
+        - https://pypsa.readthedocs.io/en/latest/user-guide/optimal-power-flow.html#ramping-constraints
+        - https://pypsa.readthedocs.io/en/latest/examples/unit-commitment.html#Ramp-rate-limits
+    operating:
+      value: y
+      source:
+        - https://pypsa.readthedocs.io/en/latest/examples/unit-commitment.html#Minimum-part-load-demonstration
+        - https://pypsa.readthedocs.io/en/latest/examples/unit-commitment.html#Minimum-up-time-demonstration
+        - https://pypsa.readthedocs.io/en/latest/examples/unit-commitment.html#Minimum-down-time-demonstration
+    total:
+      source: []
+      value: n
+  asset__operating_representation:
+    ed:
+      source: []
+      value: n
+    uced:
+      value: y
+      source:
+        - https://pypsa.readthedocs.io/en/latest/examples/unit-commitment.html
+  competition:
+    distributed_objectives:
+      source: []
+      value: n
+    portfolio:
+      source: []
+      value: n
+  edge_effects:
+    energy_balance:
+      source: []
+      value: n
+    spatial:
+      source: []
+      value: n
+    time_financial:
+      source: []
+      value: n
+    time_operational:
+      source: []
+      value: n
+  interface__input:
+    cli:
+      source: []
+      value: n
+    gui:
+      source: []
+      value: n
+    no_code:
+      source: []
+      value: n
+    scripting:
+      value: y
+      source:
+        - https://pypsa.readthedocs.io/en/latest/references/api-reference.html
+    standardised:
+      source: []
+      value: n
+  interface__output:
+    gui:
+      source: []
+      value: n
+    logs:
+      source: []
+      value: n
+    reports:
+      source: []
+      value: n
+    standardised:
+      source: []
+      value: n
+    tables:
+      source: []
+      value: n
+  optimisation_problem:
+    configuration:
+      source: []
+      value: n
+    decomposition:
+      source: []
+      value: n
+    near_optimal:
+      source: []
+      value: n
+    sim + opt:
+      source: []
+      value: n
+    user_defined_constraints:
+      value: y
+      source:
+        - https://pypsa.readthedocs.io/en/latest/user-guide/optimal-power-flow.html#custom-constraints
+    user_defined_variables:
+      value: y
+      source:
+        - https://pypsa.readthedocs.io/en/latest/user-guide/optimal-power-flow.html#custom-constraints
+  postprocessing:
+    aggregation:
+      source: []
+      value: n
+    curtailment:
+      value: y
+      source:
+        - https://pypsa.readthedocs.io/en/latest/api/_source/pypsa.statistics.StatisticsAccessor.curtailment.html
+    financial:
+      source: []
+      value: n
+    future_cost_function:
+      source: []
+      value: n
+    gtc:
+      source: []
+      value: n
+    impact_assessment:
+      source: []
+      value: n
+    lcoe:
+      source: []
+      value: n
+    lodf:
+      value: y
+      source:
+        - https://pypsa.readthedocs.io/en/latest/api/_source/pypsa.SubNetwork.calculate_BODF.html
+    ptdf:
+      source: []
+      value: n
+    shadow_prices:
+      source: []
+      value: n
+  preprocessing:
+    download:
+      source: []
+      value: n
+    forecasting:
+      source: []
+      value: n
+    spatial_distribution:
+      value: y
+      source:
+        - https://pypsa.readthedocs.io/en/latest/examples/experimental-components-class.html#Calculate-line-length-from-attached-buses
+  resource_adequacy:
+    eens:
+      source: []
+      value: n
+    lolp:
+      source: []
+      value: n
+    maintenance_scheduling:
+      source: []
+      value: n
+    monte_carlo:
+      source: []
+      value: n
+    sampling:
+      source: []
+      value: n
+  robustness:
+    asset_outages:
+      source: []
+      value: n
+    eens_limit:
+      source: []
+      value: n
+    lolp_limit:
+      source: []
+      value: n
+    multi_stage_stochastic:
+      source: []
+      value: n
+    ram:
+      source: []
+      value: n
+    reserve_limit:
+      value: y
+      source:
+        - https://pypsa.readthedocs.io/en/latest/examples/reserve-power.html
+    two_stage_stochastic:
+      value: y
+      source:
+        - https://pypsa.readthedocs.io/en/latest/examples/stochastic-problem.html
+    voll:
+      value: y
+      source:
+        - https://pypsa.readthedocs.io/en/latest/api/_source/pypsa.optimization.optimize.OptimizationAccessor.add_load_shedding.html
+  spatial__resolution__simplification:
+    network:
+      source: []
+      value: n
+    resampling:
+      value: y
+      source:
+        - https://pypsa.readthedocs.io/en/latest/api/clustering.html
+        - https://pypsa.readthedocs.io/en/latest/examples/spatial-clustering.html
+  system__carriers:
+    coupled:
+      value: y
+      source:
+        - https://pypsa.readthedocs.io/en/latest/examples-index/sector-coupling.html
+    decoupled:
+      source: []
+      value: n
+  system__limits:
+    capacity:
+      value: y
+      source:
+        - https://pypsa.readthedocs.io/en/latest/examples/capacity-constraint-per-bus.html
+    operation:
+      value: y
+      source:
+        - https://pypsa.readthedocs.io/en/latest/user-guide/optimal-power-flow.html#operational-limit
+  time__foresight:
+    myopic:
+      value: y
+      source:
+          - https://pypsa.readthedocs.io/en/latest/examples/unit-commitment.html#Rolling-horizon-example
+          - https://pypsa.readthedocs.io/en/latest/user-guide/optimal-power-flow.html#rolling-horizon-optimization
+    perfect:
+      value: y
+      source:
+          - https://pypsa.readthedocs.io/en/latest/user-guide/optimal-power-flow.html#overview
+  time__horizon:
+    multi_year:
+      value: y
+      source:
+          - https://pypsa.readthedocs.io/en/latest/examples/multi-investment-optimisation.html
+    single_year:
+      source: []
+      value: n
+    sub_day:
+      source: []
+      value: n
+    sub_year:
+      source: []
+      value: n
+  time__resolution__simplification:
+    distortion_mitigation:
+      source: []
+      value: n
+    load_duration_curves:
+      source: []
+      value: n
+    resampling:
+      value: y
+      source:
+        - https://github.com/PyPSA/PyPSA/blob/c5346226ad01de2a9157f8aa198cd14e9fbcfa92/pypsa/common.py#L771
+    typical_periods:
+      source: []
+      value: n
+  transmission__limits:
+    gtc:
+      source: []
+      value: n
+    phase_angle:
+      source: []
+      value: n
+    ptdf:
+      value: y
+      source:
+        - https://pypsa.readthedocs.io/en/latest/api/_source/pypsa.SubNetwork.calculate_PTDF.html
+    thermal:
+      source: []
+      value: n
+  transmission__opf:
+    ac_opf:
+      source: []
+      value: n
+    dc_opf:
+      source: []
+      value: n
+    sec_opf:
+      value: y
+      source:
+       - https://pypsa.readthedocs.io/en/latest/examples/scigrid-sclopf.html
+    transport:
+      source: []
+      value: n

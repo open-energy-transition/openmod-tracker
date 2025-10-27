@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: use-cases/network_development_plan/features.yaml CODEOWNERS
+# SPDX-FileCopyrightText: openmod-features contributors
+#
+# SPDX-License-Identifier: CC-BY-4.0
+
+# Changes here will be overwritten by Copier
+# DO NOT MANUALLY MODIFY THIS FILE
+_commit: d831de9
+_src_path: gh:open-energy-transition/openmod-features
+description: Create a set of detailed scenarios of e.g., 2050 transmission grid designs
+    for use in guiding policy implementation and providing boundary conditions for
+    investors, utilities, and local authorities to develop their own plans. The transmission
+    plans will be optimized based on high-level scenarios of decarbonised energy system
+    findings.
+list_type: use-case
+maintainers: brynpickering
+name: Network Development Plan (NDP) / Transmission Planning Process (TPP)
+shortname: network_development_plan

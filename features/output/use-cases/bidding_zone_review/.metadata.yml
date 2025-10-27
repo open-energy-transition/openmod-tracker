@@ -1,0 +1,17 @@
+# SPDX-FileCopyrightText: use-cases/bidding_zone_review/features.yaml CODEOWNERS
+# SPDX-FileCopyrightText: openmod-features contributors
+#
+# SPDX-License-Identifier: CC-BY-4.0
+
+# Changes here will be overwritten by Copier
+# DO NOT MANUALLY MODIFY THIS FILE
+_commit: d831de9
+_src_path: gh:open-energy-transition/openmod-features
+description: Model impact on energy system design, systemwide costs, and / or transmission
+    system congestion of implementing new market mechanisms or updating existing ones.
+    This could include bidding zone reviews; direct subsidies; feed-in-tariffs; contract
+    auctions.
+list_type: use-case
+maintainers: brynpickering
+name: Bidding Zone Review
+shortname: bidding_zone_review

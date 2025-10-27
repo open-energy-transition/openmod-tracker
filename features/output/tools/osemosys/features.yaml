@@ -1,0 +1,421 @@
+# SPDX-FileCopyrightText: tools/osemosys/features.yaml CODEOWNERS
+# SPDX-FileCopyrightText: openmod-features contributors
+#
+# SPDX-License-Identifier: CC-BY-4.0
+
+# yaml-language-server: $schema=https://raw.githubusercontent.com/open-energy-transition/openmod-features/c5fd715/schema/schema.yaml
+features:
+  asset__candidates:
+    converters:
+      source:
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#sets
+      value: y
+    electricity_transmission:
+      source:
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#sets
+      value: y
+    endogenous:
+      source:
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#capacity-variables
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#capacity-adequacy-a
+      value: y
+    exogenous:
+      source:
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#performance
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#capacity-adequacy-a
+      value: y
+    fluid_or_gas_distribution:
+      source: []
+      value: n
+    generators:
+      source:
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#accounting-technology-production-use
+      value: y
+    loads:
+      source:
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#demands
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#demands-1
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#rate-of-demand
+      value: y
+    storage:
+      source:
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#storage
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#storage-1
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#storage-equations
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#storage-constraints
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#storage-investments
+      value: y
+  asset__capacity_representation:
+    grouped:
+      source:
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#capacity-adequacy-a
+      value: y
+    partial_grouped:
+      source: []
+      value: n
+    units:
+      source:
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#capacity-adequacy-a
+      value: y
+  asset__chaining:
+    asset_linking:
+      source:
+        - https://osemosys.readthedocs.io/en/latest/manual/Advanced%20functionalities.html#cascaded-water-storage
+        - https://doi.org/10.1088/2515-7620/ad8ca4
+      value: y
+    stockpiling:
+      source: []
+      value: n
+  asset__cost__investment:
+    annuitisation:
+      source:
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#capital-costs
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#total-discounted-costs
+      value: y
+    linear:
+      source:
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#technology-costs
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#capital-costs
+      value: y
+    piecewise:
+      source: []
+      value: n
+    subsidy/penalty:
+      source: []
+      value: n
+    unit:
+      source: []
+      value: n
+  asset__cost__operation:
+    linear:
+      source:
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#technology-costs
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#operating-costs
+      value: y
+    piecewise:
+      source:
+        - https://osemosys.readthedocs.io/en/latest/manual/Advanced%20functionalities.html#short-term-operational-constraints-of-power-plants
+      value: dev
+    subsidy/penalty:
+      source:
+        - https://osemosys.readthedocs.io/en/latest/manual/Advanced%20functionalities.html#short-term-planning
+      value: dev
+    unit:
+      source: []
+      value: n
+  asset__operating_characteristics:
+    iterative:
+      source: []
+      value: n
+    linear:
+      source:
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#performance
+      value: y
+    piecewise:
+      source: []
+      value: n
+    static non_dimensional:
+      source:
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#performance
+      value: y
+    static_dimensional:
+      source:
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#performance
+      value: y
+  asset__operating_constraints:
+    inter_spatial:
+      source: []
+      value: n
+    inter_temporal:
+      source:
+        - https://osemosys.readthedocs.io/en/latest/manual/Advanced%20functionalities.html#short-term-operational-constraints-of-power-plants
+        - https://doi.org/10.1016/j.apenergy.2014.08.072
+      value: dev
+    operating:
+      source: []
+      value: n
+    total:
+      source:
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#activity-constraints
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#annual-activity-constraints
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#total-activity-constraints
+      value: y
+  asset__operating_representation:
+    ed:
+      source:
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#activity-variables
+      value: y
+    uced:
+      source: []
+      value: n
+  competition:
+    distributed_objectives:
+      source: []
+      value: n
+    portfolio:
+      source: []
+      value: n
+  edge_effects:
+    energy_balance:
+      source: []
+      value: n
+    spatial:
+      source:
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#activity-variables
+      value: y
+    time_financial:
+      source:
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#salvage-value
+      value: y
+    time_operational:
+      source: []
+      value: n
+  interface__input:
+    cli:
+      source:
+        - https://otoole.readthedocs.io/en/latest/functionality.html#
+      value: y
+    gui:
+      source:
+        - https://github.com/OSeMOSYS/MUIO/blob/master/README.md
+      value: y
+    no_code:
+      source:
+        - https://github.com/OSeMOSYS/MUIO/blob/master/README.md
+      value: y
+    scripting:
+      source: []
+      value: n
+    standardised:
+      source: []
+      value: n
+  interface__output:
+    gui:
+      source:
+      - https://github.com/OSeMOSYS/MUIO/blob/master/README.md
+      value: y
+    logs:
+      source:
+        - https://en.wikibooks.org/wiki/GLPK/Using_GLPSOL
+      value: y
+    reports:
+      source: []
+      value: n
+    standardised:
+      source: []
+      value: n
+    tables:
+      source:
+        - https://otoole.readthedocs.io/en/latest/functionality.html#result-processing
+      value: y
+  optimisation_problem:
+    configuration:
+      source: []
+      value: n
+    decomposition:
+      source: []
+      value: n
+    near_optimal:
+      source: []
+      value: n
+    sim + opt:
+      source: []
+      value: n
+    user_defined_constraints:
+      source:
+        - https://github.com/OSeMOSYS/OSeMOSYS_GNU_MathProg/pull/75
+      value: dev
+    user_defined_variables:
+      source: []
+      value: n
+  postprocessing:
+    aggregation:
+      source:
+        - https://github.com/OSeMOSYS/osemosys2iamc/blob/main/README.md
+      value: y
+    curtailment:
+      source: []
+      value: n
+    financial:
+      source: []
+      value: n
+    future_cost_function:
+      source: []
+      value: n
+    gtc:
+      source: []
+      value: n
+    impact_assessment:
+      source: []
+      value: n
+    lcoe:
+      source: []
+      value: n
+    lodf:
+      source: []
+      value: n
+    ptdf:
+      source: []
+      value: n
+    shadow_prices:
+      source:
+        - https://github.com/KTH-dESA/dual_values/blob/main/README.md
+      value: y
+  preprocessing:
+    download:
+      source: []
+      value: n
+    forecasting:
+      source: []
+      value: n
+    spatial_distribution:
+      source: []
+      value: n
+  resource_adequacy:
+    eens:
+      source:
+        - https://osemosys.readthedocs.io/en/latest/manual/Advanced%20functionalities.html#stochastic-modelling-of-energy-security-assessment
+      value: dev
+    lolp:
+      source: []
+      value: n
+    maintenance_scheduling:
+      source: []
+      value: n
+    monte_carlo:
+      source:
+        - https://github.com/KTH-dESA/esom_gsa
+        - https://open-research-europe.ec.europa.eu/articles/3-30/v1
+      value: dev
+    sampling:
+      source:
+        - https://github.com/KTH-dESA/esom_gsa
+        - https://open-research-europe.ec.europa.eu/articles/3-30/v1
+      value: dev
+  robustness:
+    asset_outages:
+      source: []
+      value: n
+    eens_limit:
+      source: []
+      value: n
+    lolp_limit:
+      source: []
+      value: n
+    multi_stage_stochastic:
+      source: []
+      value: n
+    ram:
+      source: []
+      value: n
+    reserve_limit:
+      source:
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#reserve-margin
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#reserve-margin-constraints
+      value: y
+    two_stage_stochastic:
+      source: []
+      value: n
+    voll:
+      source: []
+      value: n
+  spatial__resolution__simplification:
+    network:
+      source: []
+      value: n
+    resampling:
+      source:
+        - https://github.com/KTH-dESA/GSA_Spatial_temporal
+        - https://doi.org/10.1016/j.isci.2025.111792
+      value: dev
+  system__carriers:
+    coupled:
+      source:
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#sets
+      value: y
+    decoupled:
+      source:
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#sets
+      value: y
+  system__limits:
+    capacity:
+      source:
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#new-capacity-constraints
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#total-capacity-constraints
+      value: y
+    operation:
+      source:
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#annual-activity-constraints
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#total-activity-constraints
+      value: y
+  time__foresight:
+    myopic:
+      source:
+        - https://github.com/KTH-dESA/OSeMOSYS_step
+        - https://doi.org/10.1186/s13705-024-00469-w
+      value: dev
+    perfect:
+      source:
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#objective-function
+      value: y
+  time__horizon:
+    multi_year:
+      source:
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#sets
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#global-parameters
+      value: y
+    single_year:
+      source:
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#sets
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#global-parameters
+      value: y
+    sub_day:
+      source:
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#sets
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#global-parameters
+      value: y
+    sub_year:
+      source:
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#sets
+        - https://osemosys.readthedocs.io/en/latest/manual/Structure%20of%20OSeMOSYS.html#global-parameters
+      value: y
+  time__resolution__simplification:
+    distortion_mitigation:
+      source: []
+      value: n
+    load_duration_curves:
+      source: []
+      value: n
+    resampling:
+      source: []
+      value: n
+    typical_periods:
+      source: []
+      value: n
+  transmission__limits:
+    gtc:
+      source: []
+      value: y
+    phase_angle:
+      source: []
+      value: n
+    ptdf:
+      source: []
+      value: n
+    thermal:
+      source: []
+      value: n
+  transmission__opf:
+    ac_opf:
+      source: []
+      value: n
+    dc_opf:
+      source: []
+      value: n
+    sec_opf:
+      source: []
+      value: n
+    transport:
+      source:
+        - https://osemosys.readthedocs.io/en/latest/manual/Introduction.html
+      value: y

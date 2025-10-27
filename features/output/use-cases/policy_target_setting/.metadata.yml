@@ -1,0 +1,15 @@
+# SPDX-FileCopyrightText: use-cases/policy_target_setting/features.yaml CODEOWNERS
+# SPDX-FileCopyrightText: openmod-features contributors
+#
+# SPDX-License-Identifier: CC-BY-4.0
+
+# Changes here will be overwritten by Copier
+# DO NOT MANUALLY MODIFY THIS FILE
+_commit: d831de9
+_src_path: gh:open-energy-transition/openmod-features
+description: Political exercise to set carbon emission pathways to meet future year
+    targets
+list_type: use-case
+maintainers: brynpickering
+name: Policy Target Setting
+shortname: policy_target_setting

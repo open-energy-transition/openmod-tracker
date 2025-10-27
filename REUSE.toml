@@ -14,7 +14,7 @@ SPDX-License-Identifier = "CC0-1.0"
 path = [
     "inventory/output/**",
     "user_analysis/output/**",
-    "code_quality/outputs/**"
+    "code_quality/output/**"
 ]
 SPDX-FileCopyrightText = "openmod-tracker contributors"
 SPDX-License-Identifier = "CC-BY-4.0"

@@ -115,7 +115,7 @@ Running `pixi run python code_quality/sonarcloud.py create openmod-tracker` will
 For newly created projects, you will then need to trigger an assessment manually on SonarQube as there is no way to do so via the API.
 Clicking on the project name is sufficient to start a project.
 
-Running `pixi run python code_quality/sonarcloud.py get-metrics openmod-tracker code_quality/outputs/metrics.csv` will update the code quality statistics for all existing SonarQube cloud platform projects.
+Running `pixi run python code_quality/sonarcloud.py get-metrics openmod-tracker code_quality/output/metrics.csv` will update the code quality statistics for all existing SonarQube cloud platform projects.
 
 >[!NOTE]
 >Only Python and C projects can be analysed automatically by SonarQube.

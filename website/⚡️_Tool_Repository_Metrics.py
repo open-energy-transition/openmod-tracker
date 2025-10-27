@@ -35,6 +35,9 @@ COLUMN_NAME_MAPPING: dict[str, str] = {
     "last_month_downloads": "1 Month Downloads",
     "category": "Category",
     "language": "Language",
+    "reliability_rating": "Reliability",
+    "security_rating": "Security",
+    "sqale_rating": "Maintainability",
 }
 
 COLUMN_DTYPES: dict[str, Callable] = {
@@ -72,6 +75,9 @@ COLUMN_HELP: dict[str, str] = {
     "Score": "The tool score is a weighted average of all numeric metrics, after scaling those metrics to similar ranges.",
     "Interactions": "The cumulative sum of interactions with the repository in the past 6 months at a weekly resolution. Interactions include new stars, issues, forks, and pull requests. Data only available for GitHub-hosted repositories.",
     "Language": "The programming language in which the majority of the tool source code is written.",
+    "Reliability": "Code reliability rating from SonarCloud: 🟢 A (best) to 🔴 E (worst).",
+    "Security": "Code security rating from SonarCloud: 🟢 A (best) to 🔴 E (worst).",
+    "Maintainability": "Code maintainability rating from SonarCloud: 🟢 A (best) to 🔴 E (worst).",
 }
 
 EXTRA_COLUMNS = ["name_with_url", "Docs", "Score", "Interactions"]
@@ -80,12 +86,15 @@ NOT_OPEN_SOURCE_LANGUAGES = ["gams", "matlab", "jetbrains mps", "powerbuilder", 
 
 
 @st.cache_data
-def create_vis_table(tool_stats_dir: Path, user_stats_dir: Path) -> pd.DataFrame:
+def create_vis_table(
+    tool_stats_dir: Path, user_stats_dir: Path, code_quality_metrics_dir: Path
+) -> pd.DataFrame:
     """Create the tool table with columns renamed and filtered ready for visualisation.
 
     Args:
         tool_stats_dir (Path): The directory in which to find tool list and stats.
         user_stats_dir (Path): The directory in which to find tool user stats.
+        code_quality_metrics_dir (Path): The directory in which to find code quality metrics.
 
     Returns:
         pd.DataFrame: Filtered and column renamed tool table.
@@ -93,7 +102,9 @@ def create_vis_table(tool_stats_dir: Path, user_stats_dir: Path) -> pd.DataFrame
     stats_df = pd.read_csv(tool_stats_dir / "stats.csv", index_col="id")
     tools_df = pd.read_csv(tool_stats_dir / "filtered.csv", index_col="id")
     docs_df = pd.read_csv(tool_stats_dir / "docs.csv", index_col="id")
-
+    code_quality_df = pd.read_csv(
+        code_quality_metrics_dir / "metrics.csv", index_col=["repo", "metric"]
+    )
     df = pd.merge(left=stats_df, right=tools_df, right_index=True, left_index=True)
     df["Interactions"] = (
         _create_user_interactions_timeseries(user_stats_dir)
@@ -122,11 +133,59 @@ def create_vis_table(tool_stats_dir: Path, user_stats_dir: Path) -> pd.DataFrame
     df["Score"] = pd.Series(
         np.random.choice([0, 100], size=len(df.index)), index=df.index
     )
+    df = pd.concat([df, _create_code_quality_cols(code_quality_df, df)], axis=1)
+    # Build quality ratings from code quality metrics (metrics ending with _rating)
+    # Create separate columns for Reliability, Security, and Maintainability
     df_vis = df.rename(columns=COLUMN_NAME_MAPPING)[
         EXTRA_COLUMNS + list(COLUMN_NAME_MAPPING.values())
     ]
 
     return df_vis
+
+
+def _create_code_quality_cols(
+    code_quality_df: pd.DataFrame, df: pd.DataFrame
+) -> pd.DataFrame:
+    """Create code quality columns for the visualization DataFrame.
+
+    Args:
+        code_quality_df (pd.DataFrame): DataFrame containing code quality metrics.
+        df (pd.DataFrame): Main DataFrame to which code quality columns will be added.
+
+    Returns:
+        pd.DataFrame: DataFrame of code quality columns added.
+    """
+    cq = code_quality_df.reset_index()
+    ratings_pivot = cq.pivot(index="repo", columns="metric", values="value")
+
+    # Match repos by tool name - metrics CSV uses tool names like "AdOpT-NET0"
+    # The df has a 'name' column with comma-separated names, we'll match against all names
+    # Create mapping from normalized names to df index
+    def get_url(name):
+        found = df.loc[df["html_url"].str.endswith(name), "html_url"]
+        if not found.empty:
+            return found.iloc[0]
+        else:
+            return None
+
+    ratings_pivot.index = ratings_pivot.index.map(get_url)
+
+    # Map to df index using tool names
+    ratings_for_tools = pd.merge(
+        df, ratings_pivot, right_index=True, left_on="html_url"
+    )
+
+    emoji_map = {
+        1: "🟢",  # A
+        2: "🟡",  # B
+        3: "🟠",  # C
+        4: "🟠",  # D
+        5: "🔴",  # E
+    }
+    results = ratings_for_tools.loc[
+        :, ratings_for_tools.columns.str.endswith("_rating")
+    ].replace(emoji_map)
+    return results
 
 
 def _create_user_interactions_timeseries(
@@ -854,6 +913,15 @@ def main(df: pd.DataFrame):
             "Docs", display_text="📖", help=COLUMN_HELP["Docs"]
         ),
         "Score": score_col_config,
+        "Reliability": st.column_config.TextColumn(
+            "Reliability", help=COLUMN_HELP["Reliability"], width="small"
+        ),
+        "Security": st.column_config.TextColumn(
+            "Security", help=COLUMN_HELP["Security"], width="small"
+        ),
+        "Maintainability": st.column_config.TextColumn(
+            "Maintainability", help=COLUMN_HELP["Maintainability"], width="small"
+        ),
         "Interactions": st.column_config.BarChartColumn(
             "6 Month Interactions",
             y_min=0,
@@ -896,9 +964,11 @@ def main(df: pd.DataFrame):
 
 if __name__ == "__main__":
     # define the path of the CSV file listing the packages to assess
-    tool_stats_dir = Path(__file__).parent.parent / "inventory" / "output"
-    user_stats_dir = Path(__file__).parent.parent / "user_analysis" / "output"
-    readme_path = Path(__file__).parent.parent / "README.md"
+    proj_dir = Path(__file__).parent.parent
+    tool_stats_dir = proj_dir / "inventory" / "output"
+    user_stats_dir = proj_dir / "user_analysis" / "output"
+    code_quality_metrics_dir = proj_dir / "code_quality" / "output"
+    readme_path = proj_dir / "README.md"
 
     st.set_page_config(
         page_title="Tool Repository Metrics", page_icon="⚡️", layout="wide"
@@ -917,7 +987,7 @@ if __name__ == "__main__":
         icon_image=OET_LOGO_ABBREVIATED,
     )
 
-    df_vis = create_vis_table(tool_stats_dir, user_stats_dir)
+    df_vis = create_vis_table(tool_stats_dir, user_stats_dir, code_quality_metrics_dir)
     g = git.cmd.Git()
     latest_changes = g.log("-1", "--pretty=%cs", tool_stats_dir / "stats.csv")
 

@@ -1,9 +1,11 @@
-# SPDX-FileCopyrightText: tools/osemosys/features.yaml CODEOWNERS
+
+# SPDX-FileCopyrightText: tools/OSeMOSYS/features.yaml CODEOWNERS
 # SPDX-FileCopyrightText: openmod-features contributors
 #
 # SPDX-License-Identifier: CC-BY-4.0
 
-# yaml-language-server: $schema=https://raw.githubusercontent.com/open-energy-transition/openmod-features/c5fd715/schema/schema.yaml
+# yaml-language-server: $schema=https://raw.githubusercontent.com/open-energy-transition/openmod-features/c87f4ce/schema/tool-schema.yaml
+
 features:
   asset__candidates:
     converters:

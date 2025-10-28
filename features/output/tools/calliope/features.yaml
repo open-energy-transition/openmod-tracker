@@ -1,78 +1,116 @@
+
 # SPDX-FileCopyrightText: tools/calliope/features.yaml CODEOWNERS
 # SPDX-FileCopyrightText: openmod-features contributors
 #
 # SPDX-License-Identifier: CC-BY-4.0
 
-# yaml-language-server: $schema=https://raw.githubusercontent.com/open-energy-transition/openmod-features/6fd6237/schema/schema.yaml
+# yaml-language-server: $schema=https://raw.githubusercontent.com/open-energy-transition/openmod-features/c87f4ce/schema/tool-schema.yaml
+
 features:
   asset__candidates:
     converters:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/basic/techs/#base-techs
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/examples/urban_scale/#conversion-technologies
+      value: y
     electricity_transmission:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/basic/techs/#base-techs
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/examples/national_scale/#other-technologies
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/examples/urban_scale/#transmission-technologies
+      value: y
     endogenous:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/math/base/#flow_cap
+      value: y
     exogenous:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/basic/modes/#operate-mode
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/examples/modes/#running-in-operate-mode
+      value: y
     fluid_or_gas_distribution:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/examples/urban_scale/#transmission-technologies
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/user_defined_math/examples/fuel_dist
+      value: y
     generators:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/basic/techs/#base-techs
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/examples/national_scale/#supply-technologies
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/examples/urban_scale/#supply-technologies
+      value: y
     loads:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/basic/techs/#base-techs
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/examples/urban_scale/#demand-technologies
+      value: y
     storage:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/basic/techs/#base-techs
+      value: y
   asset__capacity_representation:
     grouped:
       source: []
-      value: n
+      value: y
     partial_grouped:
       source: []
       value: n
     units:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/examples/milp/#purchased-units
+      value: y
   asset__chaining:
     asset_linking:
       source: []
-      value: n
+      value: y
     stockpiling:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/advanced/constraints/#activating-storage-buffers-in-non-storage-technologies
+      value: y
   asset__cost__investment:
     annuitisation:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/math/base/#cost_investment_annualised
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/math/base/#cost_depreciation_rate
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/math/base/#cost_interest_rate
+      value: y
     linear:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/math/base/#cost_area_use
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/math/base/#cost_flow_cap
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/math/base/#cost_flow_cap_per_distance
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/math/base/#cost_source_cap
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/math/base/#cost_storage_cap
+      value: y
     piecewise:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/user_defined_math/components/#piecewise-constraints
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/user_defined_math/examples/piecewise_linear_costs/
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/user_defined_math/examples/sos2_piecewise_linear_costs/
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/examples/piecewise_constraints/
+      value: y
     subsidy/penalty:
       source: []
       value: n
     unit:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/math/built_in/milp/#cost_purchase
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/math/built_in/milp/#cost_purchase_per_distance
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/examples/milp/#purchase-cost
+      value: y
   asset__cost__operation:
     linear:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/math/base/#cost_flow_in
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/math/base/#cost_flow_out
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/math/base/#cost_export
+      value: y
     piecewise:
       source: []
-      value: n
+      value: y
     subsidy/penalty:
       source: []
-      value: n
+      value: y
     unit:
       source: []
       value: n
@@ -81,37 +119,54 @@ features:
       source: []
       value: n
     linear:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/math/base/#flow_out_eff
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/math/base/#flow_in_eff
+      value: y
     piecewise:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/user_defined_math/examples/piecewise_linear_efficiency/#piecewise-linear-efficiency
+      value: y
     static non_dimensional:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/basic/data_definitions/
+      value: y
     static_dimensional:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/basic/data_definitions/
+      value: y
   asset__operating_constraints:
     inter_spatial:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/user_defined_math/examples/net_import_share/
+      value: y
     inter_temporal:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/user_defined_math/helper_functions/#group_datetime
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/math/base/#ramping_down
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/math/base/#ramping_up
+      value: y
     operating:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/user_defined_math/examples/demand_share_per_timestep_decision/#demand-share-per-timestep-as-decision-variable
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/user_defined_math/examples/max_time_varying/
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/user_defined_math/examples/uptime_downtime_limits/
+      value: y
     total:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/user_defined_math/examples/share_all_timesteps/
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/user_defined_math/examples/annual_energy_balance/
+      value: y
   asset__operating_representation:
     ed:
       source: []
-      value: n
+      value: y
     uced:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/examples/milp/
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/math/built_in/milp/
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/math/built_in/milp/#operating_units
+      value: y
   competition:
     distributed_objectives:
       source: []
@@ -121,75 +176,101 @@ features:
       value: n
   edge_effects:
     energy_balance:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/examples/milp/#asynchronous-flow-inout
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/math/built_in/milp/#async_flow_in_milp
+      value: y
     spatial:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/advanced/constraints/#revenues-and-carrier-export
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/examples/urban_scale/#revenue-by-export
+      value: y
     time_financial:
-      source: []
-      value: n
+      source:
+        - https://github.com/calliope-project/calliope-pathways
+      value: dev
     time_operational:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/advanced/constraints/#cyclic-storage
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/math/built_in/storage_inter_cluster/#inter-cluster-storage-math
+      value: y
   interface__input:
     cli:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/basic/running-cli/#running-a-model-in-the-command-line
+      value: y
     gui:
-      source: []
-      value: n
+      source:
+        - https://engage.nrel.gov/
+      value: dev
     no_code:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/getting_started/creating/#creating-a-model
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/basic/data_tables/#loading-tabular-data-data_tables
+      value: y
     scripting:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/basic/running-python/#running-a-model-in-python
+      value: y
     standardised:
       source: []
       value: n
   interface__output:
     gui:
-      source: []
-      value: n
+      source:
+        - https://calligraph.readthedocs.io/en/latest/
+      value: y
     logs:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/latest/troubleshooting/#retaining-logs-and-temporary-files
+      value: y
     reports:
       source: []
       value: n
     standardised:
-      source: []
-      value: n
+      source:
+        - https://github.com/brynpickering/friendly-calliope
+      value: dev
     tables:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/latest/reference/api/model/#calliope.Model.to_csv
+      value: y
   optimisation_problem:
     configuration:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/latest/advanced/solver/#specifying-custom-solver-options
+      value: y
     decomposition:
       source: []
       value: n
     near_optimal:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/latest/math/built_in/spores/#spores-mode-math
+        - https://calliope.readthedocs.io/en/latest/basic/modes/#spores-mode
+        - https://doi.org/10.1016/j.joule.2020.08.002
+      value: y
     sim + opt:
       source: []
       value: n
     user_defined_constraints:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/latest/user_defined_math/
+        - https://calliope.readthedocs.io/en/latest/user_defined_math/examples/
+      value: y
     user_defined_variables:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/latest/user_defined_math/
+        - https://calliope.readthedocs.io/en/latest/user_defined_math/examples/
+      value: y
   postprocessing:
     aggregation:
-      source: []
-      value: n
+      source:
+        - https://github.com/calliope-project/calliope/pull/839
+      value: dev
     curtailment:
-      source: []
-      value: n
+      source:
+        - https://github.com/calliope-project/calliope/pull/839
+      value: dev
     financial:
       source: []
       value: n
@@ -201,10 +282,11 @@ features:
       value: n
     impact_assessment:
       source: []
-      value: n
+      value: y
     lcoe:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/reference/api/postprocess/#calliope.postprocess.postprocess.systemwide_levelised_cost
+      value: y
     lodf:
       source: []
       value: n
@@ -212,12 +294,15 @@ features:
       source: []
       value: n
     shadow_prices:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/advanced/shadow_prices/#shadow-prices
+      value: y
   preprocessing:
     download:
-      source: []
-      value: n
+      source:
+        - https://clio.readthedocs.io/en/latest/
+        - https://github.com/calliope-project/module_integration
+      value: dev
     forecasting:
       source: []
       value: n
@@ -226,8 +311,9 @@ features:
       value: n
   resource_adequacy:
     eens:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/math/base/#unmet_demand
+      value: y
     lolp:
       source: []
       value: n
@@ -235,15 +321,19 @@ features:
       source: []
       value: n
     monte_carlo:
-      source: []
-      value: n
+      source:
+        - https://doi.org/10.1016/j.joule.2020.08.002
+      value: dev
     sampling:
-      source: []
-      value: n
+      source:
+        - https://github.com/brynpickering/bangalore-calliope/blob/master/Building%20and%20running%20the%20model.ipynb
+        - https://github.com/brynpickering/cambridge-calliope/blob/master/notebooks/DMUU.ipynb
+      value: dev
   robustness:
     asset_outages:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/user_defined_math/examples/uptime_downtime_limits/
+      value: y
     eens_limit:
       source: []
       value: n
@@ -257,14 +347,17 @@ features:
       source: []
       value: n
     reserve_limit:
-      source: []
-      value: n
+      source:
+        - https://github.com/calliope-project/calliope/pull/517
+      value: dev
     two_stage_stochastic:
-      source: []
-      value: n
+      source:
+        - https://github.com/calliope-project/calliope/tree/stochastic_optimisation
+      value: dev
     voll:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/basic/config/#configbuildensure_feasibility
+      value: y
   spatial__resolution__simplification:
     network:
       source: []
@@ -274,55 +367,71 @@ features:
       value: n
   system__carriers:
     coupled:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/examples/urban_scale/
+        - https://github.com/calliope-project/sector-coupled-euro-calliope
+      value: y
     decoupled:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/examples/national_scale/
+      value: y
   system__limits:
     capacity:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/math/base/#flow_cap_max_systemwide
+      value: y
     operation:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/migrating/#defining-parameters-outside-the-scope-of-nodes-and-techs
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/user_defined_math/examples/annual_energy_balance/
+      value: y
   time__foresight:
     myopic:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/basic/modes/#operate-mode
+      value: y
     perfect:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/basic/modes/#modes
+        - https://github.com/calliope-project/calliope-pathways
+      value: y
   time__horizon:
     multi_year:
-      source: []
-      value: n
+      source:
+        - https://github.com/calliope-project/calliope-pathways
+      value: dev
     single_year:
       source: []
-      value: n
+      value: y
     sub_day:
       source: []
-      value: n
+      value: y
     sub_year:
       source: []
-      value: n
+      value: y
   time__resolution__simplification:
     distortion_mitigation:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/math/built_in/storage_inter_cluster/#inter-cluster-storage-math
+      value: y
     load_duration_curves:
       source: []
       value: n
     resampling:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/advanced/time/#time-resolution-adjustment-resampling
+      value: y
     typical_periods:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/advanced/time/#time-clustering
+      value: y
   transmission__limits:
     gtc:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/examples/national_scale/#other-technologies
+        - https://github.com/calliope-project/euro-calliope/blob/develop/scripts/transmission/template_transmission_entsoe_tyndp.py
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/math/base/#symmetric_transmission
+      value: y
     phase_angle:
       source: []
       value: n
@@ -343,5 +452,7 @@ features:
       source: []
       value: n
     transport:
-      source: []
-      value: n
+      source:
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/math/base/#balance_transmission
+        - https://calliope.readthedocs.io/en/v0.7.0.dev7/math/base/#symmetric_transmission
+      value: y

@@ -1,14 +1,20 @@
-# SPDX-FileCopyrightText: tools/osemosys/.metadata.yaml CODEOWNERS
+# SPDX-FileCopyrightText: tools/OSeMOSYS/features.yaml CODEOWNERS
 # SPDX-FileCopyrightText: openmod-features contributors
 #
 # SPDX-License-Identifier: CC-BY-4.0
 
 # Changes here will be overwritten by Copier
 # DO NOT MANUALLY MODIFY THIS FILE
-_commit: c5fd715
+_commit: c87f4ce
 _src_path: gh:open-energy-transition/openmod-features
+description: OSeMOSYS is an open source modelling system for long-run integrated assessment
+    and energy planning. It has been employed to develop energy systems models from
+    the scale of the globe, continents, countries, regions and villages. It can focuses
+    on detailed power representations, or multi-resource (material, financial, all
+    energy) systems.
 docs: https://osemosys.readthedocs.io/en/latest/?badge=latest
+list_type: tool
 maintainers: willu47
 name: Open Source Energy Modelling System
-shortname: osemosys
+shortname: OSeMOSYS
 source: https://github.com/OSeMOSYS/OSeMOSYS_GNU_MathProg

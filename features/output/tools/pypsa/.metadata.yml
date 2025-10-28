@@ -1,14 +1,14 @@
-# SPDX-FileCopyrightText: tools/pypsa/features.yaml CODEOWNERS
+# SPDX-FileCopyrightText: tools/PyPSA/features.yaml CODEOWNERS
 # SPDX-FileCopyrightText: openmod-features contributors
 #
 # SPDX-License-Identifier: CC-BY-4.0
 
 # Changes here will be overwritten by Copier
 # DO NOT MANUALLY MODIFY THIS FILE
-_commit: 6fd6237
+_commit: 000bf8a
 _src_path: gh:open-energy-transition/openmod-features
 docs: https://docs.pypsa.org/latest/
 maintainers: brynpickering
 name: Python for Power System Analysis
-shortname: pypsa
+shortname: PyPSA
 source: https://github.com/PyPSA/pypsa

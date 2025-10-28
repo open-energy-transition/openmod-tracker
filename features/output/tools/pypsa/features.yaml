@@ -1,126 +1,192 @@
-# SPDX-FileCopyrightText: tools/pypsa/features.yaml CODEOWNERS
+# SPDX-FileCopyrightText: tools/PyPSA/features.yaml CODEOWNERS
 # SPDX-FileCopyrightText: openmod-features contributors
 #
 # SPDX-License-Identifier: CC-BY-4.0
 
-# yaml-language-server: $schema=https://raw.githubusercontent.com/open-energy-transition/openmod-features/6fd6237/schema/schema.yaml
+# yaml-language-server: $schema=https://raw.githubusercontent.com/open-energy-transition/openmod-features/000bf8a/schema/schema.yaml
 features:
   asset__candidates:
     converters:
-      source: []
-      value: n
+      source:
+        - https://docs.pypsa.org/latest/user-guide/components/links/
+      value: y
     electricity_transmission:
-      source: []
-      value: n
+      source:
+        - https://docs.pypsa.org/latest/user-guide/components/lines/
+      value: y
     endogenous:
-      source: []
-      value: n
+      source:
+        - https://docs.pypsa.org/latest/user-guide/components/generators/
+        - https://docs.pypsa.org/latest/user-guide/components/lines/
+        - https://docs.pypsa.org/latest/user-guide/components/links/
+        - https://docs.pypsa.org/latest/user-guide/components/storage-units/
+        - https://docs.pypsa.org/latest/user-guide/components/stores/
+        - https://docs.pypsa.org/latest/user-guide/components/transformers/
+      value: y
     exogenous:
-      source: []
-      value: n
+      source:
+        - https://docs.pypsa.org/latest/user-guide/components/generators/
+        - https://docs.pypsa.org/latest/user-guide/components/lines/
+        - https://docs.pypsa.org/latest/user-guide/components/links/
+        - https://docs.pypsa.org/latest/user-guide/components/storage-units/
+        - https://docs.pypsa.org/latest/user-guide/components/stores/
+        - https://docs.pypsa.org/latest/user-guide/components/transformers/
+      value: y
     fluid_or_gas_distribution:
       source: []
       value: n
     generators:
-      source: []
-      value: n
-    loads:
-      source: []
-      value: n
-    storage:
-      value: y
       source:
-        - https://pypsa.readthedocs.io/en/latest/user-guide/optimal-power-flow.html#storage-unit-constraints
+        - https://docs.pypsa.org/latest/user-guide/components/generators/
+      value: y
+    loads:
+      source:
+        - https://docs.pypsa.org/latest/user-guide/components/loads/
+      value: y
+    storage:
+      source:
+        - https://docs.pypsa.org/latest/user-guide/components/stores/
+      value: y
   asset__capacity_representation:
     grouped:
-      source: []
-      value: n
+      source:
+        - https://docs.pypsa.org/latest/user-guide/components/generators/
+        - https://docs.pypsa.org/latest/user-guide/components/lines/
+        - https://docs.pypsa.org/latest/user-guide/components/links/
+        - https://docs.pypsa.org/latest/user-guide/components/storage-units/
+        - https://docs.pypsa.org/latest/user-guide/components/stores/
+      value: y
     partial_grouped:
       source: []
       value: n
     units:
       source: []
-      value: n
+      value: y
   asset__chaining:
     asset_linking:
       value: y
       source:
-        - https://pypsa.readthedocs.io/en/latest/examples/chained-hydro-reservoirs.html
+        - https://docs.pypsa.org/latest/examples/chained-hydro-reservoirs/
     stockpiling:
-      source: []
-      value: n
+      source:
+        - https://docs.pypsa.org/latest/user-guide/components/stores/
+      value: y
   asset__cost__investment:
     annuitisation:
-      source: []
-      value: n
+      source:
+        - https://docs.pypsa.org/latest/user-guide/optimization/objective/#investment-costs
+      value: y
     linear:
-      source: []
-      value: n
+      source:
+        - https://docs.pypsa.org/latest/user-guide/optimization/objective/#investment-costs
+        - https://docs.pypsa.org/latest/user-guide/components/generators/
+        - https://docs.pypsa.org/latest/user-guide/components/links/
+        - https://docs.pypsa.org/latest/user-guide/components/stores/
+        - https://docs.pypsa.org/latest/user-guide/components/storage-units/
+        - https://docs.pypsa.org/latest/user-guide/components/lines/
+        - https://docs.pypsa.org/latest/user-guide/components/transformers/
+      value: y
     piecewise:
       source: []
       value: n
     subsidy/penalty:
-      source: []
-      value: n
+      source:
+        - https://docs.pypsa.org/latest/user-guide/optimization/custom-constraints/#custom-constraints
+      value: dev
     unit:
       source: []
-      value: n
+      value: y
   asset__cost__operation:
     linear:
-      source: []
-      value: n
+      source:
+        - https://docs.pypsa.org/latest/user-guide/optimization/objective/#marginal-costs
+        - https://docs.pypsa.org/latest/user-guide/components/generators/
+        - https://docs.pypsa.org/latest/user-guide/components/links/
+        - https://docs.pypsa.org/latest/user-guide/components/stores/
+        - https://docs.pypsa.org/latest/user-guide/components/storage-units/
+        - https://docs.pypsa.org/latest/user-guide/components/lines/
+        - https://docs.pypsa.org/latest/user-guide/components/transformers/
+      value: y
     piecewise:
       source: []
       value: n
     subsidy/penalty:
-      source: []
-      value: n
+      source:
+        - https://docs.pypsa.org/latest/user-guide/optimization/custom-constraints/#custom-constraints
+      value: dev
     unit:
       value: y
       source:
-        - https://pypsa.readthedocs.io/en/latest/examples/unit-commitment.html#Start-up-and-shut-down-costs
+        - https://docs.pypsa.org/latest/user-guide/optimization/unit-commitment/#start-up-and-shut-down
   asset__operating_characteristics:
     iterative:
       source: []
       value: n
     linear:
-      source: []
-      value: n
+      source:
+        - https://docs.pypsa.org/latest/user-guide/components/generators/
+        - https://docs.pypsa.org/latest/user-guide/components/links/
+        - https://docs.pypsa.org/latest/user-guide/components/stores/
+        - https://docs.pypsa.org/latest/user-guide/components/storage-units/
+        - https://docs.pypsa.org/latest/user-guide/components/lines/
+        - https://docs.pypsa.org/latest/user-guide/components/transformers/
+      value: y
     piecewise:
-      source: []
-      value: n
+      source:
+        - https://docs.pypsa.org/latest/examples/demand-elasticity/#piecewise-linear-demand-curve
+      value: dev
     static non_dimensional:
-      source: []
-      value: n
+      source:
+        - https://docs.pypsa.org/latest/user-guide/components/generators/
+        - https://docs.pypsa.org/latest/user-guide/components/links/
+        - https://docs.pypsa.org/latest/user-guide/components/stores/
+        - https://docs.pypsa.org/latest/user-guide/components/storage-units/
+        - https://docs.pypsa.org/latest/user-guide/components/lines/
+        - https://docs.pypsa.org/latest/user-guide/components/transformers/
+      value: y
     static_dimensional:
-      source: []
-      value: n
+      source:
+        - https://docs.pypsa.org/latest/user-guide/components/generators/
+        - https://docs.pypsa.org/latest/user-guide/components/links/
+        - https://docs.pypsa.org/latest/user-guide/components/stores/
+        - https://docs.pypsa.org/latest/user-guide/components/storage-units/
+        - https://docs.pypsa.org/latest/user-guide/components/lines/
+        - https://docs.pypsa.org/latest/user-guide/components/transformers/
+      value: y
   asset__operating_constraints:
     inter_spatial:
-      source: []
-      value: n
+      source:
+        - https://docs.pypsa.org/latest/user-guide/design/#buses
+        - https://docs.pypsa.org/latest/user-guide/components/lines/
+        - https://docs.pypsa.org/latest/user-guide/components/links/
+      value: y
     inter_temporal:
       value: y
       source:
-        - https://pypsa.readthedocs.io/en/latest/user-guide/optimal-power-flow.html#ramping-constraints
-        - https://pypsa.readthedocs.io/en/latest/examples/unit-commitment.html#Ramp-rate-limits
+        - https://docs.pypsa.org/latest/user-guide/optimization/unit-commitment/#ramping
+        - https://docs.pypsa.org/latest/examples/unit-commitment/#ramp-rate-limits
     operating:
       value: y
       source:
-        - https://pypsa.readthedocs.io/en/latest/examples/unit-commitment.html#Minimum-part-load-demonstration
-        - https://pypsa.readthedocs.io/en/latest/examples/unit-commitment.html#Minimum-up-time-demonstration
-        - https://pypsa.readthedocs.io/en/latest/examples/unit-commitment.html#Minimum-down-time-demonstration
+        - https://docs.pypsa.org/latest/examples/unit-commitment/#minimum-part-load
+        - https://docs.pypsa.org/latest/examples/unit-commitment/#minimum-up-time
+        - https://docs.pypsa.org/latest/examples/unit-commitment/#minimum-down-time
     total:
-      source: []
-      value: n
+      source:
+        - https://docs.pypsa.org/latest/examples/simple-electricity-market-examples/
+        - https://docs.pypsa.org/latest/user-guide/design/#buses
+        - https://docs.pypsa.org/latest/user-guide/components/lines/
+        - https://docs.pypsa.org/latest/user-guide/components/links/
+        - https://docs.pypsa.org/latest/user-guide/optimization/custom-constraints/#custom-constraints
+      value: y
   asset__operating_representation:
     ed:
       source: []
-      value: n
+      value: y
     uced:
       value: y
       source:
-        - https://pypsa.readthedocs.io/en/latest/examples/unit-commitment.html
+        - https://docs.pypsa.org/latest/user-guide/optimization/unit-commitment/
   competition:
     distributed_objectives:
       source: []
@@ -130,8 +196,9 @@ features:
       value: n
   edge_effects:
     energy_balance:
-      source: []
-      value: n
+      source:
+        - https://docs.pypsa.org/latest/user-guide/optimization/energy-balance/
+      value: y
     spatial:
       source: []
       value: n
@@ -139,81 +206,100 @@ features:
       source: []
       value: n
     time_operational:
-      source: []
-      value: n
+      source:
+        - https://docs.pypsa.org/latest/user-guide/optimization/pathway-planning/#examples
+      value: y
   interface__input:
     cli:
       source: []
       value: n
     gui:
-      source: []
-      value: n
+      source:
+        - https://www.bayesian.energy/convexity
+      value: dev
     no_code:
       source: []
       value: n
     scripting:
       value: y
       source:
-        - https://pypsa.readthedocs.io/en/latest/references/api-reference.html
+        - https://docs.pypsa.org/latest/api/networks/network/
     standardised:
       source: []
       value: n
   interface__output:
     gui:
-      source: []
-      value: n
+      source:
+        - https://docs.pypsa.org/latest/user-guide/plotting/charts/#interactive-plots
+        - https://github.com/PyPSA/pypsa-server
+        - https://github.com/PriyeshGosai/pypsa_network_viewer
+        - https://www.bayesian.energy/convexity
+      value: y
     logs:
-      source: []
-      value: n
+      source:
+        - https://docs.pypsa.org/latest/user-guide/logging/
+      value: y
     reports:
-      source: []
-      value: n
+      source:
+        - https://docs.pypsa.org/latest/user-guide/import-export/#excel
+        - https://docs.pypsa.org/latest/user-guide/import-export/#csv-files
+      value: y
     standardised:
       source: []
       value: n
     tables:
       source: []
-      value: n
+      value: y
   optimisation_problem:
     configuration:
-      source: []
-      value: n
+      source:
+        - https://docs.pypsa.org/latest/api/networks/optimize/#pypsa.Network.optimize.solve_model
+      value: y
     decomposition:
       source: []
       value: n
     near_optimal:
-      source: []
-      value: n
+      source:
+        - https://docs.pypsa.org/latest/examples/mga/
+        - https://docs.pypsa.org/latest/api/networks/optimize/#pypsa.Network.optimize.solve_model
+      value: y
     sim + opt:
       source: []
       value: n
     user_defined_constraints:
       value: y
       source:
-        - https://pypsa.readthedocs.io/en/latest/user-guide/optimal-power-flow.html#custom-constraints
+        - https://docs.pypsa.org/latest/user-guide/optimization/custom-constraints/#custom-constraints
     user_defined_variables:
       value: y
       source:
-        - https://pypsa.readthedocs.io/en/latest/user-guide/optimal-power-flow.html#custom-constraints
+        - https://docs.pypsa.org/latest/user-guide/optimization/custom-constraints/#custom-constraints
   postprocessing:
     aggregation:
-      source: []
-      value: n
+      source:
+        - https://docs.pypsa.org/latest/user-guide/statistics/
+      value: y
     curtailment:
       value: y
       source:
-        - https://pypsa.readthedocs.io/en/latest/api/_source/pypsa.statistics.StatisticsAccessor.curtailment.html
+        - https://docs.pypsa.org/latest/api/networks/statistics/#pypsa.statistics.StatisticsAccessor.curtailment
+        - https://docs.pypsa.org/latest/examples/scigrid-lopf-then-pf/#curtailment
     financial:
-      source: []
-      value: n
+      source:
+        - https://docs.pypsa.org/latest/user-guide/statistics/
+      value: y
     future_cost_function:
       source: []
       value: n
     gtc:
-      source: []
-      value: n
+      source:
+        - https://docs.pypsa.org/latest/user-guide/components/lines/
+        - https://docs.pypsa.org/latest/user-guide/components/links/
+      value: y
     impact_assessment:
-      source: []
+      source:
+        - https://docs.pypsa.org/latest/user-guide/statistics/
+        - https://docs.pypsa.org/latest/api/components/types/global-constraints/#pypsa.components.GlobalConstraints.add
       value: n
     lcoe:
       source: []
@@ -221,12 +307,16 @@ features:
     lodf:
       value: y
       source:
-        - https://pypsa.readthedocs.io/en/latest/api/_source/pypsa.SubNetwork.calculate_BODF.html
+        - https://docs.pypsa.org/latest/api/networks/subnetwork/#pypsa.SubNetwork.calculate_BODF
     ptdf:
-      source: []
-      value: n
+      source:
+        - https://docs.pypsa.org/latest/api/networks/subnetwork/#pypsa.SubNetwork.calculate_PTDF
+      value: y
     shadow_prices:
-      source: []
+      source:
+        - https://docs.pypsa.org/latest/home/features/#analysis-and-usability
+        - https://docs.pypsa.org/latest/examples/scigrid-lopf-then-pf/#locational-marginal-prices
+        - https://docs.pypsa.org/latest/user-guide/faq/#can-i-model-endogenous-fuel-prices-in-pypsa
       value: n
   preprocessing:
     download:
@@ -238,7 +328,7 @@ features:
     spatial_distribution:
       value: y
       source:
-        - https://pypsa.readthedocs.io/en/latest/examples/experimental-components-class.html#Calculate-line-length-from-attached-buses
+        - https://docs.pypsa.org/latest/api/components/types/lines/#pypsa.components.Lines.calculate_line_length
   resource_adequacy:
     eens:
       source: []
@@ -250,11 +340,14 @@ features:
       source: []
       value: n
     monte_carlo:
-      source: []
-      value: n
+      source:
+        - https://docs.pypsa.org/latest/user-guide/faq/#can-you-do-generation-adequacy-studies-with-monte-carlo-unplanned-outages
+        - https://pypsa-earth.readthedocs.io/en/latest/monte_carlo.html
+      value: dev
     sampling:
-      source: []
-      value: n
+      source:
+        - https://docs.pypsa.org/latest/examples/stochastic-optimization/
+      value: y
   robustness:
     asset_outages:
       source: []
@@ -274,15 +367,15 @@ features:
     reserve_limit:
       value: y
       source:
-        - https://pypsa.readthedocs.io/en/latest/examples/reserve-power.html
+        - https://docs.pypsa.org/latest/examples/reserve-power/
     two_stage_stochastic:
       value: y
       source:
-        - https://pypsa.readthedocs.io/en/latest/examples/stochastic-problem.html
+        - https://docs.pypsa.org/latest/examples/stochastic-optimization/
     voll:
       value: y
       source:
-        - https://pypsa.readthedocs.io/en/latest/api/_source/pypsa.optimization.optimize.OptimizationAccessor.add_load_shedding.html
+        - https://docs.pypsa.org/latest/api/networks/optimize/#pypsa.Network.optimize.add_load_shedding
   spatial__resolution__simplification:
     network:
       source: []
@@ -290,49 +383,52 @@ features:
     resampling:
       value: y
       source:
-        - https://pypsa.readthedocs.io/en/latest/api/clustering.html
-        - https://pypsa.readthedocs.io/en/latest/examples/spatial-clustering.html
+        - https://docs.pypsa.org/latest/user-guide/clustering/
+        - https://docs.pypsa.org/latest/api/networks/cluster/?h=clustering#pypsa.clustering.ClusteringAccessor
   system__carriers:
     coupled:
       value: y
       source:
-        - https://pypsa.readthedocs.io/en/latest/examples-index/sector-coupling.html
+        - https://docs.pypsa.org/latest/examples/sector-coupling-single-node/
     decoupled:
       source: []
-      value: n
+      value: y
   system__limits:
     capacity:
       value: y
       source:
-        - https://pypsa.readthedocs.io/en/latest/examples/capacity-constraint-per-bus.html
+        - https://docs.pypsa.org/latest/examples/reserve-power/#basic-model
     operation:
       value: y
       source:
-        - https://pypsa.readthedocs.io/en/latest/user-guide/optimal-power-flow.html#operational-limit
+        - https://docs.pypsa.org/latest/user-guide/optimization/global-constraints/#operational-limit
   time__foresight:
     myopic:
       value: y
       source:
-          - https://pypsa.readthedocs.io/en/latest/examples/unit-commitment.html#Rolling-horizon-example
-          - https://pypsa.readthedocs.io/en/latest/user-guide/optimal-power-flow.html#rolling-horizon-optimization
+        - https://docs.pypsa.org/latest/examples/unit-commitment/#rolling-horizon
+        - https://docs.pypsa.org/latest/examples/rolling-horizon/#rolling-horizon-optimization
     perfect:
       value: y
       source:
-          - https://pypsa.readthedocs.io/en/latest/user-guide/optimal-power-flow.html#overview
+        - https://docs.pypsa.org/latest/user-guide/optimization/overview/
   time__horizon:
     multi_year:
       value: y
       source:
-          - https://pypsa.readthedocs.io/en/latest/examples/multi-investment-optimisation.html
+        - https://docs.pypsa.org/latest/user-guide/faq/?h=multi+investment#can-investments-be-modelled-for-different-years-over-multiple-decades
     single_year:
-      source: []
-      value: n
+      source:
+        - https://docs.pypsa.org/latest/user-guide/design/#snapshots
+      value: y
     sub_day:
-      source: []
-      value: n
+      source:
+        - https://docs.pypsa.org/latest/user-guide/design/#snapshots
+      value: y
     sub_year:
-      source: []
-      value: n
+      source:
+        - https://docs.pypsa.org/latest/user-guide/design/#snapshots
+      value: y
   time__resolution__simplification:
     distortion_mitigation:
       source: []
@@ -343,35 +439,42 @@ features:
     resampling:
       value: y
       source:
+        - https://docs.pypsa.org/latest/examples/time-series-aggregation/
         - https://github.com/PyPSA/PyPSA/blob/c5346226ad01de2a9157f8aa198cd14e9fbcfa92/pypsa/common.py#L771
     typical_periods:
-      source: []
-      value: n
+      source:
+        - https://docs.pypsa.org/latest/examples/time-series-aggregation/
+      value: y
   transmission__limits:
     gtc:
-      source: []
-      value: n
+      source:
+        - https://docs.pypsa.org/latest/user-guide/components/lines/
+      value: y
     phase_angle:
-      source: []
-      value: n
+      source:
+        - https://docs.pypsa.org/latest/user-guide/components/lines/
+      value: dev
     ptdf:
       value: y
       source:
-        - https://pypsa.readthedocs.io/en/latest/api/_source/pypsa.SubNetwork.calculate_PTDF.html
+        - https://docs.pypsa.org/latest/api/networks/subnetwork/#pypsa.SubNetwork.calculate_PTDF
     thermal:
       source: []
       value: n
   transmission__opf:
     ac_opf:
-      source: []
-      value: n
+      source:
+        - https://docs.pypsa.org/latest/user-guide/linear-power-flow/
+      value: y
     dc_opf:
-      source: []
-      value: n
+      source:
+        - https://docs.pypsa.org/latest/user-guide/linear-power-flow/
+      value: y
     sec_opf:
       value: y
       source:
-       - https://pypsa.readthedocs.io/en/latest/examples/scigrid-sclopf.html
+        - https://docs.pypsa.org/latest/user-guide/optimization/contingencies/#n-1-security-constraints-for-sclopf
     transport:
-      source: []
-      value: n
+      source:
+        - https://docs.pypsa.org/latest/user-guide/components/links/
+      value: y

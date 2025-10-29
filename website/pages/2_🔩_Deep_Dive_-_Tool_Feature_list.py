@@ -141,7 +141,7 @@ def calculate_percentage(
 
 
 def get_color_for_percentage(percentage: float) -> str:
-    """Get color based on percentage using a softer color scheme.
+    """Get color based on percentage using a balanced color scheme.
 
     Args:
         percentage: Percentage value between 0 and 100
@@ -149,23 +149,21 @@ def get_color_for_percentage(percentage: float) -> str:
     Returns:
         CSS color string
     """
-    # Use a softer color scheme: light coral to light sea green
-    # Light coral: rgb(240, 128, 128) at 0%
-    # Light yellow: rgb(255, 255, 153) at 50%
-    # Light sea green: rgb(144, 238, 144) at 100%
+    # Balanced color scheme: soft coral to warm yellow to medium green
+    # More saturated than pastel but softer than the original
 
     if percentage < 50:
-        # Interpolate from light coral to light yellow
+        # Soft coral to warm yellow
         ratio = percentage / 50
-        red = int(240 + (255 - 240) * ratio)
-        green = int(128 + (255 - 128) * ratio)
-        blue = int(128 + (153 - 128) * ratio)
+        red = int(255 + (255 - 255) * ratio)
+        green = int(180 + (235 - 180) * ratio)
+        blue = int(180 + (200 - 180) * ratio)
     else:
-        # Interpolate from light yellow to light green
+        # Warm yellow to medium green
         ratio = (percentage - 50) / 50
-        red = int(255 - (255 - 144) * ratio)
-        green = int(255 - (255 - 238) * ratio)
-        blue = int(153 - (153 - 144) * ratio)
+        red = int(255 - (255 - 180) * ratio)
+        green = int(235 - (235 - 220) * ratio)
+        blue = int(200 - (200 - 180) * ratio)
 
     return f"rgb({red}, {green}, {blue})"
 
@@ -318,11 +316,79 @@ def generate_collapsible_table(
     # Load template from file
     template = env.get_template("feature_table.html.jinja")
 
+    # Get current theme from Streamlit context
+    theme = st.context.theme.type
+
+    # Calculate first column width based on longest text
+    # Collect all first column texts
+    first_column_texts = ["Overall"]  # Header row
+    first_column_texts.extend(
+        [format_category_name(cat["name"]) for cat in categories_data]
+    )
+    for cat in categories_data:
+        first_column_texts.extend(
+            [f"    {format_feature_name(f['name'])}" for f in cat["features"]]
+        )
+
+    # Estimate width: ~8px per character as a rough approximation for the font
+    # Add padding (0.5rem * 2 = ~16px) and some buffer
+    max_text_length = max(len(text) for text in first_column_texts)
+    first_column_width = max_text_length * 8 + 24  # 8px per char + 24px padding
+
+    # Set reasonable min/max bounds
+    first_column_width = max(250, min(first_column_width, 600))
+
+    # Define simplified color palettes for each theme
+    if theme == "dark":
+        colors = {
+            "bg": "#0e1117",
+            "border_light": "#fafafa1a",
+            "th_text": "#fafafa",
+            "td_text": "#fafafacc",
+            "percentage_text": "#000000",
+            "hover_bg": "#26273033",
+            "category_bg": "#26273066",
+            "overall_bg": "#26273099",
+            "button_bg": "#ff4b4b",
+            "button_hover": "#ff2b2b",
+            "input_bg": "#262730",
+            "input_text": "#fafafa",
+            "input_border": "#fafafa33",
+            "input_focus": "#ff4b4b",
+            "input_placeholder": "#fafafa66",
+            "tooltip_bg": "#262730",
+            "tooltip_text": "#fafafa",
+            "link": "#58a6ff",
+        }
+    else:  # light theme
+        colors = {
+            "bg": "#ffffff",
+            "border_light": "#d0d0d0",
+            "th_text": "#31333f",
+            "td_text": "#31333f",
+            "percentage_text": "#000000",
+            "hover_bg": "#f0f2f6",
+            "category_bg": "#f0f2f6",
+            "overall_bg": "#e8eaed",
+            "button_bg": "#ff4b4b",
+            "button_hover": "#ff2b2b",
+            "input_bg": "#ffffff",
+            "input_text": "#31333f",
+            "input_border": "#d0d0d0",
+            "input_focus": "#ff4b4b",
+            "input_placeholder": "#a0a0a0",
+            "tooltip_bg": "#31333f",
+            "tooltip_text": "#ffffff",
+            "link": "#0068c9",
+        }
+
     context = {
         "tool_names": tool_names,
         "overall_percentages": overall_percentages,
         "categories_data": categories_data,
         "search_query": search_query,
+        "colors": colors,
+        "first_column_width": first_column_width,
     }
 
     return template.render(**context)
@@ -455,7 +521,7 @@ def main(
     st.markdown("---")
 
     # Generate and display the collapsible table
-    # Search is now handled within the HTML table itself
+    # The table will auto-detect Streamlit's theme using JavaScript
     table_html = generate_collapsible_table(
         filtered_tools_data, count_unsourced, count_dev, feature_schema, ""
     )

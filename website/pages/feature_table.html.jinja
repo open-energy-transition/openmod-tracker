@@ -4,175 +4,177 @@ SPDX-FileCopyrightText: openmod-tracker contributors
 SPDX-License-Identifier: MIT
 -->
 <style>
+    body {
+        font-family: "Source Sans Pro", sans-serif;
+        background-color: {{ colors.bg }};
+        color: {{ colors.td_text }};
+        margin: 0;
+        padding: 0;
+    }
+
     .feature-table {
         width: 100%;
-        border-collapse: separate;
-        border-spacing: 0;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        border-collapse: collapse;
         font-size: 14px;
-        background-color: #ffffff;
-        border: 1px solid rgba(49, 51, 63, 0.2);
-        border-radius: 4px;
+        table-layout: fixed;
+    }
+
+    .feature-table th,
+    .feature-table td {
+        padding: 0.5rem 0.75rem;
+        text-align: left;
+        border-bottom: 1px solid {{ colors.border_light }};
         overflow: hidden;
     }
+
     .feature-table th {
-        background-color: rgba(151, 166, 195, 0.15);
-        padding: 0.5rem 1rem;
-        text-align: left;
-        border-bottom: 1px solid rgba(49, 51, 63, 0.2);
+        background-color: {{ colors.bg }};
         font-weight: 600;
-        color: rgba(49, 51, 63, 1);
-        font-size: 14px;
+        color: {{ colors.th_text }};
         position: sticky;
         top: 0;
         z-index: 10;
     }
-    .feature-table th:first-child {
-        text-align: left;
-        width: 400px;
-        min-width: 400px;
-        max-width: 400px;
-    }
-    .feature-table th:not(:first-child) {
-        text-align: center;
-    }
+
     .feature-table td {
-        padding: 0.5rem 1rem;
-        border-bottom: 1px solid rgba(49, 51, 63, 0.1);
+        background-color: {{ colors.bg }};
+        color: {{ colors.td_text }};
         text-align: center;
-        color: rgba(49, 51, 63, 0.8);
-        background-color: #ffffff;
     }
+
+    .feature-table tbody tr:hover {
+        background-color: {{ colors.hover_bg }};
+    }
+
+    .feature-table th:first-child,
     .feature-table td:first-child {
-        width: 400px;
-        min-width: 400px;
-        max-width: 400px;
         text-align: left;
+        width: {{ first_column_width }}px !important;
+        min-width: {{ first_column_width }}px !important;
+        max-width: {{ first_column_width }}px !important;
     }
-    .feature-table tbody tr:hover td {
-        background-color: rgba(151, 166, 195, 0.05);
+
+    .feature-table th:not(:first-child),
+    .feature-table td:not(:first-child) {
+        text-align: center;
     }
-    .feature-table tbody tr:last-child td {
-        border-bottom: none;
+
+    .feature-name {
+        padding-left: 1.5rem;
     }
-    .feature-table .feature-name {
-        text-align: left;
-        font-weight: 400;
-        color: rgba(49, 51, 63, 0.8);
+
+    .category-row {
+        font-weight: 600;
+        background-color: {{ colors.category_bg }} !important;
     }
+
+    .overall-row {
+        font-weight: 700;
+        background-color: {{ colors.overall_bg }} !important;
+        cursor: pointer;
+    }
+
+    .overall-row td:first-child::before {
+        content: '▶ ';
+        display: inline-block;
+        transition: transform 0.2s;
+        margin-right: 0.5rem;
+    }
+
+    .overall-row.expanded td:first-child::before {
+        transform: rotate(90deg);
+    }
+
+    .category-name {
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .percentage-cell {
+        font-weight: 600;
+        color: {{ colors.percentage_text }} !important;
+    }
+
+    .control-button {
+        padding: 0.5rem 1rem;
+        margin: 0.5rem 0.25rem;
+        background-color: {{ colors.button_bg }};
+        color: white;
+        border: none;
+        border-radius: 0.25rem;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    .control-button:hover {
+        background-color: {{ colors.button_hover }};
+    }
+
+    .search-input {
+        width: 300px;
+        padding: 0.5rem;
+        border: 1px solid {{ colors.input_border }};
+        border-radius: 0.25rem;
+        font-size: 14px;
+        background-color: {{ colors.input_bg }};
+        color: {{ colors.input_text }};
+    }
+
+    .search-input:focus {
+        outline: none;
+        border-color: {{ colors.input_focus }};
+    }
+
+    .search-input::placeholder {
+        color: {{ colors.input_placeholder }};
+    }
+
     .feature-name-with-tooltip {
-        cursor: help;
         position: relative;
         display: inline-block;
+        cursor: help;
     }
-    .feature-name-with-tooltip .tooltip-text {
+
+    .tooltip-text {
         visibility: hidden;
-        width: 300px;
-        background-color: rgba(49, 51, 63, 0.95);
-        color: #ffffff;
-        text-align: left;
-        border-radius: 4px;
-        padding: 8px 12px;
         position: absolute;
         z-index: 1000;
         left: 105%;
         top: 50%;
         transform: translateY(-50%);
-        opacity: 0;
-        transition: opacity 0.2s ease-in-out;
+        width: 300px;
+        padding: 0.5rem 0.75rem;
+        background-color: {{ colors.tooltip_bg }};
+        color: {{ colors.tooltip_text }};
+        border-radius: 0.25rem;
         font-size: 13px;
-        line-height: 1.4;
-        white-space: normal;
-        word-wrap: break-word;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        opacity: 0;
+        transition: opacity 0.2s;
     }
+
     .feature-name-with-tooltip:hover .tooltip-text {
         visibility: visible;
         opacity: 1;
     }
-    .feature-table .category-row {
-        background-color: rgba(240, 242, 246, 0.5);
-        font-weight: 600;
-        border-top: 8px solid white;
-    }
-    .feature-table .category-row:hover td {
-        background-color: rgba(151, 166, 195, 0.1);
-    }
-    .feature-table .category-name {
-        cursor: pointer;
-        user-select: none;
-        text-align: left;
-        color: rgba(49, 51, 63, 1);
-    }
-    .feature-table .overall-row {
-        background-color: rgba(151, 166, 195, 0.2);
-        font-weight: 700;
-        font-size: 14px;
-        cursor: pointer;
-        user-select: none;
-    }
-    .feature-table .overall-row:hover td {
-        background-color: rgba(151, 166, 195, 0.25);
-    }
-    .feature-table .overall-row td {
-        color: rgba(49, 51, 63, 1);
-    }
-    .feature-table .overall-row td:first-child::before {
-        content: '▶ ';
-        display: inline-block;
-        transition: transform 0.2s;
-        color: #ff4b4b;
-        margin-right: 4px;
-    }
-    .feature-table .overall-row.expanded td:first-child::before {
-        transform: rotate(90deg);
-    }
-    .feature-table .percentage-cell {
-        font-weight: 600;
-        color: #333;
-    }
+
     .hidden {
         display: none !important;
     }
+
     .no-match {
         display: none !important;
     }
-    .feature-table a {
-        color: #007bff;
+
+    a {
+        color: {{ colors.link }};
         text-decoration: none;
     }
-    .feature-table a:hover {
+
+    a:hover {
         text-decoration: underline;
-    }
-    .control-button {
-        margin: 10px 5px;
-        padding: 8px 16px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 14px;
-    }
-    .control-button:hover {
-        background-color: #0056b3;
-    }
-    .search-input {
-        width: 300px;
-        padding: 8px 12px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        font-size: 14px;
-        font-family: sans-serif;
-    }
-    .search-input:focus {
-        outline: none;
-        border-color: #007bff;
-        box-shadow: 0 0 0 2px rgba(0,123,255,0.1);
     }
 </style>
 <script>
-    // Global variable to track if search is active
     var isSearchActive = false;
 
     // Save state to localStorage

@@ -75,7 +75,7 @@ github.com/IRPsim/IRPopt,
 github.com/JuliaEnergy/Joulia.jl,
 github.com/JuliaEnergy/PowerDynamics.jl,simulation model
 github.com/kiedanski/pymarket,simulation model
-github.com/KTH-dESA/OnSSET-2016,simulation model
+github.com/OnSSET/onsset,simulation model
 github.com/lanl-ansi/PowerModels.jl,
 github.com/leonardgoeke/AnyMOD.jl,
 github.com/LukasBarner/HydrOGEnMod.jl,

@@ -119,6 +119,7 @@ emma,EMMA,,https://neon-energie.de/emma,openmod,
 emma,EMMA,,https://github.com/emma-model/emma,pre-compiled,
 emprise,EMPRISE,,https://github.com/philipphaertel/emprise,pre-compiled,
 enerflow,enerflow,An open-source Python framework that enables energy data scientists and modellers to write modular and reproducible energy models that solves sequential decision problems.,https://github.com/rebase-energy/enflow,opensustain-tech,
+energy_access_explorer_(eae),Energy Access Explorer (EAE),"WRI, in collaboration with over 300 partners, has developed the Energy Access Explorer (EAE), the World’s First Digital Public Good to deliver climate compatible energy transitions for everyone. EAE takes a data-informed, integrated, and inclusive approach to achieving universal energy access, supporting equitable socio-economic development. EAE provides governments, businesses, and financiers with a transparent, interactive, geospatial platform to visualize and analyze high-priority areas for energy interventions in Africa and South Asia. EAE functions also as a dynamic information system, reducing software engineering and data transaction costs for both data providers and users and facilitating data management and governance.cilitating data management and governance.",https://github.com/energyaccessexplorer,openmod,
 energy_policy_simulator,Energy Policy Simulator,The open-source United States Energy Policy Simulator estimates environmental and economic impacts of hundreds of climate and energy policies.,https://github.com/energyinnovation/eps-us,lf-energy-landscape,
 energy_policy_simulator,Energy Policy Simulator,"About the Energy Policy Simulator
 The Energy Policy Simulator (EPS) is a computer model developed by Energy Innovation LLC as part of its Energy Policy Solutions project, an effort which aims to inform policymakers and regulators about which climate and energy policies will reduce greenhouse gas emissions most effectively and at the lowest cost.
@@ -186,6 +187,7 @@ exago,ExaGO,"ExaGO provides applications to solve stochastic, security-constrain
 exago,ExaGO,"ExaGO is a library for solving large-scale alternating current optimal power flow (ACOPF) problems including stochastic effects, security constraints and multi-period constraints.",https://gitlab.pnnl.gov/exasgd/frameworks/exago,lf-energy-landscape,
 exago,ExaGO,"High-performance power grid optimization for stochastic, security-constrained, and multi-period ACOPF problems.",https://github.com/pnnl/exago,opensustain-tech,
 exago,ExaGO,,https://github.com/pnnl/exago,pre-compiled,
+exerpy,ExerPy,A Python library designed to perform detailed exergy analysis of energy conversion systems.,https://github.com/oemof/exerpy,opensustain-tech,
 fame,FAME,,https://gitlab.com/fame-framework,lf-energy-landscape,
 fame,FAME,Its purpose is supporting the rapid development and fast execution of complex agent-based energy system simulations.,https://gitlab.com/fame-framework/fame-core,opensustain-tech,
 ficus,Ficus,A (mixed integer) linear optimisation model for local energy systems,https://github.com/yabata/ficus,openmod,
@@ -236,10 +238,10 @@ grid2op,grid2op,,https://github.com/grid2op/grid2op,pre-compiled,power-flow
 gridcal,GridCal,"GridCal, a cross-platform power systems software written in Python with user interface, used in academia and industry.
 
 GridCal does all sort of static analysis of power systems with or without time series (power flow, short circuit, linear and non linear optimization, ..., you name it)",https://github.com/sanpen/gridcal,lf-energy-landscape,power-flow
-gridcal,GridCal,Aims to be a complete platform for power systems research and simulation.,https://github.com/sanpen/veragrid,opensustain-tech,power-flow
 gridcal,GridCal,"GridCal is a research oriented power systems software.
 Research oriented? How? Well, it is a fruit of research. It is designed to be modular. As a researcher I found that the available software (not even talking about commercial options) are hard to expand or adapt to achieve complex simulations. GridCal is designed to allow you to build and reuse modules, which eventually will boost your productivity and the possibilities that are at hand.ty and the possibilities that are at hand.",https://github.com/sanpen/gridcal,openmod,power-flow
 gridcal,GridCal,,https://github.com/sanpen/gridcal,pre-compiled,power-flow
+gridfm,GridFM,"Train, finetune and interact with a foundation model for the electric power grid.",https://github.com/gridfm/gridfm-graphkit,opensustain-tech,
 gridlab_d,GridLAB-D,A simulation platform for future electricity distribution power systems.,https://github.com/arras-energy/gridlabd,opensustain-tech,
 gridlab_d,gridlab-d ,,https://github.com/gridlab-d/gridlab-d ,pre-compiled,
 gridpack,GridPACK,An open-source high-performance package for simulation of large-scale electrical grids.,https://github.com/gridoptics/gridpack,opensustain-tech,power-flow
@@ -379,8 +381,8 @@ omegalpes,OMEGAlpes,"OMEGAlpes stands for Generation of Optimization Models As L
 omegalpes,omegalpes,,https://gricad-gitlab.univ-grenoble-alpes.fr/omegalpes/omegalpes,pre-compiled,
 onsset,onsset,A GIS based optimization tool that has been developed to support electrification planning and decision making for the achievement of energy access goals in currently unserved locations.,https://github.com/onsset/onsset,lf-energy-landscape,
 onsset,onsset,A GIS based optimization tool that has been developed to support electrification planning and decision making for the achievement of energy access goals in currently unserved locations.,https://github.com/onsset/onsset,opensustain-tech,
-onsset,OnSSET,"OnSSET has been designed for identifying least-cost technology options to electrify areas presently unserved by grid-based electricity and to estimate associated investment needs related to electrification. OnSSET uses energy-related data and information on a geographical basis such as settlement sizes and locations, distances from existing and planned transmission network, power plants, economic activity, local renewable energy flows,road network, nighttime light etc.y flows,road network, nighttime light etc.",https://github.com/kth-desa/pyonsset,openmod,
-onsset_2016,OnSSET-2016,,https://github.com/kth-desa/onsset-2016,pre-compiled,
+onsset,OnSSET,"OnSSET has been designed for identifying least-cost technology options to electrify areas presently unserved by grid-based electricity and to estimate associated investment needs related to electrification. OnSSET uses energy-related data and information on a geographical basis such as settlement sizes and locations, distances from existing and planned transmission network, power plants, economic activity, local renewable energy flows,road network, nighttime light etc.y flows,road network, nighttime light etc.",https://github.com/onsset,openmod,
+onsset,onsset,,https://github.com/onsset/onsset,pre-compiled,
 open,OPEN,,https://github.com/epgoxford/open,pre-compiled,
 open_energy_cell_simulation,Open-Energy-Cell-Simulation,,https://github.com/fabmid/open-energy-cell-simulation,pre-compiled,
 open_energy_modeling_benchmarks,open-energy-modeling-benchmarks,The purpose of this repository is to collate a collection of benchmarks related to open energy modeling in JuMP.,https://github.com/jump-dev/open-energy-modeling-benchmarks,opensustain-tech,
@@ -579,6 +581,7 @@ All data sets can we downloaded at https://zenodo.org/search?page=1&size=20&q=Sc
 scigrid_power,SciGRID power,SciGRID is an open source model of the European transmission network. On the 15.06.2015 the first version (release V0.1) of SciGRID was released and the second version (release V0.2) was made available on the 20.11.2015. The third release of SciGRID (release 0.3) was made available on the 1st of August 2016 and includes a European and German dataset.nd includes a European and German dataset.,https://www.power.scigrid.de/pages/downloads.html,openmod,
 sddpdso_jl,SDDPDSO.jl,,https://github.com/psrenergy/sddpdso.jl,pre-compiled,
 secmod,secmod,,https://git-ce.rwth-aachen.de/ltt/secmod,pre-compiled,
+sienna,Sienna,The most advanced power systems modeling platform ever built,https://github.com/nrel-sienna,openmod,
 silver,SILVER,"SILVER (Strategic Integration of Large-capacity Variable Energy Resources) is a scenario-based electricity system model that explores the trade-offs among alternative balancing strategies for high variable renewable energy (VRE) electricity grids. SILVER optimizes the asset dispatch for a user-defined electricity system configuration that specifies demand response availability, generation assets, storage assets, and transmission infrastructure",https://gitlab.com/sesit/silver,g-pst,production-cost
 silver,silver,,https://gitlab.com/sesit/silver,pre-compiled,
 simbench,SimBench,The objective of the research project SimBench is the development of a benchmark dataset to support research in grid planning and operation.,https://github.com/e2niee/simbench,opensustain-tech,
@@ -661,6 +664,7 @@ urbs,URBS,"urbs is a linear programming optimisation model for capacity expansio
 urbs,urbs,,https://github.com/tum-ens/urbs,pre-compiled,capacity-expansion
 uselectricity,USelectricity,Forecast the US demand for electricity.,https://github.com/ramikrispin/uselectricity,lf-energy-landscape,
 usensys,USENSYS,"United States Energy SYStem (USENSYS) is an open source capacity expansion model (CEM, also knows as Reference Energy System model, RES), developped based on energyRt package for R.",https://github.com/usensys/usensys,openmod,
+veragrid,VeraGrid,Aims to be a complete platform for power systems research and simulation.,https://github.com/sanpen/veragrid,opensustain-tech,
 villasframework,VILLASframework,,https://github.com/villasframework/node,lf-energy-landscape,
 villasframework,VILLASframework,,https://github.com/villasframework,pre-compiled,
 villasnode,VILLASnode,Connecting real-time power grid simulation equipment.,https://git.rwth-aachen.de/acs/public/villas/node,opensustain-tech,

@@ -7,15 +7,22 @@ FROM python:3.13-slim
 COPY . ./
 
 RUN apt-get update && apt-get install -y \
-    git \
+    git sed \
     && rm -rf /var/lib/apt/lists/*
 
 RUN pip install --no-cache-dir -r website/requirements.txt pytest --root-user-action=ignore
+
+# Update the static streamlit `index.html` file to include appropriate SEO data for our app.
+RUN STREAMLIT_PATH=$(python -c "import streamlit; import os; print(os.path.dirname(streamlit.__file__))") && \
+    sed -i 's|<title>.*</title>|<title>Open Energy System Modelling Tool Tracker (openmod-tracker)</title>|' \
+    "${STREAMLIT_PATH}/static/index.html" && \
+    sed -i '/<body>/,/<\/body>/ s|<noscript>.*</noscript>|<noscript>\n        Explore and compare open-source energy modelling tools.\n        Find metrics, documentation, and community activity for tools used in energy transition planning.\n    </noscript>|' \
+    "${STREAMLIT_PATH}/static/index.html"
 
 RUN pytest tests/test_app.py
 
 EXPOSE 8080
 
-HEALTHCHECK CMD curl --fail http://localhost:8501/_stcore/health
+HEALTHCHECK CMD curl --fail http://localhost:8080/_stcore/health
 
 CMD ["streamlit", "run", "website/⚡️_Tool_Repository_Metrics.py", "--server.port=8080", "--server.address=0.0.0.0"]

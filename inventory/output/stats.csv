@@ -165,7 +165,7 @@ pysam,https://github.com/NREL/pysam,NREL,False,125,76,C,bsd-3-clause,2019-03-18T
 python_ehub,https://gitlab.com/energyincities/python-ehub,energyincities,False,7,1,,gpl-3.0+,2017-10-17T20:30:22.215Z,,2025-10-17T17:41:06.252Z,,,,401.0,3.0,2022-10-31
 python_microgrid,https://github.com/ahalev/python-microgrid,ahalev,False,91,13,Python,lgpl-3.0,2023-03-28T20:57:51.000Z,2025-01-18T04:13:20.000Z,2025-10-28T08:06:18.000Z,0.1583476764199656,10,https://python-microgrid.readthedocs.io,50.0,1.0,2024-04-06
 reeds_2_0,https://github.com/NREL/ReEDS-2.0,NREL,False,166,76,Python,bsd-3-clause,2019-05-28T15:57:01.000Z,2025-10-24T22:01:51.000Z,2025-10-19T04:13:17.000Z,0.6538461538461539,16,https://nrel.github.io/ReEDS-2.0/,,,
-reho,https://github.com/IPESE/REHO,IPESE,False,8,13,Python,apache-2.0,2023-06-19T13:01:14.000Z,2025-10-25T23:41:14.000Z,2025-10-13T14:55:33.000Z,0.6118721461187215,8,,99.0,0.0,2025-03-24
+reho,https://github.com/IPESE/REHO,IPESE,False,8,13,Python,apache-2.0,2023-06-19T13:01:14.000Z,2025-10-13T14:55:29.000Z,2025-10-13T14:55:33.000Z,0.6118721461187215,8,,99.0,0.0,2025-03-24
 reise_jl,https://github.com/Breakthrough-Energy/REISE.jl,Breakthrough-Energy,False,32,24,Julia,mit,2020-01-17T22:41:38.000Z,2023-02-24T01:33:02.000Z,2025-08-06T18:39:34.000Z,0.47042253521126765,10,https://breakthrough-energy.github.io/docs/,,,
 remix,https://gitlab.com/dlr-ve/esy/remix/framework,dlr-ve,False,10,1,,bsd-3-clause,2022-11-21T10:27:58.323Z,,2025-07-23T07:41:34.184Z,,,,,,
 renpass,https://github.com/fraukewiese/renpass,fraukewiese,False,18,10,R,gpl-3.0,2017-03-12T19:40:49.000Z,2017-03-13T18:53:18.000Z,2024-01-18T10:03:23.000Z,,,,,,

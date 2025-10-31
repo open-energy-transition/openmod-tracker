@@ -1,0 +1,439 @@
+
+# SPDX-FileCopyrightText: tools/times/features.yaml CODEOWNERS
+# SPDX-FileCopyrightText: openmod-features contributors
+#
+# SPDX-License-Identifier: CC-BY-4.0
+
+# yaml-language-server: $schema=https://raw.githubusercontent.com/open-energy-transition/openmod-features/31f3f3e/schema/tool-schema.yaml
+
+features:
+  asset__candidates:
+    converters:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #2.2, #4.1, #5
+      value: y
+    electricity_transmission:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #2.2, #4.2, #5
+      value: y
+    endogenous:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #5, #6
+      value: y
+    exogenous:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #3
+      value: y
+    fluid_or_gas_distribution:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #2.2, #4.2, #5
+      - https://link.springer.com/article/10.1007/s10666-024-09976-8
+      value: y
+    generators:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #2.2, #5
+      value: y
+    loads:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #2.2, #5
+      value: y
+    storage:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #2.2, #4.3, #5
+      value: y
+  asset__capacity_representation:
+    grouped:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-I.pdf #5.4
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #2.2, #5, #6
+      value: y
+    partial_grouped:
+      source: []
+      value: n
+    units:
+      source: []
+      value: n
+  asset__chaining:
+    asset_linking:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #2.2, #4.1
+      value: y
+    stockpiling:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #4.3
+      value: y
+  asset__cost__investment:
+    annuitisation:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-I.pdf #5.3
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #3.1, #6.2
+      value: y
+    linear:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-I.pdf #5.3
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #3.1, #6.2
+      value: y
+    piecewise:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-I.pdf #5.3
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #3.1, #6.2
+      value: y
+    subsidy/penalty:
+      source: []
+      value: n
+    unit:
+      source: []
+      value: n
+  asset__cost__operation:
+    linear:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-I.pdf #5.3
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #3.1, #6.2
+      value: y
+    piecewise:
+      source: []
+      value: n
+    subsidy/penalty:
+      source: []
+      value: n
+    unit:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #3.1, #6.2
+      value: y
+  asset__operating_characteristics:
+    iterative:
+      source: []
+      value: n
+    linear:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #3.1
+      value: y
+    piecewise:
+      source:
+      - https://iea-etsap.org/projects/TIMES_Dispatching_Documentation.pdf #3
+      value: y
+    static non_dimensional:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #3.1
+      value: y
+    static_dimensional:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #3.1
+      value: y
+  asset__operating_constraints:
+    inter_spatial:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #6.3, #6.4
+      value: y
+    inter_temporal:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #6.3, #6.4
+      - https://iea-etsap.org/projects/TIMES_Dispatching_Documentation.pdf #3
+      value: y
+    operating:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #6.3, #6.4
+      - https://iea-etsap.org/projects/TIMES_Dispatching_Documentation.pdf #3
+      value: y
+    total:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #6.3, #6.4
+      value: y
+  asset__operating_representation:
+    ed:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #6.2
+      value: y
+    uced:
+      source:
+      - https://iea-etsap.org/projects/TIMES_Dispatching_Documentation.pdf #3
+      value: y
+  competition:
+    distributed_objectives:
+      source: []
+      value: n
+    portfolio:
+      source: []
+      value: n
+  edge_effects:
+    energy_balance:
+      source: []
+      value: n
+    spatial:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-I.pdf #2.4
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #2.2, #3.1
+      value: y
+    time_financial:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-I.pdf #5.3
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #6.2
+      value: y
+    time_operational:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #4.3, #5, #6
+      value: y
+  interface__input:
+    cli:
+      source: []
+      value: n
+    gui:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-III.pdf #1
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-IV.pdf #2
+      value: y
+    no_code:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-III.pdf #1
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-IV.pdf #2
+      value: y
+    scripting:
+      source: []
+      value: n
+    standardised:
+      source: []
+      value: n
+  interface__output:
+    gui:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-III.pdf #1
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-IV.pdf #2
+      value: y
+    logs:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-III.pdf #2.3
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-IV.pdf #2
+      value: y
+    reports:
+      source: []
+      value: n
+    standardised:
+      source: []
+      value: n
+    tables:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-III.pdf #1
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-IV.pdf #2
+      value: y
+  optimisation_problem:
+    configuration:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-III.pdf #3
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-IV.pdf #2
+      value: y
+    decomposition:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-I.pdf #12
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-III.pdf #3.2.2
+      value: y
+    near_optimal:
+      source: []
+      value: n
+    sim + opt:
+      source: []
+      value: n
+    user_defined_constraints:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-I.pdf #5.4
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-III.pdf #6.4
+      value: y
+    user_defined_variables:
+      source: []
+      value: n
+  postprocessing:
+    aggregation:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-III.pdf #1
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-IV.pdf #2
+      value: y
+    curtailment:
+      source: []
+      value: n
+    financial:
+      source: []
+      value: n
+    future_cost_function:
+      source: []
+      value: n
+    gtc:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #2.2, #4.2, #5
+      value: y
+    impact_assessment:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #3.1
+      value: y
+    lcoe:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #3.3.3
+      value: y
+    lodf:
+      source: []
+      value: n
+    ptdf:
+      source: []
+      value: n
+    shadow_prices:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #3.3, #6.3.20, #6.3.32
+      value: y
+  preprocessing:
+    download:
+      source: # Raw data on energy balance and statistics base years downloaded and processed from online UN data browser
+      - https://github.com/MaREI-EPMG/TIMES-GEO
+      value: dev
+    forecasting:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #Appendix D
+      value: y
+    spatial_distribution:
+      source: []
+      value: n
+  resource_adequacy:
+    eens:
+      source: []
+      value: n
+    lolp:
+      source: []
+      value: n
+    maintenance_scheduling:
+      source: []
+      value: n
+    monte_carlo:
+      source:
+      - https://iea-etsap.org/index.php/etsap-projects
+      value: y
+    sampling:
+      source: []
+      value: n
+  robustness:
+    asset_outages:
+      source:
+      - https://iea-etsap.org/projects/TIMES-BS-Documentation.pdf #2.8, #4.10
+      value: y
+    eens_limit:
+      source: []
+      value: n
+    lolp_limit:
+      source: []
+      value: n
+    multi_stage_stochastic:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #8
+      value: y
+    ram:
+      source: []
+      value: n
+    reserve_limit:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #3.1
+      - https://iea-etsap.org/projects/TIMES-BS-Documentation.pdf #2.3, #2.5, #4.2
+      value: y
+    two_stage_stochastic:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #8
+      value: y
+    voll: # Dummy commodities
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-IV.pdf #2.4.3, #2.4.5
+      value: y
+  spatial__resolution__simplification:
+    network:
+      source: []
+      value: n
+    resampling:
+      source: []
+      value: n
+  system__carriers:
+    coupled:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #2.2
+      value: y
+    decoupled:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #2.2
+      value: y
+  system__limits:
+    capacity:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #3.1, #6.3
+      value: y
+    operation:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #3.1, #6.3
+      value: y
+  time__foresight:
+    myopic:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-I.pdf #9
+      value: y
+    perfect:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-I.pdf #3.2
+      value: y
+  time__horizon:
+    multi_year:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-I.pdf #2.2
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #2.2.2
+      value: y
+    single_year:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-I.pdf #2.2
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #2.2.2
+      value: y
+    sub_day:
+      source: []
+      value: n
+    sub_year:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-I.pdf #2.2
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #2.2.2
+      - https://iea-etsap.org/projects/TIMES_Dispatching_Documentation.pdf #3
+      value: y
+  time__resolution__simplification:
+    distortion_mitigation:
+      source: []
+      value: n
+    load_duration_curves:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-I.pdf #2.2
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #2.2.2
+      value: y
+    resampling:
+      source: []
+      value: n
+    typical_periods:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-I.pdf #2.2
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #2.2.2
+      value: y
+  transmission__limits:
+    gtc:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #3.1, #6
+      value: y
+    phase_angle:
+      source: []
+      value: n
+    ptdf:
+      source: []
+      value: n
+    thermal:
+      source: []
+      value: n
+  transmission__opf:
+    ac_opf:
+      source: []
+      value: n
+    dc_opf:
+      source: []
+      value: n
+    sec_opf:
+      source: []
+      value: n
+    transport:
+      source:
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-I.pdf #2
+      - https://github.com/etsap-TIMES/TIMES_Documentation/blob/master/Documentation_for_the_TIMES_Model-Part-II.pdf #6.3
+      value: y

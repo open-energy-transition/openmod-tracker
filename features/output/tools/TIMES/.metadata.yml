@@ -1,0 +1,15 @@
+# SPDX-FileCopyrightText: tools/times/features.yaml CODEOWNERS
+# SPDX-FileCopyrightText: openmod-features contributors
+#
+# SPDX-License-Identifier: CC-BY-4.0
+
+# Changes here will be overwritten by Copier
+# DO NOT MANUALLY MODIFY THIS FILE
+_commit: 31f3f3e
+_src_path: gh:open-energy-transition/openmod-features
+docs: https://iea-etsap.org/index.php/documentation
+list_type: tool
+maintainers: gianvicolux, willu47
+name: The Integrated MARKAL-EFOM System
+shortname: TIMES
+source: https://github.com/etsap-TIMES/TIMES_model

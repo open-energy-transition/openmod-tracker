@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: tools/PyPSA/features.yaml CODEOWNERS
+# SPDX-FileCopyrightText: tools/pypsa/features.yaml CODEOWNERS
 # SPDX-FileCopyrightText: openmod-features contributors
 #
 # SPDX-License-Identifier: CC-BY-4.0
@@ -33,8 +33,9 @@ features:
         - https://docs.pypsa.org/latest/user-guide/components/transformers/
       value: y
     fluid_or_gas_distribution:
-      source: []
-      value: n
+      source:
+        - https://docs.pypsa.org/latest/user-guide/components/links/
+      value: y
     generators:
       source:
         - https://docs.pypsa.org/latest/user-guide/components/generators/
@@ -61,7 +62,7 @@ features:
       value: n
     units:
       source: []
-      value: y
+      value: n
   asset__chaining:
     asset_linking:
       value: y
@@ -95,7 +96,7 @@ features:
       value: dev
     unit:
       source: []
-      value: y
+      value: n
   asset__cost__operation:
     linear:
       source:
@@ -181,7 +182,8 @@ features:
       value: y
   asset__operating_representation:
     ed:
-      source: []
+      source:
+        - https://docs.pypsa.org/latest/user-guide/optimization/overview/
       value: y
     uced:
       value: y
@@ -201,7 +203,7 @@ features:
       value: y
     spatial:
       source: []
-      value: n
+      value: y
     time_financial:
       source: []
       value: n
@@ -216,7 +218,7 @@ features:
     gui:
       source:
         - https://www.bayesian.energy/convexity
-      value: dev
+      value: y
     no_code:
       source: []
       value: n
@@ -240,15 +242,15 @@ features:
         - https://docs.pypsa.org/latest/user-guide/logging/
       value: y
     reports:
-      source:
-        - https://docs.pypsa.org/latest/user-guide/import-export/#excel
-        - https://docs.pypsa.org/latest/user-guide/import-export/#csv-files
-      value: y
+      source: []
+      value: n
     standardised:
       source: []
       value: n
     tables:
-      source: []
+      source:
+        - https://docs.pypsa.org/latest/user-guide/import-export/#excel
+        - https://docs.pypsa.org/latest/user-guide/import-export/#csv-files
       value: y
   optimisation_problem:
     configuration:
@@ -292,10 +294,8 @@ features:
       source: []
       value: n
     gtc:
-      source:
-        - https://docs.pypsa.org/latest/user-guide/components/lines/
-        - https://docs.pypsa.org/latest/user-guide/components/links/
-      value: y
+      source: []
+      value: n
     impact_assessment:
       source:
         - https://docs.pypsa.org/latest/user-guide/statistics/
@@ -317,14 +317,20 @@ features:
         - https://docs.pypsa.org/latest/home/features/#analysis-and-usability
         - https://docs.pypsa.org/latest/examples/scigrid-lopf-then-pf/#locational-marginal-prices
         - https://docs.pypsa.org/latest/user-guide/faq/#can-i-model-endogenous-fuel-prices-in-pypsa
-      value: n
+      value: y
   preprocessing:
     download:
-      source: []
-      value: n
+      source:
+        - https://pypsa-eur.readthedocs.io/en/latest/retrieve.html
+        - https://pypsa-earth.readthedocs.io/en/latest/data_workflow.html
+      # Ecosystem feature
+      value: dev
     forecasting:
-      source: []
-      value: n
+      source:
+        - https://atlite.readthedocs.io/en/latest/
+        - https://pypsa-eur.readthedocs.io/en/latest/configuration.html#solar
+      # Ecosystem feature
+      value: dev
     spatial_distribution:
       value: y
       source:
@@ -332,7 +338,7 @@ features:
   resource_adequacy:
     eens:
       source: []
-      value: n
+      value: y
     lolp:
       source: []
       value: n
@@ -350,8 +356,10 @@ features:
       value: y
   robustness:
     asset_outages:
-      source: []
-      value: n
+      source:
+        - https://docs.pypsa.org/latest/user-guide/optimization/dispatch-limits/
+        - https://docs.pypsa.org/latest/examples/unit-commitment/#ramp-rate-limits
+      value: y
     eens_limit:
       source: []
       value: n
@@ -391,7 +399,9 @@ features:
       source:
         - https://docs.pypsa.org/latest/examples/sector-coupling-single-node/
     decoupled:
-      source: []
+      source:
+        - https://docs.pypsa.org/latest/examples/simple-electricity-market-examples/
+        - https://docs.pypsa.org/latest/examples/islanded-methanol-production/
       value: y
   system__limits:
     capacity:
@@ -431,8 +441,10 @@ features:
       value: y
   time__resolution__simplification:
     distortion_mitigation:
-      source: []
-      value: n
+      source:
+        - https://docs.pypsa.org/latest/examples/time-series-aggregation/?h=tsam
+      # Ecosystem feature
+      value: dev
     load_duration_curves:
       source: []
       value: n
@@ -459,8 +471,10 @@ features:
       source:
         - https://docs.pypsa.org/latest/api/networks/subnetwork/#pypsa.SubNetwork.calculate_PTDF
     thermal:
-      source: []
-      value: n
+      source:
+        - https://github.com/PyPSA/pypsa-eur/blob/3679dc5b49aefd082ca36ebfc0c1df4ce4bbd435/scripts/build_line_rating.py#L72
+      # Ecosystem feature
+      value: dev
   transmission__opf:
     ac_opf:
       source:

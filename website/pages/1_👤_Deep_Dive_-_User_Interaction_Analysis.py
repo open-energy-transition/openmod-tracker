@@ -14,21 +14,63 @@ import streamlit as st
 KEEP_TOP = 15
 
 
+@st.cache_data
+def map_repo_to_tool(user_stats_df: pd.DataFrame, repo_col: str) -> list[dict]:
+    """Map repository names to tool names.
+
+    Args:
+        user_stats_df (pd.DataFrame): User stats dataframe.
+        repo_col (str): Name of the column containing repository names.
+
+    Returns:
+        list[dict]: List of dictionaries mapping repository names to tool names.
+    """
+    available_repos = set(
+        (",".join(user_stats_df[repo_col].str.lower().values)).split(",")
+    )
+    tools_df = pd.read_csv(
+        Path(__file__).parent.parent.parent / "inventory" / "output" / "filtered.csv"
+    )
+    urls = {repo: "https://github.com/" + repo.lower() for repo in available_repos}
+    repo_to_tool_map = [
+        {
+            "repo": repo,
+            "name": tools_df.loc[tools_df.url == urls[repo], "name"]
+            .item()
+            .split(",")[0],
+        }
+        for repo, url in urls.items()
+        if url in tools_df.url.values
+    ]
+    return repo_to_tool_map
+
+
 def create_vis_table(user_stats_dir: Path) -> pd.DataFrame:
-    """Load vis table."""
+    """Load and prepare user classification data.
+
+    Args:
+        user_stats_dir: Path to directory containing user analysis output files.
+
+    Returns:
+        DataFrame containing user classifications.
+    """
     # Check if user analysis data exists
     user_classifications = user_stats_dir / "user_classifications.csv"
 
     class_df = pd.read_csv(user_classifications)
 
-    # update streamlit session state doe use in the user interaction deep-dive page
     return class_df
 
 
 def user_pie(
     user_stats_df: pd.DataFrame, container: st.delta_generator.DeltaGenerator = st
 ):
-    """Prepare plot to show distribution of user classifications."""
+    """Display pie chart showing distribution of user classifications.
+
+    Args:
+        user_stats_df: DataFrame containing user classification data.
+        container: Streamlit container for rendering. Defaults to st.
+    """
     # Create pie chart of classifications
     container.subheader("User Types Across All Repositories")
     class_counts = user_stats_df.classification.value_counts()
@@ -45,7 +87,12 @@ def user_pie(
 def org_bar(
     user_stats_df: pd.DataFrame, container: st.delta_generator.DeltaGenerator = st
 ):
-    """Prepare plot to show orgs to which users are affiliated."""
+    """Display bar chart of top organizations engaging with repositories.
+
+    Args:
+        user_stats_df: DataFrame containing user classification data.
+        container: Streamlit container for rendering. Defaults to st.
+    """
     container.subheader("Top Organizations Engaging with Repositories")
 
     # Sort organizations by count
@@ -66,7 +113,12 @@ def org_bar(
 def user_locations_bar(
     user_stats_df: pd.DataFrame, container: st.delta_generator.DeltaGenerator = st
 ):
-    """Prepare bar plot to show top user locations (i.e. countries)."""
+    """Display bar chart of top user origin countries.
+
+    Args:
+        user_stats_df: DataFrame containing user classification data.
+        container: Streamlit container for rendering. Defaults to st.
+    """
     container.subheader("Top User Origin Countries")
     locations_count = user_stats_df.location.value_counts().head(KEEP_TOP)
     fig = px.bar(
@@ -84,7 +136,12 @@ def user_locations_bar(
 def user_locations_map(
     user_stats_df: pd.DataFrame, container: st.delta_generator.DeltaGenerator = st
 ):
-    """Prepare map plot to show all user locations (i.e., countries)."""
+    """Display world map showing geographic distribution of users.
+
+    Args:
+        user_stats_df: DataFrame containing user classification data.
+        container: Streamlit container for rendering. Defaults to st.
+    """
     locations_count = user_stats_df.location.value_counts()
 
     # Add a world map visualization
@@ -116,25 +173,6 @@ def user_locations_map(
         plot_bgcolor="rgba(0,0,0,0)",  # Transparent plot area
     )
     container.plotly_chart(fig, key="country_map")
-
-
-def _repo_to_tool_map(user_stats_df: pd.DataFrame) -> list[dict]:
-    available_repos = set((",".join(user_stats_df.repos.values)).split(","))
-    tools_df = pd.read_csv(
-        Path(__file__).parent.parent.parent / "inventory" / "output" / "filtered.csv"
-    )
-    urls = {repo: "https://github.com/" + repo.lower() for repo in available_repos}
-    repo_to_tool_map = [
-        {
-            "repo": repo,
-            "name": tools_df.loc[tools_df.url == urls[repo], "name"]
-            .item()
-            .split(",")[0],
-        }
-        for repo, url in urls.items()
-        if url in tools_df.url.values
-    ]
-    return repo_to_tool_map
 
 
 def preamble():
@@ -194,7 +232,7 @@ def preamble():
 def main(user_stats_df: pd.DataFrame):
     """Load page."""
     # Select repository to view
-    repo_to_tool_map = _repo_to_tool_map(user_stats_df)
+    repo_to_tool_map = map_repo_to_tool(user_stats_df, "repos")
     all_tools_toggle = st.sidebar.toggle("Show analysis for all tools", value=True)
     selected_tools = st.sidebar.multiselect(
         "Select repositories to analyze in aggregate",

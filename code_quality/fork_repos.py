@@ -11,55 +11,20 @@ and forks them to the specified organization.
 
 import csv
 import logging
-import os
 import re
 import sys
-import time
 from pathlib import Path
+from typing import Literal
+from urllib.parse import urlparse
 
 import click
-from github_api import GitHubAPI
-from util import log_to_file
+import pandas as pd
+from git_api import GitAPI
+from tqdm import tqdm
+from util import set_logging_handlers
 
 # Set up logging
 LOGGER = logging.getLogger(__name__)
-LOGGER.setLevel(logging.DEBUG)
-
-# Set up console handler
-console_handler = logging.StreamHandler()
-console_handler.setLevel(logging.INFO)
-console_formatter = logging.Formatter("%(levelname)s - %(message)s")
-console_handler.setFormatter(console_formatter)
-LOGGER.addHandler(console_handler)
-
-# Set up default file handler
-log_formatter = logging.Formatter(
-    "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
-log_dir = Path("log")
-log_dir.mkdir(exist_ok=True)
-default_log_file = log_dir / "fork_repos.log"
-file_handler = logging.FileHandler(default_log_file)
-file_handler.setLevel(logging.DEBUG)
-file_handler.setFormatter(log_formatter)
-LOGGER.addHandler(file_handler)
-
-
-def validate_config(csv_file, github_org, token=None):
-    """Validate the configuration."""
-    if not token:
-        LOGGER.error("GitHub token is not provided.")
-        LOGGER.error("Please provide it with --token option.")
-        sys.exit(1)
-
-    if not github_org:
-        LOGGER.error("GitHub organization name is not provided.")
-        sys.exit(1)
-
-    if not os.path.isfile(csv_file):
-        LOGGER.error(f"CSV file '{csv_file}' not found.")
-        LOGGER.error("Please ensure the file exists or specify with --csv option.")
-        sys.exit(1)
 
 
 def read_repos_from_csv(csv_file):
@@ -92,28 +57,49 @@ def read_repos_from_csv(csv_file):
         sys.exit(1)
 
 
-def process_repository(owner, repo_name, destination_org, token=None, log_file=None):
-    """Fork a GitHub repository using the GitHub API and sync if needed."""
-    LOGGER.info(f"Checking if {owner}/{repo_name} is already forked...")
+def process_non_github_repository(
+    url: str, repo_name: str, destination_org: str
+) -> Literal["forked", "synced", "sync failed", "fork failed"]:
+    """Process a non-GitHub repository.
 
-    # Create a GitHubAPI instance with the provided token
-    github_api = GitHubAPI(token, destination_org)
+    Returns:
+        Literal["forked", "synced", "sync failed", "fork failed"]: The result of the operation.
+    """
+    # Create a GitAPI instance with the provided token
+    github_api = GitAPI(destination_org)
+    result = github_api.process_non_github_url(url, destination_org, repo_name)
+    return result
+
+
+def process_github_repository(
+    upstream_owner: str, repo_name: str, destination_org: str
+) -> Literal["forked", "synced", "sync failed", "fork failed"]:
+    """Fork a GitHub repository using the GitHub API and sync if needed.
+
+    Args:
+        upstream_owner (str): Owner of the original repository.
+        repo_name (str): Name of the repository.
+        destination_org (str): GitHub organization to fork the repository to.
+
+    Returns:
+        str: Result of the operation: "forked", "synced", "sync failed", or "fork failed".
+    """
+    # Create a GitAPI instance with the provided token
+    github_api = GitAPI(destination_org)
 
     # Check if already forked
-    exists = github_api.check_existing_fork(owner, repo_name)
+    exists = github_api.check_existing_fork(upstream_owner, repo_name)
+    result: Literal["forked", "synced", "sync failed", "fork failed"]
 
     if exists:
         fork_url = f"https://github.com/{destination_org}/{repo_name}"
         LOGGER.info(
-            f"Repository {owner}/{repo_name} is already forked to {destination_org}"
+            f"Repository {upstream_owner}/{repo_name} is already forked to {destination_org}. "
+            f"Fork URL: {fork_url}. Checking if sync is needed..."
         )
-        LOGGER.info(f"Fork URL: {fork_url}")
-
-        # If fork exists, sync it
-        LOGGER.info(f"Syncing fork with upstream {owner}/{repo_name}...")
 
         # Get default branch from repository
-        repo_data = github_api.get_repository_details(destination_org, repo_name)
+        repo_data = github_api.get_repository_details(repo_name)
         if repo_data:
             if hasattr(repo_data, "default_branch"):
                 default_branch = repo_data.default_branch
@@ -122,174 +108,116 @@ def process_repository(owner, repo_name, destination_org, token=None, log_file=N
 
             # Sync the fork
             sync_result = github_api.sync_fork(
-                owner, repo_name, default_branch, org=destination_org
+                upstream_owner, repo_name, default_branch
             )
             sync_status = "synced" if sync_result else "sync failed"
 
             LOGGER.info(
-                f"[FORK-EXISTS] {owner}/{repo_name} - Fork exists and was {sync_status}"
+                f"[FORK-EXISTS] {upstream_owner}/{repo_name} - Fork exists and was {sync_status}. Fork URL: {fork_url}"
             )
-            LOGGER.info(f"  Fork URL: {fork_url}")
 
             if hasattr(github_api, "log_file") and github_api.log_file:
-                log_to_file(
-                    github_api.log_file,
-                    "FORK-EXISTS",
-                    f"{owner}/{repo_name} - Fork exists and was {sync_status}",
+                LOGGER.info(
+                    f"{upstream_owner}/{repo_name} - Fork exists and was {sync_status}"
                 )
 
-            return True, f"{fork_url} ({sync_status})", sync_result
+            result = sync_status
         else:
             LOGGER.error("Error getting repository details")
-
             LOGGER.warning(
-                f"[SKIPPED] {owner}/{repo_name} - Already forked but sync failed"
+                f"[SKIPPED] {upstream_owner}/{repo_name} - Already forked but sync failed. Fork URL: {fork_url}"
             )
-            LOGGER.warning(f"  Fork URL: {fork_url}")
-            LOGGER.warning("  Sync error: Could not get repository details")
 
-            return True, fork_url, False
-
-    # Fork the repository
-    success, fork_url = github_api.fork_repository(
-        owner, repo_name, destination_org=destination_org
-    )
-
-    if success:
-        LOGGER.info(f"Successfully forked {owner}/{repo_name} to {destination_org}")
-        LOGGER.info(f"Fork URL: {fork_url}")
-
-        LOGGER.info(f"[SUCCESS] {owner}/{repo_name} forked")
-        LOGGER.info(f"  Fork URL: {fork_url}")
-
-        log_to_file(
-            log_file, "SUCCESS", f"{owner}/{repo_name} forked to {destination_org}"
-        )
-
-        return True, fork_url, False
+            result = "sync failed"
     else:
-        LOGGER.error(f"[FAILED] {owner}/{repo_name} - Forking failed")
+        # Fork the repository
+        success, fork_url = github_api.fork_repository(upstream_owner, repo_name)
 
-        log_to_file(
-            log_file,
-            "FAILED",
-            f"{owner}/{repo_name} - Forking to {destination_org} failed",
-        )
+        if success:
+            LOGGER.info(
+                f"Successfully forked {upstream_owner}/{repo_name} to {destination_org}"
+                f"Fork URL: {fork_url}"
+            )
 
-        return False, None, False
+            result = "forked"
+        else:
+            LOGGER.error(
+                f"[FAILED] {upstream_owner}/{repo_name} - Forking to {destination_org} failed"
+            )
+
+            result = "fork failed"
+    return result
 
 
 @click.command()
-@click.option(
-    "--csv",
-    "-c",
-    "csv_file",
+@click.argument(
+    "repo_urls_csv",
     default="inventory/output/stats.csv",
-    help="Path to the CSV file containing repository information.",
-    type=click.Path(exists=True, file_okay=True, dir_okay=False, readable=True),
+    type=click.Path(
+        exists=True, file_okay=True, dir_okay=False, readable=True, path_type=Path
+    ),
 )
-@click.option(
-    "--org",
-    "-o",
-    "github_org",
-    help="GitHub organization name where repositories will be forked.",
-)
+@click.argument("github_org", default="openmod-tracker", type=str)
 @click.option(
     "--log",
     "-l",
     "log_file",
-    default=str(default_log_file),
+    default="logs/fork_repos.log",
     help="Path to the log file.",
-    type=click.Path(file_okay=True, dir_okay=False, writable=True),
+    type=click.Path(file_okay=True, dir_okay=False, writable=True, path_type=Path),
 )
-@click.option(
-    "--token",
-    "-t",
-    "github_token",
-    help="GitHub token with 'repo' scope for API access.",
-    required=True,
-)
-def main(csv_file, github_org, log_file, github_token):
+def cli(repo_urls_csv: Path, github_org, log_file):
     """Fork GitHub repositories from a CSV file to a specified organization.
 
-    This command reads repository information from a CSV file and forks
-    each repository to the specified GitHub organization.
+    REPO_URLS_CSV: Path to the CSV file containing repository information.
+    GITHUB_ORG: GitHub organization name where repositories will be forked.
     """
     # Use custom log file if provided and different from default
-    if log_file != str(default_log_file):
-        # Remove default file handler
-        LOGGER.removeHandler(file_handler)
-
-        # Add custom file handler
-        custom_file_handler = logging.FileHandler(log_file)
-        custom_file_handler.setLevel(logging.DEBUG)
-        custom_file_handler.setFormatter(log_formatter)
-        LOGGER.addHandler(custom_file_handler)
-
-        # Ensure the directory for the log file exists
-        os.makedirs(os.path.dirname(log_file), exist_ok=True)
-
-    # Validate configuration
-    validate_config(csv_file, github_org, github_token)
+    set_logging_handlers(LOGGER, log_file)
 
     # Log operation start
     LOGGER.info("Fork operation started")
     LOGGER.info(f"Organization: {github_org}")
-    LOGGER.info(f"CSV File: {csv_file}")
+    LOGGER.info(f"CSV File: {repo_urls_csv}")
     LOGGER.info("-----------------------------------")
 
-    # Read repositories from CSV file
-    repos = read_repos_from_csv(csv_file)
-
-    if not repos:
-        LOGGER.error("No repositories found in the CSV file.")
-        sys.exit(1)
-
-    LOGGER.info(f"Found {len(repos)} repositories to fork.")
-
-    # Process each repository
-    LOGGER.info("Starting to fork repositories...")
     successful_forks = 0
-    skipped_forks = 0
+    failed_syncs = 0
     failed_forks = 0
     synced_forks = 0
 
-    for repo in repos:
-        owner = repo["owner"]
-        name = repo["name"]
-
-        # Process the repository
-        result, url, synced = process_repository(
-            owner, name, github_org, github_token, log_file
-        )
-
-        if result:
-            has_fork_text = (
-                "already forked" in str(url).lower()
-                or "fork exists" in str(url).lower()
-            )
-            if has_fork_text:
-                skipped_forks += 1
-                if synced:
-                    synced_forks += 1
-            else:
-                successful_forks += 1
+    repos_df = pd.read_csv(repo_urls_csv, index_col="html_url")
+    for repo_url in tqdm(repos_df.index, desc="Creating/syncing forks"):
+        url_parts = urlparse(repo_url)
+        LOGGER.info(f"Processing {repo_url}")
+        orig_org, repo = url_parts.path.strip("/").rsplit("/", 1)
+        if url_parts.netloc.endswith("github.com"):
+            result = process_github_repository(orig_org, repo, github_org)
         else:
+            result = process_non_github_repository(repo_url, repo, github_org)
+
+        if result == "forked":
+            successful_forks += 1
+        elif result == "synced":
+            synced_forks += 1
+        elif result == "sync failed":
+            failed_syncs += 1
+        elif result == "fork failed":
             failed_forks += 1
 
-        # Avoid rate limiting
-        time.sleep(2)
-
     # Write summary to log
-    LOGGER.info("\n-----------------------------------")
-    LOGGER.info("Forking process completed")
-    LOGGER.info(f"Total repositories processed: {len(repos)}")
-    LOGGER.info(f"Successfully forked: {successful_forks}")
-    LOGGER.info(f"Already existed (skipped): {skipped_forks}")
-    LOGGER.info(f"Successfully synced: {synced_forks}")
-    LOGGER.info(f"Failed to fork: {failed_forks}")
-    LOGGER.info(f"See {log_file} for details.")
+    LOGGER.info(
+        f"""-----------------------------------
+        Forking process completed.
+
+        Total repositories processed: {len(repos_df)}
+        Successfully forked: {successful_forks}
+        Successfully synced existing fork: {synced_forks}
+        Failed to fork: {failed_forks}
+        Failed to sync existing fork: {failed_syncs}
+        See {log_file} for details."""
+    )
 
 
 if __name__ == "__main__":
-    main()
+    cli()

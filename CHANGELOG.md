@@ -25,9 +25,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### Added
+
+- [REVERTED] Code quality metrics in dashboard (reliability, security, maintainability) (#63).
+- Non-github project cloning to use in sonarcloud project analysis workflow.
+- First set of sonarcloud project metrics (#63).
+
+### Fixed
+
+- Go direct to source to get Julia package download statistics (since `juliapkgstats` webpage has been periodically down).
+- Repository forking/syncing scripts and sonarcloud project creator when used in anger.
+
 ## 2025-10-06
 
-- Fixed: a bug in the "Updated" field. It now correctly reports the date-time of the most recent change to a tool's repository. However, this change can be a push to any branch, not just the main or published branch.
+### Added
+
+- Disclaimer about our relationship with the Open Energy Modelling Initiative (openmod-initiative) (#143).
+
+### Fixed
+
+- a bug in the "Updated" field. It now correctly reports the date-time of the most recent change to a tool's repository. However, this change can be a push to any branch, not just the main or published branch (#116).
 
 ## 2025-09-23
 

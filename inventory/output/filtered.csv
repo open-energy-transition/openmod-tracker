@@ -65,7 +65,6 @@ erf,https://github.com/erf-model/erf,ERF,lf-energy-landscape,
 esdl,https://github.com/energytransition/esdl,ESDL,"lf-energy-landscape,opensustain-tech",
 etm_pro,https://github.com/quintel/etmodel,ETM Pro,opensustain-tech,
 exago,https://github.com/pnnl/exago,ExaGO,"g-pst,lf-energy-landscape,opensustain-tech,pre-compiled",power-flow
-exerpy,https://github.com/oemof/exerpy,ExerPy,opensustain-tech,
 fame,https://gitlab.com/fame-framework/fame-core,FAME,"lf-energy-landscape,opensustain-tech",
 ficus,https://github.com/tum-ewk/ficus,"Ficus,ficus","openmod,pre-compiled",
 fine,https://github.com/fzj-iek3-vsa/fine,FINE,"lf-energy-landscape,opensustain-tech,pre-compiled",capacity-expansion
@@ -76,17 +75,17 @@ friendlysam,https://github.com/sp-etx/friendlysam,friendlysam,pre-compiled,
 gboml,https://gitlab.uliege.be/smart_grids/public/gboml,gboml,pre-compiled,
 gear_scoup,https://github.com/nrel/gear-scoup,Gear-SCouP,lf-energy-landscape,
 gelectrical,https://github.com/manuvarkey/gelectrical,GElectrical,opensustain-tech,
-genesys_mod,https://git.tu-berlin.de/genesysmod/genesys-mod-public,"GENeSYS-MOD,GENeSYS-MOD,genesys-mod-public","lf-energy-landscape,opensustain-tech,pre-compiled,openmod",
+genesys_mod,https://git.tu-berlin.de/genesysmod/genesys-mod-public,"GENeSYS-MOD,GENeSYS-MOD,genesys-mod-public","lf-energy-landscape,openmod,opensustain-tech,pre-compiled",
 genx,https://github.com/genxproject/genx.jl,"GenX,GenX,GenX.jl","lf-energy-landscape,opensustain-tech,pre-compiled","capacity-expansion,production-cost"
 grid2op,https://github.com/grid2op/grid2op,"Grid2Op,grid2op","opensustain-tech,pre-compiled",power-flow
-gridcal,https://github.com/sanpen/gridcal,GridCal,"lf-energy-landscape,openmod,pre-compiled",power-flow
+gridcal,https://github.com/sanpen/gridcal,GridCal,"lf-energy-landscape,openmod,pre-compiled",
 gridfm,https://github.com/gridfm/gridfm-graphkit,GridFM,opensustain-tech,
 gridlab_d,https://github.com/arras-energy/gridlabd,"GridLAB-D,gridlab-d ","opensustain-tech,pre-compiled",
 gridpack,https://github.com/gridoptics/gridpack,GridPACK,opensustain-tech,power-flow
 gridpath,https://github.com/blue-marble/gridpath,"GridPath,gridpath","lf-energy-landscape,opensustain-tech,pre-compiled","capacity-expansion,production-cost"
 grimsel_flex,https://github.com/arthurrinaldi/grimsel,GRIMSEL-FLEX,openmod,
 h2integrate,https://github.com/nrel/h2integrate,H2Integrate,opensustain-tech,
-helics,https://github.com/gmlc-tdc/helics,"HELICS,Hierarchical Engine for Large-scale Infrastructure Co-Simulation","lf-energy-landscape,opensustain-tech,pre-compiled",
+heat4future,https://gitlab.com/c4dht/strategic-heat-planning-project,Heat4Future,openmod,
 heron,https://github.com/idaholab/heron,HERON,pre-compiled,
 highres_europe,https://github.com/highres-model/highres-europe,highRES-Europe,pre-compiled,
 hope,https://github.com/hope-model-project/hope,HOPE,pre-compiled,
@@ -129,7 +128,7 @@ nempy,https://github.com/unsw-ceem/nempy,"Nempy,nempy","lf-energy-landscape,pre-
 oemof_solph,https://github.com/oemof/oemof-solph,oemof-solph,"lf-energy-landscape,opensustain-tech,pre-compiled","capacity-expansion,production-cost"
 oemof_thermal,https://github.com/oemof/oemof-thermal,oemof-thermal,"lf-energy-landscape,opensustain-tech",
 omegalpes,https://gricad-gitlab.univ-grenoble-alpes.fr/omegalpes/omegalpes,"OMEGAlpes,omegalpes","lf-energy-landscape,openmod,opensustain-tech,pre-compiled",
-onsset,https://github.com/kth-desa/onsset-2016,"OnSSET,onsset","lf-energy-landscape,opensustain-tech,pre-compiled,openmod",
+onsset,https://github.com/onsset/onsset,"OnSSET,onsset","lf-energy-landscape,opensustain-tech,pre-compiled,openmod",
 open,https://github.com/epgoxford/open,OPEN,pre-compiled,
 open_energy_cell_simulation,https://github.com/fabmid/open-energy-cell-simulation,Open-Energy-Cell-Simulation,pre-compiled,
 open_modeling_framework,https://github.com/nreca-bts/omf,Open Modeling Framework,"lf-energy-landscape,opensustain-tech","production-cost,power-flow"
@@ -181,7 +180,7 @@ quasi___resie,https://github.com/quasi-software,QuaSi - ReSiE,openmod,
 reeds_2_0,https://github.com/nrel/reeds-2.0,ReEDS-2.0,pre-compiled,
 reho,https://github.com/ipese/reho,REHO,pre-compiled,
 reise_jl,https://github.com/breakthrough-energy/reise.jl,REISE.jl,"lf-energy-landscape,pre-compiled",
-remix,https://gitlab.com/dlr-ve/esy/remix/framework,"REMix,REMix,remix","g-pst,pre-compiled,opensustain-tech","capacity-expansion,production-cost"
+remix,https://gitlab.com/dlr-ve/esy/remix/framework,"REMix,REMix,remix","g-pst,pre-compiled,lf-energy-landscape,opensustain-tech","capacity-expansion,production-cost"
 renpass,https://github.com/fraukewiese/renpass,"Renpass,renpass","openmod,pre-compiled",
 reopt,https://github.com/nrel/reopt_lite_api,REopt,openmod,capacity-expansion
 reopt_jl,https://github.com/nrel/reopt.jl,REopt.jl,pre-compiled,
@@ -218,9 +217,10 @@ times,https://github.com/etsap-times/times_model,"TIMES,TIMES_model","openmod,op
 transactive_energy_service_system,https://github.com/slacgismo/tess,Transactive Energy Service System,"lf-energy-landscape,opensustain-tech",
 transient_lib,https://github.com/transient-official/transient-lib,transient-lib,pre-compiled,
 tulipa_energy_model,https://github.com/tulipaenergy/tulipaenergymodel.jl,"Tulipa Energy Model,TulipaEnergyModel.jl","opensustain-tech,pre-compiled",
+tz_osemosys,https://github.com/transition-zero/tz-osemosys,tz-osemosys,pre-compiled,
 urbs,https://github.com/tum-ens/urbs,"URBS,urbs","lf-energy-landscape,openmod,opensustain-tech,pre-compiled",capacity-expansion
 usensys,https://github.com/usensys/usensys,USENSYS,openmod,
-veragrid,https://github.com/sanpen/veragrid,VeraGrid,opensustain-tech,
+veragrid,https://github.com/sanpen/veragrid,VeraGrid,opensustain-tech,power-flow
 villasframework,https://github.com/villasframework/node,VILLASframework,"lf-energy-landscape,pre-compiled",
 wpgnn_and_playgen,https://github.com/nrel/wpgnn,WPGNN and PLayGen,lf-energy-landscape,
 zen_garden,https://github.com/zen-universe/zen-garden,ZEN-garden,pre-compiled,

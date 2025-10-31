@@ -244,7 +244,8 @@ def clean_url(url: str) -> str:
 
 @click.command()
 @click.argument(
-    "outfile", type=click.Path(exists=False, dir_okay=False, file_okay=True)
+    "outfile",
+    type=click.Path(exists=False, dir_okay=False, file_okay=True, path_type=Path),
 )
 def cli(outfile: Path):
     """Get latest ESM list from various sources."""

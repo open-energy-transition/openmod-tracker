@@ -48,7 +48,10 @@ except FileNotFoundError:
         f"s3://anaconda-package-data/conda/monthly/{NOW.year}/{NOW.year}-{LAST_MONTH - 1:02d}.parquet"
     )
 
-JULIA_STATS_API = "https://juliapkgstats.com/api/v1/monthly_downloads/"
+JULIA_STATS_DF = pd.read_csv(
+    "https://julialang-logs.s3.amazonaws.com/public_outputs/current/package_requests_by_date.csv.gz",
+    parse_dates=["date"],
+)
 
 
 def get_ecosystems_entry_data(
@@ -154,10 +157,11 @@ def _get_package_data(url: str) -> dict:
                 ].counts.sum()
             elif package_source["ecosystem"] == "julia":
                 # Julia download stats don't seem to exist in ecosyste.ms (always returning null)
-                julia_downloads = util.get_url_json_content(
-                    JULIA_STATS_API + package_source["name"]
-                )["total_requests"]
-                download_count_all += int(julia_downloads)
+                julia_downloads = JULIA_STATS_DF[
+                    (JULIA_STATS_DF.package_uuid == package_source["metadata"]["uuid"])
+                    & (JULIA_STATS_DF.client_type == "user")
+                ]
+                download_count_all += int(julia_downloads.request_count.sum())
             elif (
                 pd.notnull(package_source["downloads"])
                 and package_source["downloads_period"] == "last-month"

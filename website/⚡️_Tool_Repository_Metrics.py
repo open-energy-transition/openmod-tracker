@@ -33,8 +33,6 @@ COLUMN_NAME_MAPPING: dict[str, str] = {
     "forks_count": "Forks",
     "dependent_repos_count": "Dependents",
     "last_month_downloads": "1 Month Downloads",
-    "category": "Category",
-    "language": "Language",
 }
 
 COLUMN_DTYPES: dict[str, Callable] = {
@@ -81,12 +79,15 @@ NOT_OPEN_SOURCE_LANGUAGES = ["gams", "matlab", "jetbrains mps", "powerbuilder", 
 
 
 @st.cache_data
-def create_vis_table(tool_stats_dir: Path, user_stats_dir: Path) -> pd.DataFrame:
+def create_vis_table(
+    tool_stats_dir: Path, user_stats_dir: Path, code_quality_metrics_dir: Path
+) -> pd.DataFrame:
     """Create the tool table with columns renamed and filtered ready for visualisation.
 
     Args:
         tool_stats_dir (Path): The directory in which to find tool list and stats.
         user_stats_dir (Path): The directory in which to find tool user stats.
+        code_quality_metrics_dir (Path): The directory in which to find code quality metrics.
 
     Returns:
         pd.DataFrame: Filtered and column renamed tool table.
@@ -94,7 +95,9 @@ def create_vis_table(tool_stats_dir: Path, user_stats_dir: Path) -> pd.DataFrame
     stats_df = pd.read_csv(tool_stats_dir / "stats.csv", index_col="id")
     tools_df = pd.read_csv(tool_stats_dir / "filtered.csv", index_col="id")
     docs_df = pd.read_csv(tool_stats_dir / "docs.csv", index_col="id")
-
+    code_quality_df = pd.read_csv(
+        code_quality_metrics_dir / "metrics.csv", index_col=["repo", "metric"]
+    )
     df = pd.merge(left=stats_df, right=tools_df, right_index=True, left_index=True)
     df["Interactions"] = (
         _create_user_interactions_timeseries(user_stats_dir)
@@ -745,7 +748,7 @@ def conclusion():
 def footer():
     """Footer content for the Streamlit app."""
     st.divider()
-    _, col1, col2, col3, _ = st.columns([1, 1, 1, 1, 1])
+    _, col1, col2, col3, col4, _ = st.columns([1, 2, 2, 2, 2, 1])
     col1.image(OET_LOGO_FULL_NAME, width=300)
     col2.markdown(
         """
@@ -758,6 +761,11 @@ def footer():
         """
         Built by [Open Energy Transition](https://openenergytransition.org/), with support by [Breakthrough Energy GRIDS](https://www.breakthroughenergy.org/).
         The information provided in this dashboard is for informational purposes only and does not constitute professional advice.
+        """
+    )
+    col4.markdown(
+        """
+        `openmod-tracker.org` is not officially affiliated with and has not been endorsed by the [Open Energy Modelling (openmod) Initiative](https://openmod-initiative.org/) community.
         """
     )
 
@@ -876,7 +884,7 @@ def main(df: pd.DataFrame):
     if len(df_filtered) > 0:
         st.dataframe(
             df_filtered,
-            use_container_width=True,
+            width="stretch",
             hide_index=True,
             column_config=col_config,
             column_order=col_config.keys(),
@@ -900,9 +908,11 @@ def main(df: pd.DataFrame):
 
 if __name__ == "__main__":
     # define the path of the CSV file listing the packages to assess
-    tool_stats_dir = Path(__file__).parent.parent / "inventory" / "output"
-    user_stats_dir = Path(__file__).parent.parent / "user_analysis" / "output"
-    readme_path = Path(__file__).parent.parent / "README.md"
+    proj_dir = Path(__file__).parent.parent
+    tool_stats_dir = proj_dir / "inventory" / "output"
+    user_stats_dir = proj_dir / "user_analysis" / "output"
+    code_quality_metrics_dir = proj_dir / "code_quality" / "output"
+    readme_path = proj_dir / "README.md"
 
     st.set_page_config(
         page_title="Tool Repository Metrics", page_icon="⚡️", layout="wide"
@@ -921,7 +931,7 @@ if __name__ == "__main__":
         icon_image=OET_LOGO_ABBREVIATED,
     )
 
-    df_vis = create_vis_table(tool_stats_dir, user_stats_dir)
+    df_vis = create_vis_table(tool_stats_dir, user_stats_dir, code_quality_metrics_dir)
     g = git.cmd.Git()
     latest_changes = g.log("-1", "--pretty=%cs", tool_stats_dir / "stats.csv")
 

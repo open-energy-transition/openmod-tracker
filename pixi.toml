@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: MIT
 
-[project]
+[workspace]
 authors = ["Bryn Pickering <bryn.pickering@openenergytransition.org>", "Markus Groissböck <markus.groissbock@openenergytransition.org>", "Jacek Bendig <jacek.bendig@openenergytransition.org>"]
 channels = ["conda-forge"]
 name = "openmod-tracker"
@@ -44,7 +44,7 @@ inputs = ["user_analysis/output/user_interactions.csv"]
 outputs = ["user_analysis/output/user_details.csv", "user_analysis/output/organizations.csv"]
 depends-on = ["get-repo-users"]
 
-[feature.geo.tasks.classify-users]
+[tasks.classify-users]
 cmd = "python $PIXI_PROJECT_ROOT/user_analysis/classify_users.py --user-details user_analysis/output/user_details.csv --out-path user_analysis/output/user_classifications.csv"
 inputs = ["user_analysis/output/user_details.csv"]
 outputs = ["user_analysis/output/user_classifications.csv"]
@@ -69,9 +69,12 @@ pygithub = ">=2.6.1,<3"
 python-dotenv = ">=1.1.1,<2"
 unidecode = ">=1.3.8,<2"
 reuse = ">=5.1.1,<6"
+geopy = "*"
+pycountry = "*"
+
 
 [feature.app.dependencies]
-streamlit = "*"
+streamlit = "<1.50.0"
 streamlit-keyup = ">=0.3.0,<0.4"
 plotly = ">=6.1.2,<7"
 markdown = ">=3.8.2,<4"
@@ -92,12 +95,7 @@ seaborn = "*"
 ipykernel = ">=6.29.5,<7"
 nbformat = ">=5.10.4,<6"
 
-[feature.geo.dependencies]
-geopy = "*"
-pycountry = "*"
-
 [environments]
 app = ["app"]
 vis = ["vis"]
-geo = ["geo"]
 test = ["test", "app"]

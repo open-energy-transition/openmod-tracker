@@ -5,4 +5,4 @@ markdown>=3.8.2
 plotly>=6.1.2
 PyYAML>=6.0.2
 streamlit-keyup>=0.3.0
-streamlit>=1.48.0
+streamlit<1.50.0

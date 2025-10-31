@@ -278,6 +278,39 @@ class GitHubRepositoryCollector:
                   }
                 }
             """,
+            "commits": """
+                query RepositoryCommits($owner: String!, $name: String!, $cursor: String) {
+                  repository(owner: $owner, name: $name) {
+                    defaultBranchRef {
+                      target {
+                        ... on Commit {
+                          history(first: 100, after: $cursor) {
+                            totalCount
+                            pageInfo {
+                              hasNextPage
+                              endCursor
+                            }
+                            nodes {
+                              committedDate
+                              author {
+                                user {
+                                  login
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                  rateLimit {
+                    limit
+                    cost
+                    remaining
+                    resetAt
+                  }
+                }
+            """,
         }
 
     def _parse_author(self, author_data: dict | None) -> str | None:
@@ -304,7 +337,15 @@ class GitHubRepositoryCollector:
             if not data:
                 break
             # Extract the relevant data based on query type
-            items = data["repository"][query_name]
+            if query_name == "commits":
+                # Special handling for commits nested structure
+                default_branch = data["repository"].get("defaultBranchRef")
+                if default_branch is None:
+                    LOGGER.warning(f"No default branch found for {repo}")
+                    break
+                items = default_branch["target"]["history"]
+            else:
+                items = data["repository"][query_name]
 
             if query_name == "stargazers":
                 all_data.extend(items["edges"])
@@ -313,7 +354,6 @@ class GitHubRepositoryCollector:
 
             if not items["pageInfo"]["hasNextPage"]:
                 break
-
             cursor = items["pageInfo"]["endCursor"]
             PAGINATION_CACHE[cache_key] = cursor
             page += 1
@@ -422,6 +462,31 @@ class GitHubRepositoryCollector:
             "created": fork_data["createdAt"],
         }
 
+    def _parse_commit_data(
+        self, commit_data: dict, is_default_branch: bool = True
+    ) -> dict:
+        """Parse commit data to extract author username and commit date.
+
+        Args:
+            commit_data: GraphQL commit node data
+            is_default_branch: Whether this commit is from the default branch
+        """
+        author_info = commit_data.get("author", {})
+        # Try to get GitHub username first, fall back to git author name
+        username = None
+        if author_info.get("user"):
+            username = author_info["user"].get("login")
+        if username is None:
+            # Fall back to git author name or email
+            username = author_info.get("name") or author_info.get("email")
+
+        return {
+            "interaction": "commit",
+            "subtype": "default_branch" if is_default_branch else "other_branch",
+            "username": username,
+            "created": commit_data["committedDate"],
+        }
+
     def _get_contributors(self, repo: str) -> list[dict]:
         """Get all users who are watching a repository.
 
@@ -461,6 +526,13 @@ class GitHubRepositoryCollector:
         forks_data = self._paginate_query("forks", repo)
         for fork_data in forks_data:
             results.append(self._parse_fork_data(fork_data))
+
+        # Fetch commits (optional - can be expensive for large repos)
+        # Uncomment the lines below to collect commit statistics
+        # Note: This query only fetches commits from the default branch
+        commits_data = self._paginate_query("commits", repo)
+        for commit_data in commits_data:
+            results.append(self._parse_commit_data(commit_data, is_default_branch=True))
 
         # Fetch contributors (no timestamps)
         contributors = self._get_contributors(repo)
@@ -502,17 +574,18 @@ def cli(stats_file: Path, out_path: Path):
         existing_users = pd.DataFrame(columns=COLS, index=[])
         existing_users.to_csv(out_path, index=False)
 
-    repos_df = pd.read_csv(stats_file, index_col=0)
+    repos_df = pd.read_csv(stats_file, index_col="id")
     token = os.environ.get("GITHUB_TOKEN", None)
     collector = GitHubRepositoryCollector(token)
-    for repo_url in tqdm(repos_df.index, desc="Collecting users"):
+    for repo_id, repo in tqdm(repos_df.iterrows(), desc="Collecting users"):
+        repo_url = repo.html_url
         url_parts = urlparse(repo_url)
         if url_parts.netloc.endswith("github.com"):
             repo = url_parts.path.strip("/")
             LOGGER.warning(f"Collecting users for {repo}")
         else:
             LOGGER.warning(
-                f"Skipping user collection for {repo_url} as it is not a GitHub repo."
+                f"Skipping user collection for {repo_id} ({repo_url}) as it is not a GitHub repo."
             )
             continue
 

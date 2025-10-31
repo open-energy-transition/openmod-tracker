@@ -21,13 +21,14 @@ repos:
           "--exclude-file=pixi.lock",
           "--skip=user_analysis/config/*.yaml",
           "--skip=inventory/*.yaml",
-          "--skip=*.csv"
+          "--skip=*.csv",
+          "--ignore-words-list=doubleClick"
         ]
 
   - repo: https://github.com/fsfe/reuse-tool
     rev: v6.0.0
     hooks:
-      - id: reuse
+      - id: reuse-lint-file
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0

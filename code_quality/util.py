@@ -7,24 +7,32 @@
 Common helper functions shared across multiple scripts in the project.
 """
 
-import datetime
+import logging
+from pathlib import Path
 
 
-def log_to_file(log_file, status, message):
-    """Write a timestamped log entry to a file.
+def set_logging_handlers(logger: logging.Logger, log_file: Path | None = None):
+    """Set up logging handlers for console and file output.
 
     Args:
-        log_file (str): Path to the log file
-        status (str): Status code for the log entry
-                     (e.g., "SYNC", "SYNC-FAILED")
-        message (str): Log message to write
-
-    Returns:
-        None
+        logger (logging.Logger): Logger instance to configure.
+        log_file (Path | None):
+            Optional path to a log file.
+            If provided, log messages will also be written to this file.
     """
-    if not log_file:
-        return
+    logging.root.setLevel(logging.NOTSET)
+    formatter = logging.Formatter(
+        "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    )
+    # Set up console handler
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.INFO)
+    console_handler.setFormatter(formatter)
+    logger.addHandler(console_handler)
 
-    with open(log_file, "a") as log:
-        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        log.write(f"[{status}] {message} at {timestamp}\n")
+    if log_file is not None:
+        log_file.parent.mkdir(parents=True, exist_ok=True)
+        file_handler = logging.FileHandler(log_file)
+        file_handler.setLevel(logging.DEBUG)
+        file_handler.setFormatter(formatter)
+        logger.addHandler(file_handler)

@@ -207,6 +207,7 @@ https://github.com/switch-model/switch: https://repos.ecosyste.ms/api/v1/hosts/G
 https://github.com/temoaproject/temoa: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/TemoaProject%2Ftemoa
 https://github.com/thales1330/psp: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/Thales1330%2FPSP
 https://github.com/transient-official/transient-lib: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/TransiEnt-official%2Ftransient-lib
+https://github.com/transition-zero/tz-osemosys: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/transition-zero%2Ftz-osemosys
 https://github.com/tulipaenergy/tulipaenergymodel.jl: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/TulipaEnergy%2FTulipaEnergyModel.jl
 https://github.com/tum-ens/rivus: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/tum-ens%2Frivus
 https://github.com/tum-ens/urbs: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/tum-ens%2Furbs
@@ -224,6 +225,7 @@ https://github.com/yabata/ficus: https://repos.ecosyste.ms/api/v1/hosts/GitHub/r
 https://github.com/yanzhaochang/psatools-python: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/yanzhaochang%2FPSATools-Python
 https://github.com/youngfaithful/capacityexpansion.jl: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/YoungFaithful%2FCapacityExpansion.jl
 https://github.com/zen-universe/zen-garden: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/ZEN-universe%2FZEN-garden
+https://gitlab.com/c4dht/strategic-heat-planning-project: not-found
 https://gitlab.com/diw-evu/dieter_public/dieter.jl: not-found
 https://gitlab.com/diw-evu/dieter_public/dieterpy: https://repos.ecosyste.ms/api/v1/hosts/gitlab.com/repositories/diw-evu%2Fdieter_public%2Fdieterpy
 https://gitlab.com/dlr-ve/esy/amiris/amiris: https://repos.ecosyste.ms/api/v1/hosts/gitlab.com/repositories/dlr-ve%2Fesy%2Famiris%2Famiris

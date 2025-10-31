@@ -1,31 +1,32 @@
 id,category,comment
 andes,"power-flow",
+dynawo,"power-flow",
 egret,"production-cost,power-flow",
 energy_system_simulation_and_optimization,"production-cost","possibly exclude as it is a building energy management system optimisation"
+etmodel,"capacity-expansion",
 fine,"capacity-expansion","possibly also production-cost"
 genx,"capacity-expansion,production-cost",
 grid2op,"power-flow",
-gridcal,"power-flow",
+gridfm-graphkit,"power-flow",
+gridpack,"power-flow",
 hopp,"capacity-expansion,production-cost",
 oemof_solph,"capacity-expansion,production-cost",
 open_modeling_framework,"production-cost,power-flow",
+osemosys,"capacity-expansion",
 power_grid_model,"power-flow",
-powersimulations,"production-cost",
-powersimulationsdynamics,"power-flow",
 powersimulations_jl,"production-cost",
+powersimulations,"production-cost",
 powersimulationsdynamics_jl,"power-flow",
+powersimulationsdynamics,"power-flow",
 powsybl,"power-flow",
 prep_shot,"capacity-expansion","possibly also production-cost"
 pypower,"power-flow",
 pypowsybl,"power-flow",
 pysam,"capacity-expansion,production-cost","fixed technology options; focussed on specific assets."
+reeds-2.0,"capacity-expansion","possibly also production-cost"
+reopt,"capacity-expansion","possibly also production-cost"
 sam,"capacity-expansion,production-cost","fixed technology options; focussed on specific assets."
+spineopt.jl,"capacity-expansion,production-cost",
 temoa,"capacity-expansion","possibly also production-cost"
 urbs,"capacity-expansion",
-reopt,"capacity-expansion","possibly also production-cost"
-osemosys,"capacity-expansion",
-reeds-2.0,"capacity-expansion","possibly also production-cost"
-spineopt.jl,"capacity-expansion,production-cost",
-etmodel,"capacity-expansion",
-gridpack,"power-flow",
-dynawo,"power-flow",
+veragrid,"power-flow",

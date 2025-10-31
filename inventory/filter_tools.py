@@ -140,18 +140,28 @@ def resolve_duplicated_urls(df: pd.DataFrame) -> pd.DataFrame:
                 df = df[df.url != url]
             elif url != (new_url := repo_data["html_url"].lower()):
                 LOGGER.warning(f"Found redirect for: {url} -> {new_url}.")
-                df.loc[df.id == duplicate, "url"] = new_url
+                df.loc[df.url == url, "url"] = new_url
             elif (new_name := repo_data["source_name"]) is not None:
                 new_url = "https://" + urlparse(url).netloc + "/" + new_name.lower()
                 LOGGER.warning(f"Removing {url} as it is a fork of {new_url}.")
-                df.loc[df.id == duplicate, "url"] = new_url
+                df.loc[df.url == url, "url"] = new_url
         remaining_urls = df[df.id == duplicate].url.unique()
         if len(remaining_urls) > 1:
-            LOGGER.warning(
-                f"Could not resolve duplicate URLs for {duplicate}. Remaining: {remaining_urls}."
+            most_popular = (
+                df[df.id == duplicate]
+                .source.str.split(",", expand=True)
+                .notnull()
+                .sum(axis=1)
+                .idxmax()
             )
-        else:
-            duplicate_cache[duplicate] = remaining_urls[0]
+            url = df.loc[most_popular, "url"]
+            remaining_urls = [url]
+            LOGGER.warning(
+                f"Could not resolve duplicate URLs for {duplicate}. Remaining: {remaining_urls}. "
+                f"Selecting the most popular option based on number of sources that list it: {url}."
+            )
+
+        duplicate_cache[duplicate] = remaining_urls[0]
     util.dump_cache("duplicate_urls", duplicate_cache)
     df = drop_duplicates(df, "url")
     return df

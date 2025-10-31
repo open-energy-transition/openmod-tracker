@@ -13,7 +13,8 @@ import click
 import dotenv
 import pandas as pd
 import requests
-from github import Github
+from git_api import GitAPI
+from github.Repository import Repository
 from tqdm import tqdm
 
 PROVISION_API = "https://sonarcloud.io/api/alm_integration/provision_projects"
@@ -29,19 +30,6 @@ dotenv.load_dotenv()
 def sonarcloud_header() -> dict:
     """Returns the headers required for SonarCloud API requests."""
     return {"Authorization": "Bearer " + os.environ["SONARCLOUD_TOKEN"]}
-
-
-def get_repo_id(owner: str, repo_name: str, token: str | None = None) -> int:
-    """Returns the GitHub repository ID for the given owner and repo name.
-
-    Args:
-        owner (str): The owner of the GitHub repository.
-        repo_name (str): The name of the GitHub repository.
-        token (str | None): The GitHub token for authentication (optional).
-    """
-    gh_client = Github(token)
-    repo = gh_client.get_repo(f"{owner}/{repo_name}")
-    return repo.id
 
 
 def get_analysed_repo_keys(owner: str) -> dict:
@@ -98,21 +86,19 @@ def has_bindings(url: str) -> list:
     return bindings
 
 
-def create_project(owner: str, repo_name: str) -> str:
+def create_project(repo: Repository) -> str:
     """Creates a new SonarCloud project for the specified GitHub repository.
 
     Args:
-        owner (str): The owner of the GitHub repository.
-        repo_name (str): The name of the GitHub repository.
+        repo (Repository): The GitHub repository object.
 
     Returns:
         str: The SonarCloud project key for the created project, or an empty string if creation failed.
     """
-    repo_id = get_repo_id(owner, repo_name, os.environ.get("GITHUB_TOKEN", None))
     # Request parameters
     params = {
-        "installationKeys": f"{owner}/{repo_name}|{repo_id}",
-        "organization": owner,
+        "installationKeys": f"{repo.owner.login}/{repo.name}|{repo.id}",
+        "organization": repo.owner.login,
     }
 
     # Make the request
@@ -121,7 +107,7 @@ def create_project(owner: str, repo_name: str) -> str:
         projects = response.json()["projects"]
     else:
         LOGGER.error(
-            f"Failed to create sonarcloud project for repo {repo_name}: {response.text}"
+            f"Failed to create sonarcloud project for repo {repo.name}: {response.text}"
         )
         projects = []
     return projects[0]["projectKey"] if projects else ""
@@ -163,26 +149,23 @@ def cli():
 
 @cli.command()
 @click.argument("org", type=str, default="openmod-tracker")
-@click.argument(
-    "repo_list",
-    type=click.Path(exists=True, file_okay=True, dir_okay=False, path_type=Path),
-)
-def create(org: str, repo_list: Path):
+def create(org: str):
     """Creates SonarCloud projects for the specified GitHub repositories.
 
     Newly created projects will need to be clicked on in the SonarCloud UI to complete the setup.
 
     ORG is the name of the SonarCloud (and GitHub) organization.
-
-    REPO_LIST is the path to CSV file containing a 'repo' column with GitHub repository URLs.
     """
-    repos = pd.read_csv(repo_list)
-    for repo in tqdm(repos.repo.values, desc="Creating projects"):
-        if not has_bindings(f"https://github.com/{org}/{repo}"):
-            project_key = create_project(org, repo)
-            click.echo(f"Created SonarCloud project for repo {repo}: {project_key}")
+    git_client = GitAPI(org)
+    repos = git_client.repos
+    for repo in tqdm(repos.values(), total=len(repos), desc="Creating projects"):
+        if not has_bindings(repo.html_url):
+            project_key = create_project(repo)
+            click.echo(
+                f"Created SonarCloud project for repo {repo.name}: {project_key}"
+            )
         else:
-            click.echo(f"Repo {repo} already created in SonarCloud.")
+            click.echo(f"Repo {repo.name} already created in SonarCloud.")
 
 
 @cli.command()
@@ -190,15 +173,16 @@ def create(org: str, repo_list: Path):
 @click.argument(
     "output_path",
     type=click.Path(exists=False, file_okay=True, dir_okay=False, path_type=Path),
+    default="code_quality/output/metrics.csv",
 )
 @click.option(
     "--metrics",
     type=str,
-    default="sqale_rating,reliability_rating,security_rating,effort_to_reach_maintainability_rating_a,duplicated_lines_density,security_hotspots_to_review_status",
+    default="sqale_rating,reliability_rating,security_rating,duplicated_lines_density,sqale_index,reliability_remediation_effort,security_remediation_effort",
     show_default=True,
     help="Comma-separated list of SonarCloud metrics to retrieve. To view metric key options visit <https://sonarcloud.io/api/metrics/search>",
 )
-def get_stats(org: str, output_path: Path, metrics: str):
+def get_metrics(org: str, output_path: Path, metrics: str):
     """Retrieves SonarCloud project statistics.
 
     ORG is the name of the SonarCloud (and GitHub) organization.
@@ -217,7 +201,10 @@ def get_stats(org: str, output_path: Path, metrics: str):
         else:
             all_stats.append(pd.DataFrame(stats).assign(repo=repo))
     if all_stats:
-        pd.concat(all_stats).to_csv(output_path, index=False)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        pd.concat(all_stats).sort_values(["repo", "metric"]).to_csv(
+            output_path, index=False
+        )
     else:
         click.echo("No valid stats retrieved.")
 

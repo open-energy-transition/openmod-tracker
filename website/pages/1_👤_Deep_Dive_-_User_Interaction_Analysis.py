@@ -176,7 +176,10 @@ def user_locations_map(
 
 
 def preamble():
-    """Text to show before the user data plots."""
+    """Display explanatory text about user interaction analysis.
+
+    Shows overview of interaction types, user classifications, and caveats.
+    """
     st.markdown(
         """
         Interactions generally come in the form of

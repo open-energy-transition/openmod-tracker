@@ -25,6 +25,7 @@ features:
       value: y
     exogenous:
       source:
+        - https://docs.pypsa.org/latest/user-guide/components/loads/
         - https://docs.pypsa.org/latest/user-guide/components/generators/
         - https://docs.pypsa.org/latest/user-guide/components/lines/
         - https://docs.pypsa.org/latest/user-guide/components/links/
@@ -220,8 +221,10 @@ features:
         - https://www.bayesian.energy/convexity
       value: y
     no_code:
-      source: []
-      value: n
+      source:
+        - https://model.energy/
+        - https://model.energy/scenarios/
+      value: y
     scripting:
       value: y
       source:
@@ -300,7 +303,7 @@ features:
       source:
         - https://docs.pypsa.org/latest/user-guide/statistics/
         - https://docs.pypsa.org/latest/api/components/types/global-constraints/#pypsa.components.GlobalConstraints.add
-      value: n
+      value: y
     lcoe:
       source: []
       value: n
@@ -386,8 +389,9 @@ features:
         - https://docs.pypsa.org/latest/api/networks/optimize/#pypsa.Network.optimize.add_load_shedding
   spatial__resolution__simplification:
     network:
-      source: []
-      value: n
+      source:
+        - https://docs.pypsa.org/latest/examples/scigrid-redispatch/?h=redispatch
+      value: y
     resampling:
       value: y
       source:
@@ -478,7 +482,7 @@ features:
   transmission__opf:
     ac_opf:
       source:
-        - https://docs.pypsa.org/latest/user-guide/linear-power-flow/
+        - https://docs.pypsa.org/latest/api/networks/power-flow/#pypsa.Network.pf
       value: y
     dc_opf:
       source:

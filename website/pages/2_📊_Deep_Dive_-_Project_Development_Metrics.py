@@ -7,6 +7,7 @@
 
 import textwrap
 from pathlib import Path
+from typing import Literal
 
 import numpy as np
 import pandas as pd
@@ -174,31 +175,36 @@ def get_totals(df: pd.DataFrame, date_col: str, resample: str) -> pd.DataFrame:
     return totals_df
 
 
-def _plot_line(
-    df: pd.DataFrame, color_map: dict, title: str, category_orders: dict
+def _plot_timeseries(
+    df: pd.DataFrame,
+    color_map: dict,
+    title: str,
+    category_orders: dict,
+    plot_type: Literal["bar", "line"] = "bar",
 ) -> go.Figure:
-    """Create a line plot for interaction metrics.
+    """Create a timeseries plot for interaction metrics.
 
     Args:
         df: DataFrame containing interaction data with Date, Count, and Interaction columns.
         color_map: Dictionary mapping interaction types to colors.
         title: Title for the plot.
         category_orders: Dictionary defining the order of categories for plotting.
+        plot_type: Type of plot to create ('bar' or 'line'). Defaults to 'bar'.
 
     Returns:
         Plotly Figure object.
     """
-    fig = px.line(
+    plotter = getattr(px, plot_type)
+    fig = plotter(
         df,
         x="Date",
         y="Count",
         color="Interaction",
         title=title,
-        markers=True,
         color_discrete_map=color_map,
         category_orders=category_orders,
     )
-    fig.update_traces(marker=dict(size=1), hovertemplate=None)
+    fig.update_traces(hovertemplate=None)
     fig.update_layout(
         hovermode="x",
         xaxis=dict(type="date"),
@@ -237,10 +243,10 @@ def plot_totals_metrics(
         .reset_index()
     )
     title_prefix = "Cumulative " if cumulative else ""
-    fig = _plot_line(
+    fig = _plot_timeseries(
         plot_df,
         color_map,
-        title=f"{title_prefix}Repository Metrics Over Time",
+        title=f"{title_prefix}Repository Metrics Over Time ({resolution})",
         category_orders={"Interaction": TOTALS_METRICS},
     )
     return fig
@@ -289,7 +295,7 @@ def plot_open_metrics(df: pd.DataFrame, resolution: str, color_map: dict) -> go.
         .reset_index()
     )
 
-    fig = _plot_line(
+    fig = _plot_timeseries(
         plot_df,
         color_map,
         title=f"Open Issues and PRs ({resolution})",
@@ -330,7 +336,7 @@ def daily_interactions_timeline(df: pd.DataFrame):
 
     # Define color mapping for all metrics
 
-    colors = px.colors.qualitative.G10
+    colors = px.colors.sequential.Peach
     color_map = {
         metric: colors[idx % len(colors)] for idx, metric in enumerate(TOTALS_METRICS)
     }

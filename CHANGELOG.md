@@ -27,6 +27,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Changed
+
+- Timeseries data from lines to bars & using gradient colour palette.
+- 6-month interactions in main table from cumulative to absolute.
+
 ### Added
 
 - Dashboard app smoke tests (incl. memory peak checks).

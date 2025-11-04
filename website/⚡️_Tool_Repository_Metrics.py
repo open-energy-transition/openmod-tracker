@@ -71,7 +71,8 @@ COLUMN_HELP: dict[str, str] = {
     "Category": "Category of energy system planning / operation problem for which this tool could be used. This is based on [G-PST entries](https://api.github.com/repos/G-PST/opentools) and our own manual assignment applied to a subset of tools.",
     "Docs": "Link to tool documentation.",
     "Score": "The tool score is a weighted average of all numeric metrics, after scaling those metrics to similar ranges.",
-    "Interactions": "The cumulative sum of interactions with the repository in the past 6 months at a weekly resolution. Interactions include new stars, issues, forks, and pull requests. Data only available for GitHub-hosted repositories.",
+    "Interactions": "The sum of weekly interactions with the repository in the past 6 months. Interactions include new stars, issues, forks, commits, and pull requests. "
+    "Data only available for GitHub-hosted repositories.",
     "Language": "The programming language in which the majority of the tool _source code_ is written. "
     "It is an indicator of potential licensing issues (if the language is proprietary) and development community size. "
     "This may not be the language same as the interface language used by the tool.",

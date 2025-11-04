@@ -65,21 +65,20 @@ def map_repo_to_tool(user_stats_df: pd.DataFrame, repo_col: str) -> list[dict]:
 
 
 @st.cache_data
-def create_vis_table(user_stats_dir: Path) -> pd.DataFrame:
+def create_vis_table(filepath: Path) -> pd.DataFrame:
     """Load and prepare user interactions data.
 
     Args:
-        user_stats_dir: Path to directory containing user analysis output files.
+        filepath: Path to user interactions data file.
 
     Returns:
         DataFrame containing user interactions with parsed datetime columns.
     """
     # Check if user analysis data exists
-    user_interactions = user_stats_dir / "user_interactions.csv"
-
-    df = pd.read_csv(
-        user_interactions, parse_dates=["created", "closed", "merged"]
-    ).dropna(subset=["username", "repo"], how="any")
+    df = pd.read_csv(filepath, parse_dates=["created", "closed", "merged"]).dropna(
+        subset=["username", "repo"], how="any"
+    )
+    st.session_state["interaction_df"] = df
 
     return df
 
@@ -102,8 +101,13 @@ def filter_interactions(
         Filtered DataFrame containing interactions matching the criteria.
     """
     bot_patterns = [
-        "bot",
+        "-bot",
         "actions",
+        "dependabot",
+        "JuliaTagBot",
+        "pudlbot",
+        "codebot",
+        "renovate",
         "sonarqubecloud",
         "codecov",
         "coveralls",
@@ -120,7 +124,7 @@ def filter_interactions(
         selected_repos = [
             item["repo"] for item in repo_to_tool_map if item["name"] in selected_tools
         ]
-        df = df[df["repo"].isin(selected_repos)]
+        df = df[df.repo.str.contains("|".join(selected_repos), case=False)]
     return df
 
 
@@ -258,11 +262,11 @@ def plot_open_metrics(df: pd.DataFrame, resolution: str, color_map: dict) -> go.
     _df.loc[:, "closed"] = _df["closed"].fillna(_df["merged"])
     created_df = get_totals(_df, "created", resample).cumsum()
     closed_df = get_totals(_df, "closed", resample).cumsum()
-    open_df = (
-        created_df.subtract(closed_df, fill_value=0)
-        .where(lambda x: x >= 0)
-        .rename(columns=lambda x: x.replace("Total ", "Open "))
+    closed_df_full = closed_df.reindex(created_df.index).ffill().fillna(0)
+    open_df = created_df.subtract(closed_df_full).rename(
+        columns=lambda x: x.replace("Total ", "Open ")
     )
+    assert (open_df >= 0).all().all(), "Open counts contain negative values!"
     extra_dfs = []
     for subtype in ["comment", "review"]:
         _df = get_totals(
@@ -336,7 +340,7 @@ def daily_interactions_timeline(df: pd.DataFrame):
     )
     st.plotly_chart(
         fig_cumulative,
-        use_container_width=True,
+        width="stretch",
         key="cumulative_metrics_plot",
         config=FIG_CONFIG,
     )
@@ -347,7 +351,7 @@ def daily_interactions_timeline(df: pd.DataFrame):
     # Create open counts chart
     fig_open = plot_open_metrics(df, resolution=resolution, color_map=color_map)
     st.plotly_chart(
-        fig_open, use_container_width=True, key="open_metrics_plot", config=FIG_CONFIG
+        fig_open, width="stretch", key="open_metrics_plot", config=FIG_CONFIG
     )
 
 
@@ -400,15 +404,14 @@ def get_complete_time(df: pd.DataFrame, interaction: str, time_col: str) -> pd.S
         time_col: Name of the completion date column ('merged' or 'closed').
 
     Returns:
-        Series containing completion times in days, filtered to exclude values >= 365 days.
+        Series containing completion times in days.
     """
     # Calculate time to merge for PRs
     data = df.loc[(df.interaction == interaction) & (df["subtype"] == "author")].dropna(
         subset=[time_col]
     )
     complete_time = (data[time_col] - data["created"]).dt.total_seconds() / (24 * 3600)
-    complete_time_filtered = complete_time[complete_time < 365]
-    return complete_time_filtered
+    return complete_time
 
 
 def plot_histogram(
@@ -469,7 +472,7 @@ def plot_histogram(
     return fig
 
 
-def get_engagement(df: pd.DataFrame, interaction: str) -> pd.Series:
+def _get_engagement(df: pd.DataFrame, interaction: str) -> pd.Series:
     """Calculate engagement metrics for PRs or issues.
 
     Args:
@@ -534,7 +537,7 @@ def resolution_histograms(df: pd.DataFrame, global_df: pd.DataFrame | None = Non
         )
         cols[interaction].plotly_chart(
             fig,
-            use_container_width=True,
+            width="stretch",
             config=FIG_CONFIG,
             key=f"{interaction}_resolution_histogram",
         )
@@ -559,33 +562,19 @@ def engagement_histograms(df: pd.DataFrame, global_df: pd.DataFrame | None = Non
     *Engagement* refers to the number of comments, reactions, and reviews made on a PR or issue before it is closed or merged.
     Higher engagement can indicate more thorough reviews and feedback in PRs and active problem-solving and collaboration in Issues.
     """)
-    pr_interactions = df.loc[(df.interaction == "pr")]
-    if not pr_interactions.merged.isna().all():
-        n_merged = len(
-            pr_interactions[
-                (pr_interactions.subtype == "author")
-                & (pr_interactions.closed.notna() | pr_interactions.merged.notna())
-            ][["repo", "number"]].drop_duplicates()
-        )
-        n_reviewed = len(
-            pr_interactions[(pr_interactions.subtype == "review")][
-                ["repo", "number"]
-            ].drop_duplicates()
-        )
-        perc_prs_reviewed = (n_reviewed / n_merged) * 100
-        st.caption(
-            f"{perc_prs_reviewed:.1f}% of PRs received at least one review before being merged/closed."
-        )
+    _prs_with_reviews_caption(df)
     col_engagement_1, col_engagement_2 = st.columns(2)
     cols = {"pr": col_engagement_1, "issue": col_engagement_2}
     for interaction in cols.keys():
-        engagement_time = get_engagement(df, interaction)
+        engagement_time = _get_engagement(df, interaction)
+
         if engagement_time.empty:
             cols[interaction].info("No engagement data available.")
             continue
 
         if global_df is not None:
-            global_engagement_time = get_engagement(global_df, interaction).median()
+            global_engagement_time = _get_engagement(global_df, interaction).median()
+
         else:
             global_engagement_time = None
         fig = plot_histogram(
@@ -596,26 +585,58 @@ def engagement_histograms(df: pd.DataFrame, global_df: pd.DataFrame | None = Non
         )
         cols[interaction].plotly_chart(
             fig,
-            use_container_width=True,
+            width="stretch",
             config=FIG_CONFIG,
             key=f"{interaction}_engagement_histogram",
         )
 
 
-def main():
+def _prs_with_reviews_caption(df: pd.DataFrame) -> None:
+    """Calculate and display percentage of PRs reviewed before merge."""
+
+    def __reviewed_before_merge(df: pd.DataFrame) -> bool | float:
+        is_merged = df[
+            (df.subtype == "author") & (df.closed.notna() | df.merged.notna())
+        ]
+        reviews = df[df.subtype == "review"]
+        if is_merged.empty:
+            return float("nan")
+        return False if reviews.empty else True
+
+    pr_interactions = df.loc[(df.interaction == "pr")]
+    merged_and_reviewed = pr_interactions.groupby(["repo", "number"]).apply(
+        __reviewed_before_merge, include_groups=False
+    )
+    if not merged_and_reviewed.isna().all():
+        perc_prs_reviewed = (
+            merged_and_reviewed.sum() / len(merged_and_reviewed.dropna()) * 100
+        )
+        st.caption(
+            f"{perc_prs_reviewed:.1f}% of PRs received at least one review before being merged/closed."
+        )
+
+
+def preamble():
+    """Text to show before the user data plots."""
+    st.markdown(
+        """
+        Activity on source code repositories can tell us about how tools are being developed and maintained.
+        Here we analyse interactions on GitHub repositories for energy modelling tools, including
+        [stars](https://docs.github.com/en/get-started/exploring-projects-on-github/saving-repositories-with-stars),
+        [forks](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/about-forks),
+        [issues](https://docs.github.com/en/issues/tracking-your-work-with-issues/about-issues),
+        [pull requests (PRs)](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests),
+        and [commits](https://docs.github.com/en/pull-requests/committing-changes-to-your-project/creating-and-editing-commits/about-commits).
+        We also look at key contributors to these repositories.
+        Together, this information can help us understand how actively a tool is being developed, how responsive maintainers are to feedback, and how engaged the community is around a tool's development.
+
+        Use the filters on the left to change the time period of these interactions, select specific tools to analyse, and filter out known "bot" activity (interactions from automated accounts).
+        """
+    )
+
+
+def main(df_vis: pd.DataFrame):
     """Main function for the Project Development Metrics page."""
-    st.set_page_config(
-        page_title="Project Development Metrics", page_icon="📊", layout="wide"
-    )
-
-    st.title("Project Development Metrics")
-    st.text(
-        "Track the development activity and key contributors for energy modelling tools. "
-        "Analyse metrics such as stars, forks, issues, pull requests, and response times."
-    )
-    user_stats_dir = Path(__file__).parent.parent.parent / "user_analysis" / "output"
-    df_vis = create_vis_table(user_stats_dir)
-
     repo_to_tool_map = map_repo_to_tool(df_vis, "repo")
 
     # Sidebar filters
@@ -657,8 +678,12 @@ def main():
     # Get date range from the data
     min_date = filtered_interactions[["merged", "created", "closed"]].min().min().date()
     max_date = filtered_interactions[["merged", "created", "closed"]].max().max().date()
+
     default_range = (min_date, max_date)
-    current_range = st.session_state.get("selected_date_range_dev", default_range)
+    initial_min = (max_date - pd.DateOffset(years=1)).date()
+    current_range = st.session_state.get(
+        "selected_date_range_dev", (max(min_date, initial_min), max_date)
+    )
     # Date range selector
     start_date, end_date = st.sidebar.slider(
         "Select date range:",
@@ -669,6 +694,7 @@ def main():
         label_visibility="visible",
         help="Filter interactions by date range. Adjust the slider to focus on a specific time period.",
     )
+
     if default_range != (start_date, end_date):
         # Update filtered interactions based on date range
         filtered_interactions = date_filter(
@@ -703,4 +729,17 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    st.set_page_config(
+        page_title="Project Development Metrics", page_icon="📊", layout="wide"
+    )
+
+    st.title("Project Development Metrics")
+
+    user_stats_dir = Path(__file__).parent.parent.parent / "user_analysis" / "output"
+    # We're sharing this cached data with the main page, but we have to account for it being loaded for the first time here.
+    df_vis = st.session_state.get(
+        "df_interactions", create_vis_table(user_stats_dir / "user_interactions.csv")
+    )
+
+    preamble()
+    main(df_vis)

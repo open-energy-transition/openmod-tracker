@@ -250,7 +250,8 @@ def main(user_stats_df: pd.DataFrame):
                         i["repo"]
                         for i in repo_to_tool_map
                         if i["name"] in selected_tools
-                    )
+                    ),
+                    case=False,
                 )
             ]
         else:

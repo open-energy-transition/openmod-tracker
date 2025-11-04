@@ -33,6 +33,8 @@ COLUMN_NAME_MAPPING: dict[str, str] = {
     "forks_count": "Forks",
     "dependent_repos_count": "Dependents",
     "last_month_downloads": "1 Month Downloads",
+    "category": "Category",
+    "language": "Language",
 }
 
 COLUMN_DTYPES: dict[str, Callable] = {
@@ -70,7 +72,9 @@ COLUMN_HELP: dict[str, str] = {
     "Docs": "Link to tool documentation.",
     "Score": "The tool score is a weighted average of all numeric metrics, after scaling those metrics to similar ranges.",
     "Interactions": "The cumulative sum of interactions with the repository in the past 6 months at a weekly resolution. Interactions include new stars, issues, forks, and pull requests. Data only available for GitHub-hosted repositories.",
-    "Language": "The programming language in which the majority of the tool source code is written.",
+    "Language": "The programming language in which the majority of the tool _source code_ is written. "
+    "It is an indicator of potential licensing issues (if the language is proprietary) and development community size. "
+    "This may not be the language same as the interface language used by the tool.",
 }
 
 EXTRA_COLUMNS = ["name_with_url", "Docs", "Score", "Interactions"]
@@ -79,15 +83,12 @@ NOT_OPEN_SOURCE_LANGUAGES = ["gams", "matlab", "jetbrains mps", "powerbuilder", 
 
 
 @st.cache_data
-def create_vis_table(
-    tool_stats_dir: Path, user_stats_dir: Path, code_quality_metrics_dir: Path
-) -> pd.DataFrame:
+def create_vis_table(tool_stats_dir: Path, user_stats_dir: Path) -> pd.DataFrame:
     """Create the tool table with columns renamed and filtered ready for visualisation.
 
     Args:
         tool_stats_dir (Path): The directory in which to find tool list and stats.
         user_stats_dir (Path): The directory in which to find tool user stats.
-        code_quality_metrics_dir (Path): The directory in which to find code quality metrics.
 
     Returns:
         pd.DataFrame: Filtered and column renamed tool table.
@@ -95,9 +96,6 @@ def create_vis_table(
     stats_df = pd.read_csv(tool_stats_dir / "stats.csv", index_col="id")
     tools_df = pd.read_csv(tool_stats_dir / "filtered.csv", index_col="id")
     docs_df = pd.read_csv(tool_stats_dir / "docs.csv", index_col="id")
-    code_quality_df = pd.read_csv(
-        code_quality_metrics_dir / "metrics.csv", index_col=["repo", "metric"]
-    )
     df = pd.merge(left=stats_df, right=tools_df, right_index=True, left_index=True)
     df["Interactions"] = (
         _create_user_interactions_timeseries(user_stats_dir)
@@ -132,8 +130,25 @@ def create_vis_table(
     df_vis = df.rename(columns=COLUMN_NAME_MAPPING)[
         EXTRA_COLUMNS + list(COLUMN_NAME_MAPPING.values())
     ]
-
     return df_vis
+
+
+@st.cache_data
+def interaction_df(filepath: Path) -> pd.DataFrame:
+    """Load and prepare user interactions data.
+
+    Args:
+        filepath: Path to user interactions csv.
+
+    Returns:
+        DataFrame containing user interactions with parsed datetime columns.
+    """
+    # Check if user analysis data exists
+    df = pd.read_csv(filepath, parse_dates=["created", "closed", "merged"]).dropna(
+        subset=["username", "repo"], how="any"
+    )
+    util.set_state("interaction_df", df)
+    return df
 
 
 def _create_user_interactions_timeseries(
@@ -151,33 +166,31 @@ def _create_user_interactions_timeseries(
             Streamlit table bar plot compatible data stored in a pandas Series.
             This is not a data structure that pandas really supports as the dtype is list-like.
     """
-    user_df = pd.read_csv(
-        tool_data_dir / "user_interactions.csv", parse_dates=["created"]
+    user_df = util.get_state(
+        "interaction_df", interaction_df(tool_data_dir / "user_interactions.csv")
     )
-    interactions = (
-        user_df.groupby([user_df.created, user_df.repo])
-        .count()["interaction"]
-        .unstack("repo")
-        .resample(resolution)
-        .sum()
-        .T
-    )
-    last_6me_interactions = interactions.loc[
-        :,
-        interactions.columns.tz_localize(None).to_pydatetime()
-        > (pd.to_datetime("now") - pd.DateOffset(months=n_months)),
-    ].cumsum(axis=1)
+    use_df_6me = user_df.loc[
+        user_df.created.dt.tz_localize(None)
+        > (pd.to_datetime("now") - pd.DateOffset(months=n_months))
+    ]
 
     map_repo = {
-        idx: "https://github.com/" + idx.lower() for idx in last_6me_interactions.index
+        idx: "https://github.com/" + idx.lower() for idx in use_df_6me.repo.unique()
     }
-    last_6me_interactions.index = last_6me_interactions.index.map(map_repo)
-
-    streamlit_ready_interactions = last_6me_interactions.groupby(
-        last_6me_interactions.index
-    ).apply(lambda x: x.values[0])
-
-    return streamlit_ready_interactions
+    interactions = (
+        use_df_6me.groupby([use_df_6me.created, use_df_6me.repo])
+        .count()["interaction"]
+        .rename(index=map_repo, level="repo")
+        .groupby(
+            [pd.Grouper(level="created", freq=resolution), pd.Grouper(level="repo")]
+        )
+        .sum()
+        .unstack("created")
+        .fillna(0)
+        .groupby("repo")
+        .apply(lambda x: x.to_numpy()[0])
+    )
+    return interactions
 
 
 def numeric_range_filter(
@@ -563,11 +576,7 @@ def dist_plot(col: pd.Series, slider_range: tuple[float, float]) -> None:
 
     config = {"displayModeBar": False, "staticPlot": True}
     st.sidebar.plotly_chart(
-        fig,
-        selection_mode=[],
-        use_container_width=True,
-        key=f"{col.name}_chart",
-        config=config,
+        fig, selection_mode=[], width="stretch", key=f"{col.name}_chart", config=config
     )
 
 
@@ -748,7 +757,7 @@ def conclusion():
 def footer():
     """Footer content for the Streamlit app."""
     st.divider()
-    _, col1, col2, col3, col4, _ = st.columns([1, 2, 2, 2, 2, 1])
+    _, col1, col2, col3, col4, _ = st.columns([1, 3, 3, 3, 3, 1])
     col1.image(OET_LOGO_FULL_NAME, width=300)
     col2.markdown(
         """
@@ -911,7 +920,6 @@ if __name__ == "__main__":
     proj_dir = Path(__file__).parent.parent
     tool_stats_dir = proj_dir / "inventory" / "output"
     user_stats_dir = proj_dir / "user_analysis" / "output"
-    code_quality_metrics_dir = proj_dir / "code_quality" / "output"
     readme_path = proj_dir / "README.md"
 
     st.set_page_config(
@@ -931,7 +939,7 @@ if __name__ == "__main__":
         icon_image=OET_LOGO_ABBREVIATED,
     )
 
-    df_vis = create_vis_table(tool_stats_dir, user_stats_dir, code_quality_metrics_dir)
+    df_vis = create_vis_table(tool_stats_dir, user_stats_dir)
     g = git.cmd.Git()
     latest_changes = g.log("-1", "--pretty=%cs", tool_stats_dir / "stats.csv")
 

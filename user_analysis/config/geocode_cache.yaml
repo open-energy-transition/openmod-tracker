@@ -184,6 +184,7 @@ Bangalore: India
 Bangalore , India: India
 Bangalore, IN: India
 Bangalore, India: India
+Bangalore, Karnataka: India
 Bangkok: Thailand
 Bangkok, Thailand: Thailand
 Bangladesh: Bangladesh
@@ -344,6 +345,7 @@ Budva: Montenegro
 Buenos Aires - Argentina: Argentina
 Buenos Aires, Argentina: Argentina
 Buffalo, NY: United States
+Bujumbura: Burundi
 Bulgaria: Bulgaria
 Bumi Sukowati, Indonesia: Indonesia
 Burlington, VT: United States
@@ -624,6 +626,7 @@ El Salvador: El Salvador
 Ely Minnesota: United States
 Emden: Germany
 Emmen: Netherlands
+England, United Kingdom: United Kingdom
 Enschede: Netherlands
 Enschede, The Netherlands: Netherlands
 Enugu, Nigeria.: Nigeria
@@ -884,6 +887,7 @@ Hogwarts: Ukraine
 Hong Kong: Hong Kong
 'Hong Kong ': Hong Kong
 Hong Kong SAR: Hong Kong
+Hong Kong, China: China
 HongKong, China: China
 Hongkong: China
 Hongkong, China: China
@@ -1333,6 +1337,7 @@ Nederland: Netherlands
 Needham, MA, USA: United States
 Neo Psychiko, Athens, Greece: Greece
 Neo-Tokyo: Germany
+Nepal: Nepal
 Netherlands: Netherlands
 Netizen: Russia
 "Neuch\xE2tel, Switzerland": Switzerland
@@ -1769,6 +1774,7 @@ Somewhere on Earth (usually): null
 SooChow: China
 Soquel, CA. USA: United States
 South Africa: South Africa
+South Africa and Global: South Africa
 South Korea: Korea, Republic of
 South Wales: United Kingdom
 South of Germany: Germany
@@ -2048,6 +2054,7 @@ Warszawa: Poland
 Washington D.C.: United States
 Washington DC: United States
 Washington DC Area: United States
+Washington DC Metro Area: null
 Washington State: United States
 Washington State, USA: United States
 Washington, D.C.: United States
@@ -2116,6 +2123,7 @@ Zagreb: Croatia
 Zagreb, Croatia: Croatia
 Zambia: Zambia
 Zaporizhzhia: Ukraine
+Zhejiang, China: China
 ZhengZhou,CN: China
 'Zhong Guo Ke Xue Yuan Da Xue , udacityXue Yuan , Ke Dong Dian Li ': null
 'Zhong Qing Da Xue ': China
@@ -2552,6 +2560,7 @@ data cowboys: null
 data engineer: Philippines
 data hermeneutics: null
 data optima: null
+data scientist: null
 data scientist at novo banco: null
 data-mill.cloud: null
 datacraft: null
@@ -2659,6 +2668,7 @@ eclispe: Brazil
 ecobee: null
 ecole de technologie superieure: Canada
 ecole des ponts: France
+ecole nationale des ponts et chaussees: France
 ecole polytechnique: France
 ecole polytechnique de montreal: null
 ecole polytechnique federale de lausanne: Switzerland
@@ -2893,6 +2903,7 @@ genieframework: null
 genose.org: null
 geo-knowledge-hub e-sensing: null
 geoondas ltda.: null
+george mason university, va: United States
 georgetown-mdi: null
 georgia center for energy solutions: null
 georgia institute of technology: United States
@@ -2905,6 +2916,7 @@ german aerospace center (dlr), institute of networked energy systems: null
 german space agency: null
 germany: Germany
 gernerali deutschland ag: null
+getsentry: null
 gewv-tu-dresden: null
 gft technologies se: Germany
 ghent university: Belgium
@@ -3257,6 +3269,7 @@ localhost: Italy
 localsolver: null
 logicpp: null
 london: United Kingdom
+london school of economics (lse): null
 loony-tech: null
 los alamos national lab: null
 los alamos national laboratory: United States
@@ -3587,6 +3600,7 @@ peking university: China
 penn-electric-racing: null
 pennsylvania state university: United States
 pepsico/bravos energia: null
+perestoroniny: null
 pes, must: null
 peter-park-systems-gmbh: null
 petrochina: China
@@ -3941,6 +3955,7 @@ steinbrenner laborsysteme gmbh: null
 stellantis-adx | picopod: null
 stellenbosch university: South Africa
 steve seypt software development: null
+stevens institute of technology: United States
 stfc: null
 stitchfix: null
 stockfilm.com: null
@@ -4053,6 +4068,7 @@ the energy coalition: null
 the george washington university: United States
 the hdf group: null
 the hong kong polytechnic university: China
+the hong kong university of science and technology: China
 the hongkong polytechnic university: null
 the linux foundation: null
 the pennsylvania state university: United States
@@ -4218,6 +4234,7 @@ university of bejaia: Algeria
 university of bergamo: null
 university of bremen: Germany
 university of bristol: United Kingdom
+university of burundi: Burundi
 university of calgary: Canada
 university of california berkeley: United States
 university of california, los angeles: United States
@@ -4421,6 +4438,7 @@ wsag: Singapore
 wuhan: China
 wuhan univeristy: null
 wuhan university: China
+wuppertal institut fur klima, umwelt, energie: null
 wuxi, china: China
 www.box-id.com - box-id systems gmbh: null
 www.engi.ai: null

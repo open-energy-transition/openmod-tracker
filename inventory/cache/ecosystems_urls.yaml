@@ -16,6 +16,7 @@ https://github.com/akkudoktor-eos/eos: https://repos.ecosyste.ms/api/v1/hosts/Gi
 https://github.com/ames-market/psst: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/ames-market%2Fpsst
 https://github.com/ancillaryservicesacquisitionmodel/asam: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/AncillaryServicesAcquisitionModel%2FASAM
 https://github.com/andrewlyden/pylesa: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/andrewlyden%2FPyLESA
+https://github.com/anl-ceeesa/unitcommitment.jl: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/ANL-CEEESA%2FUnitCommitment.jl
 https://github.com/antaressimulatorteam/antares_simulator: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/AntaresSimulatorTeam%2FAntares_Simulator
 https://github.com/arras-energy/gridlabd: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/arras-energy%2Fgridlabd
 https://github.com/arthurrinaldi/grimsel: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/arthurrinaldi%2Fgrimsel
@@ -156,6 +157,8 @@ https://github.com/oemof/oemof-solph: https://repos.ecosyste.ms/api/v1/hosts/Git
 https://github.com/oemof/oemof-thermal: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/oemof%2Foemof-thermal
 https://github.com/olugovoy/energyrt: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/optimal2050%2FenergyRt
 https://github.com/onsset/onsset: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/OnSSET%2Fonsset
+https://github.com/open-energy-transition/open-tyndp: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/open-energy-transition%2Fopen-tyndp
+https://github.com/open-energy-transition/solver-benchmark: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/open-energy-transition%2Fsolver-benchmark
 https://github.com/opencemorg/opencem: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/openCEMorg%2FopenCEM
 https://github.com/openego/edisgo: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/openego%2FeDisGo
 https://github.com/openego/ego: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/openego%2FeGo
@@ -188,6 +191,7 @@ https://github.com/rl-institut/multi-vector-simulator: https://repos.ecosyste.ms
 https://github.com/robbiemorrison/deeco: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/robbiemorrison%2Fdeeco
 https://github.com/romulus97/capow_py36: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/romulus97%2FCAPOW_PY36
 https://github.com/roseautechnologies/roseau_load_flow: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/RoseauTechnologies%2FRoseau_Load_Flow
+https://github.com/rte-france/grid2op: null
 https://github.com/rwl/pypower: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/rwl%2FPYPOWER
 https://github.com/sanpen/gridcal: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/SanPen%2FGridCal
 https://github.com/sanpen/veragrid: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/SanPen%2FVeraGrid
@@ -234,6 +238,7 @@ https://gitlab.com/dlr-ve/esy/remix/framework: https://repos.ecosyste.ms/api/v1/
 https://gitlab.com/energyincities/python-ehub: https://repos.ecosyste.ms/api/v1/hosts/gitlab.com/repositories/energyincities%2Fpython-ehub
 https://gitlab.com/fame-framework: not-found
 https://gitlab.com/fame-framework/fame-core: https://repos.ecosyste.ms/api/v1/hosts/gitlab.com/repositories/fame-framework%2Ffame-core
+https://gitlab.com/fame-framework/fame-io: https://repos.ecosyste.ms/api/v1/hosts/gitlab.com/repositories/fame-framework%2Ffame-io
 https://gitlab.com/mosaik: not-found
 https://gitlab.com/mosaik/mosaik: https://repos.ecosyste.ms/api/v1/hosts/gitlab.com/repositories/mosaik%2Fmosaik
 https://gitlab.com/sesit/copper: https://repos.ecosyste.ms/api/v1/hosts/gitlab.com/repositories/sesit%2Fcopper

@@ -10,7 +10,7 @@ on:
       - main
 
 jobs:
-  serve-app:
+  serve-app: # test with same dependencies as we will build the actual app
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -25,4 +25,21 @@ jobs:
         run: pip install -r website/requirements.txt pytest
 
       - name: Run app tests
-        run: pytest tests/test_app.py
+        run: pytest tests/test_app.py::test_smoke_page
+
+  test-app: # more thorough testing
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Setup Pixi
+        uses: prefix-dev/setup-pixi@v0.9.1
+        with:
+          pixi-version: v0.44.0
+          cache: true
+          # Do not cache in branches
+          cache-write: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
+
+      - name: Run tests
+        run: pixi run test -v

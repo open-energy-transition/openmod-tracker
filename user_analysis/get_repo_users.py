@@ -83,7 +83,7 @@ class GitHubClient:
         response = self.session.post(self.base_url, json=payload, timeout=30)
         try:
             response.raise_for_status()
-        except requests.HTTPError:
+        except requests.RequestException:
             return {}
 
         data = response.json()

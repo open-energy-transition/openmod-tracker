@@ -110,7 +110,7 @@ github.com/oemof/tespy,simulation model
 github.com/openCEMorg/openCEM,
 github.com/openego/eGo,
 github.com/OpenIPSL/OpenIPSL,simulation model
-github.com/OSeMOSYS/OSeMOSYS,
+github.com/OSeMOSYS/OSeMOSYS,capacity-expansion
 github.com/pencleanenergy/MATCH-model,
 github.com/philipphaertel/EMPRISE,
 github.com/pielube/MESSpy,simulation model
@@ -150,7 +150,7 @@ github.com/tum-ewk/OpenTUMFlex,
 github.com/UNSW-CEEM/nempy,
 github.com/UU-ER/AdOpT-NET0,
 github.com/VILLASframework,
-github.com/transition-zero/tz-osemosys
+github.com/transition-zero/tz-osemosys,capacity-expansion
 github.com/yanzhaochang/PSATools-Python,simulation model
 github.com/YoungFaithful/CapacityExpansion.jl,
 github.com/ZEN-universe/ZEN-garden,
@@ -166,3 +166,4 @@ gitlab.uliege.be/smart_grids/public/gboml,
 gitlab.vtt.fi/backbone/backbone,
 gricad-gitlab.univ-grenoble-alpes.fr/omegalpes/omegalpes,
 jugit.fz-juelich.de/iek-10/public/optimization/comando,
+github.com/ANL-CEEESA/UnitCommitment.jl,production-cost

@@ -487,20 +487,6 @@ class GitHubRepositoryCollector:
             "created": commit_data["committedDate"],
         }
 
-    def _get_contributors(self, repo: str) -> list[dict]:
-        """Get all users who are watching a repository.
-
-        This requires a REST API query as the GraphQL doesn't have endpoints for high level stats.
-        """
-        repo_obj = self.client.rest_api.get_repo(repo)
-        contributors = [
-            {"username": contributor.login, "interaction": "contributor"}
-            for contributor in repo_obj.get_contributors()
-        ]
-        remaining_calls = self.client.rest_api.get_rate_limit().core.remaining
-        LOGGER.warning(f"Remaining REST API calls: {remaining_calls}.")
-        return contributors
-
     def collect_repo_data(self, repo: str) -> pd.DataFrame:
         """Analyze a GitHub repository and return comprehensive activity data."""
         LOGGER.warning(f"Starting analysis of {repo}")
@@ -533,10 +519,6 @@ class GitHubRepositoryCollector:
         commits_data = self._paginate_query("commits", repo)
         for commit_data in commits_data:
             results.append(self._parse_commit_data(commit_data, is_default_branch=True))
-
-        # Fetch contributors (no timestamps)
-        contributors = self._get_contributors(repo)
-        results.extend(contributors)
 
         LOGGER.warning(f"Analysis complete. Found {len(results)} interactions")
         results_df = pd.DataFrame(results).assign(repo=repo)
@@ -578,7 +560,7 @@ def cli(stats_file: Path, out_path: Path):
     token = os.environ.get("GITHUB_TOKEN", None)
     collector = GitHubRepositoryCollector(token)
     for repo_id, repo in tqdm(repos_df.iterrows(), desc="Collecting users"):
-        repo_url = repo.html_url
+        repo_url = repo.html_url.lower()
         url_parts = urlparse(repo_url)
         if url_parts.netloc.endswith("github.com"):
             repo = url_parts.path.strip("/")
@@ -593,11 +575,25 @@ def cli(stats_file: Path, out_path: Path):
         if df.empty:
             LOGGER.warning(f"No users found for {repo}.")
             continue
-        existing_users = (
-            pd.concat([existing_users, df]).reindex(columns=COLS).drop_duplicates()
+        existing_users = pd.concat([existing_users, df]).reindex(columns=COLS)
+        # Clean up data by removing data that has been downloaded already
+        # and merging rows with updated data (e.g. issues/PRs that have since been closed/merged)
+        no_dups_users = (
+            existing_users[existing_users["repo"] == repo]
+            .groupby(
+                ["username", "interaction", "subtype", "number", "repo"],
+                group_keys=False,
+                dropna=False,
+            )
+            .apply(lambda x: x.ffill().bfill())
+            .drop_duplicates()
+            .dropna(subset=["username", "created", "repo"])
+        )
+        existing_users = pd.concat(
+            [existing_users[existing_users["repo"] != repo], no_dups_users]
         )
         existing_users["number"] = existing_users["number"].astype("Int32")
-        existing_users.to_csv(out_path, index=False)
+        existing_users.sort_values(["repo", "created"]).to_csv(out_path, index=False)
         util.dump_yaml("pagination_cache", PAGINATION_CACHE)
 
 

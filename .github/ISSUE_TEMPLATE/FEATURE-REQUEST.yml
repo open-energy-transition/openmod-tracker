@@ -24,6 +24,6 @@ body:
     attributes:
       label: Version
       description: What version / commit hash of openmod-tracker are you using?
-      placeholder: "2025-10-31"
+      placeholder: "2025-11-04"
     validations:
       required: true

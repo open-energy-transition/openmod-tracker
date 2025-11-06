@@ -27,6 +27,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Added
+
+- more bots to be excluded in dev metrics page.
+
+### Changed
+
+- Dev metrics timeseries defaults to non-cumulative.
+
+### Fixed
+
+- duplicate entries in interaction stats.
+- fix github api method call on reaching rate limit.
+- ungraceful response to empty (NoneType) descriptions and readmes in user data.
+- ensure commits are included in dashboard dev metrics.
+- timeseries metric calculation when unselected timeseries data is needed.
+
+### Removed
+
+- "contributors" getter (we get all commits directly)
+
+## 2025-11-04
+
 ### Changed
 
 - Timeseries data from lines to bars & using gradient colour palette.

@@ -7,7 +7,7 @@ authors = ["Bryn Pickering <bryn.pickering@openenergytransition.org>", "Markus G
 channels = ["conda-forge"]
 name = "openmod-tracker"
 platforms = ["win-64", "linux-64", "osx-64", "osx-arm64", "linux-aarch64"]
-version = "2025-10-31"
+version = "2025-11-04"
 
 [tasks.get-tools]
 cmd = "python $PIXI_PROJECT_ROOT/inventory/get_tools.py inventory/output/tools.csv"

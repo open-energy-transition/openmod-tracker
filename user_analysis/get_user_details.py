@@ -76,12 +76,17 @@ def get_user_details(
             )
         except GithubException:
             readme = ""
-        user_data["readme"] = readme.strip()
+        user_data["readme"] = readme.strip() if readme is not None else ""
         # Get user's organizations
         orgs = list(user.get_orgs())
         user_data["orgs"] = ",".join(org.login for org in orgs)
         orgs_df = pd.DataFrame(
-            {"description": [org.description.strip() for org in orgs]},
+            {
+                "description": [
+                    desc.strip() if (desc := org.description) is not None else ""
+                    for org in orgs
+                ]
+            },
             index=pd.Index([org.login for org in orgs], name="orgname"),
         )
         user_df = pd.DataFrame(user_data, index=pd.Index([username], name="username"))
@@ -143,7 +148,7 @@ def cli(user_interactions: Path, outdir: Path, refresh_cache: bool):
         remaining_calls = get_rate_limit_info(gh_client)[0]
         LOGGER.warning(f"Remaining API calls: {remaining_calls}.")
         # Only add new orgs
-        org_df = org_df.drop(existing_orgs.index, axis=0, errors="ignore")
+        org_df = org_df[~org_df.index.isin(existing_orgs.index)]
         if not user_df.empty:
             user_df[USER_COLS].to_csv(user_details_path, mode="a", header=False)
         if not org_df.empty:

@@ -35,7 +35,7 @@ def get_rate_limit_info(gh_client: Github) -> tuple[int, int, int]:
         tuple: (remaining, limit, reset) where remaining is the number of requests left,
                limit is the total allowed, and reset is the reset time as a unix timestamp.
     """
-    rate = gh_client.get_rate_limit().core
+    rate = gh_client.get_rate_limit().rate
     return rate.remaining, rate.limit, int(rate.reset.timestamp())
 
 

@@ -18,6 +18,7 @@ $PYTHONPATH: null
 (ex-telecel zimbabwe): null
 '*': null
 "*\uFF65\u263E\uFF65\uFF61. \u2022 *\uFF65. \u2022 *\uFF65\u2606\uFF65": null
+'-': null
 '...': null
 1 AU: Austria
 "1 El Sarayat St.\u060C ABBASSEYA\u060C El Weili, Cairo Governorate": null
@@ -60,6 +61,7 @@ $PYTHONPATH: null
 Aachen: Germany
 Aachen (UTC+1): null
 Aachen Germany: Germany
+Aachen North Rhine-Westphalia: Germany
 Aachen, Germany: Germany
 Aalborg, Denmark: Denmark
 Aalten, The Netherlands: Netherlands
@@ -507,6 +509,8 @@ Cupertino, CA: United States
 Curitiba: Brazil
 Curitiba - PR: Brazil
 Curitiba - PR, Brazil: Brazil
+Cusco, Peru: Peru
+Cyberspace: Nigeria
 Cyprus: Cyprus
 Czech: Czechia
 Czech Republic: Czechia
@@ -540,6 +544,7 @@ Delft, the Netherlands: Netherlands
 Delhi: India
 Delhi, DL, India: India
 Delhi, India: India
+Delhi-NCR: India
 Delmenhorst: Germany
 Dengist town: null
 Denmark: Denmark
@@ -648,6 +653,7 @@ Europa: Europe
 Europe: Europe
 "Europe \U0001F1EA\U0001F1FA": Europe
 Europe/Germany/Bavaria: Germany
+European Union: Bulgaria
 "Eus\xE9bio, Cear\xE1, Brasil": Brazil
 Everett, WA, USA | Metz, France: France
 Evergem: Belgium
@@ -769,6 +775,7 @@ Glasgow: United Kingdom
 Glasgow UK: United Kingdom
 Glasgow, Scotland: United Kingdom
 Glasgow, UK: United Kingdom
+Glasgow, United Kingdom: United Kingdom
 Global: Denmark
 Gobal: India
 "Goi\xE2nia": Brazil
@@ -1129,6 +1136,7 @@ Los Angeles, California: United States
 Los Angeles, USA.: United States
 Los Mochis, Sinaloa: Mexico
 Loughborough: United Kingdom
+"Loul\xE9, Faro, Portugal": Portugal
 Louvain-la-Neuve, Belgium: Belgium
 Loveland, CO: United States
 Lower Austria: Austria
@@ -1526,6 +1534,7 @@ Portland, OR, USA: United States
 Portland, Oregon: United States
 Porto: Portugal
 Porto Alegre: Brazil
+Porto Alegre - RS: Brazil
 Porto Alegre, Brazil: Brazil
 Porto, Portugal: Portugal
 Portugal: Portugal
@@ -1940,6 +1949,7 @@ Tubbington of London: null
 Tucson: United States
 Tucson, AZ: United States
 Tucson, AZ, USA: United States
+Tulungagung Jawa Timur, Indonesia: Indonesia
 Turin, Italy: Italy
 Turkey: Turkey
 "T\xFCbingen, Germany": Germany
@@ -1973,6 +1983,7 @@ United States of America: United States
 Universe: Denmark
 University of Arizona: United States
 University of California Santa Barbara: United States
+University of Coimbra, Portugal: Portugal
 University of Macau: China
 University of Macau Avenida da Universidade Taipa, Macau, China: China
 University of North Dakota: United States
@@ -1983,6 +1994,7 @@ Upper East Side, Manhattan, NYC, NY, USA, Earth, Milky Way, Universe, [NOT KNOWN
 Upper East Side, Manhattan, NYC, NY, USA, Earth, Solar System, Orion Spur, Milky Way, Observable Universe, [NOT KNOWN YET]: null
 Uppsala, Sweden: Sweden
 Upton, NY, USA: United States
+Urbana, IL: United States
 Urdaneta City, Pangasinan, Ilocos Region, Philippines: Philippines
 Uruguay: Uruguay
 Utah: United States
@@ -2042,6 +2054,7 @@ Virginia, USA: United States
 Viroflay, France: France
 Vitebsk: Belarus
 "Vit\xF3ria, ES - Brazil": Brazil
+"Vi\xF1a del Mar, Chile": Chile
 Votorantim, Brazil: Brazil
 WA.Perth: Australia
 WRO / POL: null
@@ -2144,6 +2157,7 @@ a2a consulting, burns & mcdonnell: null
 aaas stpf fellow: null
 aalborg university: Denmark
 aalto university: Finland
+aarhus university: Denmark
 abak consulting: null
 abb: India
 academia sinica: Taiwan
@@ -2415,6 +2429,7 @@ cas, ict: null
 cas-tecnologia: Colombia
 catalyst coop: null
 catalyst-cooperative: null
+catapultlabs catapult-ai: null
 caterpillar inc.: United States
 cba invest: null
 cbroderick.me: null
@@ -2465,6 +2480,7 @@ choochoohq: null
 christmas island: Christmas Island
 chung-ang university (cau): South Korea
 chuzhou university: China
+cibb, university of coimbra: null
 cidorf engenharia: null
 ciemat: Spain
 cinemo gmbh: null
@@ -2496,6 +2512,7 @@ codeground club(codeground.club): null
 codelayerhq: null
 coder nostra gmbh: null
 coes sinac: null
+cognitivescale: null
 cohere.com: null
 coherentcat: null
 colorado school of mines: United States
@@ -2549,6 +2566,7 @@ cwp global: null
 cycle group: Canada
 cycorld: null
 da nang: Vietnam
+daedaline: null
 dalian university of technology: China
 damarseta redite: null
 damo academy, alibaba inc.: null
@@ -2572,7 +2590,9 @@ dataoptimalab - politecnico di milano: null
 datapred: null
 datarootsio: null
 datathings: Luxembourg
+datist: null
 david bourguignon conseil: null
+db systel: Germany
 dbfernverkehr: null
 dbsystel: null
 dc-opportunities: null
@@ -2830,6 +2850,7 @@ first principles advisory: null
 flatiron institute: United States
 flect co., ltd: null
 flensburg university of applied sciences: null
+flexai: null
 flibuste.net: null
 flowd gmbh: null
 flowerpilot gmbh: null
@@ -3112,6 +3133,7 @@ inovas spa: null
 inovel systeme ag: null
 input-output-hk: null
 insa toulouse: France
+insead: France
 insert robot ltd: null
 insper instituto de ensino e pesquisa: null
 instabase: null
@@ -3169,6 +3191,7 @@ jila.ai: Iraq
 jinan university: China
 jmkengineering: null
 joby: France
+joby-aviation: United States
 johns hopkins applied physics lab: United States
 johns hopkins university: United States
 journey: United States
@@ -3370,6 +3393,7 @@ mopka.ai: null
 morgan stanley: United States
 morgansolar: null
 mosek: Kazakhstan
+mosek aps: null
 moxa inc.: null
 mpei: Russia
 mpi-molgen, fu-berlin: null
@@ -3386,6 +3410,7 @@ munich: Germany
 must: Uganda
 my self e-got: null
 myown: United States
+n-side-dev: United Kingdom
 na: Namibia
 nabla: Spain
 nabla analytics ab: null
@@ -3498,6 +3523,7 @@ norwegian university of science and technology: Norway
 nottingham trent university (ntu): United Kingdom
 novus.ai: Costa Rica
 nowum: null
+npro energy: null
 nreca: Haiti
 ntb buchs: Switzerland
 ntdc pakistan: Pakistan
@@ -3759,6 +3785,7 @@ ricerca sul sistema energetico - rse: Italy
 riddle&code gmbh & rddl.io: null
 rio-tinto tradinglogic: null
 rios: Nigeria
+rise - research institutes of sweden: Sweden
 rise research institutes of sweden: Sweden
 river point technology: United States
 rmi: Italy
@@ -3771,6 +3798,8 @@ rootcode labs: null
 rootcodelabs: null
 roseautechnologies: null
 rostelecom-it: null
+royal military academy: Belgium
+rse: Australia
 rspectre communications agency: null
 ruc: Italy
 rumi inc: null
@@ -3778,6 +3807,7 @@ rutgers industrial and systems engineereing: null
 rwth aachen university: Germany
 sabahhub: null
 saci h petersen: null
+safematix, kyndryl: null
 said chihabi: null
 saint martin's university: United States
 salesforce: France
@@ -3802,6 +3832,7 @@ school of electrical engineering, shandong university: null
 schraml gmbh: Germany
 science: United Kingdom
 sciessence intl.: null
+scipopt veticare: null
 scitec: Hungary
 scm reckitt-benckiser (rb): null
 'scotland ': United Kingdom
@@ -3821,6 +3852,7 @@ senapt: null
 send lab: null
 sennheiser electronic gmbh & co. kg: null
 senscio systems: null
+sensmetry: Lithuania
 serena energy: Italy
 serlo-org: null
 sesco llc: null
@@ -4203,6 +4235,7 @@ universidade federal de uberlandia - ufu: Brazil
 universidade federal do ceara: Brazil
 universidade federal do para: Brazil
 universidade federal do rio de janeiro: Brazil
+universidade federal do rio grande do sul: Brazil
 universidade federal do vale do sao francisco: null
 universidade federal fluminense: Brazil
 universita degli studi di genova: Italy
@@ -4293,8 +4326,11 @@ university of maryland, college park: United States
 university of massachusetts amherst: United States
 university of massachusetts, amherst: United States
 university of melbourne: Australia
+university of melbourne | arpst-unimelb: null
 university of michigan: United States
 university of michigan - ann arbor: United States
+university of minnesota, twin city: null
+university of missouri: United States
 university of moratuwa: Sri Lanka
 university of new brunswick: Canada
 university of new south wales: Australia

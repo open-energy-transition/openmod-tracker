@@ -113,6 +113,9 @@ def filter_interactions(
         "codecov",
         "coveralls",
         "pre-commit-ci",
+        "pull-request-size",
+        "copilot",
+        "github-advanced-security",
     ]
     if hide_bots:
         mask = ~df["username"].str.contains(
@@ -175,6 +178,12 @@ def get_totals(df: pd.DataFrame, date_col: str, resample: str) -> pd.DataFrame:
     return totals_df
 
 
+def _reindex_to_daterange(df: pd.DataFrame, resample: str) -> pd.DataFrame:
+    return df.reindex(
+        pd.date_range(*st.session_state["date_range_slider_dev"], freq=resample)
+    )
+
+
 def _plot_timeseries(
     df: pd.DataFrame,
     color_map: dict,
@@ -232,12 +241,24 @@ def plot_totals_metrics(
     """
     resample = f"1{RESOLUTION_CONVERTER[resolution]}"
     totals_df = get_totals(
-        df[df.subtype.isnull() | (df.subtype == "author")], "created", resample
+        df[
+            df.interaction.isin(["fork", "commit", "stargazer"])
+            | (df.interaction.isin(["issue", "pr"]) & (df.subtype == "author"))
+        ],
+        "created",
+        resample,
     )
+    totals_df = totals_df.assign(
+        **{col: 0 for col in set(TOTALS_METRICS).difference(totals_df.columns)}
+    )
+    totals_df = _reindex_to_daterange(totals_df, resample)
     if cumulative:
-        totals_df = totals_df.cumsum()
+        totals_df_filled = totals_df.cumsum().ffill()
+    else:
+        totals_df_filled = totals_df.fillna(0)
+
     plot_df = (
-        totals_df.stack()
+        totals_df_filled.stack()
         .rename_axis(index=["Date", "Interaction"])
         .to_frame("Count")
         .reset_index()
@@ -266,8 +287,9 @@ def plot_open_metrics(df: pd.DataFrame, resolution: str, color_map: dict) -> go.
     resample = f"1{RESOLUTION_CONVERTER[resolution]}"
     _df = df.loc[df["interaction"].isin(["issue", "pr"]) & (df["subtype"] == "author")]
     _df.loc[:, "closed"] = _df["closed"].fillna(_df["merged"])
-    created_df = get_totals(_df, "created", resample).cumsum()
-    closed_df = get_totals(_df, "closed", resample).cumsum()
+    _df_unique = _df.drop_duplicates(subset=["number"])
+    created_df = get_totals(_df_unique, "created", resample).cumsum()
+    closed_df = get_totals(_df_unique, "closed", resample).cumsum()
     closed_df_full = closed_df.reindex(created_df.index).ffill().fillna(0)
     open_df = (
         created_df.subtract(closed_df_full)
@@ -290,10 +312,21 @@ def plot_open_metrics(df: pd.DataFrame, resolution: str, color_map: dict) -> go.
             + f" {subtype.title()}s"
         )
         extra_dfs.append(_df)
-
+    all_df = _reindex_to_daterange(pd.concat([open_df, *extra_dfs], axis=1), resample)
+    all_df = all_df.assign(
+        **{col: 0 for col in set(OPEN_METRICS).difference(all_df.columns)}
+    )
+    all_df = all_df.fillna(
+        {
+            "Open Issues": all_df["Open Issues"].ffill(),
+            "Open PRs": all_df["Open PRs"].ffill(),
+            "New Issue Comments": 0,
+            "New PR Comments": 0,
+            "New PR Reviews": 0,
+        }
+    )
     plot_df = (
-        pd.concat([open_df, *extra_dfs], axis=1)
-        .stack()
+        all_df.stack()
         .rename_axis(index=["Date", "Interaction"])
         .to_frame("Count")
         .reset_index()
@@ -322,6 +355,7 @@ def daily_interactions_timeline(df: pd.DataFrame):
     st.markdown("""
     These timelines visualise key development metrics for the selected repositories over time.
     On changing the date range, cumulative metrics reset to zero at the start of the selected period.
+    You can click on legend items to toggle visibility of specific metrics.
     """)
     # Metric options split into two groups
     col1, col2, _ = st.columns([1, 1, 2])
@@ -335,7 +369,7 @@ def daily_interactions_timeline(df: pd.DataFrame):
     )
 
     cumulative = col2.toggle(
-        "Toggle cumulative totals", value=True, key="cumulative_toggle"
+        "Toggle cumulative totals", value=False, key="cumulative_toggle"
     )
 
     # Define color mapping for all metrics
@@ -681,7 +715,6 @@ def main(df_vis: pd.DataFrame):
     min_date = filtered_interactions[["merged", "created", "closed"]].min().min().date()
     max_date = filtered_interactions[["merged", "created", "closed"]].max().max().date()
 
-    default_range = (min_date, max_date)
     initial_min = (max_date - pd.DateOffset(years=1)).date()
     current_range = st.session_state.get(
         "selected_date_range_dev", (max(min_date, initial_min), max_date)
@@ -697,37 +730,34 @@ def main(df_vis: pd.DataFrame):
         help="Filter interactions by date range. Adjust the slider to focus on a specific time period.",
     )
 
-    if default_range != (start_date, end_date):
-        # Update filtered interactions based on date range
-        filtered_interactions = date_filter(
-            filtered_interactions, (str(start_date), str(end_date))
-        )
+    time_filtered_interactions = date_filter(
+        filtered_interactions, (str(start_date), str(end_date))
+    )
+
     # Pass filtered data to visualisation functions
-    if filtered_interactions.empty:
+    if time_filtered_interactions.empty:
         st.warning("No interaction data available for the selected filters.")
         return
 
     if not all_tools_toggle and selected_tools:
         # Only pass global data if specific tools are selected
-        global_interactions = filter_interactions(
+        filtered_global_interactions = filter_interactions(
             df_vis,
             repo_to_tool_map,
             None,  # No tool filter for global data
             hide_bots=hide_bots,
         )
-        if default_range != current_range:
-            # Update filtered interactions based on date range
-            global_interactions = date_filter(
-                global_interactions, (str(start_date), str(end_date))
-            )
+        time_filtered_global_interactions = date_filter(
+            filtered_global_interactions, (str(start_date), str(end_date))
+        )
 
     else:
-        global_interactions = None
+        time_filtered_global_interactions = None
 
     daily_interactions_timeline(filtered_interactions)
-    top_users_display(filtered_interactions)
-    resolution_histograms(filtered_interactions, global_interactions)
-    engagement_histograms(filtered_interactions, global_interactions)
+    top_users_display(time_filtered_interactions)
+    resolution_histograms(time_filtered_interactions, time_filtered_global_interactions)
+    engagement_histograms(time_filtered_interactions, time_filtered_global_interactions)
 
 
 if __name__ == "__main__":

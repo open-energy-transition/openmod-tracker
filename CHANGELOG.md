@@ -23,9 +23,9 @@ Release headings should be of the form:
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+and this project adheres to [Calendar Versioning](https://calver.org/).
 
-## Unreleased
+## 2025-11-06
 
 ### Added
 
@@ -34,11 +34,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Dev metrics timeseries defaults to non-cumulative.
+- Automated stats updater to run once a month and to include user data updates as well.
 
 ### Fixed
 
 - duplicate entries in interaction stats.
-- fix github api method call on reaching rate limit.
+- github api method call on reaching rate limit.
 - ungraceful response to empty (NoneType) descriptions and readmes in user data.
 - ensure commits are included in dashboard dev metrics.
 - timeseries metric calculation when unselected timeseries data is needed.

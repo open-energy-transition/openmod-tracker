@@ -35,99 +35,18 @@ The result of the analysis is available in our [online dashboard](https://openmo
 - Fetches repository interactions and interacting user data using the [GitHub REST API](https://docs.github.com/en/rest) and classifies users based on string matching.
 - Visualises ESM tool statistics in a [Streamlit](https://streamlit.io/)-powered dashboard: <https://openmod-tracker.org/>
 
-## Installation
+## Add a tool
 
-1. Clone this repository
-1. Install [pixi](https://pixi.sh/latest/).
-1. Install all project dependencies:
+If you're looking to add a tool to the inventory, you can do one (or more) of three things:
 
-   ```sh
-   pixi install
-   ```
+1. [create an issue](https://github.com/open-energy-transition/openmod-tracker/issues/new?template=TOOLS.yml).
+2. [directly edit our pre-defined list of tools](https://github.com/open-energy-transition/openmod-tracker/edit/main/inventory/pre_compiled_esm_list.csv) to include yours, then open a Pull Request with that change.
+3. add your tool to one of the [upstream inventories](#features) from which we collate our final tool list.
 
-## Serve app locally
+Note that your tool may not be appropriate for our inventory.
+For examples of tools we have excluded from upstream repositories, see [our exclusion list](https://github.com/open-energy-transition/openmod-tracker/blob/main/inventory/exclusions.csv).
 
-To serve the streamlit app, call `pixi run -e app serve` from the command line.
-
-## Test
-
-You can run our minimal test suite by calling `pixi run test`.
-
-## Troubleshooting
-
-If the [development version dashboard](https://openmod-tracker.streamlit.app/) is not loading then you can try a few things:
-
-1. Delete the site data for <https://openmod-tracker.streamlit.app> in your browser and refresh the page.
-1. Clone this repository locally and run `pixi run test` from the terminal (having followed our [installation instructions](#installation)).
-1. If the tests fail, you can debug by setting [traces/breakpoints](https://docs.python.org/3/library/pdb.html) in the app python scripts (`website/**/*.py`) and then run `pixi run -e app serve` in the terminal.
-1. If the tests pass and you are a repository maintainer, you can reboot the app from [the streamlit dashboard](https://share.streamlit.io/).
-
-## Refreshing data
-
-Data refreshes are necessary when changing the inventory source code and are recommended at periodic intervals to capture upstream changes.
-These are automated with a Github action but you can force a manual update locally following the steps below.
-
->[!NOTE]
->The below steps leverage [pixi tasks](https://pixi.sh/dev/workspace/advanced_tasks/) which will run all steps in the sequence if there have been changes to the source code or it is the first time you are running the command.
->If you want to just run one step in isolation you will need to call the Python script directly, e.g., `pixi run python inventory/get-stats.py inventory/output/filtered.csv inventory/output/stats.csv`.
->[User statistics](#user-stats) runs will require extra dependencies provided by the "geo" environment, e.g., `pixi run -e geo python user_analysis/classify_users.py`.
->See `pixi.toml` for the command to run for each step.
-
->[!WARNING]
->Data refreshes _override_ the entire dataset.
->This can be time consuming, particularly when refreshing [user statistics](#user-stats) which will take hours.
-
-### Tool stats
-
-The model inventory and associated statistics can be updated by calling `pixi run get-stats`.
-This will get tools from the various upstream inventories, filter them based on [our requirements](#our-data-processing-approach), and then get stats from ecosyste.ms and by speculatively querying known documentation sites.
-
-### User stats
-
-All user statistics can be updated by calling `pixi run classify-users`.
-However, some steps are quite time consuming, so you may prefer to explicitly run them in turn.
-
-The repository user interactions can be updated by calling `pixi run get-repo-users`.
-This gets _all_ repository data from scratch as the [PyGitHub](https://github.com/PyGithub/PyGithub) API does not allow us to only access the most recent changes.
-Therefore, it can be very time consuming.
-
-The repository user details can be updated by calling `pixi run get-user-details`.
-It will run `get-repo-users` first if this hasn't already been run.
-This will append `inventory/output/user_details.csv` with any new users listed in `inventory/output/user_interactions.csv`.
-As we have already prepared the initial set of users, this should be relatively quick when refreshing.
-
-Finally, our heuristic user classification approach can be applied to the updated user details by calling `pixi run classify-users`.
-
-### Code quality assessment
-
-We manage forks of all GitHub repositories within our own GitHub organisation in order to have the necessary permissions to undertake code quality assessments.
-
-#### Forking Repositories
-
-Running `pixi run python code_quality/fork_repos.py` forks GitHub repositories to the specified organization and keeps existing forks in sync with their upstream repositories.
-An appropriate GitHub token for the organisation, with repository "Administrator" and "Contents" read/write access, must be stored as `GITHUB_TOKEN` in a local `.env` file at runtime.
-
-The script will:
-
-1. Read repository information from the CSV file (which must contain an `html_url` column with GitHub repository URLs)
-2. Check if each repository is already forked to the organization
-3. Fork repositories that haven't been forked yet
-4. Sync existing forks with their upstream repositories
-5. Log all operations to the specified log file
-
-#### Running code quality assessment
-
-Running `pixi run python code_quality/sonarcloud.py create openmod-tracker` will create SonarQube cloud platform projects for each of the forked repositories.
-For newly created projects, you will then need to trigger an assessment manually on SonarQube as there is no way to do so via the API.
-Clicking on the project name is sufficient to start a project.
-
-Running `pixi run python code_quality/sonarcloud.py get-metrics openmod-tracker code_quality/output/metrics.csv` will update the code quality statistics for all existing SonarQube cloud platform projects.
-
->[!NOTE]
->Only Python and C projects can be analysed automatically by SonarQube.
->Stats will therefore not be available for other other project types.
-
-### Our data processing approach
+## Our data processing approach
 
 We collect tools listed in the following inventories:
 
@@ -165,7 +84,98 @@ Further to data from <https://ecosyste.ms>, we rely on other sources to (1) link
    Direct use of the GitHub API is time intensive due to hourly request limits.
    Therefore, this data (e.g., informing the rate of user interactions over the past 6 months) is updated less frequently than other tools stats.
 
-## Release guideline
+## Development
+
+### Installation
+
+1. Clone this repository
+1. Install [pixi](https://pixi.sh/latest/).
+1. Install all project dependencies:
+
+   ```sh
+   pixi install
+   ```
+
+### Serve app locally
+
+To serve the streamlit app, call `pixi run -e app serve` from the command line.
+
+### Test
+
+You can run our minimal test suite by calling `pixi run test`.
+
+### Troubleshooting
+
+If the [development version dashboard](https://openmod-tracker.streamlit.app/) is not loading then you can try a few things:
+
+1. Delete the site data for <https://openmod-tracker.streamlit.app> in your browser and refresh the page.
+1. Clone this repository locally and run `pixi run test` from the terminal (having followed our [installation instructions](#installation)).
+1. If the tests fail, you can debug by setting [traces/breakpoints](https://docs.python.org/3/library/pdb.html) in the app python scripts (`website/**/*.py`) and then run `pixi run -e app serve` in the terminal.
+1. If the tests pass and you are a repository maintainer, you can reboot the app from [the streamlit dashboard](https://share.streamlit.io/).
+
+### Refreshing data
+
+Data refreshes are necessary when changing the inventory source code and are recommended at periodic intervals to capture upstream changes.
+These are automated with a Github action which runs once a month but you can force a manual update locally following the steps below.
+
+>[!NOTE]
+>The below steps leverage [pixi tasks](https://pixi.sh/dev/workspace/advanced_tasks/) which will run all steps in the sequence if there have been changes to the source code or it is the first time you are running the command.
+>If you want to just run one step in isolation you will need to call the Python script directly, e.g., `pixi run python inventory/get-stats.py inventory/output/filtered.csv inventory/output/stats.csv`.
+>See `pixi.toml` for the command to run for each step.
+
+#### Tool stats
+
+The model inventory and associated statistics can be updated by calling `pixi run get-docs`.
+This will get tools from the various upstream inventories, filter them based on [our requirements](#our-data-processing-approach), and then get stats from ecosyste.ms and by speculatively querying known documentation sites.
+
+#### User stats
+
+All user statistics can be updated by calling `pixi run classify-users`.
+
+The repository user interactions can be updated by calling `pixi run get-repo-users`.
+This gets _all_ repository data from scratch as the [PyGitHub](https://github.com/PyGithub/PyGithub) API does not allow us to only access the most recent changes.
+Therefore, it can be very time consuming.
+
+The repository user details can be updated by calling `pixi run get-user-details`.
+It will run `get-repo-users` first if this hasn't already been run.
+This will append `inventory/output/user_details.csv` with any new users listed in `inventory/output/user_interactions.csv`.
+As we have already prepared the initial set of users, this should be relatively quick when refreshing.
+
+Finally, our heuristic user classification approach can be applied to the updated user details by calling `pixi run classify-users`.
+
+#### Code quality assessment
+
+>[!NOTE]
+>This feature is currently under review for being added to the dashboard.
+
+We manage forks of all GitHub repositories within our own GitHub organisation in order to have the necessary permissions to undertake code quality assessments.
+
+##### Forking Repositories
+
+Running `pixi run python code_quality/fork_repos.py` forks GitHub repositories to the specified organization and keeps existing forks in sync with their upstream repositories.
+An appropriate GitHub token for the organisation, with repository "Administrator" and "Contents" read/write access, must be stored as `GITHUB_TOKEN` in a local `.env` file at runtime.
+
+The script will:
+
+1. Read repository information from the CSV file (which must contain an `html_url` column with GitHub repository URLs)
+2. Check if each repository is already forked to the organization
+3. Fork repositories that haven't been forked yet
+4. Sync existing forks with their upstream repositories
+5. Log all operations to the specified log file
+
+##### Running code quality assessment
+
+Running `pixi run python code_quality/sonarcloud.py create openmod-tracker` will create SonarQube cloud platform projects for each of the forked repositories.
+For newly created projects, you will then need to trigger an assessment manually on SonarQube as there is no way to do so via the API.
+Clicking on the project name is sufficient to start a project.
+
+Running `pixi run python code_quality/sonarcloud.py get-metrics openmod-tracker code_quality/output/metrics.csv` will update the code quality statistics for all existing SonarQube cloud platform projects.
+
+>[!NOTE]
+>Only Python and C projects can be analysed automatically by SonarQube.
+>Stats will therefore not be available for other other project types.
+
+### Release guideline
 
 We follow calendar versioning (CalVer) in this project.
 To deploy new versions of the dashboard to <https://openmod-tracker.org>, follow these steps:

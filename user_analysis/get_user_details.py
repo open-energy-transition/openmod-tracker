@@ -93,8 +93,17 @@ def get_user_details(
         return user_df, orgs_df
     except RateLimitExceededException:
         LOGGER.warning("Rate limit exceeded while fetching user details.")
-        time.sleep(60)
-        return pd.DataFrame(), pd.DataFrame()
+        if wait == 0:
+            return get_user_details(username, repos, gh_client, 120)
+        else:
+            return pd.DataFrame(), pd.DataFrame()
+    except GithubException as e:
+        if e.status == 429 and wait == 0:
+            LOGGER.warning("Fair use limit exceeded while fetching user details.")
+            return get_user_details(username, repos, gh_client, 120)
+        else:
+            LOGGER.warning(f"Failed to fetch user details for {username}: {e}")
+            return pd.DataFrame(), pd.DataFrame()
     except Exception as e:
         LOGGER.warning(f"Failed to fetch user details for {username}: {e}")
         return pd.DataFrame(), pd.DataFrame()

@@ -1677,6 +1677,7 @@ San Jose CA, Boston MA: null
 San Jose, CA: United States
 San Jose, CA, USA: United States
 San Jose, Costa Rica: Costa Rica
+"San Jos\xE9": United States
 "San Jos\xE9, California": United States
 San Juan, Argentina: Argentina
 San Juan, PR: United States
@@ -1878,6 +1879,7 @@ Taipei City, Taiwan: Taiwan, Province of China
 Taipei, Taiwan: Taiwan, Province of China
 Taiwan: Taiwan, Province of China
 Tallinn, Estonia: Estonia
+Tamil Nadu: India
 Tauranga, Bay of Plenty, New Zealand: New Zealand
 Tehran: Iran
 Tehran - Iran: Iran, Islamic Republic of
@@ -4172,6 +4174,7 @@ tyba: Palestinian Territory
 tyba energy: null
 u. alaska fairbanks: United States
 ubc: Canada
+ubs: United States
 uc: Australia
 uc merced: United States
 uc3m: Spain
@@ -4459,6 +4462,7 @@ wedoco: null
 wenergie: null
 western spark: Sri Lanka
 weyland-yutani corp.: null
+wildfire interdisciplinary research center: null
 wildgrid: null
 wispo-pop: null
 witteveenbos: null

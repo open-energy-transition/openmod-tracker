@@ -613,9 +613,9 @@ def extract_processing_approach_from_readme(readme: Path, header: str) -> str:
     """
     text = markdown.markdown(readme.read_text())
     soup = BeautifulSoup(text, "html.parser")
-    h3 = soup.find("h3", string=header)
+    h2 = soup.find("h2", string=header)
     all_html = ""
-    for sib in h3.find_next_siblings():
+    for sib in h2.find_next_siblings():
         if sib.name in ["h1", "h2", "h3"]:
             break
         else:

@@ -4,9 +4,39 @@
 #
 # SPDX-License-Identifier: CC-BY-4.0
 
-# yaml-language-server: $schema=https://raw.githubusercontent.com/open-energy-transition/openmod-features/d831de9/schema/use-case-schema.yaml
+# yaml-language-server: $schema=https://raw.githubusercontent.com/open-energy-transition/openmod-features/c87f4ce/schema/use-case-schema.yaml
 
-assumptions: []
+assumptions:
+- >-
+  The optimization will be run with perfect foresight over the full model horizon, which spans multiple years/decades.
+- >-
+  Generator capacities are fixed by the integrated resource plan (IRP) at each of the model investment years.
+- >-
+  Assets are grouped and only their dispatch, not their unit commitment is represented.
+- >-
+  Contracted operating arrangements and regulated limits (e.g. on emissions) defined in the IRP are applied.
+- >-
+  Non-linear transmission characteristics need to be defined, using piecewise linearisation.
+- >-
+  Transmission between zones is represented using AC optimal power flow.
+- >-
+  The transmission network is accurately represented, albeit aggregated into larger zones.
+- >-
+  Transmission limits are defined by power limits (grid transfer capacities).
+- >-
+  There is sufficient computational capacity to run the model with defined spatio-temporal scope and resolution without employing decomposition techniques.
+- >-
+  Investment and storage asset horizon edge effects are ignored.
+- >-
+  The system supply-demand balance is relaxed. Load shedding is limited with constraints on EENS and LOLP applied alongside a value of lost load (VOLL).
+- >-
+  User-defined decision variables may be required to enable one-off transmission system quirks to be suitably constrained.
+- >-
+  Users require a GUI to navigate model preparation, optimisation, and analysis.
+- >-
+  Different weather and demand years are used to stress-test the model but not as a formal Monte Carlo analysis.
+- >-
+  The output data must be formatted appropriately for regulatory approval.
 features:
   asset__candidates:
     converters:

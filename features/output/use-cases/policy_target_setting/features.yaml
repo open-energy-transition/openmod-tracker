@@ -4,9 +4,55 @@
 #
 # SPDX-License-Identifier: CC-BY-4.0
 
-# yaml-language-server: $schema=https://raw.githubusercontent.com/open-energy-transition/openmod-features/d831de9/schema/use-case-schema.yaml
+# yaml-language-server: $schema=https://raw.githubusercontent.com/open-energy-transition/openmod-features/c87f4ce/schema/use-case-schema.yaml
 
-assumptions: []
+assumptions:
+- >-
+  The optimization will be run with perfect foresight over the full model horizon, which spans multiple decades at 5 year resolution.
+- >-
+  Spatial scope is national and single node.
+  Could be multinode at national resolution if multinational but not chosen here.
+- >-
+  Year is represented by representative time slices (heuristics: day/night/peak/season).
+  Could also be representative periods based on automated timeseries clustering, but not chosen here.
+- >-
+  Storage aggregated.
+  Need mathematical representation to handle inter-slice storage.
+- >-
+  Assets are always grouped.
+- >-
+  Sub-group assets by their costs/resource (pre-processed).
+  Includes e.g. wind techs, sources of fuels etc. Group assets back up in postprocessing.
+- >-
+  User constraints/variables are necessary to limit total emissions etc. for subsets of the system being defined.
+- >-
+  No representation of complex asset characteristics.
+- >-
+  Flexible demand is necessary.
+- >-
+  Endogenous learning (piecewise investment cost) not used as it distorts the model.
+- >-
+  Grid-transfer capacities used for multi-node models.
+- >-
+  Multi-carrier, including electricity, hydrogen, natural gas, heat, etc.
+- >-
+  Demands are end-use services (e.g. "vehicle kms" for transport demands).
+- >-
+  Extraction of fossils are represented as assets, competing with e.g. imports.
+- >-
+  Sensitivity scenarios will be conducted but detailed sensitivity analysis/stochastic optimisation is beyond the scope of this study.
+- >-
+  Outages represented by a reserve margin of dispatchable capacity.
+  Assets also have an availability factor.
+- >-
+  GUI is necessary, particularly for outputs.
+- >-
+  Marginal/shadow prices required to compare market prices between scenarios.
+- >-
+  Technology-specific discount rates are used to represent consumer preferences on payback periods (a.k.a. hurdle rates).
+- >-
+  Demand elasticity is represented in loads.
+
 features:
   asset__candidates:
     converters:

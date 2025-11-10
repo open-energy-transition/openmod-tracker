@@ -529,7 +529,6 @@ def main(
     height = (
         sum(len(v) + 1 for v in next(iter(filtered_tools_data.values())).values()) * 40
     )  # Rough estimate: 40px per feature row
-    st.write(height)
     components.html(table_html, height=height, scrolling=False)
 
 

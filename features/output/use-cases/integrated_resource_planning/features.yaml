@@ -4,9 +4,50 @@
 #
 # SPDX-License-Identifier: CC-BY-4.0
 
-# yaml-language-server: $schema=https://raw.githubusercontent.com/open-energy-transition/openmod-features/d831de9/schema/use-case-schema.yaml
+# yaml-language-server: $schema=https://raw.githubusercontent.com/open-energy-transition/openmod-features/c87f4ce/schema/use-case-schema.yaml
 
-assumptions: []
+assumptions:
+- >-
+  The optimization will be run with perfect foresight over the full model horizon, which spans multiple years/decades.
+- >-
+  Investment decisions may occur once every N (> 1) years.
+   Within a year, the timeseries is contiguous but may be resampled.
+- >-
+  Large assets (e.g. thermal power plants, hydro) are individually resolved;
+  distributed assets (e.g. wind & solar) are grouped per project or region.
+- >-
+  Large assets are represented with unit commitment due to operating constraints which require resolving (ramping, uptimes, run ups. etc.).
+- >-
+  Hydro cascading and technology chaining internal to power plants is not represented.
+- >-
+  Generator contract arrangements (e.g. min/max dispatch obligations) are represented.
+- >-
+  Technology economies of scale and bidding levels are represented.
+- >-
+  Hydro storage levels are set by the model at the start/end of the time horizon.
+- >-
+  Demand-side flexibility is represented by time-shiftable loads.
+- >-
+  LOLP/EENS constraints are not explicitly set;
+  the standard system balance constraint will set this to effectively zero energy not served.
+- >-
+  Curtailment rates are calculated in post-processing.
+- >-
+  Robustness and MGA techniques will not be employed.
+  Sensitivity analysis will be limited to a small set of tests and therefore not require monte carlo techniques.
+- >-
+  There is sufficient computational capacity to run the model with defined spatio-temporal scope and resolution without employing decomposition techniques.
+- >-
+  transmission line and storage charge/discharge losses are not defined, so "unphysical" energy destruction does not need to be mitigated against.
+- >-
+  User-defined constraints are necessary to represent policy targets (e.g. systemwide limits, possibly only affecting a subset of technologies).
+- >-
+  Users require a GUI to navigate model preparation, optimisation, and analysis.
+- >-
+  The gas distribution network is resolved alongside the electricity transmission network.
+- >-
+  Transmission between regions is represented using DC optimal power flow.
+
 features:
   asset__candidates:
     converters:

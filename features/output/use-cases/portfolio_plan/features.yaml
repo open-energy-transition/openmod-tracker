@@ -4,9 +4,31 @@
 #
 # SPDX-License-Identifier: CC-BY-4.0
 
-# yaml-language-server: $schema=https://raw.githubusercontent.com/open-energy-transition/openmod-features/d831de9/schema/use-case-schema.yaml
+# yaml-language-server: $schema=https://raw.githubusercontent.com/open-energy-transition/openmod-features/c87f4ce/schema/use-case-schema.yaml
 
-assumptions: []
+assumptions:
+- >-
+  The optimization will be run over individual years both with perfect foresight (capacity planning) and with myopic foresight over days or weeks within the year (operating revenue analysis).
+- >-
+  Financial and operational horizon edge effects must be considered as the portfolio includes storage devices.
+- >-
+  No timeseries simplification is undertaken because the spatial and generator scope is limited to cover only the assets in the portfolio.
+- >-
+  The rest of the system develops according to the scenarios set out by the integrated resource plan (IRP) and network development plan (NDP) and is resolved coarsely.
+- >-
+  Portfolio assets are resolved individually with unit commitment characteristics (ramp rate, up/down-time, etc.) and non-linear operating and financial considerations that are piecewise linearised.
+- >-
+  Hydro cascading is represented, as well as asset linking within power plants, where those power plants have multiple possible asset configurations.
+- >-
+  Transmission from assets to the rest of the system is represented using AC optimal power flow, is limited by PTDF and considers phase angles.
+- >-
+  Available investment limits the total capacity of new assets that can be feasibly purchased.
+- >-
+  Weather and market uncertainties are mitigated against using two-stage stochastic optimisation.
+- >-
+  Externalities (loads, changes to asset capacities beyond the current portfolio) must be forecast over the next 10-15 years.
+- >-
+  Profit-maximisation must be represented in how the portfolio is committed and dispatched in the day-ahead and intra-day markets, which requires competitors and their perceived risk appetite to be resolved.
 features:
   asset__candidates:
     converters:

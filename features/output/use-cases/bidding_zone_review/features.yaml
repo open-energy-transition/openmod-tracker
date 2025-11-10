@@ -4,9 +4,28 @@
 #
 # SPDX-License-Identifier: CC-BY-4.0
 
-# yaml-language-server: $schema=https://raw.githubusercontent.com/open-energy-transition/openmod-features/d831de9/schema/use-case-schema.yaml
+# yaml-language-server: $schema=https://raw.githubusercontent.com/open-energy-transition/openmod-features/c87f4ce/schema/use-case-schema.yaml
 
-assumptions: []
+assumptions:
+- >-
+  The optimization will be run over individual years with myopic foresight over days or weeks within the year.
+- >-
+  Available transmission lines are set by scenarios from the network development plan (NDP), are limited between bidding zones using power transfer distribution factors, and are represented using security-constrained AC optimal power flow.
+- >-
+  Generator capacities are fixed by the integrated resource plan (IRP).
+- >-
+  Assets are resolved individually where possible and their unit commitment as well as economic dispatch is represented with the aim of accurately representing the day-ahead and intra-day markets.
+  This may require iterating between an optimisation and simulation run to resolve bidding decisions.
+- >-
+  Only the power system is considered.
+- >-
+  The system supply-demand balance is relaxed.
+  Load shedding is limited with constraints on EENS and LOLP applied alongside a value of lost load (VOLL).
+- >-
+  Resilience to weather uncertainty is addressed using multi-stage stochastic optimisation applied across rolling horizon windows.
+  This may require decomposing the problem into different optimisation problems that are iterated upon until convergence.
+- >-
+  Users require a GUI to navigate model preparation, optimisation, and analysis.
 features:
   asset__candidates:
     converters:

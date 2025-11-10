@@ -521,11 +521,16 @@ def main(
     st.markdown("---")
 
     # Generate and display the collapsible table
-    # The table will auto-detect Streamlit's theme using JavaScript
+    # Use a very large height to accommodate fully expanded table
+    # The iframe will auto-resize via JavaScript postMessage
     table_html = generate_collapsible_table(
         filtered_tools_data, count_unsourced, count_dev, feature_schema, ""
     )
-    components.html(table_html, height=3000, scrolling=False)
+    height = (
+        sum(len(v) + 1 for v in next(iter(filtered_tools_data.values())).values()) * 40
+    )  # Rough estimate: 40px per feature row
+    st.write(height)
+    components.html(table_html, height=height, scrolling=False)
 
 
 if __name__ == "__main__":

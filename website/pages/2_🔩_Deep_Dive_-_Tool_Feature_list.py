@@ -217,6 +217,266 @@ def format_feature_name(feature: str) -> str:
     return feature.replace("_", " ").title()
 
 
+def main_use_case_comparison(
+    tools_data: dict[str, dict], use_cases_data: dict[str, dict], feature_schema: dict
+):
+    """Use case comparison view - show features as rows, use cases as columns."""
+    st.sidebar.header("⚙️ Filter Options")
+
+    # 1. Tool selection (single tool)
+    st.sidebar.subheader("1. Select Tool")
+    all_tools = sorted(tools_data.keys())
+    tool_options = ["None (show requirements only)"] + all_tools
+    selected_tool = st.sidebar.selectbox(
+        "Choose a tool to evaluate:",
+        options=tool_options,
+        help="Select which tool to evaluate against use case requirements, or 'None' to only show requirements",
+    )
+
+    # Handle None selection
+    if selected_tool == "None (show requirements only)":
+        selected_tool = None
+
+    # 2. Use case selection
+    st.sidebar.subheader("2. Select Use Cases")
+    all_use_cases = sorted(use_cases_data.keys())
+    selected_use_cases = st.sidebar.multiselect(
+        "Choose use cases to compare:",
+        options=all_use_cases,
+        default=all_use_cases,
+        help="Select which use cases to include in the comparison",
+    )
+
+    if not selected_use_cases:
+        st.warning("⚠️ Please select at least one use case from the sidebar.")
+        return
+
+    # Legend in sidebar
+    st.sidebar.markdown(
+        f"""
+        ---
+        ## 📖 Legend
+
+        **Match Status:**
+
+        - <span style="color: {COLOR_SCHEME["y"]["sourced"]};">✓</span> Tool has feature (implemented)
+        - <span style="color: {COLOR_SCHEME["dev"]["sourced"]};">⎌</span> Tool has feature (in development)
+        - <span style="color: {COLOR_SCHEME["n"]["sourced"]};">✕</span> Tool lacks feature (not implemented)
+        - ○ Use case does not require this feature
+        """,
+        unsafe_allow_html=True,
+    )
+
+    # Main content
+    st.write(
+        f"Evaluating **{selected_tool}** against **{len(selected_use_cases)}** use cases: {', '.join(sorted(selected_use_cases))}"
+    )
+
+    st.write(
+        "Click on 'Overall' to expand all categories. Click on category names to expand/collapse detailed features. "
+        "Color coding: Green = tool has feature, Blue = in development, Red = tool lacks feature, Gray = not required by use case."
+    )
+
+    st.markdown("---")
+
+    # Generate and display the pivoted table
+    table_html = generate_use_case_comparison_table(
+        tools_data[selected_tool] if selected_tool else None,
+        {uc: use_cases_data[uc] for uc in selected_use_cases},
+        feature_schema,
+    )
+    height = 600  # Fixed height for iframe
+    components.html(table_html, height=height, scrolling=True)
+
+
+def generate_use_case_comparison_table(
+    tool_features: dict | None,
+    use_cases_data: dict[str, dict],
+    schema: dict[str, dict] | None = None,
+) -> str:
+    """Generate HTML table comparing a single tool against multiple use cases.
+
+    Args:
+        tool_features: Features dictionary for a single tool, or None to show only requirements
+        use_cases_data: Dictionary of use case data (filtered to selected use cases)
+        schema: Feature schema with descriptions for tooltips
+
+    Returns:
+        HTML string with the comparison table
+    """
+    # Setup Jinja2 environment
+    env = Environment(loader=FileSystemLoader(Path(__file__).parent))
+    env.filters["format_category_name"] = format_category_name
+    env.filters["format_feature_name"] = format_feature_name
+
+    # Get theme
+    theme = st.context.theme.type
+
+    # Prepare data structure
+    use_case_names = sorted(use_cases_data.keys())
+
+    # Get all categories from all use cases if no tool selected
+    if tool_features is None:
+        all_categories = set()
+        for uc_data in use_cases_data.values():
+            all_categories.update(uc_data["features"].keys())
+        categories = sorted(all_categories)
+    else:
+        categories = list(tool_features.keys())
+
+    # Build data structure for template
+    categories_data = []
+    for cat_idx, category in enumerate(categories):
+        category_id = f"cat_{cat_idx}"
+        category_desc = ""
+        if schema and category in schema:
+            category_desc = schema[category].get("description", "")
+
+        features_data = []
+
+        # Get all features for this category
+        if tool_features is not None:
+            # Tool selected: iterate through tool's features
+            category_features = tool_features.get(category, {})
+            for feature_name, feature_value in category_features.items():
+                feature_desc = ""
+                if schema and category in schema and "members" in schema[category]:
+                    feature_desc = schema[category]["members"].get(feature_name, "")
+
+                # Get tool's implementation status
+                tool_status = feature_value.get("value", "n")
+
+                # Get use case requirements
+                use_case_statuses = {}
+                for uc_name in use_case_names:
+                    uc_features = use_cases_data[uc_name]["features"]
+                    if (
+                        category in uc_features
+                        and feature_name in uc_features[category]
+                    ):
+                        required = (
+                            uc_features[category][feature_name].get("value", "n") == "y"
+                        )
+                    else:
+                        required = False
+                    use_case_statuses[uc_name] = {
+                        "required": required,
+                        "tool_status": tool_status if required else "not_required",
+                    }
+
+                features_data.append(
+                    {
+                        "name": feature_name,
+                        "description": feature_desc,
+                        "statuses": use_case_statuses,
+                    }
+                )
+        else:
+            # No tool selected: collect all features from use cases
+            all_features_in_category = set()
+            for uc_data in use_cases_data.values():
+                if category in uc_data["features"]:
+                    all_features_in_category.update(
+                        uc_data["features"][category].keys()
+                    )
+
+            for feature_name in sorted(all_features_in_category):
+                feature_desc = ""
+                if schema and category in schema and "members" in schema[category]:
+                    feature_desc = schema[category]["members"].get(feature_name, "")
+
+                # Get use case requirements (no tool status)
+                use_case_statuses = {}
+                for uc_name in use_case_names:
+                    uc_features = use_cases_data[uc_name]["features"]
+                    if (
+                        category in uc_features
+                        and feature_name in uc_features[category]
+                    ):
+                        required = (
+                            uc_features[category][feature_name].get("value", "n") == "y"
+                        )
+                    else:
+                        required = False
+                    use_case_statuses[uc_name] = {
+                        "required": required,
+                        "tool_status": "no_tool",  # Special status for no tool selected
+                    }
+
+                features_data.append(
+                    {
+                        "name": feature_name,
+                        "description": feature_desc,
+                        "statuses": use_case_statuses,
+                    }
+                )
+
+        if features_data:  # Only add category if it has features
+            categories_data.append(
+                {
+                    "id": category_id,
+                    "name": category,
+                    "description": category_desc,
+                    "features": features_data,
+                }
+            )
+
+    # Define colors based on theme
+    if theme == "dark":
+        colors = {
+            "bg": "#0e1117",
+            "border_light": "#fafafa1a",
+            "th_text": "#fafafa",
+            "td_text": "#fafafacc",
+            "hover_bg": "#26273033",
+            "category_bg": "#26273066",
+            "overall_bg": "#26273099",
+            "button_bg": "#ff4b4b",
+            "button_hover": "#ff2b2b",
+            "tooltip_bg": "#262730",
+            "tooltip_text": "#fafafa",
+        }
+    else:
+        colors = {
+            "bg": "#ffffff",
+            "border_light": "#d0d0d0",
+            "th_text": "#31333f",
+            "td_text": "#31333f",
+            "hover_bg": "#f0f2f6",
+            "category_bg": "#f0f2f6",
+            "overall_bg": "#e8eaed",
+            "button_bg": "#ff4b4b",
+            "button_hover": "#ff2b2b",
+            "tooltip_bg": "#31333f",
+            "tooltip_text": "#ffffff",
+        }
+
+    # Calculate first column width
+    first_column_texts = ["Overall"]
+    first_column_texts.extend(
+        [format_category_name(cat["name"]) for cat in categories_data]
+    )
+    for cat in categories_data:
+        first_column_texts.extend(
+            [f"    {format_feature_name(f['name'])}" for f in cat["features"]]
+        )
+
+    max_text_length = max(len(text) for text in first_column_texts)
+    first_column_width = max(250, min(max_text_length * 8 + 24, 600))
+
+    # Load template
+    template = env.get_template("feature_table_use_case.html.jinja")
+
+    context = {
+        "use_case_names": use_case_names,
+        "categories_data": categories_data,
+        "colors": colors,
+        "first_column_width": first_column_width,
+    }
+
+    return template.render(**context)
+
+
 def generate_collapsible_table(
     tools_data: dict[str, dict],
     count_unsourced: bool = True,
@@ -399,6 +659,19 @@ def main(
 ):
     """Main Streamlit app."""
     # Sidebar for filtering options
+    st.sidebar.header("⚙️ View Options")
+
+    # 0. View mode selection
+    view_mode = st.sidebar.radio(
+        "Select View Mode:",
+        options=["Tools Comparison", "Use Cases Comparison"],
+        help="Choose between comparing tools or comparing use cases against a single tool",
+    )
+
+    if view_mode == "Use Cases Comparison":
+        main_use_case_comparison(tools_data, use_cases_data, feature_schema)
+        return
+
     st.sidebar.header("⚙️ Filter Options")
 
     # 1. Tool selection

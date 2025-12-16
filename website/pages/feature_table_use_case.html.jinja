@@ -1,0 +1,443 @@
+<!--
+SPDX-FileCopyrightText: openmod-tracker contributors
+
+SPDX-License-Identifier: MIT
+-->
+<style>
+    body {
+        font-family: "Source Sans Pro", sans-serif;
+        background-color: {{ colors.bg }};
+        color: {{ colors.td_text }};
+        margin: 0;
+        padding: 0;
+    }
+
+    .feature-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+        table-layout: fixed;
+    }
+
+    .feature-table th,
+    .feature-table td {
+        padding: 0.5rem 0.75rem;
+        text-align: left;
+        border-bottom: 1px solid {{ colors.border_light }};
+        overflow: visible;
+    }
+
+    .feature-table th {
+        background-color: {{ colors.bg }};
+        font-weight: 600;
+        color: {{ colors.th_text }};
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    .feature-table td {
+        background-color: {{ colors.bg }};
+        color: {{ colors.td_text }};
+        text-align: center;
+    }
+
+    .feature-table tbody tr:hover {
+        background-color: {{ colors.hover_bg }};
+    }
+
+    .feature-table th:first-child,
+    .feature-table td:first-child {
+        text-align: left;
+        width: {{ first_column_width }}px !important;
+        min-width: {{ first_column_width }}px !important;
+        max-width: {{ first_column_width }}px !important;
+    }
+
+    .feature-table th:not(:first-child),
+    .feature-table td:not(:first-child) {
+        text-align: center;
+    }
+
+    .feature-name {
+        padding-left: 1.5rem;
+    }
+
+    .category-row {
+        font-weight: 600;
+        background-color: {{ colors.category_bg }} !important;
+    }
+
+    .overall-row {
+        font-weight: 700;
+        background-color: {{ colors.overall_bg }} !important;
+        cursor: pointer;
+    }
+
+    .overall-row td:first-child::before {
+        content: '▶ ';
+        display: inline-block;
+        transition: transform 0.2s;
+        margin-right: 0.5rem;
+    }
+
+    .overall-row.expanded td:first-child::before {
+        transform: rotate(90deg);
+    }
+
+    .category-name {
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .control-button {
+        padding: 0.5rem 1rem;
+        margin: 0.5rem 0.25rem;
+        background-color: {{ colors.button_bg }};
+        color: white;
+        border: none;
+        border-radius: 0.25rem;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    .control-button:hover {
+        background-color: {{ colors.button_hover }};
+    }
+
+    .feature-name-with-tooltip {
+        position: relative;
+        display: inline-block;
+        cursor: help;
+    }
+
+    .tooltip-text {
+        visibility: hidden;
+        position: fixed;
+        z-index: 1000;
+        width: 300px;
+        padding: 0.5rem 0.75rem;
+        background-color: {{ colors.tooltip_bg }};
+        color: {{ colors.tooltip_text }};
+        border-radius: 0.25rem;
+        font-size: 13px;
+        opacity: 0;
+        transition: opacity 0.2s;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        pointer-events: none;
+    }
+
+    .feature-name-with-tooltip:hover .tooltip-text {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    .hidden {
+        display: none !important;
+    }
+
+    .match-symbol {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    /* Color coding for match status */
+    .match-yes {
+        color: #28a745;
+    }
+
+    .match-dev {
+        color: #007bff;
+    }
+
+    .match-no {
+        color: #a71d2a;
+    }
+
+    .match-not-required {
+        color: #6c757d;
+    }
+</style>
+
+<script>
+    // Position tooltip dynamically to avoid cutoff
+    function positionTooltip(event) {
+        var tooltip = event.currentTarget.querySelector('.tooltip-text');
+        if (!tooltip) return;
+
+        var triggerRect = event.currentTarget.getBoundingClientRect();
+        var tooltipWidth = 300;
+        var tooltipHeight = tooltip.offsetHeight || 100;
+        var margin = 10;
+
+        var left = triggerRect.right + margin;
+        var top = triggerRect.top + (triggerRect.height / 2);
+
+        if (left + tooltipWidth > window.innerWidth) {
+            left = triggerRect.left - tooltipWidth - margin;
+        }
+
+        if (left < 0) {
+            left = triggerRect.left;
+            top = triggerRect.bottom + margin;
+        }
+
+        top = top - (tooltipHeight / 2);
+
+        if (top < margin) {
+            top = margin;
+        }
+
+        if (top + tooltipHeight > window.innerHeight - margin) {
+            top = window.innerHeight - tooltipHeight - margin;
+        }
+
+        tooltip.style.left = left + 'px';
+        tooltip.style.top = top + 'px';
+    }
+
+    function initializeTooltips() {
+        var tooltipTriggers = document.querySelectorAll('.feature-name-with-tooltip');
+        tooltipTriggers.forEach(function(trigger) {
+            trigger.addEventListener('mouseenter', positionTooltip);
+            trigger.addEventListener('mousemove', positionTooltip);
+        });
+    }
+
+    function saveState() {
+        var state = {
+            overallExpanded: document.querySelector('.overall-row').classList.contains('expanded'),
+            expandedCategories: []
+        };
+
+        var categoryNames = document.querySelectorAll('.category-name');
+        categoryNames.forEach(function(cat, index) {
+            if (cat.classList.contains('expanded')) {
+                state.expandedCategories.push(index);
+            }
+        });
+
+        localStorage.setItem('useCaseTableState', JSON.stringify(state));
+    }
+
+    function restoreState() {
+        var stateStr = localStorage.getItem('useCaseTableState');
+        if (!stateStr) return;
+
+        try {
+            var state = JSON.parse(stateStr);
+            var overallRow = document.querySelector('.overall-row');
+            var categoryRows = document.querySelectorAll('.category-row');
+            var categoryNames = document.querySelectorAll('.category-name');
+
+            if (state.overallExpanded) {
+                overallRow.classList.add('expanded');
+                categoryRows.forEach(function(row) {
+                    row.classList.remove('hidden');
+                });
+            }
+
+            state.expandedCategories.forEach(function(index) {
+                if (categoryNames[index]) {
+                    categoryNames[index].classList.add('expanded');
+                    var className = 'cat_' + index;
+                    var rows = document.querySelectorAll('.' + className);
+                    rows.forEach(function(row) {
+                        row.classList.remove('hidden');
+                    });
+                }
+            });
+        } catch (e) {
+            console.error('Error restoring state:', e);
+        }
+    }
+
+    function toggleOverall() {
+        var categoryRows = document.querySelectorAll('.category-row');
+        var featureRows = document.querySelectorAll('.feature-row');
+        var overallRow = document.querySelector('.overall-row');
+        var isExpanded = overallRow.classList.contains('expanded');
+
+        categoryRows.forEach(function(row) {
+            if (isExpanded) {
+                row.classList.add('hidden');
+            } else {
+                row.classList.remove('hidden');
+            }
+        });
+
+        if (isExpanded) {
+            featureRows.forEach(function(row) {
+                row.classList.add('hidden');
+            });
+            var categoryNames = document.querySelectorAll('.category-name');
+            categoryNames.forEach(function(cat) {
+                cat.classList.remove('expanded');
+            });
+        }
+
+        if (isExpanded) {
+            overallRow.classList.remove('expanded');
+        } else {
+            overallRow.classList.add('expanded');
+        }
+
+        saveState();
+    }
+
+    function toggleRows(className) {
+        var rows = document.querySelectorAll('.' + className);
+        var trigger = event.target;
+        var isExpanded = trigger.classList.contains('expanded');
+
+        rows.forEach(function(row) {
+            if (row.classList.contains('category-row')) {
+                return;
+            }
+
+            if (isExpanded) {
+                row.classList.add('hidden');
+            } else {
+                row.classList.remove('hidden');
+            }
+        });
+
+        if (isExpanded) {
+            trigger.classList.remove('expanded');
+        } else {
+            trigger.classList.add('expanded');
+        }
+
+        saveState();
+    }
+
+    function expandAll() {
+        var overallRow = document.querySelector('.overall-row');
+        var categoryRows = document.querySelectorAll('.category-row');
+        var featureRows = document.querySelectorAll('.feature-row');
+        var categoryNames = document.querySelectorAll('.category-name');
+
+        overallRow.classList.add('expanded');
+        categoryRows.forEach(function(row) {
+            row.classList.remove('hidden');
+        });
+        featureRows.forEach(function(row) {
+            row.classList.remove('hidden');
+        });
+        categoryNames.forEach(function(cat) {
+            cat.classList.add('expanded');
+        });
+
+        saveState();
+    }
+
+    function collapseAll() {
+        var overallRow = document.querySelector('.overall-row');
+        var categoryRows = document.querySelectorAll('.category-row');
+        var featureRows = document.querySelectorAll('.feature-row');
+        var categoryNames = document.querySelectorAll('.category-name');
+
+        overallRow.classList.remove('expanded');
+        categoryRows.forEach(function(row) {
+            row.classList.add('hidden');
+        });
+        featureRows.forEach(function(row) {
+            row.classList.add('hidden');
+        });
+        categoryNames.forEach(function(cat) {
+            cat.classList.remove('expanded');
+        });
+
+        saveState();
+    }
+
+    window.addEventListener('load', function() {
+        initializeTooltips();
+        setTimeout(restoreState, 100);
+    });
+</script>
+
+<div style="margin-bottom: 10px;">
+    <button class="control-button" onclick="expandAll()">Expand All</button>
+    <button class="control-button" onclick="collapseAll()">Collapse All</button>
+</div>
+
+<table class="feature-table">
+    <thead>
+        <tr>
+            <th>Feature</th>
+            {% for use_case in use_case_names %}
+            <th>{{ use_case }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {# Overall row - placeholder for future aggregate view #}
+        <tr class="overall-row" onclick="toggleOverall()">
+            <td>Overall</td>
+            {% for use_case in use_case_names %}
+            <td>-</td>
+            {% endfor %}
+        </tr>
+
+        {# Categories and features #}
+        {% for category in categories_data %}
+        {# Category row #}
+        <tr class="{{ category.id }} category-row hidden">
+            <td class="category-name" onclick="toggleRows('{{ category.id }}')">
+                {% if category.description %}
+                <span class="feature-name-with-tooltip">
+                    {{ category.name | format_category_name }}
+                    <span class="tooltip-text">{{ category.description }}</span>
+                </span>
+                {% else %}
+                {{ category.name | format_category_name }}
+                {% endif %}
+            </td>
+            {% for use_case in use_case_names %}
+            <td>-</td>
+            {% endfor %}
+        </tr>
+
+        {# Feature rows #}
+        {% for feature in category.features %}
+        <tr class="{{ category.id }} feature-row hidden">
+            <td class="feature-name">
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                {% if feature.description %}
+                <span class="feature-name-with-tooltip">
+                    {{ feature.name | format_feature_name }}
+                    <span class="tooltip-text">{{ feature.description }}</span>
+                </span>
+                {% else %}
+                {{ feature.name | format_feature_name }}
+                {% endif %}
+            </td>
+            {% for use_case in use_case_names %}
+            {% set status = feature.statuses[use_case] %}
+            {% if status.tool_status == 'no_tool' %}
+                {# No tool selected - show only requirement status #}
+                {% if status.required %}
+                <td><span class="match-symbol" style="color: #000000;">✓</span></td>
+                {% else %}
+                <td><span class="match-symbol match-not-required">○</span></td>
+                {% endif %}
+            {% elif status.required %}
+                {# Tool selected and feature is required - show match status #}
+                {% if status.tool_status == 'y' %}
+                <td><span class="match-symbol match-yes">✓</span></td>
+                {% elif status.tool_status == 'dev' %}
+                <td><span class="match-symbol match-dev">⎌</span></td>
+                {% elif status.tool_status == 'n' %}
+                <td><span class="match-symbol match-no">✕</span></td>
+                {% endif %}
+            {% else %}
+                {# Tool selected but feature not required #}
+                <td><span class="match-symbol match-not-required">○</span></td>
+            {% endif %}
+            {% endfor %}
+        </tr>
+        {% endfor %}
+        {% endfor %}
+    </tbody>
+</table>

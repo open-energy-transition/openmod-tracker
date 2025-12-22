@@ -4,6 +4,8 @@
 
 """Streamlit app to display energy system modelling tool feature comparison."""
 
+import base64
+import json
 from pathlib import Path
 
 import streamlit as st
@@ -217,6 +219,119 @@ def format_feature_name(feature: str) -> str:
     return feature.replace("_", " ").title()
 
 
+def get_theme_colors() -> dict[str, str]:
+    """Get color scheme based on current Streamlit theme.
+
+    Returns:
+        Dictionary of color values for the current theme
+    """
+    theme = st.context.theme.type
+
+    if theme == "dark":
+        return {
+            "bg": "#0e1117",
+            "border_light": "#fafafa1a",
+            "th_text": "#fafafa",
+            "td_text": "#fafafacc",
+            "percentage_text": "#000000",
+            "hover_bg": "#26273033",
+            "category_bg": "#26273066",
+            "overall_bg": "#26273099",
+            "button_bg": "#ff4b4b",
+            "button_hover": "#ff2b2b",
+            "input_bg": "#262730",
+            "input_text": "#fafafa",
+            "input_border": "#fafafa33",
+            "input_focus": "#ff4b4b",
+            "input_placeholder": "#fafafa66",
+            "tooltip_bg": "#262730",
+            "tooltip_text": "#fafafa",
+            "link": "#58a6ff",
+            "checkbox_border": "#fafafa33",
+        }
+    else:  # light theme
+        return {
+            "bg": "#ffffff",
+            "border_light": "#d0d0d0",
+            "th_text": "#31333f",
+            "td_text": "#31333f",
+            "percentage_text": "#000000",
+            "hover_bg": "#f0f2f6",
+            "category_bg": "#f0f2f6",
+            "overall_bg": "#e8eaed",
+            "button_bg": "#ff4b4b",
+            "button_hover": "#ff2b2b",
+            "input_bg": "#ffffff",
+            "input_text": "#31333f",
+            "input_border": "#d0d0d0",
+            "input_focus": "#ff4b4b",
+            "input_placeholder": "#a0a0a0",
+            "tooltip_bg": "#31333f",
+            "tooltip_text": "#ffffff",
+            "link": "#0068c9",
+            "checkbox_border": "#d0d0d0",
+        }
+
+
+def encode_custom_use_case(features: dict, name: str = "Custom Use Case") -> str:
+    """Encode custom use case features to URL-safe string.
+
+    Args:
+        features: Dictionary of category -> {feature_name: True/False}
+        name: Name for the custom use case
+
+    Returns:
+        Base64 URL-safe encoded string
+    """
+    # Compress to only include True values
+    compressed = {"_name": name}
+    for category, feature_dict in features.items():
+        selected = [f for f, v in feature_dict.items() if v]
+        if selected:
+            compressed[category] = selected
+
+    json_str = json.dumps(compressed, separators=(",", ":"))
+    encoded = base64.urlsafe_b64encode(json_str.encode()).decode()
+    return encoded
+
+
+def decode_custom_use_case(encoded: str) -> tuple[dict, str]:
+    """Decode custom use case from URL parameter.
+
+    Args:
+        encoded: Base64 URL-safe encoded string
+
+    Returns:
+        Tuple of (features dictionary, name string)
+    """
+    try:
+        json_str = base64.urlsafe_b64decode(encoded.encode()).decode()
+        compressed = json.loads(json_str)
+        # Extract name (default to "Custom Use Case" for backward compatibility)
+        name = compressed.pop("_name", "Custom Use Case")
+        # Expand to full format with True values
+        features = {}
+        for category, feature_list in compressed.items():
+            features[category] = {f: True for f in feature_list}
+        return features, name
+    except Exception:
+        return {}, "Custom Use Case"
+
+
+def load_custom_use_case_from_url() -> tuple[dict | None, str | None]:
+    """Load custom use case from URL parameters if present.
+
+    Returns:
+        Tuple of (features dictionary or None, name or None)
+    """
+    query_params = st.query_params
+    custom_encoded = query_params.get("custom_features", None)
+
+    if custom_encoded:
+        return decode_custom_use_case(custom_encoded)
+    return None, None
+
+
 def main_use_case_comparison(
     tools_data: dict[str, dict], use_cases_data: dict[str, dict], feature_schema: dict
 ):
@@ -227,23 +342,37 @@ def main_use_case_comparison(
     st.sidebar.subheader("1. Select Tool")
     all_tools = sorted(tools_data.keys())
     tool_options = ["None (show requirements only)"] + all_tools
-    selected_tool = st.sidebar.selectbox(
+    selected_tool_raw = st.sidebar.selectbox(
         "Choose a tool to evaluate:",
         options=tool_options,
         help="Select which tool to evaluate against use case requirements, or 'None' to only show requirements",
     )
 
     # Handle None selection
-    if selected_tool == "None (show requirements only)":
-        selected_tool = None
+    selected_tool: str | None = (
+        None
+        if selected_tool_raw == "None (show requirements only)"
+        else selected_tool_raw
+    )
 
     # 2. Use case selection
     st.sidebar.subheader("2. Select Use Cases")
-    all_use_cases = sorted(use_cases_data.keys())
+    # Put custom use case first if it exists
+    other_use_cases = sorted(
+        [uc for uc in use_cases_data.keys() if not uc.endswith(" (custom)")]
+    )
+    custom_use_case_list = [
+        uc for uc in use_cases_data.keys() if uc.endswith(" (custom)")
+    ]
+    all_use_cases = custom_use_case_list + other_use_cases
+
+    # Default to custom use case if it exists, otherwise all use cases
+    default_selection = custom_use_case_list if custom_use_case_list else all_use_cases
+
     selected_use_cases = st.sidebar.multiselect(
         "Choose use cases to compare:",
         options=all_use_cases,
-        default=all_use_cases,
+        default=default_selection,
         help="Select which use cases to include in the comparison",
     )
 
@@ -268,14 +397,22 @@ def main_use_case_comparison(
     )
 
     # Main content
-    st.write(
-        f"Evaluating **{selected_tool}** against **{len(selected_use_cases)}** use cases: {', '.join(sorted(selected_use_cases))}"
-    )
-
-    st.write(
-        "Click on 'Overall' to expand all categories. Click on category names to expand/collapse detailed features. "
-        "Color coding: Green = tool has feature, Blue = in development, Red = tool lacks feature, Gray = not required by use case."
-    )
+    if selected_tool:
+        st.write(
+            f"Evaluating **{selected_tool}** against **{len(selected_use_cases)}** use cases: {', '.join(sorted(selected_use_cases))}"
+        )
+        st.write(
+            "Click on 'Overall' to expand all categories. Click on category names to expand/collapse detailed features. "
+            "Color coding: Green = tool has feature, Blue = in development, Red = tool lacks feature, Gray = not required by use case."
+        )
+    else:
+        st.write(
+            f"Showing feature requirements for **{len(selected_use_cases)}** use cases: {', '.join(sorted(selected_use_cases))}"
+        )
+        st.write(
+            "Click on 'Overall' to expand all categories. Click on category names to expand/collapse detailed features. "
+            "✓ indicates required features, ○ indicates optional features."
+        )
 
     st.markdown("---")
 
@@ -309,8 +446,8 @@ def generate_use_case_comparison_table(
     env.filters["format_category_name"] = format_category_name
     env.filters["format_feature_name"] = format_feature_name
 
-    # Get theme
-    theme = st.context.theme.type
+    # Get theme colors
+    colors = get_theme_colors()
 
     # Prepare data structure
     use_case_names = sorted(use_cases_data.keys())
@@ -420,36 +557,6 @@ def generate_use_case_comparison_table(
                     "features": features_data,
                 }
             )
-
-    # Define colors based on theme
-    if theme == "dark":
-        colors = {
-            "bg": "#0e1117",
-            "border_light": "#fafafa1a",
-            "th_text": "#fafafa",
-            "td_text": "#fafafacc",
-            "hover_bg": "#26273033",
-            "category_bg": "#26273066",
-            "overall_bg": "#26273099",
-            "button_bg": "#ff4b4b",
-            "button_hover": "#ff2b2b",
-            "tooltip_bg": "#262730",
-            "tooltip_text": "#fafafa",
-        }
-    else:
-        colors = {
-            "bg": "#ffffff",
-            "border_light": "#d0d0d0",
-            "th_text": "#31333f",
-            "td_text": "#31333f",
-            "hover_bg": "#f0f2f6",
-            "category_bg": "#f0f2f6",
-            "overall_bg": "#e8eaed",
-            "button_bg": "#ff4b4b",
-            "button_hover": "#ff2b2b",
-            "tooltip_bg": "#31333f",
-            "tooltip_text": "#ffffff",
-        }
 
     # Calculate first column width
     first_column_texts = ["Overall"]
@@ -576,9 +683,6 @@ def generate_collapsible_table(
     # Load template from file
     template = env.get_template("feature_table.html.jinja")
 
-    # Get current theme from Streamlit context
-    theme = st.context.theme.type
-
     # Calculate first column width based on longest text
     # Collect all first column texts
     first_column_texts = ["Overall"]  # Header row
@@ -598,49 +702,8 @@ def generate_collapsible_table(
     # Set reasonable min/max bounds
     first_column_width = max(250, min(first_column_width, 600))
 
-    # Define simplified color palettes for each theme
-    if theme == "dark":
-        colors = {
-            "bg": "#0e1117",
-            "border_light": "#fafafa1a",
-            "th_text": "#fafafa",
-            "td_text": "#fafafacc",
-            "percentage_text": "#000000",
-            "hover_bg": "#26273033",
-            "category_bg": "#26273066",
-            "overall_bg": "#26273099",
-            "button_bg": "#ff4b4b",
-            "button_hover": "#ff2b2b",
-            "input_bg": "#262730",
-            "input_text": "#fafafa",
-            "input_border": "#fafafa33",
-            "input_focus": "#ff4b4b",
-            "input_placeholder": "#fafafa66",
-            "tooltip_bg": "#262730",
-            "tooltip_text": "#fafafa",
-            "link": "#58a6ff",
-        }
-    else:  # light theme
-        colors = {
-            "bg": "#ffffff",
-            "border_light": "#d0d0d0",
-            "th_text": "#31333f",
-            "td_text": "#31333f",
-            "percentage_text": "#000000",
-            "hover_bg": "#f0f2f6",
-            "category_bg": "#f0f2f6",
-            "overall_bg": "#e8eaed",
-            "button_bg": "#ff4b4b",
-            "button_hover": "#ff2b2b",
-            "input_bg": "#ffffff",
-            "input_text": "#31333f",
-            "input_border": "#d0d0d0",
-            "input_focus": "#ff4b4b",
-            "input_placeholder": "#a0a0a0",
-            "tooltip_bg": "#31333f",
-            "tooltip_text": "#ffffff",
-            "link": "#0068c9",
-        }
+    # Get theme colors
+    colors = get_theme_colors()
 
     context = {
         "tool_names": tool_names,
@@ -654,6 +717,142 @@ def generate_collapsible_table(
     return template.render(**context)
 
 
+def main_use_case_builder(feature_schema: dict, use_cases_data: dict[str, dict]):
+    """Use case builder view - interactive table for creating custom use cases."""
+    st.write("### 🎨 Custom Use Case Builder")
+    st.write(
+        "Select the features you need for your use case. Categories can be expanded by clicking their names. "
+        "When you're done selecting features, click 'Apply Custom Use Case' to make it available in other views."
+    )
+
+    # Load existing custom use case from URL
+    existing_custom_features, existing_custom_name = load_custom_use_case_from_url()
+
+    st.write("#### Starting Point")
+
+    template_use_cases = {
+        k: v for k, v in use_cases_data.items() if not k.endswith(" (custom)")
+    }
+    use_case_options = ["Start from scratch"] + sorted(template_use_cases.keys())
+
+    selected_template = st.selectbox(
+        "Choose a use case as a starting point:",
+        options=use_case_options,
+        help="Select an existing use case to pre-populate features, or start from scratch",
+    )
+
+    if selected_template != "Start from scratch":
+        if st.button(
+            f"📋 Load '{selected_template}' features", use_container_width=True
+        ):
+            template_features = template_use_cases[selected_template]["features"]
+            template_selections = {}
+            for category, features in template_features.items():
+                template_selections[category] = {}
+                for feature_name, feature_data in features.items():
+                    if feature_data.get("value", "n") == "y":
+                        template_selections[category][feature_name] = True
+
+            # Encode and save to URL so it persists across rerun
+            encoded = encode_custom_use_case(template_selections)
+            st.query_params.update({"custom_features": encoded})
+            st.success(f"✅ Loaded features from '{selected_template}'")
+            st.rerun()
+
+    st.markdown("---")
+
+    preselected = existing_custom_features or {}
+
+    # Use a form for feature selection
+    with st.form("custom_use_case_form"):
+        st.write("#### Name Your Use Case")
+        custom_name = st.text_input(
+            "Use case name:",
+            value=existing_custom_name or "My Use Case",
+            help="This name will be used to identify your custom use case in other views",
+            placeholder="Enter a descriptive name...",
+        )
+
+        st.write("#### Select Features")
+
+        selected_features = {}
+
+        for category in sorted(feature_schema.keys()):
+            if "members" not in feature_schema[category]:
+                continue
+
+            category_desc = feature_schema[category].get("description", "")
+            category_name = format_category_name(category)
+
+            with st.expander(
+                f"**{category_name}**"
+                + (f" - {category_desc}" if category_desc else "")
+            ):
+                # Individual feature checkboxes
+                for feature_name in sorted(feature_schema[category]["members"].keys()):
+                    feature_desc = feature_schema[category]["members"].get(
+                        feature_name, ""
+                    )
+                    default_val = preselected.get(category, {}).get(feature_name, False)
+
+                    is_selected = st.checkbox(
+                        format_feature_name(feature_name),
+                        value=default_val,
+                        key=f"feature_{category}_{feature_name}",
+                        help=feature_desc if feature_desc else None,
+                    )
+
+                    if is_selected:
+                        if category not in selected_features:
+                            selected_features[category] = {}
+                        selected_features[category][feature_name] = True
+
+        st.markdown("---")
+
+        col1, col2, _ = st.columns([2, 2, 1])
+
+        with col1:
+            submitted = st.form_submit_button(
+                "🔄 Apply Custom Use Case", type="primary", use_container_width=True
+            )
+
+        with col2:
+            cleared = st.form_submit_button(
+                "🗑️ Clear Selection", use_container_width=True
+            )
+
+    if submitted:
+        if selected_features:
+            # Encode and update query params
+            encoded = encode_custom_use_case(
+                selected_features, custom_name.strip() or "My Use Case"
+            )
+            st.query_params.update({"custom_features": encoded})
+            st.success(
+                f"✅ '{custom_name}' applied! ({sum(len(f) for f in selected_features.values())} features selected)"
+            )
+            st.info(
+                "💡 Switch to 'Tools Comparison' or 'Use Cases Comparison' view to use your custom use case."
+            )
+            st.rerun()
+        else:
+            st.warning("⚠️ Please select at least one feature before applying.")
+
+    if cleared:
+        st.query_params.clear()
+        st.success("✅ Selection cleared!")
+        st.rerun()
+
+    # Display info if custom use case exists
+    if existing_custom_features and not submitted and not cleared:
+        feature_count = sum(
+            len(features) for features in existing_custom_features.values()
+        )
+        st.info(
+            f"ℹ️ Currently loaded: {feature_count} features selected. Modify selections above and click 'Apply' to update."
+        )
+
+
 def main(
     tools_data: dict[str, dict], use_cases_data: dict[str, dict], feature_schema: dict
 ):
@@ -664,9 +863,36 @@ def main(
     # 0. View mode selection
     view_mode = st.sidebar.radio(
         "Select View Mode:",
-        options=["Tools Comparison", "Use Cases Comparison"],
-        help="Choose between comparing tools or comparing use cases against a single tool",
+        options=["Tools Comparison", "Use Cases Comparison", "Use Case Builder"],
+        help="Choose between comparing tools, comparing use cases, or building a custom use case",
     )
+
+    # Handle Use Case Builder view
+    if view_mode == "Use Case Builder":
+        main_use_case_builder(feature_schema, use_cases_data)
+        return
+
+    # Load custom use case from URL (available in comparison views)
+    custom_features, custom_name = load_custom_use_case_from_url()
+
+    # Add custom use case to use_cases_data if it exists
+    if custom_features:
+        use_cases_data = dict(use_cases_data)  # Make a copy
+        # Convert custom features format to match expected format
+        formatted_features = {}
+        for category, features in custom_features.items():
+            formatted_features[category] = {
+                feature_name: {"value": "y"} for feature_name in features.keys()
+            }
+
+        # Use custom name with " (custom)" suffix
+        custom_use_case_display_name = f"{custom_name} (custom)"
+        use_cases_data[custom_use_case_display_name] = {
+            "features": formatted_features,
+            "assumptions": [],
+            "description": f"Custom use case: {custom_name}",
+            "id": "custom",
+        }
 
     if view_mode == "Use Cases Comparison":
         main_use_case_comparison(tools_data, use_cases_data, feature_schema)
@@ -710,12 +936,43 @@ def main(
 
     # 3. Use case filtering
     st.sidebar.subheader("3. Filter by Use Case")
-    use_case_options = ["All Features"] + sorted(use_cases_data.keys())
+    # Put custom use case first if it exists, then alphabetize others
+    other_use_cases = sorted(
+        [uc for uc in use_cases_data.keys() if not uc.endswith(" (custom)")]
+    )
+    custom_use_case_list = [
+        uc for uc in use_cases_data.keys() if uc.endswith(" (custom)")
+    ]
+    use_case_options = ["All Features"] + custom_use_case_list + other_use_cases
+
+    # Initialize session state for persisting use case selection
+    if "selected_use_case" not in st.session_state:
+        st.session_state.selected_use_case = "All Features"
+
+    # Only switch to custom use case if it was just created
+    if custom_features and not st.session_state.selected_use_case.endswith(" (custom)"):
+        # Check if custom use case was just created by seeing if it's a new addition
+        if custom_use_case_list and "last_custom_check" not in st.session_state:
+            st.session_state.selected_use_case = custom_use_case_list[0]
+    st.session_state.last_custom_check = bool(custom_use_case_list)
+
+    # Ensure the selected use case is still valid (it might have been removed)
+    if st.session_state.selected_use_case not in use_case_options:
+        st.session_state.selected_use_case = "All Features"
+
+    default_index = use_case_options.index(st.session_state.selected_use_case)
+
     selected_use_case = st.sidebar.selectbox(
         "Filter features by use case:",
         options=use_case_options,
+        index=default_index,
+        key="use_case_selector",
         help="Show only features required by a specific use case",
     )
+
+    # Update session state when selection changes
+    if selected_use_case != st.session_state.selected_use_case:
+        st.session_state.selected_use_case = selected_use_case
 
     # Apply use case filtering if selected
     use_case_data = None

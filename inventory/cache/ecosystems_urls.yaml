@@ -58,6 +58,7 @@ https://github.com/energyinnovation/eps-us: https://repos.ecosyste.ms/api/v1/hos
 https://github.com/energymodelsx/energymodelsbase.jl: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/EnergyModelsX%2FEnergyModelsBase.jl
 https://github.com/energyrt/energyrt: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/optimal2050%2FenergyRt
 https://github.com/energyscope/energyscope: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/energyscope%2FEnergyScope
+https://github.com/energysystemsmodellinglab/muse2: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/EnergySystemsModellingLab%2FMUSE2
 https://github.com/energysystemsmodellinglab/muse_os: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/EnergySystemsModellingLab%2FMUSE_OS
 https://github.com/energytransition/esdl: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/EnergyTransition%2FESDL
 https://github.com/epgoxford/open: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/EPGOxford%2FOPEN
@@ -96,6 +97,7 @@ https://github.com/ie3-institute/powersystemdatamodel: https://repos.ecosyste.ms
 https://github.com/ie3-institute/simona: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/ie3-institute%2Fsimona
 https://github.com/iee-tugraz/lego: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/IEE-TUGraz%2FLEGO
 https://github.com/iesa-opt/iesa-opt-nm: not-found
+https://github.com/iiasa/message_ix: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/iiasa%2Fmessage_ix
 https://github.com/iit-energysystemmodels/openmaster: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/IIT-EnergySystemModels%2FopenMASTER
 https://github.com/iit-energysystemmodels/opensduc: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/IIT-EnergySystemModels%2FopenSDUC
 https://github.com/iit-energysystemmodels/opentepes: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/IIT-EnergySystemModels%2FopenTEPES
@@ -181,6 +183,7 @@ https://github.com/pypsa/pypsa: https://repos.ecosyste.ms/api/v1/hosts/GitHub/re
 https://github.com/quasi-software: not-found
 https://github.com/quintel/etengine: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/quintel%2Fetengine
 https://github.com/quintel/etmodel: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/quintel%2Fetmodel
+https://github.com/quintel/pyetm: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/quintel%2Fpyetm
 https://github.com/rahmankhorramfar91/jpong: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/RahmanKhorramfar91%2FJPoNG
 https://github.com/rcuk-cee/energynumbers-balancing: not-found
 https://github.com/rebase-energy/enflow: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/rebase-energy%2Fenflow

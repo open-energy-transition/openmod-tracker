@@ -116,6 +116,7 @@ def filter_interactions(
         "pull-request-size",
         "copilot",
         "github-advanced-security",
+        "coderabbitai",
     ]
     if hide_bots:
         mask = ~df["username"].str.contains(

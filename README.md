@@ -138,7 +138,7 @@ Therefore, it can be very time consuming.
 
 The repository user details can be updated by calling `pixi run get-user-details`.
 It will run `get-repo-users` first if this hasn't already been run.
-This will append `inventory/output/user_details.csv` with any new users listed in `inventory/output/user_interactions.csv`.
+This will append `inventory/output/user_details.csv` with any new users listed in `inventory/output/repo_interactions.csv`.
 As we have already prepared the initial set of users, this should be relatively quick when refreshing.
 
 Finally, our heuristic user classification approach can be applied to the updated user details by calling `pixi run classify-users`.

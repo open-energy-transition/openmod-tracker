@@ -6,7 +6,7 @@
 !/inventory/output/filtered.csv
 !/inventory/output/stats.csv
 !/inventory/output/docs.csv
-!/user_analysis/output/user_interactions.csv
+!/user_analysis/output/repo_interactions.csv
 !/user_analysis/output/user_classifications.csv
 !/website
 !/.git

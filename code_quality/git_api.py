@@ -64,24 +64,13 @@ class GitAPI:
         repo = self.repos.get(repo_name, None)
         upstream_fullname = f"{upstream_owner}/{repo_name}"
         if repo is not None:
-            if (
-                repo.fork
-                and (repo.source.full_name == upstream_fullname)
-                # To catch edge cases where the repo is a fork of a fork.
-                # We check for the intermediate source in the base source's forks:
-                or any(
-                    repo.full_name == upstream_fullname
-                    for repo in self.github_client.get_repo(
-                        repo.source.full_name
-                    ).get_forks()
-                )
-            ):
+            if repo.fork and (repo.parent.full_name == upstream_fullname):
                 exists = True
             else:
                 raise GithubException(
                     1,
                     message=f"Found a repo with the same name ({repo_name}) but different source. "
-                    f"Received {repo.source.full_name}, expected {upstream_owner}/{repo_name}",
+                    f"Received {repo.parent.full_name}, expected {upstream_owner}/{repo_name}",
                 )
         else:
             # Repository doesn't exist in the organization

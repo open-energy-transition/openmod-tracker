@@ -14,7 +14,6 @@ import pandas as pd
 import util
 from tqdm import tqdm
 
-NOW = datetime.now()
 LOGGER = logging.getLogger(__name__)
 ENTRIES_TO_KEEP = [
     "html_url",
@@ -36,22 +35,59 @@ EXTRA_COLS = [
     "dependent_repos_count",
     "latest_release_published_at",
 ]
-LAST_MONTH = NOW.month - 1
-try:
-    # The previous month's Anaconda data doesn't get compiled and uploaded to S3 until sometime into the following month.
-    # If the file isn't found, we take the month before that
-    CONDA_DOWNLOAD_DF = pd.read_parquet(
-        f"s3://anaconda-package-data/conda/monthly/{NOW.year}/{NOW.year}-{LAST_MONTH:02d}.parquet"
-    )
-except FileNotFoundError:
-    CONDA_DOWNLOAD_DF = pd.read_parquet(
-        f"s3://anaconda-package-data/conda/monthly/{NOW.year}/{NOW.year}-{LAST_MONTH - 1:02d}.parquet"
-    )
 
 JULIA_STATS_DF = pd.read_csv(
     "https://julialang-logs.s3.amazonaws.com/public_outputs/current/package_requests_by_date.csv.gz",
     parse_dates=["date"],
 )
+
+
+def _get_conda_download_df(months_ago: int = 1, retry: bool = False) -> pd.DataFrame:
+    """Get Anaconda download statistics for a past month as a dataframe.
+
+    Args:
+        months_ago (int, optional):
+            Number of months prior to the current month to retrieve data for.
+            There will never be any data for the current month (it will be released in the following month).
+            Defaults to 1.
+        retry (bool, optional):
+            Whether this is a retry attempt after a failed download.
+            In place to avoid infinite recursion.
+            Defaults to False.
+
+    Returns:
+        pd.DataFrame: Dataframe of Anaconda download statistics for the specified month.
+    """
+    if months_ago < 1:
+        raise ValueError("months_ago must be 1 or greater")
+    now = datetime.now()
+    month = now.month - months_ago
+    year = now.year
+    if month < 1:
+        year -= 1
+        month = 12 - (months_ago - 1)
+
+    # The previous month's Anaconda data doesn't get compiled and uploaded to S3 until sometime into the following month.
+    # If the file isn't found, we take the month before that
+    try:
+        df = pd.read_parquet(
+            f"s3://anaconda-package-data/conda/monthly/{year}/{year}-{month:02d}.parquet"
+        )
+        LOGGER.warning(f"Found Anaconda download data for {year}-{month:02d}")
+        return df
+    except FileNotFoundError:
+        if retry:
+            LOGGER.warning(
+                f"Could not find Anaconda download data for {year}-{month:02d}, trying previous month"
+            )
+            return _get_conda_download_df(months_ago=months_ago + 1, retry=False)
+        else:
+            raise FileNotFoundError(
+                f"Could not find Anaconda download data for {year}-{month:02d}"
+            )
+
+
+CONDA_DOWNLOAD_DF = _get_conda_download_df()
 
 
 def get_ecosystems_entry_data(
@@ -151,7 +187,7 @@ def _get_package_data(url: str) -> dict:
         dependent_repos_count_all = 0
         for package_source in package_data:
             if package_source["ecosystem"] == "conda":
-                # HACK: last month download count doesn't seem to exist in ecosyste.ms
+                # Last month download count doesn't seem to exist in ecosyste.ms
                 download_count_all += CONDA_DOWNLOAD_DF[
                     CONDA_DOWNLOAD_DF.pkg_name == package_source["name"]
                 ].counts.sum()

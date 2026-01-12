@@ -7,7 +7,7 @@ default_language_version:
 
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.3
+    rev: v0.14.10
     hooks:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix]
@@ -40,7 +40,7 @@ repos:
       - id: check-merge-conflict
       - id: check-illegal-windows-names
       - id: check-added-large-files
-        args: [--enforce-all --maxkb=100000]
+        args: [--enforce-all, --maxkb=100000]
       - id: trailing-whitespace
         exclude: "^(inventory|user_analysis)/output/.*.csv$"
       - id: end-of-file-fixer

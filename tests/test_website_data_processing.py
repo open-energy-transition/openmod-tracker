@@ -185,12 +185,12 @@ class TestMainPageFunctions:
     @pytest.fixture(scope="class")
     def interaction_dataframe(self):
         """Load interaction dataframe from CSV (class-level fixture)."""
-        return main_page.interaction_df(USER_STATS_DIR / "user_interactions.csv")
+        return main_page.interaction_df(USER_STATS_DIR / "repo_interactions.csv")
 
     @pytest.fixture(scope="class")
-    def user_interactions_timeseries(self):
-        """Create user interactions timeseries (class-level fixture)."""
-        return main_page._create_user_interactions_timeseries(USER_STATS_DIR)
+    def repo_interactions_timeseries(self):
+        """Create repo interactions timeseries (class-level fixture)."""
+        return main_page._create_repo_interactions_timeseries(USER_STATS_DIR)
 
     @pytest.fixture
     def sample_stats_df(self):
@@ -296,33 +296,33 @@ class TestMainPageFunctions:
         assert interaction_dataframe["username"].notna().all()
         assert interaction_dataframe["repo"].notna().all()
 
-    def test_create_user_interactions_timeseries_structure(
-        self, user_interactions_timeseries
+    def test_create_repo_interactions_timeseries_structure(
+        self, repo_interactions_timeseries
     ):
-        """Test _create_user_interactions_timeseries returns Series with list values."""
-        assert isinstance(user_interactions_timeseries, pd.Series)
+        """Test _create_repo_interactions_timeseries returns Series with list values."""
+        assert isinstance(repo_interactions_timeseries, pd.Series)
         # Values should be numpy arrays
         assert all(
-            isinstance(v, np.ndarray) for v in user_interactions_timeseries.values
+            isinstance(v, np.ndarray) for v in repo_interactions_timeseries.values
         )
 
     @pytest.mark.parametrize("n_months", [6, 12])
-    def test_create_user_interactions_timeseries_with_different_n_months(
+    def test_create_repo_interactions_timeseries_with_different_n_months(
         self, n_months
     ):
-        """Test _create_user_interactions_timeseries with different n_months parameter."""
-        result = main_page._create_user_interactions_timeseries(
+        """Test _create_repo_interactions_timeseries with different n_months parameter."""
+        result = main_page._create_repo_interactions_timeseries(
             USER_STATS_DIR, n_months=n_months
         )
 
         assert isinstance(result, pd.Series)
 
     @pytest.mark.parametrize("resolution", ["7d", "30d"])
-    def test_create_user_interactions_timeseries_with_different_resolution(
+    def test_create_repo_interactions_timeseries_with_different_resolution(
         self, resolution
     ):
-        """Test _create_user_interactions_timeseries with different resolution."""
-        result = main_page._create_user_interactions_timeseries(
+        """Test _create_repo_interactions_timeseries with different resolution."""
+        result = main_page._create_repo_interactions_timeseries(
             USER_STATS_DIR, resolution=resolution
         )
 
@@ -512,12 +512,12 @@ class TestDevMetricsFunctions:
     @pytest.fixture(scope="class")
     def dev_vis_table(self):
         """Create dev metrics vis table (class-level fixture)."""
-        return dev_metrics.create_vis_table(USER_STATS_DIR / "user_interactions.csv")
+        return dev_metrics.create_vis_table(USER_STATS_DIR / "repo_interactions.csv")
 
     @pytest.fixture(scope="class")
-    def user_interactions_csv(self):
+    def repo_interactions_csv(self):
         """Load user interactions CSV (class-level fixture)."""
-        return pd.read_csv(USER_STATS_DIR / "user_interactions.csv")
+        return pd.read_csv(USER_STATS_DIR / "repo_interactions.csv")
 
     @pytest.fixture
     def sample_interactions_df(self):
@@ -562,9 +562,9 @@ class TestDevMetricsFunctions:
         assert dev_vis_table["username"].notna().all()
         assert dev_vis_table["repo"].notna().all()
 
-    def test_map_repo_to_tool_structure(self, user_interactions_csv):
+    def test_map_repo_to_tool_structure(self, repo_interactions_csv):
         """Test map_repo_to_tool returns list of dicts."""
-        result = dev_metrics.map_repo_to_tool(user_interactions_csv, "repo")
+        result = dev_metrics.map_repo_to_tool(repo_interactions_csv, "repo")
 
         assert isinstance(result, list)
         assert all(isinstance(item, dict) for item in result)

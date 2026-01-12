@@ -43,7 +43,11 @@ def get_ecosystems_data(url: str) -> list[dict] | dict | str | None:
     Returns:
         requests.Response: If the repository exists, the ecosyste.ms API repository URL
     """
-    response = requests.get(url)
+    try:
+        response = requests.get(url)
+    except requests.exceptions.RequestException as e:
+        LOGGER.error(f"Error fetching ecosystems data from {url}: {e}")
+        return "not-found"
 
     if response.ok:
         return yaml.safe_load(response.content.decode("utf-8"))

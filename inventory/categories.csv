@@ -4,6 +4,7 @@ dispa-set,"production-cost",
 dynawo,"power-flow",
 egret,"production-cost,power-flow",
 energy_system_simulation_and_optimization,"production-cost","possibly exclude as it is a building energy management system optimisation"
+EPM,"capacity-expansion",
 etmodel,"capacity-expansion",
 fine,"capacity-expansion","possibly also production-cost"
 genx,"capacity-expansion,production-cost",
@@ -29,5 +30,8 @@ reopt_jl,"capacity-expansion","possibly also production-cost"
 sam,"capacity-expansion,production-cost","fixed technology options; focussed on specific assets."
 spineopt_jl,"capacity-expansion,production-cost",
 temoa,"capacity-expansion","possibly also production-cost"
+tz-osemosys,"capacity-expansion",
+UnitCommitment,"production-cost",
+UnitCommitment_jl,"production-cost",
 urbs,"capacity-expansion",
 veragrid,"power-flow",

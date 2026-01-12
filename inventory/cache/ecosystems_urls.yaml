@@ -58,6 +58,7 @@ https://github.com/energyinnovation/eps-us: https://repos.ecosyste.ms/api/v1/hos
 https://github.com/energymodelsx/energymodelsbase.jl: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/EnergyModelsX%2FEnergyModelsBase.jl
 https://github.com/energyrt/energyrt: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/optimal2050%2FenergyRt
 https://github.com/energyscope/energyscope: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/energyscope%2FEnergyScope
+https://github.com/energysystemsmodellinglab/muse2: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/EnergySystemsModellingLab%2FMUSE2
 https://github.com/energysystemsmodellinglab/muse_os: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/EnergySystemsModellingLab%2FMUSE_OS
 https://github.com/energytransition/esdl: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/EnergyTransition%2FESDL
 https://github.com/epgoxford/open: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/EPGOxford%2FOPEN
@@ -65,6 +66,7 @@ https://github.com/epri-dev/opender: https://repos.ecosyste.ms/api/v1/hosts/GitH
 https://github.com/epri-dev/opendss-c: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/epri-dev%2FOpenDSS-C
 https://github.com/epri-dev/storagevet: not-found
 https://github.com/erf-model/erf: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/erf-model%2FERF
+https://github.com/esmap-world-bank-group/epm: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/ESMAP-World-Bank-Group%2FEPM
 https://github.com/etsap-times/times_model: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/etsap-TIMES%2FTIMES_model
 https://github.com/fabmid/open-energy-cell-simulation: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/fabmid%2FOpen-Energy-Cell-Simulation
 https://github.com/flexiblepower/powermatcher: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/flexiblepower%2Fpowermatcher
@@ -95,6 +97,7 @@ https://github.com/ie3-institute/powersystemdatamodel: https://repos.ecosyste.ms
 https://github.com/ie3-institute/simona: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/ie3-institute%2Fsimona
 https://github.com/iee-tugraz/lego: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/IEE-TUGraz%2FLEGO
 https://github.com/iesa-opt/iesa-opt-nm: not-found
+https://github.com/iiasa/message_ix: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/iiasa%2Fmessage_ix
 https://github.com/iit-energysystemmodels/openmaster: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/IIT-EnergySystemModels%2FopenMASTER
 https://github.com/iit-energysystemmodels/opensduc: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/IIT-EnergySystemModels%2FopenSDUC
 https://github.com/iit-energysystemmodels/opentepes: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/IIT-EnergySystemModels%2FopenTEPES
@@ -124,7 +127,6 @@ https://github.com/mbheinen/bpa-ipf-tsp: https://repos.ecosyste.ms/api/v1/hosts/
 https://github.com/mesmo-dev/mesmo: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/mesmo-dev%2Fmesmo
 https://github.com/microgrids-x/microgrids.py: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/Microgrids-X%2FMicrogrids.py
 https://github.com/microgridspy/microgridspy: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/MicroGridsPy%2FMicroGridsPy
-https://github.com/modpowersystems/modpowersystems: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/ModPowerSystems%2FModPowerSystems
 https://github.com/mzy2240/esa: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/mzy2240%2FESA
 https://github.com/niclasmattsson/supergrid: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/niclasmattsson%2FSupergrid
 https://github.com/nreca-bts/omf: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/nreca-bts%2Fomf
@@ -157,8 +159,6 @@ https://github.com/oemof/oemof-solph: https://repos.ecosyste.ms/api/v1/hosts/Git
 https://github.com/oemof/oemof-thermal: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/oemof%2Foemof-thermal
 https://github.com/olugovoy/energyrt: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/optimal2050%2FenergyRt
 https://github.com/onsset/onsset: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/OnSSET%2Fonsset
-https://github.com/open-energy-transition/open-tyndp: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/open-energy-transition%2Fopen-tyndp
-https://github.com/open-energy-transition/solver-benchmark: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/open-energy-transition%2Fsolver-benchmark
 https://github.com/opencemorg/opencem: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/openCEMorg%2FopenCEM
 https://github.com/openego/edisgo: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/openego%2FeDisGo
 https://github.com/openego/ego: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/openego%2FeGo
@@ -181,6 +181,7 @@ https://github.com/pypsa/pypsa: https://repos.ecosyste.ms/api/v1/hosts/GitHub/re
 https://github.com/quasi-software: not-found
 https://github.com/quintel/etengine: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/quintel%2Fetengine
 https://github.com/quintel/etmodel: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/quintel%2Fetmodel
+https://github.com/quintel/pyetm: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/quintel%2Fpyetm
 https://github.com/rahmankhorramfar91/jpong: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/RahmanKhorramfar91%2FJPoNG
 https://github.com/rcuk-cee/energynumbers-balancing: not-found
 https://github.com/rebase-energy/enflow: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/rebase-energy%2Fenflow
@@ -238,7 +239,6 @@ https://gitlab.com/dlr-ve/esy/remix/framework: https://repos.ecosyste.ms/api/v1/
 https://gitlab.com/energyincities/python-ehub: https://repos.ecosyste.ms/api/v1/hosts/gitlab.com/repositories/energyincities%2Fpython-ehub
 https://gitlab.com/fame-framework: not-found
 https://gitlab.com/fame-framework/fame-core: https://repos.ecosyste.ms/api/v1/hosts/gitlab.com/repositories/fame-framework%2Ffame-core
-https://gitlab.com/fame-framework/fame-io: https://repos.ecosyste.ms/api/v1/hosts/gitlab.com/repositories/fame-framework%2Ffame-io
 https://gitlab.com/mosaik: not-found
 https://gitlab.com/mosaik/mosaik: https://repos.ecosyste.ms/api/v1/hosts/gitlab.com/repositories/mosaik%2Fmosaik
 https://gitlab.com/sesit/copper: https://repos.ecosyste.ms/api/v1/hosts/gitlab.com/repositories/sesit%2Fcopper

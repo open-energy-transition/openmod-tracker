@@ -116,6 +116,7 @@ def filter_interactions(
         "pull-request-size",
         "copilot",
         "github-advanced-security",
+        "coderabbitai",
     ]
     if hide_bots:
         mask = ~df["username"].str.contains(
@@ -439,6 +440,105 @@ def top_users_display(df: pd.DataFrame):
             )
 
 
+def detailed_org_contributions_breakdown(
+    df: pd.DataFrame, user_classifications_df: pd.DataFrame
+):
+    """Display detailed breakdown of organizational contributions by type.
+
+    Shows top 3 organizations with expandable statistics in columns.
+
+    Args:
+        df (pd.DataFrame): DataFrame containing user interaction data (already filtered).
+        user_classifications_df (pd.DataFrame): DataFrame containing username to company mappings.
+    """
+    st.subheader("Top 3 Contributing Organizations")
+
+    contribution_types = {
+        "Issues Opened": "interaction == 'issue' & subtype == 'author'",
+        "PRs Opened": "interaction == 'pr' & subtype == 'author'",
+        "Commits": "interaction == 'commit'",
+        "Feedback Given": (
+            "interaction in ['issue', 'pr'] & subtype in ['comment', 'reaction', 'review']"
+        ),
+    }
+
+    global_totals = {"Total contributions": len(df)}
+    for contrib_name, mask in contribution_types.items():
+        global_totals[contrib_name] = len(df.query(mask))
+
+    org_contributions = (
+        df.merge(user_classifications_df[["username", "company"]], on="username")
+        .groupby(["company", "interaction", "subtype"])
+        .size()
+        .to_frame("count")
+        .reset_index()
+    )
+
+    totals = {
+        "Total contributions": org_contributions.groupby("company")["count"].sum()
+    }
+
+    for contrib_name, mask in contribution_types.items():
+        totals[contrib_name] = (
+            org_contributions.query(mask).groupby("company")["count"].sum()
+        )
+
+    totals_df = (
+        pd.DataFrame(totals)
+        .fillna(0)
+        .sort_values(by="Total contributions", ascending=False)
+        .head(3)
+    )
+
+    st.html(
+        f"""
+        <style>
+            div [data-testid=stExpander] details summary{{
+                background-color: {px.colors.sequential.Peach[0]};
+            }}
+            div [data-testid=stExpander] details summary p{{
+                font-size: 1rem;
+            }}
+        </style>
+        """
+    )
+
+    cols = st.columns(3)
+
+    metric_order = ["Issues Opened", "PRs Opened", "Commits", "Feedback Given"]
+
+    for (company, row), col in zip(totals_df.iterrows(), cols):
+        with col:
+            company_name = str(company).title()
+
+            st.markdown(f"**{company_name}**")
+
+            st.metric(
+                label="Total contributions",
+                value=f"{int(row['Total contributions']):,}",
+            )
+            with st.expander("View breakdown"):
+                for metric in metric_order:
+                    st.markdown(
+                        _render_stat(metric, row[metric], global_totals[metric])
+                    )
+
+
+def _render_stat(label: str, value: int, total: int) -> str:
+    """Render an org contribution as a markdown string with percentage.
+
+    Args:
+        label (str): label for the metric.
+        value (int): value for the metric.
+        total (int): total value for calculating percentage.
+
+    Returns:
+        str: formatted markdown string with value and percentage.
+    """
+    pct = (value / total * 100) if total > 0 else 0
+    return f"**{label}:** {int(value):,} / {int(total):,} ({int(pct)}%)"
+
+
 def get_complete_time(df: pd.DataFrame, interaction: str, time_col: str) -> pd.Series:
     """Calculate time to completion for PRs or issues.
 
@@ -485,7 +585,7 @@ def plot_histogram(
         line_dash="dash",
         line_color="black",
         annotation={
-            "text": f"Median: {median:.1f}",
+            "text": f"Median: {median}",
             "font_color": "black",
             "y": 1,
             # "position": "top",
@@ -671,7 +771,7 @@ def preamble():
     )
 
 
-def main(df_vis: pd.DataFrame):
+def main(df_vis: pd.DataFrame, user_classifications_df: pd.DataFrame):
     """Main function for the Project Development Metrics page."""
     repo_to_tool_map = map_repo_to_tool(df_vis, "repo")
 
@@ -699,7 +799,7 @@ def main(df_vis: pd.DataFrame):
         help="Filter out automated bot interactions (e.g., actions, codecov, pre-commit-ci).",
     )
 
-    # Apply all filters including date range
+    # Apply all filters except date range
     filtered_interactions = filter_interactions(
         df_vis,
         repo_to_tool_map,
@@ -710,7 +810,6 @@ def main(df_vis: pd.DataFrame):
     if filtered_interactions.empty:
         st.warning("No interaction data available for the selected filters.")
         return
-
     # Get date range from the data
     min_date = filtered_interactions[["merged", "created", "closed"]].min().min().date()
     max_date = filtered_interactions[["merged", "created", "closed"]].max().max().date()
@@ -756,6 +855,9 @@ def main(df_vis: pd.DataFrame):
 
     daily_interactions_timeline(filtered_interactions)
     top_users_display(time_filtered_interactions)
+    detailed_org_contributions_breakdown(
+        time_filtered_interactions, user_classifications_df
+    )
     resolution_histograms(time_filtered_interactions, time_filtered_global_interactions)
     engagement_histograms(time_filtered_interactions, time_filtered_global_interactions)
 
@@ -770,8 +872,10 @@ if __name__ == "__main__":
     user_stats_dir = Path(__file__).parent.parent.parent / "user_analysis" / "output"
     # We're sharing this cached data with the main page, but we have to account for it being loaded for the first time here.
     df_vis = st.session_state.get(
-        "df_interactions", create_vis_table(user_stats_dir / "user_interactions.csv")
+        "df_interactions", create_vis_table(user_stats_dir / "repo_interactions.csv")
     )
 
+    user_classifications_df = pd.read_csv(user_stats_dir / "user_classifications.csv")
+
     preamble()
-    main(df_vis)
+    main(df_vis, user_classifications_df)

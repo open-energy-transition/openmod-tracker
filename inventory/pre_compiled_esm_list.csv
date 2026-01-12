@@ -88,7 +88,6 @@ github.com/MATPOWER/most,
 github.com/mesmo-dev/mesmo,
 github.com/Microgrids-X/Microgrids.py,simulation model
 github.com/MicroGridsPy/MicroGridsPy,
-github.com/ModPowerSystems/ModPowerSystems,
 github.com/niclasmattsson/Supergrid,
 github.com/NREL-Distribution-Suites/erad,
 github.com/NREL-Sienna/PowerSimulations.jl,simulation model
@@ -121,6 +120,7 @@ github.com/powsybl,simulation model
 github.com/psrenergy/SDDPDSO.jl,simulation model
 github.com/PyPSA/PyPSA,
 github.com/quintel/etengine,
+github.com/quintel/pyetm,
 github.com/RahmanKhorramfar91/JPoNG,
 github.com/rebase-energy/enflow,simulation model
 github.com/rl-institut/multi-vector-simulator,
@@ -167,3 +167,5 @@ gitlab.vtt.fi/backbone/backbone,
 gricad-gitlab.univ-grenoble-alpes.fr/omegalpes/omegalpes,
 jugit.fz-juelich.de/iek-10/public/optimization/comando,
 github.com/ANL-CEEESA/UnitCommitment.jl,production-cost
+github.com/ESMAP-World-Bank-Group/EPM,capacity-expansion
+github.com/iiasa/message_ix,

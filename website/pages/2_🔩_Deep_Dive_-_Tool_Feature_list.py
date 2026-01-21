@@ -30,11 +30,10 @@ def load_tool_features(tools_dir: Path) -> dict[str, dict]:
     Returns:
         Dictionary mapping tool name to features data
     """
-    tools_data = {}
-    for tool_path in sorted(tools_dir.rglob("features.yaml")):
-        data = yaml.safe_load(tool_path.read_text())
-        tools_data[tool_path.parent.name] = data["features"]
-    return tools_data
+    return {
+        tool_path.parent.name: yaml.safe_load(tool_path.read_text())["features"]
+        for tool_path in sorted(tools_dir.rglob("features.yaml"))
+    }
 
 
 def load_use_case_features(use_cases_dir: Path) -> dict[str, dict]:
@@ -46,19 +45,22 @@ def load_use_case_features(use_cases_dir: Path) -> dict[str, dict]:
     Returns:
         Dictionary mapping use case name to full use case data (features, assumptions, description, etc.)
     """
-    use_cases_data = {}
-    for use_case_path in sorted(use_cases_dir.rglob("features.yaml")):
+
+    def _load_use_case(use_case_path: Path) -> tuple[str, dict]:
         data = yaml.safe_load(use_case_path.read_text())
         metadata_path = use_case_path.parent / ".metadata.yml"
         description = yaml.safe_load(metadata_path.read_text())["description"]
         name = use_case_path.parent.name.replace("_", " ").title()
-        use_cases_data[name] = {
+        return name, {
             "features": data["features"],
             "assumptions": data["assumptions"],
             "description": description,
             "id": use_case_path.name,
         }
-    return use_cases_data
+
+    return dict(
+        _load_use_case(path) for path in sorted(use_cases_dir.rglob("features.yaml"))
+    )
 
 
 def filter_features_by_use_case(
@@ -97,6 +99,79 @@ def filter_features_by_use_case(
     return filtered
 
 
+def _count_feature_as_met(
+    feature_value: str, has_source: bool, count_unsourced: bool, count_dev: bool
+) -> bool:
+    """Helper to determine if a feature should be counted as met.
+
+    Args:
+        feature_value: The feature value ('y', 'n', or 'dev')
+        has_source: Whether the feature has source references
+        count_unsourced: Whether to count 'y' without sources
+        count_dev: Whether to count 'dev' as met
+
+    Returns:
+        True if feature should be counted as met
+    """
+    if feature_value == "y":
+        return has_source or count_unsourced
+    elif feature_value == "dev":
+        return count_dev
+    return False
+
+
+def calculate_use_case_coverage(
+    tool_features: dict,
+    use_case_features: dict,
+    count_unsourced: bool = True,
+    count_dev: bool = False,
+) -> float | None:
+    """Calculate percentage of use case requirements met by a tool.
+
+    Args:
+        tool_features: Features dictionary for a single tool
+        use_case_features: Use case required features (value='y' means required)
+        count_unsourced: Whether to count 'y' without sources as met
+        count_dev: Whether to count 'dev' as met
+
+    Returns:
+        Percentage of required features that are met by the tool, or None if no requirements
+    """
+    total_required = 0
+    met_count = 0
+
+    for category, category_features in use_case_features.items():
+        if category not in tool_features:
+            # Category doesn't exist in tool - count all required features as unmet
+            for feature_name, feature_data in category_features.items():
+                if feature_data.get("value", "n") == "y":
+                    total_required += 1
+            continue
+
+        for feature_name, feature_data in category_features.items():
+            # Only count features required by the use case
+            if feature_data.get("value", "n") != "y":
+                continue
+
+            total_required += 1
+
+            # Check if tool has this feature
+            if feature_name not in tool_features[category]:
+                continue  # Tool doesn't have this feature
+
+            tool_feature = tool_features[category][feature_name]
+            tool_value = tool_feature.get("value", "n")
+            has_source = bool(tool_feature.get("source", []))
+
+            # Check if feature is met based on criteria
+            if _count_feature_as_met(
+                tool_value, has_source, count_unsourced, count_dev
+            ):
+                met_count += 1
+
+    return (met_count / total_required * 100) if total_required > 0 else None
+
+
 def calculate_percentage(
     features_dict: dict, count_unsourced: bool = True, count_dev: bool = False
 ) -> float:
@@ -118,12 +193,9 @@ def calculate_percentage(
             total += 1
             feature_value = value["value"]
             has_source = bool(value.get("source", []))
-
-            if feature_value == "y":
-                # Count if: (has source) OR (no source but count_unsourced is True)
-                if has_source or count_unsourced:
-                    yes_count += 1
-            elif feature_value == "dev" and count_dev:
+            if _count_feature_as_met(
+                feature_value, has_source, count_unsourced, count_dev
+            ):
                 yes_count += 1
         elif isinstance(value, dict):
             # Nested group
@@ -132,11 +204,9 @@ def calculate_percentage(
                     total += 1
                     feature_value = feature["value"]
                     has_source = bool(feature.get("source", []))
-
-                    if feature_value == "y":
-                        if has_source or count_unsourced:
-                            yes_count += 1
-                    elif feature_value == "dev" and count_dev:
+                    if _count_feature_as_met(
+                        feature_value, has_source, count_unsourced, count_dev
+                    ):
                         yes_count += 1
 
     return (yes_count / total * 100) if total > 0 else 0
@@ -332,6 +402,56 @@ def load_custom_use_case_from_url() -> tuple[dict | None, str | None]:
     return None, None
 
 
+def _get_feature_description(
+    schema: dict | None, category: str, feature_name: str = ""
+) -> str:
+    """Get description from schema for a category or feature.
+
+    Args:
+        schema: Feature schema dictionary
+        category: Category name
+        feature_name: Optional feature name within category
+
+    Returns:
+        Description string or empty string if not found
+    """
+    if not schema or category not in schema:
+        return ""
+
+    if feature_name:
+        # Get feature description
+        return schema[category].get("members", {}).get(feature_name, "")
+    else:
+        # Get category description
+        return schema[category].get("description", "")
+
+
+def add_coverage_calculation_checkboxes(
+    section_number: str = "2", section_title: str = "Percentage Calculation"
+) -> tuple[bool, bool]:
+    """Add sidebar checkboxes for coverage calculation options.
+
+    Args:
+        section_number: Section number to display in sidebar
+        section_title: Title for the sidebar section
+
+    Returns:
+        Tuple of (count_unsourced, count_dev) boolean values
+    """
+    st.sidebar.subheader(f"{section_number}. {section_title}")
+    count_unsourced = st.sidebar.checkbox(
+        "Include unvalidated features",
+        value=True,
+        help="Count features marked as 'y' without source references in percentage calculations",
+    )
+    count_dev = st.sidebar.checkbox(
+        "Include in-development features",
+        value=False,
+        help="Count features marked as 'dev' as implemented in percentage calculations",
+    )
+    return count_unsourced, count_dev
+
+
 def main_use_case_comparison(
     tools_data: dict[str, dict], use_cases_data: dict[str, dict], feature_schema: dict
 ):
@@ -380,6 +500,14 @@ def main_use_case_comparison(
         st.warning("⚠️ Please select at least one use case from the sidebar.")
         return
 
+    # 3. Coverage calculation options (only show if tool is selected)
+    if selected_tool:
+        count_unsourced, count_dev = add_coverage_calculation_checkboxes(
+            "3", "Coverage Calculation"
+        )
+    else:
+        count_unsourced, count_dev = True, False
+
     # Legend in sidebar
     st.sidebar.markdown(
         f"""
@@ -421,15 +549,52 @@ def main_use_case_comparison(
         tools_data[selected_tool] if selected_tool else None,
         {uc: use_cases_data[uc] for uc in selected_use_cases},
         feature_schema,
+        count_unsourced=count_unsourced,
+        count_dev=count_dev,
     )
     height = 600  # Fixed height for iframe
     components.html(table_html, height=height, scrolling=True)
+
+
+def _build_use_case_status(
+    feature_name: str,
+    category: str,
+    tool_status: str,
+    use_case_name: str,
+    use_case_features: dict,
+) -> dict[str, str | bool]:
+    """Build status dictionary for a feature in a use case.
+
+    Args:
+        feature_name: Name of the feature
+        category: Category name
+        tool_status: Tool's implementation status ('y', 'n', 'dev', 'no_tool', 'not_required')
+        use_case_name: Name of the use case
+        use_case_features: Use case features dictionary
+
+    Returns:
+        Dictionary with 'required' and 'tool_status' keys
+    """
+    required = (
+        category in use_case_features
+        and feature_name in use_case_features[category]
+        and use_case_features[category][feature_name].get("value", "n") == "y"
+    )
+
+    if tool_status in ("no_tool", "not_required"):
+        status = tool_status
+    else:
+        status = tool_status if required else "not_required"
+
+    return {"required": required, "tool_status": status}
 
 
 def generate_use_case_comparison_table(
     tool_features: dict | None,
     use_cases_data: dict[str, dict],
     schema: dict[str, dict] | None = None,
+    count_unsourced: bool = True,
+    count_dev: bool = False,
 ) -> str:
     """Generate HTML table comparing a single tool against multiple use cases.
 
@@ -437,6 +602,8 @@ def generate_use_case_comparison_table(
         tool_features: Features dictionary for a single tool, or None to show only requirements
         use_cases_data: Dictionary of use case data (filtered to selected use cases)
         schema: Feature schema with descriptions for tooltips
+        count_unsourced: Whether to count 'y' without sources as met
+        count_dev: Whether to count 'dev' as met
 
     Returns:
         HTML string with the comparison table
@@ -445,6 +612,7 @@ def generate_use_case_comparison_table(
     env = Environment(loader=FileSystemLoader(Path(__file__).parent))
     env.filters["format_category_name"] = format_category_name
     env.filters["format_feature_name"] = format_feature_name
+    env.filters["get_color_for_percentage"] = get_color_for_percentage
 
     # Get theme colors
     colors = get_theme_colors()
@@ -461,102 +629,103 @@ def generate_use_case_comparison_table(
     else:
         categories = list(tool_features.keys())
 
-    # Build data structure for template
-    categories_data = []
-    for cat_idx, category in enumerate(categories):
-        category_id = f"cat_{cat_idx}"
-        category_desc = ""
-        if schema and category in schema:
-            category_desc = schema[category].get("description", "")
+    # Calculate overall percentages per use case (only if tool is selected)
+    overall_percentages = {}
+    if tool_features is not None:
+        for uc_name in use_case_names:
+            uc_features = use_cases_data[uc_name]["features"]
+            overall_percentages[uc_name] = calculate_use_case_coverage(
+                tool_features, uc_features, count_unsourced, count_dev
+            )
 
-        features_data = []
+    # Build data structure for template
+    def _build_category_data(cat_idx: int, category: str) -> dict | None:
+        """Build data for a single category."""
+        # Calculate category percentages per use case (only if tool is selected)
+        category_percentages = {}
+        if tool_features is not None:
+            category_percentages = {
+                uc_name: (
+                    calculate_use_case_coverage(
+                        tool_features,
+                        {category: use_cases_data[uc_name]["features"][category]},
+                        count_unsourced,
+                        count_dev,
+                    )
+                    if category in use_cases_data[uc_name]["features"]
+                    else None
+                )
+                for uc_name in use_case_names
+            }
 
         # Get all features for this category
         if tool_features is not None:
             # Tool selected: iterate through tool's features
             category_features = tool_features.get(category, {})
-            for feature_name, feature_value in category_features.items():
-                feature_desc = ""
-                if schema and category in schema and "members" in schema[category]:
-                    feature_desc = schema[category]["members"].get(feature_name, "")
-
-                # Get tool's implementation status
-                tool_status = feature_value.get("value", "n")
-
-                # Get use case requirements
-                use_case_statuses = {}
-                for uc_name in use_case_names:
-                    uc_features = use_cases_data[uc_name]["features"]
-                    if (
-                        category in uc_features
-                        and feature_name in uc_features[category]
-                    ):
-                        required = (
-                            uc_features[category][feature_name].get("value", "n") == "y"
+            features_data = [
+                {
+                    "name": feature_name,
+                    "description": _get_feature_description(
+                        schema, category, feature_name
+                    ),
+                    "statuses": {
+                        uc_name: _build_use_case_status(
+                            feature_name,
+                            category,
+                            feature_value.get("value", "n"),
+                            uc_name,
+                            use_cases_data[uc_name]["features"],
                         )
-                    else:
-                        required = False
-                    use_case_statuses[uc_name] = {
-                        "required": required,
-                        "tool_status": tool_status if required else "not_required",
-                    }
-
-                features_data.append(
-                    {
-                        "name": feature_name,
-                        "description": feature_desc,
-                        "statuses": use_case_statuses,
-                    }
-                )
+                        for uc_name in use_case_names
+                    },
+                }
+                for feature_name, feature_value in category_features.items()
+            ]
         else:
             # No tool selected: collect all features from use cases
-            all_features_in_category = set()
-            for uc_data in use_cases_data.values():
-                if category in uc_data["features"]:
-                    all_features_in_category.update(
-                        uc_data["features"][category].keys()
-                    )
+            all_features_in_category = {
+                feature_name
+                for uc_data in use_cases_data.values()
+                if category in uc_data["features"]
+                for feature_name in uc_data["features"][category].keys()
+            }
 
-            for feature_name in sorted(all_features_in_category):
-                feature_desc = ""
-                if schema and category in schema and "members" in schema[category]:
-                    feature_desc = schema[category]["members"].get(feature_name, "")
-
-                # Get use case requirements (no tool status)
-                use_case_statuses = {}
-                for uc_name in use_case_names:
-                    uc_features = use_cases_data[uc_name]["features"]
-                    if (
-                        category in uc_features
-                        and feature_name in uc_features[category]
-                    ):
-                        required = (
-                            uc_features[category][feature_name].get("value", "n") == "y"
-                        )
-                    else:
-                        required = False
-                    use_case_statuses[uc_name] = {
-                        "required": required,
-                        "tool_status": "no_tool",  # Special status for no tool selected
-                    }
-
-                features_data.append(
-                    {
-                        "name": feature_name,
-                        "description": feature_desc,
-                        "statuses": use_case_statuses,
-                    }
-                )
-
-        if features_data:  # Only add category if it has features
-            categories_data.append(
+            features_data = [
                 {
-                    "id": category_id,
-                    "name": category,
-                    "description": category_desc,
-                    "features": features_data,
+                    "name": feature_name,
+                    "description": _get_feature_description(
+                        schema, category, feature_name
+                    ),
+                    "statuses": {
+                        uc_name: _build_use_case_status(
+                            feature_name,
+                            category,
+                            "no_tool",
+                            uc_name,
+                            use_cases_data[uc_name]["features"],
+                        )
+                        for uc_name in use_case_names
+                    },
                 }
-            )
+                for feature_name in sorted(all_features_in_category)
+            ]
+
+        if not features_data:  # Skip categories without features
+            return None
+
+        return {
+            "id": f"cat_{cat_idx}",
+            "name": category,
+            "description": _get_feature_description(schema, category),
+            "features": features_data,
+            "percentages": category_percentages,
+        }
+
+    categories_data = [
+        cat_data
+        for cat_idx, category in enumerate(categories)
+        if (cat_data := _build_category_data(cat_idx, category)) is not None
+    ]
 
     # Calculate first column width
     first_column_texts = ["Overall"]
@@ -579,6 +748,8 @@ def generate_use_case_comparison_table(
         "categories_data": categories_data,
         "colors": colors,
         "first_column_width": first_column_width,
+        "overall_percentages": overall_percentages,
+        "has_tool": tool_features is not None,
     }
 
     return template.render(**context)
@@ -644,31 +815,29 @@ def generate_collapsible_table(
             category_desc = schema[category].get("description", "")
 
         # Prepare features for this category
-        feature_list = list(first_tool[category].keys())
-        features_data = []
-        for feature in feature_list:
-            feature_desc = ""
-            if schema and category in schema and "members" in schema[category]:
-                feature_desc = schema[category]["members"].get(feature, "")
-
-            # Get feature values for each tool
-            feature_values = {}
-            for tool in tool_names:
-                if (
-                    category in tools_data[tool]
-                    and feature in tools_data[tool][category]
-                ):
-                    feature_data = tools_data[tool][category][feature]
-                    feature_values[tool] = {
-                        "value": feature_data.get("value", "n"),
-                        "sources": feature_data.get("source", []),
-                    }
-                else:
-                    feature_values[tool] = {"value": "n", "sources": []}
-
-            features_data.append(
-                {"name": feature, "description": feature_desc, "values": feature_values}
-            )
+        features_data = [
+            {
+                "name": feature,
+                "description": _get_feature_description(schema, category, feature),
+                "values": {
+                    tool: (
+                        {
+                            "value": tools_data[tool][category][feature].get(
+                                "value", "n"
+                            ),
+                            "sources": tools_data[tool][category][feature].get(
+                                "source", []
+                            ),
+                        }
+                        if category in tools_data[tool]
+                        and feature in tools_data[tool][category]
+                        else {"value": "n", "sources": []}
+                    )
+                    for tool in tool_names
+                },
+            }
+            for feature in first_tool[category].keys()
+        ]
 
         categories_data.append(
             {
@@ -684,23 +853,19 @@ def generate_collapsible_table(
     template = env.get_template("feature_table.html.jinja")
 
     # Calculate first column width based on longest text
-    # Collect all first column texts
-    first_column_texts = ["Overall"]  # Header row
-    first_column_texts.extend(
-        [format_category_name(cat["name"]) for cat in categories_data]
+    first_column_texts = (
+        ["Overall"]
+        + [format_category_name(cat["name"]) for cat in categories_data]
+        + [
+            f"    {format_feature_name(f['name'])}"
+            for cat in categories_data
+            for f in cat["features"]
+        ]
     )
-    for cat in categories_data:
-        first_column_texts.extend(
-            [f"    {format_feature_name(f['name'])}" for f in cat["features"]]
-        )
 
-    # Estimate width: ~8px per character as a rough approximation for the font
-    # Add padding (0.5rem * 2 = ~16px) and some buffer
+    # Estimate width: ~8px per character, with min/max bounds
     max_text_length = max(len(text) for text in first_column_texts)
-    first_column_width = max_text_length * 8 + 24  # 8px per char + 24px padding
-
-    # Set reasonable min/max bounds
-    first_column_width = max(250, min(first_column_width, 600))
+    first_column_width = max(250, min(max_text_length * 8 + 24, 600))
 
     # Get theme colors
     colors = get_theme_colors()
@@ -922,17 +1087,7 @@ def main(
     }
 
     # 2. Percentage calculation options
-    st.sidebar.subheader("2. Percentage Calculation")
-    count_unsourced = st.sidebar.checkbox(
-        "Include unsourced features",
-        value=True,
-        help="Count features marked as 'y' without source references in percentage calculations",
-    )
-    count_dev = st.sidebar.checkbox(
-        "Include in-development features",
-        value=False,
-        help="Count features marked as 'dev' as implemented in percentage calculations",
-    )
+    count_unsourced, count_dev = add_coverage_calculation_checkboxes()
 
     # 3. Use case filtering
     st.sidebar.subheader("3. Filter by Use Case")

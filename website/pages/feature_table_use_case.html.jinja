@@ -372,17 +372,29 @@ SPDX-License-Identifier: MIT
         </tr>
     </thead>
     <tbody>
-        {# Overall row - placeholder for future aggregate view #}
+        {# Overall row - show coverage percentages if tool is selected #}
         <tr class="overall-row" onclick="toggleOverall()">
             <td>Overall</td>
             {% for use_case in use_case_names %}
+            {% if has_tool %}
+                {% if overall_percentages[use_case] is none %}
+                <td style="background-color: {{ colors.bg }};">
+                    <strong style="color: #6c757d;">N/A</strong>
+                </td>
+                {% else %}
+                <td style="background-color: {{ overall_percentages[use_case] | get_color_for_percentage }};">
+                    <strong style="color: {{ colors.percentage_text }};">{{ "%.0f" | format(overall_percentages[use_case]) }}%</strong>
+                </td>
+                {% endif %}
+            {% else %}
             <td>-</td>
+            {% endif %}
             {% endfor %}
         </tr>
 
         {# Categories and features #}
         {% for category in categories_data %}
-        {# Category row #}
+        {# Category row - show coverage percentages if tool is selected #}
         <tr class="{{ category.id }} category-row hidden">
             <td class="category-name" onclick="toggleRows('{{ category.id }}')">
                 {% if category.description %}
@@ -395,7 +407,19 @@ SPDX-License-Identifier: MIT
                 {% endif %}
             </td>
             {% for use_case in use_case_names %}
+            {% if has_tool %}
+                {% if category.percentages[use_case] is none %}
+                <td style="background-color: {{ colors.bg }};">
+                    <strong style="color: #6c757d;">N/A</strong>
+                </td>
+                {% else %}
+                <td style="background-color: {{ category.percentages[use_case] | get_color_for_percentage }};">
+                    <strong style="color: {{ colors.percentage_text }};">{{ "%.0f" | format(category.percentages[use_case]) }}%</strong>
+                </td>
+                {% endif %}
+            {% else %}
             <td>-</td>
+            {% endif %}
             {% endfor %}
         </tr>
 

@@ -12,6 +12,13 @@ SPDX-License-Identifier: MIT
         padding: 0;
     }
 
+    .table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        margin-bottom: 1rem;
+    }
+
     .feature-table {
         width: 100%;
         border-collapse: collapse;
@@ -52,6 +59,10 @@ SPDX-License-Identifier: MIT
         width: {{ first_column_width }}px !important;
         min-width: {{ first_column_width }}px !important;
         max-width: {{ first_column_width }}px !important;
+        position: sticky;
+        left: 0;
+        z-index: 5;
+        background-color: {{ colors.bg }};
     }
 
     .feature-table th:not(:first-child),
@@ -171,6 +182,73 @@ SPDX-License-Identifier: MIT
 
     a:hover {
         text-decoration: underline;
+    }
+
+    /* Mobile responsive styles */
+    @media screen and (max-width: 768px) {
+        .feature-table {
+            font-size: 12px;
+            table-layout: auto;
+            min-width: 800px;
+        }
+
+        .feature-table th,
+        .feature-table td {
+            padding: 0.4rem 0.5rem;
+            white-space: nowrap;
+        }
+
+        .feature-table th:first-child,
+        .feature-table td:first-child {
+            min-width: 150px !important;
+            white-space: normal;
+            position: relative;
+            left: auto;
+        }
+
+        .feature-table th:not(:first-child),
+        .feature-table td:not(:first-child) {
+            min-width: 80px;
+        }
+
+        .control-button {
+            padding: 0.4rem 0.8rem;
+            font-size: 12px;
+            margin: 0.25rem 0.1rem;
+        }
+
+        .search-input {
+            width: 100%;
+            max-width: 200px;
+            font-size: 12px;
+        }
+
+        .tooltip-text {
+            width: 250px;
+            font-size: 12px;
+        }
+    }
+
+    @media screen and (max-width: 480px) {
+        .feature-table {
+            font-size: 11px;
+            min-width: 600px;
+        }
+
+        .feature-table th:first-child,
+        .feature-table td:first-child {
+            min-width: 120px !important;
+        }
+
+        .feature-table th:not(:first-child),
+        .feature-table td:not(:first-child) {
+            min-width: 60px;
+        }
+
+        .control-button {
+            padding: 0.3rem 0.6rem;
+            font-size: 11px;
+        }
     }
 </style>
 <script>
@@ -505,7 +583,7 @@ SPDX-License-Identifier: MIT
     });
 </script>
 
-<div style="margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+<div style="margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
     <div>
         <button class="control-button" onclick="expandAll()">Expand All</button>
         <button class="control-button" onclick="collapseAll()">Collapse All</button>
@@ -515,6 +593,7 @@ SPDX-License-Identifier: MIT
     </div>
 </div>
 
+<div class="table-wrapper">
 <table class="feature-table">
     <thead>
         <tr>
@@ -579,3 +658,4 @@ SPDX-License-Identifier: MIT
         {% endfor %}
     </tbody>
 </table>
+</div>

@@ -1,6 +1,7 @@
 source_url,note
 diw.de/documents/dokumentenarchiv/17/diw_01.c.528469.de/elmod-de_v1.zip,
-git-ce.rwth-aachen.de/ltt/secmod,
+git-ce.rwth-aachen.de/ltt/secmod,capacity-expansion
+git-ce.rwth-aachen.de/ltt/secmod-milp,capacity-expansion
 git.rwth-aachen.de/acs/public/simulation/DistAIXFramework/distaixweb,
 git.rwth-aachen.de/acs/public/simulation/pvgenerator,
 git.rwth-aachen.de/acs/public/simulation/pycity_scheduling,

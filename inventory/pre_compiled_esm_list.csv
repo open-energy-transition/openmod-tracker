@@ -96,16 +96,16 @@ github.com/NREL-Sienna/PowerSimulations.jl,simulation model
 github.com/NREL-Sienna/PowerSimulationsDynamics.jl,
 github.com/NREL-Sienna/PowerSystems.jl,
 github.com/NREL-Sienna/PowerSystemsInvestments.jl,
-github.com/NREL/EMeRGE,
-github.com/NREL/HOPP,
-github.com/NREL/ParaEMT_public,
-github.com/NREL/PRAS,
-github.com/NREL/pysam,
-github.com/NREL/ReEDS-2.0,
-github.com/NREL/REopt.jl,
-github.com/NREL/RODeO,
-github.com/NREL/SAM,
-github.com/NREL/ssc,
+github.com/natlabrockies/EMeRGE,
+github.com/natlabrockies/HOPP,
+github.com/natlabrockies/ParaEMT_public,
+github.com/natlabrockies/PRAS,
+github.com/natlabrockies/pysam,
+github.com/natlabrockies/ReEDS-2.0,
+github.com/natlabrockies/REopt.jl,
+github.com/natlabrockies/RODeO,
+github.com/natlabrockies/SAM,
+github.com/natlabrockies/ssc,
 github.com/oemof/oemof-solph,
 github.com/oemof/tespy,simulation model
 github.com/openCEMorg/openCEM,
@@ -128,7 +128,7 @@ github.com/rebase-energy/enflow,simulation model
 github.com/rl-institut/multi-vector-simulator,
 github.com/robbiemorrison/deeco,
 github.com/rwl/PYPOWER,simulation model
-github.com/SanPen/GridCal,simulation model
+github.com/SanPen/VeraGrid,simulation model
 github.com/sei-international/NemoMod.jl,
 github.com/simjunky/Leelo,
 github.com/sogno-platform/dpsim,
@@ -169,8 +169,8 @@ gitlab.vtt.fi/backbone/backbone,
 gricad-gitlab.univ-grenoble-alpes.fr/omegalpes/omegalpes,
 jugit.fz-juelich.de/iek-10/public/optimization/comando,
 github.com/ANL-CEEESA/UnitCommitment.jl,production-cost
-github.com/ESMAP-World-Bank-Group/EPM,capacity-expansion
+github.com/ESMAP-World-Bank-Group/EPM,
 github.com/iiasa/message_ix,
-github.com/SanPen/VeraGrid,power-flow
 github.com/QuaSi-Software/resie,simulation model
 github.com/ESDLMapEditorESSIM/essim,simulation model
+github.com/powergama/powergama

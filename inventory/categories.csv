@@ -4,7 +4,7 @@ dispa-set,"production-cost",
 dynawo,"power-flow",
 egret,"production-cost,power-flow",
 energy_system_simulation_and_optimization,"production-cost","possibly exclude as it is a building energy management system optimisation"
-EPM,"capacity-expansion",
+EPM,"capacity-expansion,production-cost",
 etmodel,"capacity-expansion",
 fine,"capacity-expansion","possibly also production-cost"
 flixopt,"capacity-expansion","possibly also production-cost"
@@ -19,6 +19,7 @@ oemof_solph,"capacity-expansion,production-cost",
 open_modeling_framework,"production-cost,power-flow",
 osemosys,"capacity-expansion",
 power_grid_model,"power-flow",
+powergama,"capacity-expansion,production-cost",
 powersimulations_jl,"production-cost",
 powersimulations,"production-cost",
 powersimulationsdynamics_jl,"power-flow",

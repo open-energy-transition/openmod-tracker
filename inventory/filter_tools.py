@@ -62,8 +62,10 @@ def drop_no_git(df: pd.DataFrame) -> pd.DataFrame:
         pd.DataFrame: `df` without projects that do not define a git repo URL.
     """
     git_filter = df.url.apply(
-        lambda x: pd.notnull(x)
-        and any(src in urlparse(x).netloc.lower() for src in ["git", "bitbucket"])
+        lambda x: (
+            pd.notnull(x)
+            and any(src in urlparse(x).netloc.lower() for src in ["git", "bitbucket"])
+        )
     )
     new_df = df[git_filter]
 

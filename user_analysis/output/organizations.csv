@@ -3429,3 +3429,5 @@ ROCm,
 AMD-HPC,
 AMD-AI,
 ntnuiotenergy,
+elyra-ai,Elyra is an open source set of AI-centric extensions to JupyterLab Notebooks. The project is hosted in incubation in the LF AI & Data Foundation.
+claimed-framework,CLAIMED is a runtime and programming language agnostic Data & AI component framework abstracting away all complexity for advanced MLOps and TrustedAI.

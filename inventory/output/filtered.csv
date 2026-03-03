@@ -1,5 +1,6 @@
 id,url,name,source,category
 adopt_net0,https://github.com/uu-er/adopt-net0,AdOpT-NET0,"openmod,pre-compiled",
+akkudoktoreos,https://github.com/akkudoktor-eos/eos,AkkudoktorEOS,opensustain-tech,
 amiris,https://gitlab.com/dlr-ve/esy/amiris/amiris,AMIRIS,"lf-energy-landscape,openmod",
 andes,https://github.com/curent/andes,ANDES,"lf-energy-landscape,opensustain-tech",power-flow
 antares_simulator,https://github.com/antaressimulatorteam/antares_simulator,"Antares Simulator,Antares_Simulator","lf-energy-landscape,opensustain-tech,pre-compiled",
@@ -8,6 +9,7 @@ aristopy,https://git.tu-berlin.de/etus/public/aristopy,aristopy,pre-compiled,
 asam,https://github.com/ancillaryservicesacquisitionmodel/asam,ASAM,openmod,
 asset_level_transition_risk_in_the_global_coal__oil__and_gas_supply_chains,https://github.com/lkruitwagen/global-fossil-fuel-supply-chain,"Asset-level Transition Risk in the Global Coal, Oil, and Gas Supply Chains",lf-energy-landscape,
 assume,https://github.com/assume-framework/assume,ASSUME,openmod,
+backbone,https://gitlab.vtt.fi/backbone/backbone,"Backbone,backbone","g-pst,lf-energy-landscape,openmod,opensustain-tech,pre-compiled","capacity-expansion,production-cost"
 balmorel,https://github.com/balmorelcommunity/balmorel,Balmorel,"lf-energy-landscape,openmod,opensustain-tech,pre-compiled",
 bewhere_model,https://github.com/caaficus/bewhere-model,BeWhere-model,pre-compiled,
 bluesky,https://github.com/eiagov/bluesky,BlueSky,"opensustain-tech,pre-compiled",
@@ -47,7 +49,6 @@ energy_access_explorer_(eae),https://github.com/energyaccessexplorer,Energy Acce
 energy_policy_simulator,https://github.com/energyinnovation/eps-us,Energy Policy Simulator,"lf-energy-landscape,openmod",
 energy_py,https://github.com/adgefficiency/energy-py,energy-py,"lf-energy-landscape,opensustain-tech",
 energy_py_linear,https://github.com/adgefficiency/energy-py-linear,energy-py-linear,"lf-energy-landscape,opensustain-tech",
-energy_system_simulation_and_optimization,https://github.com/akkudoktor-eos/eos,Energy System Simulation and Optimization,opensustain-tech,production-cost
 energymodelsbase_jl,https://github.com/energymodelsx/energymodelsbase.jl,EnergyModelsBase.jl,pre-compiled,
 energyrt,https://github.com/optimal2050/energyrt,"EnergyRt,energyRt","lf-energy-landscape,openmod,opensustain-tech",
 energyscope,https://github.com/energyscope/energyscope,EnergyScope,openmod,
@@ -56,7 +57,7 @@ enflow,https://github.com/rebase-energy/enflow,enflow,"opensustain-tech,pre-comp
 eoles_elecres,https://github.com/behrangshirizadeh/eoles_elecres,EOLES elecRES,openmod,
 eoles_mv,https://github.com/behrangshirizadeh/eoles_mv,EOLES_mv,pre-compiled,
 epm,https://github.com/esmap-world-bank-group/epm,"EPM,Electricity Planning Model","opensustain-tech,pre-compiled",
-erad,https://github.com/nlr-distribution-suite/erad,"ERAD,erad","opensustain-tech,pre-compiled",
+erad,https://github.com/nlr-distribution-suite/erad,erad,pre-compiled,
 erf,https://github.com/erf-model/erf,ERF,lf-energy-landscape,
 esdl,https://github.com/energytransition/esdl,ESDL,"lf-energy-landscape,opensustain-tech",
 essim,https://github.com/esdlmapeditoressim/essim,essim,pre-compiled,

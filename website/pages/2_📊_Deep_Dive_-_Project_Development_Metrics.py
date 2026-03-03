@@ -309,8 +309,9 @@ def plot_open_metrics(df: pd.DataFrame, resolution: str, color_map: dict) -> go.
             "created",
             resample,
         ).rename(
-            columns=lambda x: x.replace("Total ", "New ").removesuffix("s")
-            + f" {subtype.title()}s"
+            columns=lambda x: (
+                x.replace("Total ", "New ").removesuffix("s") + f" {subtype.title()}s"
+            )
         )
         extra_dfs.append(_df)
     all_df = _reindex_to_daterange(pd.concat([open_df, *extra_dfs], axis=1), resample)

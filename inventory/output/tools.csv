@@ -1,6 +1,7 @@
 id,name,description,url,source,category
 adopt_net0,AdOpT-NET0,AdOpT-NET0 is a Python Library for bottom-up multi energy system modelling. It can model conversion technologies and networks for any carrier and optimize the design and operation of your energy system.,https://github.com/uu-er/adopt-net0,openmod,
 adopt_net0,AdOpT-NET0,,https://github.com/uu-er/adopt-net0,pre-compiled,
+akkudoktoreos,AkkudoktorEOS,"An open-source energy optimization system that integrates renewable energy sources, such as photovoltaic (PV) systems, battery storage, and smart load management solutions.",https://github.com/akkudoktor-eos/eos,opensustain-tech,
 amiris,AMIRIS,,https://gitlab.com/dlr-ve/esy/amiris/amiris,lf-energy-landscape,
 amiris,AMIRIS,"Agent-based electricty market model for analysing questions on future energy markets, their market design, and energy-related policy instruments",https://gitlab.com/dlr-ve/esy/amiris/amiris,openmod,
 andes,ANDES,Power system transient dynamics simulation with symbolic modeling and numerical analysis.,https://github.com/curent/andes,lf-energy-landscape,power-flow
@@ -141,7 +142,6 @@ energy_py,energy-py,Reinforcement learning for energy systems.,https://github.co
 energy_py,energy-py,Reinforcement learning for energy systems.,https://github.com/adgefficiency/energy-py,opensustain-tech,
 energy_py_linear,energy-py-linear,Optimizing energy systems using mixed integer linear programming.,https://github.com/adgefficiency/energy-py-linear,lf-energy-landscape,
 energy_py_linear,energy-py-linear,Optimizing energy systems using mixed integer linear programming.,https://github.com/adgefficiency/energy-py-linear,opensustain-tech,
-energy_system_simulation_and_optimization,Energy System Simulation and Optimization,"An open-source energy optimization system that integrates renewable energy sources, such as photovoltaic (PV) systems, battery storage, and smart load management solutions.",https://github.com/akkudoktor-eos/eos,opensustain-tech,production-cost
 energy_system_technology_data,Energy System Technology Data,"Compilation of assumptions about energy system technologies such as cost, efficiency and lifetime that can be read by energy system modelling software.",https://github.com/pypsa/technology-data,lf-energy-landscape,
 energy_transition_engine,Energy Transition Engine,Calculation engine for the Energy Transition Model.,https://github.com/quintel/etengine,opensustain-tech,
 energy_transition_model,Energy Transition Model,Web-based model based on a holistic description of a country's energy system.,https://github.com/quintel/documentation,openmod,
@@ -177,7 +177,6 @@ power generation technologies: offshore and onshore wind power, solar photovolta
 storage (PHS), batteries and methanation combined with open-cycle gas turbines.ion combined with open-cycle gas turbines.",https://github.com/behrangshirizadeh/eoles_elecres,openmod,
 eoles_mv,EOLES_mv,,https://github.com/behrangshirizadeh/eoles_mv,pre-compiled,
 epm,EPM,,https://github.com/esmap-world-bank-group/epm,pre-compiled,
-erad,ERAD,Graph based Python library for computing resilience metrics for power distribution systems.,https://github.com/nrel-distribution-suites/erad,opensustain-tech,
 erad,erad,,https://github.com/nrel-distribution-suites/erad,pre-compiled,
 erf,ERF,,https://github.com/erf-model/erf,lf-energy-landscape,
 esdl,ESDL,A modelling language created for the components in an energy system and their relations towards each other.,https://github.com/energytransition/esdl,lf-energy-landscape,

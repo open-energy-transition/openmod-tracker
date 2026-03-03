@@ -5,16 +5,20 @@
 
 """Filter collected ESM tools to remove duplicates and non-Git source URLs."""
 
+import difflib
 import logging
 from pathlib import Path
 from urllib.parse import urlparse
 
 import click
 import pandas as pd
+import requests
 import util
 from get_tools import TOOL_TYPES
+from tqdm import tqdm
 
 LOGGER = logging.getLogger(__name__)
+tqdm.pandas()
 
 
 def drop_duplicates(df: pd.DataFrame, on: str = "url") -> pd.DataFrame:
@@ -45,11 +49,30 @@ def drop_duplicates(df: pd.DataFrame, on: str = "url") -> pd.DataFrame:
         sources = ",".join(sorted(set(dup_df.source.values)))
         names = ",".join(sorted(set(dup_df.name.values)))
         filled = df_unique.loc[[idx]]
+        best_id = _closest_id(idx, dup_df.id.unique())
         for _, series in dup_df.iterrows():
             with pd.option_context("future.no_silent_downcasting", True):
                 filled = filled.fillna(value=series.dropna().to_dict())
-        df_unique.loc[[idx]] = filled.assign(source=sources, name=names)
+        df_unique.loc[[idx]] = filled.assign(source=sources, name=names, id=best_id)
     return df_unique.reset_index()
+
+
+def _closest_id(url: str, ids: list[str]) -> str:
+    """Find the closest matching ID to a given URL from a list of IDs.
+
+    Args:
+        url (str): URL to match.
+        ids (list[str]): List of IDs to search.
+
+    Returns:
+        str: Closest matching ID.
+    """
+    url_name = urlparse(url).path.lower().split("/")[-1]
+    scores = {
+        id_: difflib.SequenceMatcher(None, url_name, id_.lower()).ratio() for id_ in ids
+    }
+    best_id = max(scores, key=scores.get)
+    return best_id
 
 
 def drop_no_git(df: pd.DataFrame) -> pd.DataFrame:
@@ -169,6 +192,37 @@ def resolve_duplicated_urls(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def _get_url(url_series: pd.Series) -> str | None:
+    """Get the final URL for a repository, following redirects if necessary.
+
+    Args:
+        url_series (pd.Series): Series containing a single URL to check.
+
+    Returns:
+        str | None: The final URL after following redirects, or None if the URL is inaccessible.
+    """
+    # We expect only one unique URL per series.
+    url = url_series.drop_duplicates().item()
+    if pd.isnull(url):
+        return None
+    try:
+        r = requests.get(url, allow_redirects=True, timeout=60)
+        if r.ok:
+            new_url = r.url.lower()
+            if new_url != url:
+                LOGGER.warning(f"Found redirect for: {url} -> {new_url}.")
+            return new_url
+        elif r.status_code == 443:
+            LOGGER.warning(f"Read timed out for {url}, returning {url}.")
+            return url
+        else:
+            LOGGER.warning(f"Error accessing {url}: {r.status_code}")
+            return None
+    except Exception as e:
+        LOGGER.warning(f"Error accessing {url}: {e}")
+        return None
+
+
 @click.command()
 @click.argument("infile", type=click.Path(exists=True, dir_okay=False, file_okay=True))
 @click.argument(
@@ -185,7 +239,13 @@ def cli(infile: Path, outfile: Path, ignore: tuple[str]):
     """Filter collated tool list."""
     entries = pd.read_csv(infile).drop("description", axis=1)
     entries_ignore_sources = entries[~entries["source"].isin(ignore)]
-    filtered_entries = drop_no_git(entries_ignore_sources)
+
+    redirected_urls = entries_ignore_sources.groupby("url").url.progress_apply(_get_url)
+    entries_ignore_sources["url"] = entries_ignore_sources.url.map(redirected_urls)
+    filtered_entries = entries_ignore_sources.dropna(subset=["url"])
+
+    filtered_entries = drop_no_git(filtered_entries)
+
     filtered_entries = drop_duplicates(filtered_entries, on="url")
     filtered_entries = drop_exclusions(filtered_entries)
     filtered_entries = resolve_duplicated_urls(filtered_entries)

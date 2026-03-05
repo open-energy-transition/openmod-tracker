@@ -216,6 +216,7 @@ switch,https://github.com/switch-model/switch,"Switch,switch,switch-model","g-ps
 temoa,https://github.com/temoaproject/temoa,"Temoa,temoa","lf-energy-landscape,openmod,opensustain-tech,pre-compiled",capacity-expansion
 tesp,https://github.com/pnnl/tesp,tesp,pre-compiled,
 times_model,https://github.com/etsap-times/times_model,"TIMES,TIMES_model","openmod,opensustain-tech",
+toop,https://github.com/eliagroup/toop,ToOp,lf-energy-landscape,
 transactive_energy_service_system,https://github.com/slacgismo/tess,Transactive Energy Service System,"lf-energy-landscape,opensustain-tech",
 transient_lib,https://github.com/transient-official/transient-lib,transient-lib,pre-compiled,
 tulipaenergymodel_jl,https://github.com/tulipaenergy/tulipaenergymodel.jl,"Tulipa Energy Model,TulipaEnergyModel.jl","opensustain-tech,pre-compiled",

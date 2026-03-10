@@ -31,27 +31,31 @@ COLS = [
     "closed",
     "merged",
     "repo",
-    "host",
 ]
 
 
-def detect_host(url: str) -> str | None:
-    """Detect the git hosting platform from a URL.
+def get_repo_and_host(url: str) -> str | None:
+    """Extract the repository path and host from a URL.
 
     Args:
         url: Repository URL
 
     Returns:
-        'gh', 'gl', or None if unknown
+        A tuple of (repository path, host) if the URL is recognized, otherwise None.
     """
     parsed = urlparse(url.lower())
     netloc = parsed.netloc
+    path = parsed.path.strip("/")
 
     if netloc.endswith("github.com"):
-        return "gh"
+        repo = "gh:" + path
     elif "gitlab" in netloc:
-        return "gl"
-    return None
+        repo = "gl:" + path
+    else:
+        LOGGER.warning(f"Skipping user collection for {url} - unknown host.")
+        repo = None
+
+    return repo
 
 
 @click.command()
@@ -82,19 +86,12 @@ def cli(stats_file: Path, out_path: Path):
     # Initialize collectors
     github_collector = GitHubRepositoryCollectorGH()
     gitlab_collector = GitLabRepositoryCollectorGL()
-
-    for repo_id, repo in tqdm(repos_df.iterrows(), desc="Collecting users"):
-        repo_url = str(repo.html_url).lower()
-        host = detect_host(repo_url)
-
-        if host is None:
-            LOGGER.warning(
-                f"Skipping user collection for {repo_id} ({repo_url}) - unknown host."
-            )
-            continue
-
-        url_parts = urlparse(repo_url)
-        repo_path = url_parts.path.strip("/")
+    host_repos = repos_df["html_url"].apply(get_repo_and_host).dropna().values
+    existing_interactions = existing_interactions[
+        existing_interactions.repo.isin(host_repos)
+    ]
+    for host_repo in tqdm(host_repos, desc="Collecting users"):
+        host, repo_path = host_repo.split(":", 1)
 
         LOGGER.warning(f"Collecting users for {repo_path} from {host}")
 
@@ -111,22 +108,17 @@ def cli(stats_file: Path, out_path: Path):
             LOGGER.warning(f"No users found for {repo_path}.")
             continue
 
-        # Add host column
-        df["host"] = host
-
         existing_interactions = pd.concat([existing_interactions, df]).reindex(
             columns=COLS
         )
 
         # Clean up data by removing data that has been downloaded already
         # and merging rows with updated data (e.g. issues/PRs that have since been closed/merged)
-        is_repo = (existing_interactions["repo"] == repo_path) & (
-            existing_interactions["host"] == host
-        )
+        is_repo = existing_interactions["repo"] == repo_path
         no_dups_interactions = (
             existing_interactions[is_repo]
             .groupby(
-                ["username", "interaction", "subtype", "number", "repo", "host"],
+                ["username", "interaction", "subtype", "number", "repo"],
                 group_keys=False,
                 dropna=False,
             )

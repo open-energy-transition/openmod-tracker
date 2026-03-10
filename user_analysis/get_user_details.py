@@ -60,13 +60,11 @@ def cli(repo_interactions: Path, outdir: Path, refresh_cache: bool):
         existing_users = pd.read_csv(user_details_path, index_col=0)
     else:
         existing_users = pd.DataFrame(columns=USER_COLS, index=[])
-        existing_users.to_csv(user_details_path)
 
     if org_details_path.exists() and not refresh_cache:
         existing_orgs = pd.read_csv(org_details_path, index_col=0)
     else:
         existing_orgs = pd.DataFrame(columns=ORG_COLS, index=[])
-        existing_orgs.to_csv(org_details_path)
 
     # Initialize clients
     gh_client = GitHubClientGH()
@@ -74,12 +72,19 @@ def cli(repo_interactions: Path, outdir: Path, refresh_cache: bool):
 
     users_df = pd.read_csv(repo_interactions)
 
+    # Filter out any users for which we're removed the repo they are interacting with + any orgs that now disappear.
+    # This ensures we don't have user/org details for users who no longer interact with any repos in our dataset.
+    existing_users_start = existing_users[existing_users.index.isin(users_df.username)]
+    existing_users_start.to_csv(user_details_path)
+    avail_orgs = set(",".join(existing_users_start.orgs.dropna()).split(","))
+    existing_orgs_start = existing_orgs[existing_orgs.index.isin(avail_orgs)]
+    existing_orgs_start.to_csv(org_details_path)
+
     # Filter out users we've already processed
     users_df = users_df[~users_df.username.isin(existing_users.index)]
-
-    # Group by username and host to get repos per user per platform
+    hosts = users_df["repo"].str.split(":", n=1, expand=True)[0]
     user_repo_map = (
-        users_df.groupby(["username", "host"])["repo"].agg(lambda x: set(x)).to_dict()
+        users_df.groupby(["username", hosts])["repo"].agg(lambda x: set(x)).to_dict()
     )
 
     LOGGER.warning(

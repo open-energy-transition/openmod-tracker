@@ -27,9 +27,21 @@ and this project adheres to [Calendar Versioning](https://calver.org/).
 
 ## Unreleased
 
+### Added
+
+- Repo interaction and user detail cleaning when removing a repo with existing downloaded data.
+
 ### Fixed
 
 - Anaconda data downloader when entering a new year.
+- Source code URL redirects (identified when `NREL` org changed to `NatLabRockies` across multiple repos).
+- RTD link checks when too many requests are made.
+
+## Changed
+
+- Some existing tools added to exclusions following refreshed review.
+- host and repo name combined in user analysis.
+  We now store data in the form `<host>:<repo>` where host is one of `gh` (GitHub) or `gl` (Gitlab).
 
 ## 2025-11-06
 

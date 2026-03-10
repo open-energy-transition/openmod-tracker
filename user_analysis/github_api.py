@@ -525,7 +525,7 @@ class GitHubRepositoryCollectorGH:
             results.append(self._parse_commit_data(commit_data, is_default_branch=True))
 
         LOGGER.warning(f"Analysis complete. Found {len(results)} interactions")
-        results_df = pd.DataFrame(results).assign(repo=repo)
+        results_df = pd.DataFrame(results).assign(repo=f"gh:{repo}")
 
         # Simplify datetime strings to reduce size on disk
         for ts_col in ["created", "closed", "merged"]:

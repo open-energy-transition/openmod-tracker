@@ -305,7 +305,7 @@ class GitLabRepositoryCollectorGL:
             LOGGER.info(f"No interactions found for {repo_path}")
             return pd.DataFrame(columns=COLS)
 
-        df = pd.DataFrame(results).assign(repo=repo_path)
+        df = pd.DataFrame(results).assign(repo=f"gl:{repo_path}")
         # Harmonize columns
         for col in ("number", "closed", "merged", "subtype"):
             if col not in df:

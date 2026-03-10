@@ -77,7 +77,6 @@ energysystemsmodellinglab.muse_os.commits: bd476c7da30739a7387785e8571dcdb8aae7f
   2899
 energysystemsmodellinglab.muse_os.issues: Y3Vyc29yOnYyOpK5MjAyNS0wNy0xNVQxNDo0ODoxOSswMTowMM7AqaBj
 energysystemsmodellinglab.muse_os.pullRequests: Y3Vyc29yOnYyOpK5MjAyNS0wNi0wMlQxMjo1NzoxNiswMTowMM6YnFbO
-energytransition.esdl.commits: a39b2ee693ecbef0a289e8601c35917ae4c14ac2 199
 epri-dev.opender.commits: fe7877c664bc6c5eb3832499bf05e0f1dd1825c8 99
 erf-model.erf.commits: b4d6b3969b99c5d9fc9865a1219dd4e7ff649d20 4399
 erf-model.erf.pullRequests: Y3Vyc29yOnYyOpK5MjAyNi0wMi0xNlQxNTo1Mzo1OCswMDowMM7EIlDt
@@ -264,7 +263,6 @@ pypsa.pypsa.forks: Y3Vyc29yOnYyOpK5MjAyNi0wMi0xOVQwNTo0MDoxMSswMDowMM5FOkoy
 pypsa.pypsa.issues: Y3Vyc29yOnYyOpK0MjAyNi0wMy0wMlQxOTowMDowNVrO7y5qmw==
 pypsa.pypsa.pullRequests: Y3Vyc29yOnYyOpK5MjAyNi0wMS0wNVQxMzo1NjozMCswMDowMM67ickd
 pypsa.pypsa.stargazers: Y3Vyc29yOnYyOpK5MjAyNi0wMS0xN1QxMDoxMDoxNCswMDowMM4m0_tA
-pypsa.whobs-server.commits: 9f587ce7f23a37cc899a4551e4a3d0ea90707208 99
 quasi-software.resie.commits: cd7170abc64631eb951c0a853f853714c419bb9a 1799
 quintel.etengine.commits: 31ba6d8b5d64b7e8bb4687ce9fb576ed03dfaa0f 5799
 quintel.etengine.issues: Y3Vyc29yOnYyOpK5MjAyNS0xMi0xNVQxMToxMjoxMiswMDowMM7eUlEo
@@ -319,6 +317,7 @@ tulipaenergy.tulipaenergymodel.jl.commits: 2a205c8fb56a1748fa06ffff5910d62f9d827
   699
 tulipaenergy.tulipaenergymodel.jl.issues: Y3Vyc29yOnYyOpK5MjAyNS0wNy0wOVQxMToyMjowMSswMTowMM6_pwxY
 tulipaenergy.tulipaenergymodel.jl.pullRequests: Y3Vyc29yOnYyOpK5MjAyNS0xMi0xNVQxOToxNDozOCswMDowMM64_qSq
+tum-ens.hamlet.commits: 7590f454c682c0fd569624569095661fffe685b5 599
 tum-ens.rivus.commits: b96937e8ff6b66919fd431de2c604d40c7dc1fd6 199
 tum-ens.urbs.commits: e542b3126d11e6d081ce35236a26ef105160e480 799
 tum-ens.urbs.forks: Y3Vyc29yOnYyOpK5MjAyMi0wNC0yNVQxMjozMzoxNSswMTowMM4c7cSK
@@ -326,7 +325,6 @@ tum-ens.urbs.issues: Y3Vyc29yOnYyOpK5MjAxOS0wNC0wMVQxMjowODo1NCswMTowMM4ZfVdA
 tum-ens.urbs.pullRequests: Y3Vyc29yOnYyOpK5MjAxNy0xMi0wOFQxMjowNzoxMyswMDowMM4JXx13
 tum-ens.urbs.stargazers: Y3Vyc29yOnYyOpK5MjAyNS0xMS0yNFQwMToyNTowNyswMDowMM4mAA7W
 tum-ewk.ficus.commits: 25403c97aa14a8466130f17327e11c76f62d5365 99
-tum-ewk.lemlab.commits: 43670aa66a395f4ab703a8c4b6af757694d2e19e 99
 tum-ewk.opentumflex.commits: 830b19b5c42f21d47ca64d3b146c9c6064a55b68 399
 unsw-ceem.nempy.commits: 2d3cef0e5545c820067fecddfa2e2fd984ac5583 399
 upb-lea.electricgrid.jl.commits: 3057471a1e55d4626236b98721864f70fcb815d9 1199

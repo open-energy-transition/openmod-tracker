@@ -132,7 +132,6 @@ github.com/SanPen/VeraGrid,simulation model
 github.com/sei-international/NemoMod.jl,
 github.com/simjunky/Leelo,
 github.com/sogno-platform/dpsim,
-github.com/sogno-platform/libcimpp,
 github.com/sogno-platform/pymfm,simulation model
 github.com/soheilmohseni/pyMicrogridControl,simulation model
 github.com/sp-etx/friendlysam,simulation model
@@ -174,3 +173,4 @@ github.com/iiasa/message_ix,
 github.com/QuaSi-Software/resie,simulation model
 github.com/ESDLMapEditorESSIM/essim,simulation model
 github.com/powergama/powergama
+github.com/tum-ens/HAMLET

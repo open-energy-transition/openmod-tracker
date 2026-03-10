@@ -6,18 +6,31 @@
 """Get ecosyste.ms stats for defined projects."""
 
 import logging
+import os
 from pathlib import Path
+from time import sleep
 from urllib.parse import urlparse
 
 import click
+import dotenv
 import pandas as pd
 import requests
-import util
 from tqdm import tqdm
 
 LOGGER = logging.getLogger(__name__)
 COLS = ["rtd", "pages", "wiki"]
 RTD_URL = "http://{slug}.readthedocs.io"
+
+
+def _parse_url(url: str) -> tuple[str, str, str]:
+    """Parse a Git repo URL into its host, owner, and repo components."""
+    parsed = urlparse(url)
+    host, owner, repo = (
+        parsed.netloc,
+        parsed.path.strip("/").split("/")[0],
+        parsed.path.strip("/").split("/")[-1],
+    )
+    return host, owner, repo
 
 
 def _get_docs_data(url: str) -> dict:
@@ -37,17 +50,16 @@ def _get_docs_data(url: str) -> dict:
     Returns:
         dict: Dict mapping docs sources (rtd, pages, wiki) to links, if those links exist.
     """
-    parsed = urlparse(url)
-    host, owner, repo = (
-        parsed.netloc,
-        parsed.path.strip("/").split("/")[0],
-        parsed.path.strip("/").split("/")[-1],
-    )
+    host, owner, repo = _parse_url(url)
+
     for rtd_slug in [
         repo,
         repo.replace("_", "-"),
+        owner,
+        owner.replace("_", "-"),
         f"{owner}-{repo}",
         f"{repo}-documentation",
+        f"{repo}-docs",
     ]:
         valid_rtd_doc = _verify_rtd(rtd_slug, url)
         if valid_rtd_doc:
@@ -105,17 +117,50 @@ def _verify_rtd(slug: str, url: str) -> bool:
     Returns:
         bool: True if RTD Git URL linked to the `slug` site matches the `url`, False otherwise.
     """
-    site_exists = _check_header(RTD_URL.format(slug=slug))
-    if not site_exists:
+    token = os.getenv("READTHEDOCS_API_TOKEN")
+    if token is not None:
+        kwargs = {"headers": {"Authorization": f"Token {token}"}}
+    else:
+        kwargs = {}
+
+    url_status = requests.get(RTD_URL.format(slug=slug)).status_code
+    if url_status == 404:
+        return False
+    elif url_status == 429:
+        LOGGER.warning(
+            f"Rate limited by RTD when checking {slug}. Waiting 60 seconds before retrying."
+        )
+        sleep(60)
+        return _verify_rtd(slug, url)
+
+    response = requests.get(
+        f"https://readthedocs.org/api/v3/projects/{slug.lower()}", **kwargs
+    )
+
+    if response.status_code == 429:
+        LOGGER.warning(
+            f"Rate limited by RTD API when checking {slug}. Waiting 60 seconds before retrying."
+        )
+        sleep(60)
+        return _verify_rtd(slug, url)
+    elif not response.ok:
         return False
 
-    response = util.get_url_json_content(
-        f"https://readthedocs.org/api/v3/projects/{slug.lower()}"
-    )
-    rtd_git_url = response.get("repository", {}).get("url", None)
+    rtd_git_url = response.json().get("repository", {}).get("url", None)
+    host, owner, _ = _parse_url(url)
+    url_org = f"https://{host}/{owner}/documentation"
     if rtd_git_url is not None:
-        rtd_git_url_cleaned = requests.head(rtd_git_url, allow_redirects=True).url
-        return rtd_git_url_cleaned == url
+        try:
+            rtd_git_url_cleaned = (
+                requests.head(rtd_git_url, allow_redirects=True)
+                .url.removesuffix(".git")
+                .lower()
+            )
+        except (requests.exceptions.HTTPError, requests.exceptions.ConnectionError):
+            return False
+        return (
+            rtd_git_url_cleaned == url.lower() or rtd_git_url_cleaned == url_org.lower()
+        )
     else:
         return False
 
@@ -131,6 +176,7 @@ def _verify_rtd(slug: str, url: str) -> bool:
 )
 def cli(tool_stats: Path, outfile: Path):
     """Get ecosyste.ms stats for all entries."""
+    dotenv.load_dotenv()
     entries = pd.read_csv(tool_stats, index_col="id")
     if outfile.exists():
         existing_docs_df = pd.read_csv(outfile, index_col="id")

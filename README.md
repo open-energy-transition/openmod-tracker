@@ -128,6 +128,10 @@ These are automated with a Github action which runs once a month but you can for
 The model inventory and associated statistics can be updated by calling `pixi run get-docs`.
 This will get tools from the various upstream inventories, filter them based on [our requirements](#our-data-processing-approach), and then get stats from ecosyste.ms and by speculatively querying known documentation sites.
 
+>[!NOTE]
+>To successfully call the ReadTheDocs API, you should add a suitable RTD API token as the `READTHEDOCS_API_TOKEN` environment variable on your device.
+>You can store it directly in the repository within a `.env` file and it will be picked up automatically by the workflow.
+
 #### User stats
 
 All user statistics can be updated by calling `pixi run classify-users`.
@@ -142,6 +146,10 @@ This will append `inventory/output/user_details.csv` with any new users listed i
 As we have already prepared the initial set of users, this should be relatively quick when refreshing.
 
 Finally, our heuristic user classification approach can be applied to the updated user details by calling `pixi run classify-users`.
+
+>[!NOTE]
+>To successfully call the GitHub and Gitlab APIs, you should add a suitable API tokens as the `GITHUB_TOKEN` and `GITLAB_TOKEN` environment variables, respectively.
+>You can store them directly in the repository within a `.env` file and it will be picked up automatically by the workflow.
 
 #### Code quality assessment
 

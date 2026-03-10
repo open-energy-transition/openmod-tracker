@@ -1059,7 +1059,6 @@ opensourcedesign,Connecting open source & design! 🎨 Join our forum at https:/
 unibz,
 nextcloud,"📱☁️💻 A safe home for all your data – community-driven, free & open source 👏"
 terion-io,
-Geodan,
 modelica,Projects of the Modelica Association
 strivewire,
 sipgate,"sipgate isn’t your typical telephony provider. With 300 colleagues, we work together on extraordinary landline and telephony services just for you."
@@ -1441,7 +1440,6 @@ bitdances,
 ICESAT-2HackWeek,
 ampl,A modeling language for mathematical programming
 mit,"For students/alumni/staff/MIT affiliates! To join, email with GitHub+Athena usernames."
-EnergyTransition,
 montefiore-ms,"Our research concerns the modeling, analysis, optimal design and control of electric power and energy systems."
 eggzec,Science & Computing.
 crs-org,On the edge of research in automatic speech recognition for telephony.
@@ -1517,7 +1515,6 @@ rapidsms,
 unicef,
 unicefuganda,
 flexiblepower,FAN is open standard and implementation that connects devices with energy management services.
-EnergyTransition,
 CodeHuntersLab,"Comunidad que desarrolla actividades orientadas a la formación en investigación y creación tecnológica, dirigidas a jóvenes entre 15 y 20 años."
 apple,
 swift-server,
@@ -1599,7 +1596,6 @@ JuliaLinearAlgebra,A collection of linear algebra packages for the Julia Program
 julia-vscode,The Julia extension for Visual Studio Code provides rich support for the Julia programming language
 Ferrite-FEM,
 JuliaLogging,
-ekimiateam,Free Software for the modern Enterprise
 codeneuro,
 lightning-viz,
 thunder-project,
@@ -2996,7 +2992,6 @@ alohaeditor,A JavaScript library to replace contentEditable with better capabili
 sandstorm,sandstorm - building great web applications
 neos,Neos is a Content Application Platform with a CMS and an application framework at its core.
 bnw-digital,Arbeitsgruppe Digitales im Bundesverband Nachhaltige Wirtschaft
-commanded,Use Commanded to build Elixir CQRS/ES applications
 uDeviceX,In Silico Lab-On-A-Chip
 dd-harp,
 AlgebraicJulia,An Ecosystem of Software Based on Generalized Algebra and Category Theory in Julia
@@ -3134,7 +3129,7 @@ JuliaGraphics,
 JuliaCI,Continuous integration (CI) support for the Julia programming language
 JuliaGeometry,Computational Geometry with Julia
 JuliaIO,A collection of Julia packages for unified IO infrastructure
-HolyLab,None
+HolyLab,
 JuliaImages,Julia packages for image processing
 JuliaPackaging,Tooling for Julia's binary packages and dependencies
 JuliaMath,Mathematics made easy in Julia
@@ -3432,3 +3427,4 @@ ntnuiotenergy,
 elyra-ai,Elyra is an open source set of AI-centric extensions to JupyterLab Notebooks. The project is hosted in incubation in the LF AI & Data Foundation.
 claimed-framework,CLAIMED is a runtime and programming language agnostic Data & AI component framework abstracting away all complexity for advanced MLOps and TrustedAI.
 digitalernachschub,
+adlr-team,

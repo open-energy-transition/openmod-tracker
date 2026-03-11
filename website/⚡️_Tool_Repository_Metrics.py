@@ -220,7 +220,10 @@ def _create_repo_interactions_timeseries(
     ]
 
     map_repo = {
-        idx: "https://github.com/" + idx.lower() for idx in use_df_6me.repo.unique()
+        idx: idx.lower()
+        .replace("gh:", "https://github.com/")
+        .replace("gl:", "https://gitlab.com/")
+        for idx in use_df_6me.repo.unique()
     }
     interactions = (
         use_df_6me.groupby([use_df_6me.created, use_df_6me.repo])

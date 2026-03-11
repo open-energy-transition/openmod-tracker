@@ -30,6 +30,7 @@ and this project adheres to [Calendar Versioning](https://calver.org/).
 ### Added
 
 - Repo interaction and user detail cleaning when removing a repo with existing downloaded data.
+- Warning on category assignments referring to IDs not defined in the tool list.
 
 ### Fixed
 
@@ -42,6 +43,8 @@ and this project adheres to [Calendar Versioning](https://calver.org/).
 - Some existing tools added to exclusions following refreshed review.
 - host and repo name combined in user analysis.
   We now store data in the form `<host>:<repo>` where host is one of `gh` (GitHub) or `gl` (Gitlab).
+- Project naming convention, to choose the closest name to the repository name.
+- IDs used in category assignment to match updated IDs.
 
 ## 2025-11-06
 

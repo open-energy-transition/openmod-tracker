@@ -7,6 +7,7 @@
 
 import difflib
 import logging
+from collections.abc import Iterable
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -46,10 +47,16 @@ def drop_duplicates(df: pd.DataFrame, on: str = "url") -> pd.DataFrame:
 
     for idx in df_duplicates[on].unique():
         dup_df = df[df[on] == idx]
-        sources = ",".join(sorted(set(dup_df.source.values)))
-        names = ",".join(sorted(set(dup_df.name.values)))
+        sources = ",".join(sorted(dup_df.source.unique()))
+        # We de-prioritise pre-compiled entries as their name entry is just the repo name
+        is_pre_compiled = dup_df.source == "pre-compiled"
+        names = (
+            ",".join(_match_to_url(idx, dup_df[~is_pre_compiled].name.unique()))
+            or dup_df[is_pre_compiled].name.drop_duplicates().item()
+        )
+
         filled = df_unique.loc[[idx]]
-        best_id = _closest_id(idx, dup_df.id.unique())
+        best_id = _match_to_url(idx, dup_df.id.unique())[0]
         for _, series in dup_df.iterrows():
             with pd.option_context("future.no_silent_downcasting", True):
                 filled = filled.fillna(value=series.dropna().to_dict())
@@ -57,21 +64,21 @@ def drop_duplicates(df: pd.DataFrame, on: str = "url") -> pd.DataFrame:
     return df_unique.reset_index()
 
 
-def _closest_id(url: str, ids: list[str]) -> str:
-    """Find the closest matching ID to a given URL from a list of IDs.
+def _match_to_url(url: str, ids: Iterable[str]) -> list[str]:
+    """Order IDs / names based on similarity to a given git repo name.
 
     Args:
         url (str): URL to match.
-        ids (list[str]): List of IDs to search.
+        ids (list[str]): List of IDs/names to order.
 
     Returns:
-        str: Closest matching ID.
+        list[str]: List of IDs/names ordered by similarity (first is most similar).
     """
     url_name = urlparse(url).path.lower().split("/")[-1]
     scores = {
         id_: difflib.SequenceMatcher(None, url_name, id_.lower()).ratio() for id_ in ids
     }
-    best_id = max(scores, key=scores.get)
+    best_id = sorted(scores, key=scores.get, reverse=True)
     return best_id
 
 
@@ -115,23 +122,6 @@ def drop_exclusions(df: pd.DataFrame) -> pd.DataFrame:
         f"Excluding {len(df) - len(new_df):d} entries following manual assessment."
     )
     return new_df
-
-
-def add_categories(df: pd.DataFrame) -> pd.DataFrame:
-    """Add manually derived tool categories.
-
-    Args:
-        df (pd.DataFrame): Tools table.
-
-    Returns:
-        pd.DataFrame: Updated `df` with `category` column filled with manual categories.
-    """
-    categories = pd.read_csv(
-        Path(__file__).parent / "categories.csv", index_col="id"
-    ).category
-    df = df.set_index("id")
-    df["category"] = df["category"].fillna(categories.reindex(df.index))
-    return df.reset_index()
 
 
 def resolve_duplicated_urls(df: pd.DataFrame) -> pd.DataFrame:

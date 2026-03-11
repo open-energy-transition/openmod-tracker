@@ -215,7 +215,12 @@ def add_categories(df: pd.DataFrame) -> pd.DataFrame:
     categories = pd.read_csv(
         Path(__file__).parent / "categories.csv", index_col="id"
     ).category
+
     df = df.set_index("id")
+    if len(unexepcted_ids := categories.index.difference(df.index)) > 0:
+        LOGGER.warning(
+            f"Found {len(unexepcted_ids)} unexpected IDs in categories.csv that are not in the tool list: {', '.join(unexepcted_ids)}"
+        )
     df["category"] = df["category"].fillna(categories.reindex(df.index))
     return df.reset_index()
 

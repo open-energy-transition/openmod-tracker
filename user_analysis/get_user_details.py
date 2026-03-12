@@ -83,9 +83,7 @@ def cli(repo_interactions: Path, outdir: Path, refresh_cache: bool):
     # Filter out users we've already processed
     users_df = users_df[~users_df.username.isin(existing_users.index)]
     hosts = users_df["repo"].str.split(":", n=1, expand=True)[0]
-    user_repo_map = (
-        users_df.groupby(["username", hosts])["repo"].agg(lambda x: set(x)).to_dict()
-    )
+    user_repo_map = users_df.groupby(["username", hosts])["repo"].agg(set).to_dict()
 
     LOGGER.warning(
         f"Collecting details for {len(user_repo_map)} unique user-host pairs"

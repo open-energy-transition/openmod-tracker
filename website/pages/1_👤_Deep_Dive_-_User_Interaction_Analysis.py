@@ -31,7 +31,12 @@ def map_repo_to_tool(user_stats_df: pd.DataFrame, repo_col: str) -> list[dict]:
     tools_df = pd.read_csv(
         Path(__file__).parent.parent.parent / "inventory" / "output" / "filtered.csv"
     )
-    urls = {repo: "https://github.com/" + repo.lower() for repo in available_repos}
+    urls = {
+        repo: repo.lower()
+        .replace("gh:", "https://github.com/")
+        .replace("gl:", "https://gitlab.com/")
+        for repo in available_repos
+    }
     repo_to_tool_map = [
         {
             "repo": repo,

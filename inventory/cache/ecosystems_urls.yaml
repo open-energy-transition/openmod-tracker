@@ -9,6 +9,7 @@ https://git.rwth-aachen.de/acs/public/simulation/ssmd: https://repos.ecosyste.ms
 https://git.tu-berlin.de/etus/public/aristopy: https://repos.ecosyste.ms/api/v1/hosts/git.tu-berlin.de/repositories/etus%2Fpublic%2Faristopy
 https://git.tu-berlin.de/genesysmod/genesys-mod-public: https://repos.ecosyste.ms/api/v1/hosts/git.tu-berlin.de/repositories/genesysmod%2Fgenesys-mod-public
 https://git.tu-berlin.de/users/sign_in: not-found
+https://github.com/GENeSYS-MOD/GENeSYS_MOD.gms: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/GENeSYS-MOD%2FGENeSYS_MOD.gms
 https://github.com/adamgreenhall/minpower: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/adamgreenhall%2Fminpower
 https://github.com/adgefficiency/energy-py: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/ADGEfficiency%2Fenergy-py
 https://github.com/adgefficiency/energy-py-linear: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/ADGEfficiency%2Fenergy-py-linear

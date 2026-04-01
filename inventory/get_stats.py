@@ -29,6 +29,7 @@ ENTRIES_TO_KEEP = [
     "commit_stats.dds",
     "commit_stats.total_committers",
     "homepage",
+    "active_maintainers_count",
 ]
 EXTRA_COLS = [
     "last_month_downloads",
@@ -131,6 +132,8 @@ def get_ecosystems_entry_data(
         for entry in ENTRIES_TO_KEEP:
             if "." in entry:
                 val = _get_nested_dict_entry(repo_data, entry)
+            elif entry == "active_maintainers_count":
+                val = _get_number_of_maintainers(repo_data["html_url"])
             else:
                 val = repo_data[entry]
             repo_data_to_keep[entry] = val
@@ -174,6 +177,39 @@ def _get_nested_dict_entry(
     else:
         val = subdict.get(key_2, None)
     return val
+
+
+def _get_number_of_maintainers(url: str) -> int:
+    """
+    Get the number of active maintainers for a repository from ecosyste.ms package API.
+
+    Args:
+        url (str): Repository URL.
+
+    Returns:
+        int: Number of active maintainers. Returns 0 if no entry is found or data is unavailable.
+    """
+    try:
+        package_data = util.get_ecosystems_package_data(url)
+    except Exception as e:
+        LOGGER.warning(f"Error fetching ecosyste.ms package data for {url}: {e}")
+        return 0
+
+    if not package_data or package_data == "not-found":
+        LOGGER.warning(f"Could not find ecosyste.ms package entry for {url}")
+        return 0
+
+    try:
+        active_maintainers = package_data[0]["issue_metadata"]["active_maintainers"]
+    except (IndexError, TypeError) as e:
+        LOGGER.warning(f"Unexpected package data structure for {url}: {e}")
+        return 0
+
+    if not active_maintainers:
+        LOGGER.debug(f"No active maintainers found for {url}")
+        return 0
+
+    return len(active_maintainers)
 
 
 def _get_package_data(url: str) -> dict:

@@ -14,3 +14,4 @@ For a full contributor list, see <https://github.com/open-energy-transition/open
 - Markus Groissböck, Open Energy Transition <markus.groissbock@openenergytransition.org>
 - Jacek Bendig, Open Energy Transition <jacek.bendig@openenergytransition.org>
 - Ruaridh Macdonald, <ruaridh.macd@gmail.com>
+- Fabrizio Finozzi, <fabrizio.finozzi.business@gmail.com>

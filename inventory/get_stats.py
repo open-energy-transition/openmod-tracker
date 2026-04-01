@@ -180,8 +180,7 @@ def _get_nested_dict_entry(
 
 
 def _get_number_of_maintainers(url: str) -> int:
-    """
-    Get the number of active maintainers for a repository from ecosyste.ms package API.
+    """Get the number of active maintainers for a repository from ecosyste.ms package API.
 
     Args:
         url (str): Repository URL.

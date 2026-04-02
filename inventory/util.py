@@ -13,7 +13,9 @@ import requests
 import yaml
 
 ECOSYSTEMS_REPO_LOOKUP_API = "https://repos.ecosyste.ms/api/v1/repositories/lookup?url="
-ECOSYSTEMS_ISSUES_LOOKUP_API = "https://issues.ecosyste.ms/api/v1/repositories/lookup?url="
+ECOSYSTEMS_ISSUES_LOOKUP_API = (
+    "https://issues.ecosyste.ms/api/v1/repositories/lookup?url="
+)
 ECOSYSTEMS_PACKAGES_LOOKUP_API = (
     "https://packages.ecosyste.ms/api/v1/packages/lookup?repository_url="
 )

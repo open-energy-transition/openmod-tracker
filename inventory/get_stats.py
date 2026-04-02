@@ -180,29 +180,31 @@ def _get_nested_dict_entry(
 
 
 def _get_number_of_maintainers(url: str) -> int:
-    """Get the number of active maintainers for a repository from ecosyste.ms package API.
+    """Get the number of active maintainers for a repository from ecosyste.ms issues API.
 
     Args:
         url (str): Repository URL.
 
     Returns:
-        int: Number of active maintainers. Returns 0 if no entry is found or data is unavailable.
+        int: Number of active maintainers. Returns -1 data is unavailable.
+            Returns 0 if there are no active maintainers, and a positive integer for the
+            number of active maintainers if data is available.
     """
     try:
-        package_data = util.get_ecosystems_package_data(url)
+        issues_data = util.get_ecosystems_issues_data(url)
     except Exception as e:
-        LOGGER.warning(f"Error fetching ecosyste.ms package data for {url}: {e}")
-        return 0
+        LOGGER.warning(f"Error fetching ecosyste.ms issues data for {url}: {e}")
+        return -1
 
-    if not package_data or package_data == "not-found":
-        LOGGER.warning(f"Could not find ecosyste.ms package entry for {url}")
-        return 0
+    if not issues_data or issues_data == "not-found":
+        LOGGER.warning(f"Could not find ecosyste.ms issues entry for {url}")
+        return -1
 
     try:
-        active_maintainers = package_data[0]["issue_metadata"]["active_maintainers"]
+        active_maintainers = issues_data["active_maintainers"]
     except (IndexError, KeyError, TypeError) as e:
-        LOGGER.warning(f"Unexpected package data structure for {url}: {e}")
-        return 0
+        LOGGER.warning(f"Unexpected issues data structure for {url}: {e}")
+        return -1
 
     if not active_maintainers:
         LOGGER.debug(f"No active maintainers found for {url}")

@@ -29,6 +29,7 @@ COLUMN_NAME_MAPPING: dict[str, str] = {
     "pushed_at": "Updated",
     "stargazers_count": "Stars",
     "commit_stats.total_committers": "Contributors",
+    "active_maintainers_count": "Active Maintainers",
     "commit_stats.dds": "DDS",
     "forks_count": "Forks",
     "dependent_repos_count": "Dependents",
@@ -36,7 +37,6 @@ COLUMN_NAME_MAPPING: dict[str, str] = {
     "category": "Category",
     "language": "Language",
     "license_category": "License Type",
-    "active_maintainers_count": "Active Maintainers",
 }
 
 COLUMN_DTYPES: dict[str, Callable] = {
@@ -45,13 +45,13 @@ COLUMN_DTYPES: dict[str, Callable] = {
     "updated_at": pd.to_datetime,
     "stargazers_count": pd.to_numeric,
     "commit_stats.total_committers": pd.to_numeric,
+    "active_maintainers_count": pd.to_numeric,
     "commit_stats.dds": lambda x: 100 * pd.to_numeric(x),
     "forks_count": pd.to_numeric,
     "dependent_repos_count": pd.to_numeric,
     "last_month_downloads": pd.to_numeric,
     "category": lambda x: x.str.split(","),
     "license_category": lambda x: x.astype("string"),
-    "active_maintainers_count": pd.to_numeric,
 }
 
 NUMBER_FORMAT: dict[str, str] = {

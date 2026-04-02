@@ -36,7 +36,7 @@ COLUMN_NAME_MAPPING: dict[str, str] = {
     "category": "Category",
     "language": "Language",
     "license_category": "License Type",
-    "active_maintainers_count": "Maintainers",
+    "active_maintainers_count": "Active Maintainers",
 }
 
 COLUMN_DTYPES: dict[str, Callable] = {
@@ -61,7 +61,7 @@ NUMBER_FORMAT: dict[str, str] = {
     "Forks": "localized",
     "Dependents": "localized",
     "1 Month Downloads": "localized",
-    "Maintainers": "localized",
+    "Active Maintainers": "localized",
 }
 
 COLUMN_HELP: dict[str, str] = {
@@ -69,7 +69,7 @@ COLUMN_HELP: dict[str, str] = {
     "Updated": "Most recent repository commit",
     "Stars": "Repository bookmarks",
     "Contributors": "All-time source code contributors",
-    "Maintainers": "Active source code maintainers",
+    "Active Maintainers": "Active maintainers of the source code",
     "DDS": "Development distribution score (the bigger the number the better, 0 means only one contributor. [Click for more info](https://report.opensustain.tech/chapters/development-distribution-score))",
     "Forks": "Number of Git forks",
     "Dependents": "Packages dependent on this project (only available if the project is indexed on a package repository)",

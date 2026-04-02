@@ -200,7 +200,7 @@ def _get_number_of_maintainers(url: str) -> int:
 
     try:
         active_maintainers = package_data[0]["issue_metadata"]["active_maintainers"]
-    except (IndexError, TypeError) as e:
+    except (IndexError, KeyError, TypeError) as e:
         LOGGER.warning(f"Unexpected package data structure for {url}: {e}")
         return 0
 

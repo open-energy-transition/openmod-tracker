@@ -177,6 +177,7 @@ power generation technologies: offshore and onshore wind power, solar photovolta
 storage (PHS), batteries and methanation combined with open-cycle gas turbines.ion combined with open-cycle gas turbines.",https://github.com/behrangshirizadeh/eoles_elecres,openmod,
 eoles_mv,EOLES_mv,,https://github.com/behrangshirizadeh/eoles_mv,pre-compiled,
 epm,EPM,,https://github.com/esmap-world-bank-group/epm,pre-compiled,"capacity-expansion,production-cost"
+erad,ERAD,Graph based Python library for computing resilience metrics for power distribution systems.,https://github.com/nlr-distribution-suite/erad,opensustain-tech,
 erad,erad,,https://github.com/nrel-distribution-suites/erad,pre-compiled,
 erf,ERF,,https://github.com/erf-model/erf,lf-energy-landscape,
 esdl,ESDL,A modelling language created for the components in an energy system and their relations towards each other.,https://github.com/energytransition/esdl,lf-energy-landscape,
@@ -206,6 +207,7 @@ flexplan_jl,FlexPlan.jl,An open-source Julia tool for transmission and distribut
 flexplan_jl,FlexPlan.jl,,https://github.com/electa-git/flexplan.jl,pre-compiled,
 flixopt,flixOpt,Python-based optimization framework designed to tackle energy and material flow problems using mixed-integer linear programming (MILP) and provides a powerful platform for both dispatch and investment optimization challenges.,https://github.com/flixopt/flixopt,opensustain-tech,capacity-expansion
 flixopt,flixOpt,,https://github.com/flixopt/flixopt,pre-compiled,capacity-expansion
+fluxopt,fluxopt,"Energy system optimization with linopy — detailed dispatch, scaled to multi period planning.",https://github.com/fbumann/fluxopt,opensustain-tech,
 frictionless_energy_data,Frictionless Energy data,Common medium to facilitate the flow of data between energy and environmental models in a way that can be automated.,https://github.com/sentinel-energy/friendly_data,lf-energy-landscape,
 friendlysam,friendlysam,,https://github.com/sp-etx/friendlysam,pre-compiled,
 gamamod,GAMAMOD,"The gas market model GAMAMOD is a bottom-up model used to determine and analyze the optimal natural gas supply structure in Germany and to examine the utilization of the natural gas infrastructure. In its basic version, the model is a Linear Program with  a high spatial resolution and daily time steps. It contains more than 800 nodes and 1200 edges, while also taking into account parallel transmission lines, storage, and changes to demand and the grid as year progress. It's main outputs are optimal flow, imports, storage usage and retrofitting.
@@ -314,6 +316,7 @@ matpower,matpower,"A package of M-files for solving power flow, continuation pow
 matpower,matpower,,https://github.com/matpower/matpower,pre-compiled,
 medea,Medea,,https://github.com/inwe-boku/medea,openmod,
 medeas,MEDEAS,,http://medeas.eu/model/medeas-model,openmod,
+mescal,mescal,Coupling Energy System Models with Life Cycle Assessment.,https://github.com/matthieu-str/mescal,opensustain-tech,
 mesmo,MESMO,"An open-source Python tool for the modeling, simulation and optimization of multi-scale electric and thermal distribution systems along with distributed energy resources.",https://github.com/mesmo-dev/mesmo,opensustain-tech,
 mesmo,mesmo,,https://github.com/mesmo-dev/mesmo,pre-compiled,
 message_ix,message_ix,,https://github.com/iiasa/message_ix,pre-compiled,
@@ -510,6 +513,7 @@ pypsa,PyPSA,,https://github.com/pypsa/pypsa,pre-compiled,
 pypsa_earth,PyPSA-Earth,An Open Optimisation Model of the Earth Energy System.,https://github.com/pypsa-meets-earth/pypsa-earth,lf-energy-landscape,
 pypsa_eur_sec,PyPSA-Eur-Sec,A Sector-Coupled Open Optimisation Model of the European Energy System.,https://github.com/pypsa/pypsa-eur-sec,lf-energy-landscape,
 pypsa_spice,PyPSA-SPICE,PyPSA-based Scenario Planning and Integrated Capacity Expansion Model Builder.,https://github.com/agoenergy/pypsa-spice,opensustain-tech,
+pysam,PySAM,A Python package for the National Renewable Energy Laboratory’s System Advisor Model.,https://github.com/natlabrockies/pysam,opensustain-tech,"capacity-expansion,production-cost"
 pysam,pysam,,https://github.com/natlabrockies/pysam,pre-compiled,"capacity-expansion,production-cost"
 python_ehub,python-ehub,,https://gitlab.com/energyincities/python-ehub,pre-compiled,
 python_microgrid,python-microgrid,,https://github.com/ahalev/python-microgrid,pre-compiled,

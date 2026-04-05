@@ -74,6 +74,7 @@ https://github.com/esdlmapeditoressim/essim: https://repos.ecosyste.ms/api/v1/ho
 https://github.com/esmap-world-bank-group/epm: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/ESMAP-World-Bank-Group%2FEPM
 https://github.com/etsap-times/times_model: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/etsap-TIMES%2FTIMES_model
 https://github.com/fabmid/open-energy-cell-simulation: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/fabmid%2FOpen-Energy-Cell-Simulation
+https://github.com/fbumann/fluxopt: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/FBumann%2Ffluxopt
 https://github.com/flexiblepower/powermatcher: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/flexiblepower%2Fpowermatcher
 https://github.com/flexigis/flexigis: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/FlexiGIS%2FFlexiGIS
 https://github.com/flixopt/flixopt: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/flixOpt%2Fflixopt
@@ -130,6 +131,7 @@ https://github.com/manuvarkey/gelectrical: https://repos.ecosyste.ms/api/v1/host
 https://github.com/marvinler/pypownet: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/MarvinLer%2Fpypownet
 https://github.com/matpower/matpower: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/MATPOWER%2Fmatpower
 https://github.com/matpower/most: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/MATPOWER%2Fmost
+https://github.com/matthieu-str/mescal: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/matthieu-str%2Fmescal
 https://github.com/mbheinen/bpa-ipf-tsp: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/mbheinen%2Fbpa-ipf-tsp
 https://github.com/mesmo-dev/mesmo: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/mesmo-dev%2Fmesmo
 https://github.com/microgrids-x/microgrids.py: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/Microgrids-X%2FMicrogrids.py
@@ -202,6 +204,7 @@ https://github.com/quintel/etmodel: https://repos.ecosyste.ms/api/v1/hosts/GitHu
 https://github.com/quintel/pyetm: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/quintel%2Fpyetm
 https://github.com/rahmankhorramfar91/jpong: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/RahmanKhorramfar91%2FJPoNG
 https://github.com/rcuk-cee/energynumbers-balancing: not-found
+https://github.com/rebase-energy/emflow: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/rebase-energy%2Femflow
 https://github.com/rebase-energy/enflow: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/rebase-energy%2Fenflow
 https://github.com/reegis/deflex: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/reegis%2Fdeflex
 https://github.com/rheia-framework/rheia: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/rheia-framework%2FRHEIA
@@ -265,6 +268,7 @@ https://gitlab.com/sesit/idea: https://repos.ecosyste.ms/api/v1/hosts/gitlab.com
 https://gitlab.com/sesit/silver: https://repos.ecosyste.ms/api/v1/hosts/gitlab.com/repositories/sesit%2Fsilver
 https://gitlab.com/smartgridtoolbox/smartgridtoolbox: https://repos.ecosyste.ms/api/v1/hosts/gitlab.com/repositories/SmartGridToolbox%2FSmartGridToolbox
 https://gitlab.com/smspp/smspp-project: https://repos.ecosyste.ms/api/v1/hosts/gitlab.com/repositories/smspp%2Fsmspp-project
+https://gitlab.com/users/sign_in: not-found
 https://gitlab.lrz.de/open-ees-ses/simses: not-found
 https://gitlab.pnnl.gov/exasgd/frameworks/exago: not-found
 https://gitlab.tubit.tu-berlin.de/wip/dynelmod_public: not-found

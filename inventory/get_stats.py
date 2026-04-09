@@ -93,7 +93,7 @@ CONDA_DOWNLOAD_DF = _get_conda_download_df()
 
 def _get_score_card(url: str) -> dict[str, Any] | None:
     """
-    Retrieve the scorecard for a repository from the ecosyste.ms API.
+    Retrieve the scorecard for a repository from the ecosyste.ms API with CSV fallback.
 
     Parameters
     ----------
@@ -105,26 +105,27 @@ def _get_score_card(url: str) -> dict[str, Any] | None:
     dict[str, Any] | None
         The scorecard dictionary containing `id`, `data`, `last_synced_at`,
         `repository_id`, `created_at`, and `updated_at` fields.
-        Returns None if the scorecard cannot be retrieved or does not exist.
+        Returns None if the scorecard cannot be retrieved from API or CSV.
 
     Notes
     -----
-    Returns None in the following cases:
-    - API request fails or times out
-    - Repository entry not found in ecosyste.ms
-    - Scorecard field is missing or empty in the response
+    Retrieval strategy:
+    1. First attempts to fetch from ecosyste.ms API
+    2. Falls back to CSV file if API data is unavailable
+    3. Returns None if scorecard not found in either source
     """
+    # Try API first
     try:
         repo_data = util.get_ecosystems_repo_data(url)
+        if repo_data and (score_card := repo_data.get("scorecard")):
+            return score_card
     except Exception as e:
         LOGGER.warning(f"Error fetching ecosyste.ms repo data for {url}: {e}")
-        return None
 
-    score_card = repo_data.get("scorecard") if repo_data else None
-
+    # Fallback to CSV
+    score_card = _load_scorecard_from_csv(url)
     if not score_card:
-        LOGGER.warning(f"No scorecard found for {url}")
-        return None
+        LOGGER.warning(f"No scorecard found for {url} in API or CSV")
 
     return score_card
 

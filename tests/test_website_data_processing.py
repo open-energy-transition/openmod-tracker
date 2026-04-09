@@ -724,6 +724,7 @@ class TestDevMetricsFunctions:
         # Issue 1 in org2/tool2 should have engagement count of 2 (comment + reaction)
         assert result.loc[(1, "org2/tool2")] == 2.0
 
+
 class TestGetStatsFunctions:
     """Tests for functions in inventory/get_stats.py."""
 
@@ -760,7 +761,9 @@ class TestGetStatsFunctions:
     ) -> None:
         """Test _get_score_card returns scorecard dict when API call succeeds."""
         repo_data = {"scorecard": sample_scorecard, "other_field": "value"}
-        monkeypatch.setattr(get_stats.util, "get_ecosystems_repo_data", lambda url: repo_data)
+        monkeypatch.setattr(
+            get_stats.util, "get_ecosystems_repo_data", lambda url: repo_data
+        )
 
         result = get_stats._get_score_card("https://github.com/org/repo")
 

@@ -92,22 +92,21 @@ CONDA_DOWNLOAD_DF = _get_conda_download_df()
 
 
 def _get_score_card(url: str) -> dict[str, Any] | None:
-    """
-    Retrieve the scorecard for a repository from the ecosyste.ms API with CSV fallback.
+    """Retrieve the scorecard for a repository from the ecosyste.ms API with CSV fallback.
 
     Parameters
     ----------
     url : str
         The repository URL.
 
-    Returns
+    Returns:
     -------
     dict[str, Any] | None
         The scorecard dictionary containing `id`, `data`, `last_synced_at`,
         `repository_id`, `created_at`, and `updated_at` fields.
         Returns None if the scorecard cannot be retrieved from API or CSV.
 
-    Notes
+    Notes:
     -----
     Retrieval strategy:
     1. First attempts to fetch from ecosyste.ms API

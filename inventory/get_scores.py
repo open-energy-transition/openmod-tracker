@@ -5,21 +5,22 @@
 
 """Get OpenSSF Scorecard stats for defined projects."""
 
-import subprocess
-import pathlib
-import pandas as pd
-import re
-import logging
 import argparse
+import logging
+import pathlib
+import re
+import subprocess
+
+import pandas as pd
 
 path_cwd = pathlib.Path().cwd()
 inventory_output_path = pathlib.Path(path_cwd, "inventory", "output")
 
 LOGGER = logging.getLogger(__name__)
 
+
 def get_tool_name_url(file_name: str) -> pd.DataFrame:
-    """
-    Get the tool name and URL for the scorecard command.
+    """Get the tool name and URL for the scorecard command.
 
     Returns:
         A DataFrame containing the tool name and URL for the scorecard command.
@@ -30,8 +31,7 @@ def get_tool_name_url(file_name: str) -> pd.DataFrame:
 
 
 def extract_aggregate_score(output: str) -> float | None:
-    """
-    Extract the aggregate score from scorecard output.
+    """Extract the aggregate score from scorecard output.
 
     Args:
         output: The full scorecard command output.
@@ -39,13 +39,12 @@ def extract_aggregate_score(output: str) -> float | None:
     Returns:
         The aggregate score as a float, or None if not found.
     """
-    match = re.search(r'Aggregate score:\s+([\d.]+)\s+/\s+10', output)
+    match = re.search(r"Aggregate score:\s+([\d.]+)\s+/\s+10", output)
     return float(match.group(1)) if match else None
 
 
 def extract_check_scores(output: str) -> list[dict[str, str]]:
-    """
-    Extract individual check scores from scorecard output table.
+    """Extract individual check scores from scorecard output table.
 
     Args:
         output: The full scorecard command output.
@@ -62,7 +61,7 @@ def extract_check_scores(output: str) -> list[dict[str, str]]:
     table_section = output.split("Check scores:")[1]
 
     # Match table rows with 4 columns: | SCORE | NAME | REASON | DOC_URL |
-    pattern = r'\|\s*([^|]+?)\s*\|\s*([^|]+?)\s*\|\s*([^|]+?)\s*\|\s*([^|]+?)\s*\|'
+    pattern = r"\|\s*([^|]+?)\s*\|\s*([^|]+?)\s*\|\s*([^|]+?)\s*\|\s*([^|]+?)\s*\|"
 
     for match in re.finditer(pattern, table_section):
         score = match.group(1).strip()
@@ -75,22 +74,18 @@ def extract_check_scores(output: str) -> list[dict[str, str]]:
             continue
 
         # Only keep rows where score looks like a numeric score or N/A
-        if not re.match(r'^[\d]+\s*/\s*10$|^N/A$|^\?$', score):
+        if not re.match(r"^[\d]+\s*/\s*10$|^N/A$|^\?$", score):
             continue
 
-        checks.append({
-            'score': score,
-            'name': name,
-            'reason': reason,
-            'doc_url': doc_url
-        })
+        checks.append(
+            {"score": score, "name": name, "reason": reason, "doc_url": doc_url}
+        )
 
     return checks
 
 
 def parse_scorecard_output(output: str) -> tuple[float | None, pd.DataFrame]:
-    """
-    Parse the complete scorecard output and return structured data.
+    """Parse the complete scorecard output and return structured data.
 
     Args:
         output: The full scorecard command output.
@@ -106,8 +101,7 @@ def parse_scorecard_output(output: str) -> tuple[float | None, pd.DataFrame]:
 
 
 def run_scorecard(url: str) -> str | None:
-    """
-    Run the scorecard command for a given repository URL and return the output.
+    """Run the scorecard command for a given repository URL and return the output.
 
     Args:
         url: The repository URL to pass to scorecard.
@@ -118,39 +112,39 @@ def run_scorecard(url: str) -> str | None:
     Raises:
         FileNotFoundError: If the scorecard command is not found in PATH.
     """
-    command: list[str] = ['scorecard', f'--repo={url}']
+    command: list[str] = ["scorecard", f"--repo={url}"]
     try:
         process = subprocess.Popen(
-            command,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            text=True
+            command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True
         )
 
         output_lines = []
 
         # Read stdout line by line
         for line in process.stdout:
-            print(line, end=' ')  # Print to console
+            print(line, end=" ")  # Print to console
             output_lines.append(line)
 
         process.wait()
 
-        full_output = ''.join(output_lines)
+        full_output = "".join(output_lines)
         if process.returncode == 0:
             return full_output
         else:
-            LOGGER.error(f"Error: scorecard failed with return code {process.returncode}")
+            LOGGER.error(
+                f"Error: scorecard failed with return code {process.returncode}"
+            )
             LOGGER.error(f"stderr: {process.stderr}")
             return None
     except FileNotFoundError:
-        LOGGER.error(f"Error: 'scorecard' command not found. Ensure it is installed and in PATH.")
+        LOGGER.error(
+            "Error: 'scorecard' command not found. Ensure it is installed and in PATH."
+        )
         return None
 
 
 def process_repositories(file_name: str) -> None:
-    """
-    Read repository URLs from the stats.csv file and run scorecard on each one.
+    """Read repository URLs from the stats.csv file and run scorecard on each one.
 
     Args:
         file_name: The name of the CSV file containing repository URLs (default: "stats.csv").
@@ -161,21 +155,24 @@ def process_repositories(file_name: str) -> None:
         reason_rows: list[dict] = []
 
         for _, row in stats_df.iterrows():
-            url = row['html_url']
-            tool_name = row['id']
+            url = row["html_url"]
+            tool_name = row["id"]
 
             LOGGER.info(f"Running scorecard for: {url}")
             result = run_scorecard(url)
 
             if result:
                 aggregate_score, checks_df = parse_scorecard_output(result)
-                score_record: dict = {'tool_name': tool_name, 'aggregate_score': aggregate_score}
-                reason_record: dict = {'tool_name': tool_name}
+                score_record: dict = {
+                    "tool_name": tool_name,
+                    "aggregate_score": aggregate_score,
+                }
+                reason_record: dict = {"tool_name": tool_name}
 
                 for _, check in checks_df.iterrows():
-                    name = check['name']
-                    score_record[name] = check['score']
-                    reason_record[f'Reason {name}'] = check['reason']
+                    name = check["name"]
+                    score_record[name] = check["score"]
+                    reason_record[f"Reason {name}"] = check["reason"]
 
                 score_rows.append(score_record)
                 reason_rows.append(reason_record)
@@ -196,10 +193,9 @@ def process_repositories(file_name: str) -> None:
 
 
 def parse_args() -> argparse.Namespace:
-    """
-    Parse command-line arguments for the benchmark generation script.
+    """Parse command-line arguments for the benchmark generation script.
 
-    Returns
+    Returns:
     -------
     argparse.Namespace
         An object containing the parsed command-line arguments as attributes.
@@ -207,12 +203,10 @@ def parse_args() -> argparse.Namespace:
         `dry_run`, `clusters`, and `time_resolutions`.
     """
     p = argparse.ArgumentParser()
-    p.add_argument(
-        "--file_name", default="stats.csv"
-    )
+    p.add_argument("--file_name", default="stats.csv")
     return p.parse_args()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     args = parse_args()
     process_repositories(args.file_name)

@@ -2284,7 +2284,7 @@ Welcome.",
 Ares-Hantrio,,,,,,,1.0,8.0,gh:genxproject/genx.jl,,
 Ari-manius,,,,,,,2.0,1.0,gh:pypsa/pypsa,,
 Aries-Wu,,,,,,,2.0,6.0,gh:powergridmodel/power-grid-model,,
-Arieself,,,,,,,0.0,0.0,"gh:tum-ens/urbs",,
+Arieself,,,,,,,0.0,0.0,gh:tum-ens/urbs,,
 ArijusVilk,,,,,3rd year major of Data Science and Engineering,,0.0,0.0,gh:tum-ens/urbs,,
 Arjay7891,,,,,,,2.0,3.0,gh:flexiblepower/powermatcher,,
 ArjunReddy07,,,,,,,10.0,45.0,"gh:grid-parity-exchange/egret,gh:richard-weinhold/pomato",,
@@ -7218,7 +7218,7 @@ HoussameH,,,,,,,2.0,1.0,gh:tum-ens/urbs,,
 HowardNTUST,臺灣行銷研究,https://tmrmds.co/,"Taipei, Taiwan",,"Marketing Data Science Data Miner
 行銷資料科學資料礦工",,82.0,12.0,gh:adgefficiency/energy-py,,
 Hruodperht,,,,,,,0.0,7.0,gh:akkudoktor-eos/eos,,
-Hsuth1996,Tianjin University,,Tianjin,,A PhD candidate of EE in Tianjin university,,5.0,12.0,"gh:mesmo-dev/mesmo",,
+Hsuth1996,Tianjin University,,Tianjin,,A PhD candidate of EE in Tianjin university,,5.0,12.0,gh:mesmo-dev/mesmo,,
 Hu-Hust,Huazhong University of Science and Technology,,Wuhan,,,,0.0,0.0,gh:assume-framework/assume,,
 HuangJQ-root,,,,,,,0.0,12.0,"gh:energy-modelling-toolkit/dispa-set,gh:natlabrockies/sam",,
 HubYZ,,,,,,,52.0,32.0,"gh:e2niee/pandapower,gh:matpower/matpower",,
@@ -9624,7 +9624,7 @@ KarimHFahmy,,,,,,,0.0,0.0,gh:tum-ewk/opentumflex,,
 Karinamatoreynaud,,,,,,,0.0,0.0,gh:gridoptics/gridpack,,
 KarmaCobra,,,Vienna,,,Karma_Cobra,0.0,0.0,gh:akkudoktor-eos/eos,,
 Karuneshm9,,,,,,,0.0,0.0,gh:pnnl/tesp,,
-Kasra-Aliyon,,,,,,,2.0,13.0,"gh:gmlc-dispatches/dispatches",,
+Kasra-Aliyon,,,,,,,2.0,13.0,gh:gmlc-dispatches/dispatches,,
 Kathy5731,,,,,,,0.0,0.0,gh:prep-next/prep-shot,,
 Katolus,,,Sydney,,Software Gardener | Researcher,,8.0,20.0,gh:pypsa/pypsa,"### Hi there 👋. I'm [Katolus](https://twitter.com/Katolinho).
 
@@ -13085,7 +13085,7 @@ OlekPop,,,Kherson,,"It's simple: I'm an aging electrical design engineer, starte
 Olexandr88,,,Ukraine,gmail.com,Сontributor | Building-learning ZK 💛 💙,samsara8_8,65.0,164.0,gh:natlabrockies/hopp,,
 Olgalb28,,,,,,,0.0,0.0,gh:grid2op/grid2op,,
 Oli-311,,,,,,,4.0,3.0,gh:e2niee/pandapower,,
-OliEfr,TUM munich,oliver.hausdoerfer.de,Germany,,"Phd Student in robotics @ Prof. Schoellig Lab, TUM 🤖 ",OliHausdorfer,65.0,71.0,"gh:ahalev/python-microgrid",,TUfast-TUD
+OliEfr,TUM munich,oliver.hausdoerfer.de,Germany,,"Phd Student in robotics @ Prof. Schoellig Lab, TUM 🤖 ",OliHausdorfer,65.0,71.0,gh:ahalev/python-microgrid,,TUfast-TUD
 OliOssi,,,,,,,1.0,6.0,gh:akkudoktor-eos/eos,,
 Oliman70,,,,,,,0.0,0.0,gh:akkudoktor-eos/eos,,
 OliverEvans96,,,"Eugene, Oregon, USA",gmail.com,"Musician & Computational
@@ -18721,7 +18721,7 @@ VictorOrmeno,,,,,,,0.0,0.0,gh:matpower/matpower,,
 VictorRicaux,,,,,,,1.0,0.0,gh:lanl-ansi/powermodels.jl,,
 VictoriaDahmen,,,,,,,0.0,0.0,gh:iiasa/message_ix,,
 Victory233,,,,,,,0.0,0.0,gh:ahalev/python-microgrid,,
-VigneshWater,,,,,,,0.0,1.0,"gh:critical-infrastructure-systems-lab/pownet",,
+VigneshWater,,,,,,,0.0,1.0,gh:critical-infrastructure-systems-lab/pownet,,
 VikasChidananda,Universität Paderborn,,Paderborn,,,,7.0,28.0,gh:upb-lea/electricgrid.jl,,
 VikiPetrovic,,,,,,,0.0,0.0,gh:e2niee/pandapower,,
 Vikkum102,,,,,,,0.0,0.0,gh:pypsa/pypsa,,
@@ -23150,7 +23150,7 @@ akorkovelos,Freelancer,https://akorkovelos.me,London,gmail.com,Energy systems mo
 akornelis,,,,,Data scientist working on energy transition,,0.0,7.0,gh:genxproject/genx.jl,,
 akoslowski,@new-work @xing-com ,https://bit.ly/m/akos,"Hamburg, Germany",,,,49.0,359.0,gh:akkudoktor-eos/eos,,
 akotenev,,,,,,,0.0,1.0,gh:pypsa/pypsa,,
-akram-6790,,,,,,,3.0,146.0,"gh:tum-ewk/ficus",,
+akram-6790,,,,,,,3.0,146.0,gh:tum-ewk/ficus,,
 akrauss,,,,,,,0.0,1.0,gh:akkudoktor-eos/eos,,
 akrivi,,,,,,,1.0,1.0,"gh:nrel-sienna/powersimulations.jl,gh:nrel-sienna/powersystemsinvestments.jl",,
 aks60808,,https://www.linkedin.com/in/hengchuantommylin/,,,When a chemist start coding...,,2.0,4.0,gh:iit-energysystemmodels/opentepes,"### Hi there 👋
@@ -24186,7 +24186,7 @@ Here are some ideas to get you started:
 anchapin,,,,,,,,,gl:energyincities/python-ehub,,
 anchen1011,,anchen1011@gmail.com,Cambridge,gmail.com,MidReal; MIT EECS; ex AWS AI,,104.0,15.0,"gh:adgefficiency/energy-py,gh:e2niee/pandapower",,
 ande128,,,,,,,25.0,1.0,gh:sanpen/veragrid,,
-andelink,Lyft,linktr.ee/kandelin,,,,,19.0,113.0,"gh:pypsa/pypsa",,
+andelink,Lyft,linktr.ee/kandelin,,,,,19.0,113.0,gh:pypsa/pypsa,,
 ander-db,,,Spain,,Deep Learning | MSc Artificial Intelligence,,25.0,43.0,gh:powergridmodel/power-grid-model,"<h1 align=""center"">Hey there! 👋 I'm Ander</h1>
 
 <h3 align=""center"">Deep Learning Engineer | MSc Artificial Intelligence</h3>
@@ -32830,9 +32830,9 @@ enel-ihopper,Enel,https://www.enelgreenpower.com/countries/north-america,Wiscons
 energy-democracy,,,,,,,0.0,0.0,gh:switch-model/switch,,
 energy-modelling-club,,energymodelling.club,,,,nrgmodelling,3.0,0.0,gh:etsap-times/times_model,,
 energy-projects-renovation-state,,,Germany,,"This organization contains forks of various OSS projects from the energy sector, in order to analyze their software dependencies with Renovate Bot",,0.0,0.0,"gh:powergridmodel/power-grid-model,gh:sogno-platform/dpsim",,
-energy-trader,,,,,,,0.0,2.0,"gh:ancillaryservicesacquisitionmodel/asam",,
+energy-trader,,,,,,,0.0,2.0,gh:ancillaryservicesacquisitionmodel/asam,,
 energy-water,,,,,,,0.0,0.0,gh:prep-next/prep-shot,,
-energyLS,,,,,,,9.0,11.0,"gh:pypsa/pypsa",,
+energyLS,,,,,,,9.0,11.0,gh:pypsa/pypsa,,
 energy_trader07,,,,,,,,,gl:dlr-ve/esy/amiris/amiris,,
 energybrothers,,,,,,,0.0,0.0,gh:powsybl/powsybl-core,,
 energydatachpguy,,,,,,,2.0,2.0,gh:gh:adgefficiency/energy-py-linear,,
@@ -40512,7 +40512,7 @@ jpfutalef,,,"Milano, Italia",,I code things,,7.0,3.0,gh:e2niee/pandapower,,
 jpnorenam,@Canonical,https://www.linkedin.com/in/jpnorenam/,"Medellín, Colombia",,Field Cloud Engineer @canonical,,5.0,28.0,"gh:sogno-platform/dpsim,gh:villasframework/node",,powerframes
 jpolyy,,,,,Idk,,0.0,0.0,gh:unsw-ceem/nempy,,
 jpscl,,,,,,,0.0,3.0,gh:pypsa/pypsa,,
-jpwijbenga,TNO,,Groningen,tno.nl,,,11.0,2.0,"gh:flexiblepower/powermatcher",,flexiblepower
+jpwijbenga,TNO,,Groningen,tno.nl,,,11.0,2.0,gh:flexiblepower/powermatcher,,flexiblepower
 jqin020,,,,,,,3.0,9.0,"gh:anl-ceeesa/unitcommitment.jl,gh:genxproject/genx.jl,gh:grid-parity-exchange/egret,gh:grid2op/grid2op,gh:rwl/pypower",,
 jr-42,,,Lyon,,"PhD in magnetospheric physics.
 
@@ -41156,7 +41156,7 @@ kaltakovae,,,,,,,0.0,0.0,gh:powsybl/powsybl-core,,
 kalyan1370,,,,,,,1.0,0.0,gh:sogno-platform/dpsim,,
 kamal0013,University of Maryland,https://orcid.org/my-orcid?orcid=0000-0003-3763-1204,"Maryland, USA",,Assistant Research Scientist,,32.0,22.0,"gh:blue-marble/gridpath,gh:critical-infrastructure-systems-lab/pownet,gh:romulus97/capow_py36,gh:switch-model/switch",,
 kamaladekola,,,The Netherlands,,,,1.0,13.0,"gh:pypsa/pypsa,gh:richard-weinhold/pomato,gh:tulipaenergy/tulipaenergymodel.jl",,
-kamalchapagain,Kathmandu University,,"Dhulikhel, Nepal",,"Expert in advanced machine learning algorithms, optimization, and forecasting.",,1.0,2.0,"gh:unsw-ceem/nempy","# 👋 Hello all, I'm Kamal Chapagain, PhD
+kamalchapagain,Kathmandu University,,"Dhulikhel, Nepal",,"Expert in advanced machine learning algorithms, optimization, and forecasting.",,1.0,2.0,gh:unsw-ceem/nempy,"# 👋 Hello all, I'm Kamal Chapagain, PhD
 
 🎓 **Data Analytics Professional | Advanced Machine Learning Specialist | Energy Data Enthusiast**
 
@@ -42285,7 +42285,7 @@ knallio,,,,,,,0.0,0.0,gh:tum-ens/urbs,,
 kndehaan,,,,,,,1.0,0.0,"gh:quintel/etengine,gh:quintel/etmodel,gh:quintel/pyetm",,
 kngms,,,Berlin,posteo.de,,,2.0,64.0,"gh:grid2op/chronix2grid,gh:marvinler/pypownet",,
 knightad10,,,,,_constraints usher creativity_,,0.0,0.0,gh:pnnl/exago,,
-knightnight93,,,,,,,1.0,13.0,"gh:epri-dev/opender",,
+knightnight93,,,,,,,1.0,13.0,gh:epri-dev/opender,,
 knoxsp,,,,,,,16.0,5.0,gh:pypsa/pypsa,,
 knraj,,,,,,,0.0,0.0,gh:iiasa/message_ix,,
 knut0815,,,,,,,7.0,0.0,"gh:calliope-project/calliope,gh:e2niee/pandapower,gh:fraukewiese/renpass,gh:oemof/oemof-solph,gh:osemosys/osemosys,gh:pypsa/pypsa,gh:reegis/deflex,gh:robbiemorrison/deeco,gh:rwl/pypower,gh:sanpen/veragrid,gh:tum-ewk/ficus",,
@@ -44646,7 +44646,7 @@ ma-entellgenio,,,,,,,0.0,0.0,gh:e2niee/pandapower,,
 ma-galan,,,,,,,0.0,8.0,"gh:e2niee/pandapower,gh:pypsa/pypsa,gh:sanpen/veragrid",,
 maaikeelgersma,,,,,,,1.0,0.0,gh:tulipaenergy/tulipaenergymodel.jl,,
 maarten,,,"Amsterdam, The Netherlands",iridia.nl,,,33.0,1.0,gh:pypsa/pypsa,,
-maartenelgar,projetsolaire,www.projetsolaire.com,marseille,gmail.com,CTO of projetsolaire.com,,38.0,84.0,"gh:sei-international/nemomod.jl",,
+maartenelgar,projetsolaire,www.projetsolaire.com,marseille,gmail.com,CTO of projetsolaire.com,,38.0,84.0,gh:sei-international/nemomod.jl,,
 mab-wien,,,Austria/Vienna,,,,2.0,0.0,gh:akkudoktor-eos/eos,,devops-wien
 mabijkerk,@quintel,,Netherlands,,Team Lead Modelling & Development,,5.0,2.0,"gh:quintel/etengine,gh:quintel/etmodel,gh:quintel/pyetm",,quintel
 mabote1,Oregon State Univerisity,https://www.linkedin.com/in/thabiso-mabote-321013100/,"OR, USA",gmail.com,EECS grad student,MaboteThabiso,5.0,8.0,gh:lanl-ansi/powermodels.jl,,
@@ -48532,7 +48532,7 @@ milipili,,,"Tokyo, Japan",,Software Engineer,,27.0,1.0,gh:antaressimulatorteam/a
 milkway,UFPE,https://castlab.org,Brazil,de.ufpe.br,,,18.0,10.0,gh:natlabrockies/sam,,
 millettmb,,millett.co,"Canberra, Australia",,,,0.0,0.0,gh:opencemorg/opencem,,
 milton-alvarenga,,http://devblog.drall.com.br,,,,,34.0,53.0,"gh:calliope-project/calliope,gh:dynawo/dynawo,gh:oemof/oemof-solph,gh:pypsa/pypsa,gh:tum-ens/urbs",,
-milyas009,,,,,,,0.0,7.0,"gh:epgoxford/open","# 💫 About Me:
+milyas009,,,,,,,0.0,7.0,gh:epgoxford/open,"# 💫 About Me:
 👋 Hi, I’m Muhammad Ilyas, a PhD Scholar in ICDI, CMU Thailand.<br>👀 I’m interested in Power System Modelling, RE Technologies, P2P Energy Trading, Energy Markets<br>🌱 I’m currently learning about Smart Contracts, Blockchain, AI and ML <br>💞️ I’m looking to collaborate on any of the above or research in the relevant area<br>📫 How to reach me? Email: milyas0009@gmail.com
 
 
@@ -51882,7 +51882,7 @@ old3-3,,,,,,,0.0,0.0,gh:prep-next/prep-shot,,
 oldppp,,,,163.com,,,0.0,6.0,gh:matpower/matpower,,
 olejandro,,,,,"Energy system modeller 🇺🇦 🇩🇰 🇪🇨 🇺🇸
 Passionate about using modern web technology.",,29.0,43.0,"gh:balmorelcommunity/balmorel,gh:eiagov/bluesky,gh:esmap-world-bank-group/epm,gh:etsap-times/times_model,gh:genxproject/genx.jl,gh:irena-flextool/flextool,gh:pnnl/exago",,"balmorelcommunity,ReeemProject,energy-modelling-club,etsap-TIMES,Modelling-Team-GR,MaREI-EPMG,esma-cu,times-ukraine"
-olejorgenb,,,Norway,gmail.com,,,38.0,33.0,"gh:genxproject/genx.jl",,paperwm
+olejorgenb,,,Norway,gmail.com,,,38.0,33.0,gh:genxproject/genx.jl,,paperwm
 olekaa,,,,,,,0.0,0.0,gh:tum-ens/urbs,,
 olelenz,,,Berlin,,Student from TU Berlin,,5.0,13.0,gh:pypsa/pypsa,,
 oleso,,,,,,,1.0,0.0,gh:emlab/emlab-generation,,
@@ -58966,7 +58966,7 @@ Here are some ideas to get you started:
 - 😄 Pronouns: ...
 - ⚡ Fun fact: ...
 -->","WhitestormJS,Shyran-Systems"
-ssldk83,G4iE,www.g4ie.dk,Denmark,,,,0.0,4.0,"gh:pypsa/pypsa",,
+ssldk83,G4iE,www.g4ie.dk,Denmark,,,,0.0,4.0,gh:pypsa/pypsa,,
 ssmil,,,,,,,0.0,0.0,gh:temoaproject/temoa,,
 ssolheart,,,,,,,0.0,1.0,gh:natlabrockies/wpgnn,,
 ssonniaa,,,,,,,1.0,0.0,gh:energyinnovation/eps-us,,
@@ -59481,7 +59481,7 @@ staudtMarius,,,,,,,4.0,4.0,"gh:ie3-institute/powersystemdatamodel,gh:ie3-institu
 stbilodeau,,,,,,,0.0,0.0,gh:slacgismo/tess,,
 stealthmaster007,,,,,,,0.0,0.0,gh:susantoj/pypower-dynamics,,
 stefan-oet,@open-energy-transition,,,,,,1.0,0.0,gh:pypsa/pypsa,,open-energy-transition
-stefaneidelloth,,,,,,,17.0,0.0,"gh:pypsa/pypsa",,
+stefaneidelloth,,,,,,,17.0,0.0,gh:pypsa/pypsa,,
 stefaneidelloth,,,,,,,,,gl:mosaik/mosaik,,
 stefango79,,,,,,,4.0,27.0,gh:akkudoktor-eos/eos,,
 stefanheinrichsen,,,"Germany, Kamen",,,,5.0,9.0,gh:akkudoktor-eos/eos,,ffdo
@@ -60049,7 +60049,7 @@ syskelly00,,,,,,,1.0,1.0,gh:anl-ceeesa/unitcommitment.jl,,
 syspy357,,,,,,,0.0,0.0,gh:e2niee/pandapower,,
 sysrun,,,Germany,,,,22.0,10.0,gh:akkudoktor-eos/eos,,
 systemrust,,,,,,,0.0,0.0,gh:manuvarkey/gelectrical,,
-sz73,,,,,,,3.0,25.0,,
+sz73,,,,,,,3.0,25.0,,,
 sza8723,,,,,,,0.0,0.0,gh:pypsa/pypsa,,
 szhan311,,,,,,,1.0,4.0,gh:curent/andes,,
 szhang-host,Cleveland State University,,"Cleveland, Ohio",,,,0.0,0.0,gh:matpower/matpower,,
@@ -61666,7 +61666,7 @@ tpt5cu,,,,gmail.com,,,3.0,4.0,gh:nreca-bts/omf,,
 tpu-brunkhorst,,,,,,,1.0,2.0,"gh:nrel-sienna/powersimulations.jl,gh:switch-model/switch",,
 trPowerGas,,,,,,,0.0,0.0,gh:richard-weinhold/pomato,,
 traeu,,,,,,,0.0,0.0,gh:akkudoktor-eos/eos,,
-tranberg,Libra,https://tberg.dk,Berlin,,CTO @LibratechAI ,botranberg,29.0,32.0,"gh:pypsa/pypsa",,"ok-dk,LibratechAI"
+tranberg,Libra,https://tberg.dk,Berlin,,CTO @LibratechAI ,botranberg,29.0,32.0,gh:pypsa/pypsa,,"ok-dk,LibratechAI"
 tranminhduc9,,,,,,,0.0,0.0,gh:grid2op/grid2op,,
 transducer,,rooijakkers.software,Amsterdam,,,,33.0,33.0,gh:flexiblepower/powermatcher,,"ClojureBridgeAmsterdam,mediquest-nl"
 tranvary,,,,,,,0.0,0.0,gh:e2niee/pandapower,,
@@ -66229,7 +66229,7 @@ Here are some ideas to get you started:
 ![](https://img.shields.io/badge/-Windows-0078D6?style=flat-square&logo=Windows)
 ![](https://img.shields.io/badge/-Android-green?style=flat-square&logo=Android&logoColor=fff)",
 zxc5586916,,,,,,,0.0,0.0,gh:tum-ewk/opentumflex,,
-zxc8063898,,,,,,,1.0,0.0,"gh:tum-ewk/opentumflex",,
+zxc8063898,,,,,,,1.0,0.0,gh:tum-ewk/opentumflex,,
 zxdi,,,,,,,1.0,7.0,gh:idaholab/hybrid,,
 zxh525,,,,,,,0.0,2.0,gh:matpower/matpower,,
 zxnga,,,Paris,,PhD student in RL and Meta-RL,,5.0,4.0,gh:grid2op/grid2op,"## Hi there 👋
@@ -66878,9 +66878,9 @@ shuixs217-droid,Hohai University,,"Hohai University, No. 1 Xikang Road, Gulou Di
 siarhei2000582,,,,,,,0.0,0.0,gh:eliagroup/toop,,
 spetznick-elia,,,,,,,0.0,1.0,gh:eliagroup/toop,,
 tilcraemer,,,,,,,0.0,0.0,gh:oemof/oemof-solph,,
-Chrisschmit,,,"Munich, Germany",,,,6,9,gh:tum-ens/hamlet,,adlr-team
-GengXia0406,,,,,,,1,0,gh:erf-model/erf,,
-JanMarcoRuizdeVargas,,,Germany,,,,0,2,gh:tum-ens/hamlet,"- 👋 Hi, I’m @JanMarcoRuizdeVargas
+Chrisschmit,,,"Munich, Germany",,,,6.0,9.0,gh:tum-ens/hamlet,,adlr-team
+GengXia0406,,,,,,,1.0,0.0,gh:erf-model/erf,,
+JanMarcoRuizdeVargas,,,Germany,,,,0.0,2.0,gh:tum-ens/hamlet,"- 👋 Hi, I’m @JanMarcoRuizdeVargas
 - 👀 I’m interested in Machine Learning, Data Science, AI, Statistics and Mathematics.
 - 🌱 I’m currently learning Reinforcement Learning for Energy Systems, Data Markets, Data Valuation and Spatio-temporal Forecasting.
 <!-- - 💞️ I’m looking to collaborate on  -->
@@ -66890,9 +66890,9 @@ JanMarcoRuizdeVargas,,,Germany,,,,0,2,gh:tum-ens/hamlet,"- 👋 Hi, I’m @JanMa
 JanMarcoRuizdeVargas/JanMarcoRuizdeVargas is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
 You can click the Preview link to take a look at your changes.
 --->",
-KafukaTree,华中科技大学,,,,,,1,7,gh:matpower/matpower,,
-KonoeSubaru,,,,,,,1,1,gh:tum-ens/hamlet,,
-LY-must-win,,,,,,,1,7,gh:natlabrockies/paraemt_public,"- 👋 Hi, 我是LY-must-win
+KafukaTree,华中科技大学,,,,,,1.0,7.0,gh:matpower/matpower,,
+KonoeSubaru,,,,,,,1.0,1.0,gh:tum-ens/hamlet,,
+LY-must-win,,,,,,,1.0,7.0,gh:natlabrockies/paraemt_public,"- 👋 Hi, 我是LY-must-win
 - 👀 我爱好电影、音乐和编程
 - 🌱 我目前正在学习机器学习，在不久会学习深度学习
 
@@ -66902,15 +66902,1473 @@ LY-must-win,,,,,,,1,7,gh:natlabrockies/paraemt_public,"- 👋 Hi, 我是LY-must-
 LY-must-win/LY-must-win is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
 You can click the Preview link to take a look at your changes.
 --->",
-MysteriousStudent,,,,,,,0,0,gh:tum-ens/hamlet,,
-Raeschart,,,,,,,0,2,gh:oemof/oemof-solph,,
-SimonAtWattscout,,,,,,,1,1,gh:rl-institut/multi-vector-simulator,,
-WojteckiQ,,,,,,,2,12,gh:tum-ens/hamlet,,
-armftno,,,,,,,0,0,gh:matpower/matpower,,
-dpmendez,,dianipatito.com,"Chicago, IL",,"Experimental particle physicist, using analytical and quantitative skills to tackle higher impact challenges.",,3,2,gh:sei-international/nemomod.jl,,
-lab992,,,,,,,1,0,gh:tum-ens/hamlet,,
-minyxrii,POSTECH,,"Pohang, Korea(Republic of)",,Hi ! I am Minyeong Kang :],,0,1,gh:pypsa/pypsa,,
-mylesfranklin,Swayzio,www.swayzio.com,"San Diego, CA",,"growth engineer with 10 years of data science, and developing advanced google cloud ecosystem frameworks (current: A2A) @Swayzio ",myles_franklin,8,14,gh:ie3-institute/simona,,
-silvercrowii,,,,,,,0,0,gh:pypsa/pypsa,,
-sofiapnm,,,,,learning 2 codeeeeee,,1,1,gh:pypsa/pypsa,,
-yitongshang2021,The Hong Kong University of Science and Technology,,"Clear Water Bay, Hong Kong",,,,4,0,gh:tum-ens/hamlet,,
+MysteriousStudent,,,,,,,0.0,0.0,gh:tum-ens/hamlet,,
+Raeschart,,,,,,,0.0,2.0,gh:oemof/oemof-solph,,
+SimonAtWattscout,,,,,,,1.0,1.0,gh:rl-institut/multi-vector-simulator,,
+WojteckiQ,,,,,,,2.0,12.0,gh:tum-ens/hamlet,,
+armftno,,,,,,,0.0,0.0,gh:matpower/matpower,,
+dpmendez,,dianipatito.com,"Chicago, IL",,"Experimental particle physicist, using analytical and quantitative skills to tackle higher impact challenges.",,3.0,2.0,gh:sei-international/nemomod.jl,,
+lab992,,,,,,,1.0,0.0,gh:tum-ens/hamlet,,
+minyxrii,POSTECH,,"Pohang, Korea(Republic of)",,Hi ! I am Minyeong Kang :],,0.0,1.0,gh:pypsa/pypsa,,
+mylesfranklin,Swayzio,www.swayzio.com,"San Diego, CA",,"growth engineer with 10 years of data science, and developing advanced google cloud ecosystem frameworks (current: A2A) @Swayzio ",myles_franklin,8.0,14.0,gh:ie3-institute/simona,,
+silvercrowii,,,,,,,0.0,0.0,gh:pypsa/pypsa,,
+sofiapnm,,,,,learning 2 codeeeeee,,1.0,1.0,gh:pypsa/pypsa,,
+yitongshang2021,The Hong Kong University of Science and Technology,,"Clear Water Bay, Hong Kong",,,,4.0,0.0,gh:tum-ens/hamlet,,
+2390772736-ctrl,,,,,,,0,0,gh:richard-weinhold/pomato,,
+278136289-eco,,,,,,,0,0,"gh:e2niee/pandapower,gh:powergridmodel/power-grid-model,gh:pypsa/pypsa",,
+404GamerNotFound,,,,,,,5,3,gh:akkudoktor-eos/eos,,
+603713921,,,,,,,0,0,gh:chengts95/rustpower,,
+95Penguin,,,,,,,2,2,"gh:e2niee/pandapower,gh:matpower/matpower",,
+ANUSHREE1403,,,,,yummy AIML stuff in the making !,,21,20,gh:natlabrockies/sam,"<p align=""center"">
+  <img src=""https://capsule-render.vercel.app/api?type=waving&section=header&height=180&color=gradient&customColorList=0f0c29,302b63,24243e&text=Anushree%20%E2%80%94%20AI%2FML%2FDS%20Enthusiast&fontColor=FFFFFF&fontSize=34&fontAlign=50&animation=twinkling"" alt=""Anushree gradient banner"" />
+</p>
+
+<h1 align=""center"">Hi! I'm Anushree</h1>
+<h3 align=""center"">⚡Currently training models and my patience ⚡</h3>
+
+<p align=""center"">
+  <img src=""https://media.giphy.com/media/du3J3cXyzhj75IOgvA/giphy.gif"" width=""220"" alt=""coding gif"">
+</p>
+
+<p align=""center"">
+  <img src=""https://img.shields.io/badge/ML-Always%20Learning-ff69b4"" alt=""always learning badge"" />
+  <img src=""https://img.shields.io/badge/Open%20to-Collaboration-24B36B"" alt=""open to collaboration badge"" />
+  <img src=""https://img.shields.io/badge/Coffee-Powered-brown"" alt=""coffee powered badge"" />
+</p>
+
+---
+
+### 👩‍💻 About Me
+
+- AI enthusiast with a soft spot for creative UI and logical puzzles  
+- Currently building cool stuff in **Python**  
+- Diving deep into **Data Science** and **AI tools**  
+- Trying my hands in **ML** (every single day)  
+
+---
+
+### 🔭 Current Vibes
+
+- Shipping tiny models that punch above their weight
+- Reading one research paper/article a week (and actually taking notes!)
+- Learning something new and sharing it
+
+---
+
+### 🔗 Find Me
+
+- [LinkedIn](https://www.linkedin.com/in/anushree14/)
+- [Email](mailto:workanushree14@gmail.com)
+
+---
+
+### 🧰 Languages & Tools
+
+<p align=""left"">
+  <img src=""https://skillicons.dev/icons?i=python,java,js,html,css,tensorflow,pytorch,mysql,mongodb,git,figma,vscode,gcp,cloudrun,cloudfunctions"" alt=""skills"" />
+</p>
+
+---
+
+### 🎉 Fun Zone
+
+- Favorite timepass : reading wtv the 🦆 i like
+- Best bug fix fuel: coffee + nom nom munchies ☕🎧
+- Ask me about: turning messy data into neat stories 📊
+
+---
+
+<p align=""center"">
+  <img src=""https://komarev.com/ghpvc/?username=ANUSHREE1403&label=Profile%20views&color=0e75b6&style=flat"" alt=""profile views"" />
+</p>",
+Acolasia-bot,,,,,,,0,0,gh:grid2op/grid2op,,
+Aditya7171-maker,,,,,,,0,1,gh:pypsa/pypsa,,
+Aerivus1,,,,,,,0,1,gh:tum-ens/urbs,,
+Alikashanizadeh,,,,,,,0,0,gh:uu-er/adopt-net0,,
+Allotrope-git,,,,,,,1,0,gh:natlabrockies/reopt.jl,,
+AssassinGod179,,,,,,,0,2,gh:pypsa/pypsa,,
+Atine,The University of Tokyo,atine.github.io,"Tokyo, Japan",mi.t.u-tokyo.ac.jp,"Ph.D student @ MIL lab, UTokyo",,2,9,gh:chrisyeh96/sustaingym,,mil-tokyo
+Batu-D,,,,,,,0,0,gh:pypsa/pypsa,,
+CHNMYT,,,,,,,0,1,gh:matpower/matpower,,
+CIE2D,,,,,,,0,0,gh:natlabrockies/sam,,
+CRTejaswi,,crtejaswi.github.io/cv,"Bengaluru, India",,"EECS engineer.
+Interests: VLSI, Embedded Systems, Digital Signal Processing, Digital Document Processing (Text, Image, Audio/Video), Data Mining & Analytics",CRTejaswi,9,39,gh:pypsa/pypsa,,THEPortatCERN
+Comfac-Global-Group,,,,,"We are a company that sells services, which goes to pay costs and support open source projects. We believe open source can be a full time job.",,5,0,gh:e2niee/pandapower,,
+Connected-Energy-AI,Connected Energy AI,https://litigationforce.ai,"Houston, TX",connectedenergyservices.com,World-class AI agent orchestration platform for litigation intelligence & social media analysis. LitigationForce.AI — built on Google ADK + Claude.,ConnectedEnergyAI,1,0,gh:natlabrockies/reeds-2.0,,
+Cxm906,,,,,,,0,4,gh:curent/andes,,
+DeligneS,,,,,,,2,7,"gh:e2niee/pandapower,gh:pypsa/pypsa",,
+DominikTrenz,,,,,,,1,2,gh:akkudoktor-eos/eos,,viomedi
+DrWatsonApps,,https://drwatsonapps.carrd.co,UK,gmail.com,I'm an electrical engineer and app developer. Occasionally I also try to make music.,,0,0,gh:sanpen/veragrid,,
+DuyCongTran,,,,,,,0,2,gh:pypsa/pypsa,,
+EAYassine,,,,,,,0,1,gh:pypsa/pypsa,,
+Erhari,,,,,,,0,0,gh:pypsa/pypsa,,
+FGH-wirtz,,,Aachen,,,,0,3,gh:sogno-platform/dpsim,,
+Fernadoteixeira,,,,,,,6,100,"gh:natlabrockies/sam,gh:oemof/oemof-solph,gh:powergridmodel/power-grid-model",,
+FocusMode-coder,FOCUSMODE,,,gmail.com,"Luciano AI – Autonomous AI agent for real-time bot deployment, system orchestration, and zero-downtime operations.
+",,4,0,gh:akkudoktor-eos/eos,,
+GIOVESS,@GIOSPATIAL ,https://giovannibwayo.site,,,"Eat, Sleep, Code.
+",,22,37,gh:balmorelcommunity/balmorel,"[![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&pause=1000&color=6793F7&width=700&lines=👋+Hi%2C+everyone!+I'm+Giovanni.;💻+Welcome+to+my+Github!;🚀+I+enjoy+building+apps...;📊+Analyzing+data...;✨+Turning+ideas+into+innovative+solutions.;🤝+Open+to+collabs+and+new+adventures!)](https://git.io/typing-svg)
+
+
+## Technologies and Tools:
+
+<div style=""display: inline_block""><br>
+<img align=""center"" alt=""Giovanni-Js"" height=""35"" width=""40"" src=""https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-plain.svg"" />
+<img align=""center"" alt=""Giovanni-HTML"" height=""35"" width=""40"" src=""https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg"" />
+<img align=""center"" alt=""Giovanni-CSS"" height=""35"" width=""40"" src=""https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg"" />
+<img align=""center"" alt=""Giovanni-Python"" height=""35"" width=""40"" src=""https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg"" />
+<img align=""center"" alt=""Giovanni-PHP"" height=""35"" width=""40"" src=""https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-plain.svg"">
+<img align=""center"" alt=""Giovanni-C"" height=""35"" width=""40"" src=""https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg"">
+<img align=""center"" alt=""Giovanni-R"" height=""35"" width=""40"" src=""https://cdn.jsdelivr.net/gh/devicons/devicon/icons/r/r-original.svg"">
+<img align=""center"" alt=""Giovanni-Flask"" height=""35"" width=""40"" src=""https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flask/flask-original.svg"">
+<img align=""center"" alt=""Giovanni-Django"" height=""35"" width=""40"" src=""https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg"">
+<img align=""center"" alt=""Giovanni-Jupyter"" height=""35"" width=""40"" src=""https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jupyter/jupyter-original.svg"">
+<img align=""center"" alt=""Giovanni-MySQL"" height=""60"" width=""40"" src=""https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original-wordmark.svg"">
+<img align=""center"" alt=""Giovanni-Git"" height=""35"" width=""40"" src=""https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg"">
+<img align=""center"" alt=""Giovanni-VSCode"" height=""35"" width=""40"" src=""https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg"">
+<img align=""center"" alt=""ArcGIS"" height=""35"" src=""https://simpleicons.org/icons/arcgis.svg"">
+
+</div><br>
+
+##  Skills Snapshot
+
+- **Languages**: JavaScript, TypeScript, HTML, CSS, PHP, Python, R, C, Ruby
+- **Web Development**: React, Next.js, Flask, Django, PHP
+- **Databases**: MySQL, PostgreSQL, Prisma
+- **Machine Learning**: Random Forest, Decision Trees, Grid Search, Predictive Modeling
+- **Data Science**: EDA, Data Cleaning, Visualization, Statistics, Power BI
+- **GIS & Geospatial**: ArcGIS Pro, ArcGIS Online, ArcPy, ModelBuilder, QGIS
+- **Tools**: Git, VS Code, Jupyter, Postman, Bash, Docker (basics)
+
+
+##  GitHub Stats
+
+<div style=""display: flex; justify-content: space-between; align-items: center;"">
+  <img height=""180px"" src=""https://github-readme-stats.vercel.app/api/top-langs/?username=GIOVESS&layout=compact&hide_progress=true&langs_count=8&theme=vision-friendly-dark""/>
+</div>
+
+
+## Contact Me
+
+<div style=""display: flex; gap: 10px; align-items: center;"">
+  <a href=""https://www.linkedin.com/in/giovanni-bwayo"" target=""_blank"">
+    <img src=""https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"" alt=""LinkedIn"">
+  </a>
+
+  <a href=""mailto:giovannibwayo@gmail.com"">
+    <img src=""https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white"" alt=""Gmail"">
+  </a>
+</div>",
+GeiserX,ACSdesk,https://geiser.cloud,"Murcia, Spain",,"💻 Tech enthusiast since I was a kid 🌩️ Sr. Cloud DevOps Engineer @ work – Speaks ES, EN & BG. Writing Go, Bash & Python for fun & @ work – Rlang still ❤️‍",,58,25,"gh:calliope-project/calliope,gh:energy-modelling-toolkit/dispa-set,gh:oemof/oemof-solph,gh:powsybl/powsybl-core,gh:pypsa/pypsa","<p align=""center"">
+  <strong>Senior DevOps Engineer specializing in Cloud & Kubernetes</strong>
+</p>
+
+<p align=""center"">
+  <a href=""https://geiser.cloud/?ref=github.com"" rel=""me""><img src=""https://img.shields.io/badge/Blog-geiser.cloud-FF6B35?style=flat-square&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAxNiIgZmlsbD0id2hpdGUiPjxwYXRoIGQ9Ik0xOS4zNSA2LjA0QTcuNDkgNy40OSAwIDAwMTIgMEM5LjExIDAgNi42IDEuNjQgNS4zNSA0LjA0QTUuOTk0IDUuOTk0IDAgMDAwIDEwYzAgMy4zMSAyLjY5IDYgNiA2aDEzYzIuNzYgMCA1LTIuMjQgNS01IDAtMi42NC0yLjA1LTQuNzgtNC42NS00Ljk2eiIvPjwvc3ZnPg==&logoColor=white"" alt=""Blog""></a>
+  <a href=""https://pumperly.com""><img src=""https://img.shields.io/badge/Pumperly-pumperly.com-34d399?style=flat-square&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHBhdGggZmlsbD0id2hpdGUiIGZpbGwtcnVsZT0iZXZlbm9kZCIgZD0iTTcgMGgxOGMzLjg3IDAgNyAzLjEzIDcgN3YxOGMwIDMuODctMy4xMyA3LTcgN0g3Yy0zLjg3IDAtNy0zLjEzLTctN1Y3QzAgMy4xMyAzLjEzIDAgNyAwek0yMiAyTDcgMTdoOWwtNiAxM0wyNSAxM2gtOXoiLz48L3N2Zz4=&logoColor=white"" alt=""Pumperly""></a>
+  <a href=""https://lynxprompt.com""><img src=""https://img.shields.io/badge/LynxPrompt-lynxprompt.com-228BE6?style=flat-square&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAQAAADZc7J/AAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAACYktHRAD/h4/MvwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB+oDGBUXAcFvQn8AAAAldEVYdGRhdGU6Y3JlYXRlADIwMjYtMDMtMTBUMTE6MTI6NDIrMDA6MDDMqllFAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDI2LTAzLTEwVDExOjEyOjQyKzAwOjAwvffh+QAAACh0RVh0ZGF0ZTp0aW1lc3RhbXAAMjAyNi0wMy0yNFQyMToyMzowMSswMDowMNKq66YAAAJ7SURBVEjHlZVLaFRJFIa/e9P2qNEYBhKJDzQiGoiMs1I3EUUCiiAi4kpxL4Ju4kZcuBEXjgrDILNUEBQUDPjAlaAQRSKIiPFBRBQEX7gwDXnez8Wtvn27o0n3qU3fqvr//s9/TlUhFl1vk0h9YTrmucWixEALvfSUl2aHh9hNDx1QAFpZx07GGUg3RPXA99HHEHH6r02esOSQO4K4maXjHx7ykz88IobpNh+oHz3iggpJBqiGd3jWEfWSzRWC+d5WddTLrpffjiZ7veeUqqczcrHFe2piog57zCXB53aX22FrWiO7POeXbN+FFF4AIGEqS3QVp9jLFeaziWUsYJxvvOEhbRxkTc7Hibw5c7wamJPAn8qsxKRTNTuO5xVM8LLG8KimGHG+hsBYGRGHiUeU6mxEgIgPPK0meMLzXAfN3pC3eVdN8JnrOVg0IzhihJtl2+NsclHdCUgzO4N7oQrY7dsql2ce+tnNaRXioHsPnXWfZ5A2DlAAQwp/sr2BGqTRy+qKB110NQiXpWysEHTT2kACaRT4u0KwIqtGI9FJsUxQ5H3DCmBhmSBmgBuzNE9tRAzzgjg9TAm3aJ/lMpwezzjPaDmFCV7yo0GCIYYZhzgqf75qADxJiYfpz3JHf+V/FrGWpA4dCf0UGUytAMJpKHjUyazbS05Vdf9YtqYf7HGDce4BCHfuUgfVRP3uMZ9lh0tHPRPWEvWfcMnmVQWK/Y6oet8WtztkSR3zriddaJ+Jo4742M5fPj8izvVfE/WikfiX+/zPw7ZZFLdZcsB+t/3m9QoaFnvNj15wTviOskdlq4PusrsWHuUpAFjJfl5za9olu5lm7kwD8RNgBx7Cv8chlwAAAABJRU5ErkJggg==&logoColor=white"" alt=""LynxPrompt""></a>
+  <a href=""https://mastodon.social/@geiser"" rel=""me""><img src=""https://img.shields.io/badge/Mastodon-@geiser-6364FF?style=flat-square&logo=mastodon&logoColor=white"" alt=""Mastodon""></a>
+</p>
+
+---
+
+My journey started when I was just a curious 12-year-old kid, begging my mom to buy me the book _""Hacking Exposed 4: Network Security Secrets & Solutions""_ published by McGraw Hill. I still get chills thinking about it!
+
+Honestly though, after reading it, I realized I'd prefer building things rather than breaking them. Fast forward over two decades, and here I am — fully embracing life in the cloud, building and scaling apps, and loving every second of it.
+
+#### Latest Posts
+
+<!-- BLOG-POST-LIST:START -->
+- [On Overengineering &lpar;DevOps Edition&rpar;](https://geiser.cloud/on-overengineering-devops-edition/)
+- [Deploying Garage S3 &lpar;v2.x&rpar; and Hooking It Up to Duplicacy](https://geiser.cloud/deploying-garage-s3-v2-x-and-hooking-it-up-to-duplicacy/)
+- [Putting AI-Hands on Routers: Building a GenieACS MCP Server in Go](https://geiser.cloud/putting-ai-hands-on-routers-building-a-genieacs-mcp-server-in-go/)
+- [Paging into the Night—Assess Before You Fix: Many Years of On-Call Lessons](https://geiser.cloud/paging-into-the-night-assess-before-you-fix-many-years-of-on-call-lessons/)
+- [DevOps in the Catacombs – Everyday Software Archaeology and Why I’d Still Bet on a Monorepo](https://geiser.cloud/software-archaeology-monorepo/)
+<!-- BLOG-POST-LIST:END -->
+
+## Certifications
+
+<p align=""center"">
+  <a href=""https://learn.microsoft.com/en-us/users/sergiofz/credentials/62c37378fe6b23b5""><img src=""https://images.credly.com/size/340x340/images/89efc3e7-842b-4790-b09b-9ea5efc71ec3/image.png"" width=""120"" alt=""GitHub Actions""></a>&nbsp;&nbsp;
+  <a href=""https://www.credly.com/badges/280dfe0a-7f95-4efd-988c-833a2ce50bb3""><img src=""https://images.credly.com/size/340x340/images/8b8ed108-e77d-4396-ac59-2504583b9d54/cka_from_cncfsite__281_29.png"" width=""120"" alt=""CKA: Certified Kubernetes Administrator""></a>&nbsp;&nbsp;
+  <a href=""https://www.credly.com/badges/95cfef44-d320-4783-bfcd-191e8036edaa""><img src=""https://images.credly.com/size/340x340/images/cd038261-9d1c-4792-bc62-3a3b5bda175c/blob"" width=""120"" alt=""HashiCorp Certified Terraform Associate""></a>&nbsp;&nbsp;
+  <a href=""https://drive.google.com/file/d/1DDywieez2z3MEFZneKmNWFX29mnscnge/view""><img src=""docs/images/badge-cambridge-c1.svg"" width=""120"" alt=""Cambridge English C1 Advanced""></a>&nbsp;&nbsp;
+  <a href=""https://www.credly.com/badges/5b013852-5840-4003-8d88-f57046f0f867""><img src=""https://images.credly.com/size/340x340/images/0e284c3f-5164-4b21-8660-0d84737941bc/image.png"" width=""120"" alt=""AWS Solutions Architect Associate""></a>&nbsp;&nbsp;
+  <a href=""https://drive.google.com/file/d/1dW75WIMym5hbxSGHXmK0RmP2Mu4m_RD3/view""><img src=""docs/images/badge-huawei-hcna.svg"" width=""120"" alt=""Huawei HCNA Routing & Switching""></a>&nbsp;&nbsp;
+  <a href=""https://www.credly.com/badges/816320ad-ed15-41a1-98f7-f4d134ff9a44/public_url""><img src=""https://images.credly.com/size/340x340/images/2d84e428-9078-49b6-a804-13c15383d0de/image.png"" width=""120"" alt=""AWS Solutions Architect Professional""></a>
+</p>
+
+## Projects
+
+<p align=""center"">
+<a href=""https://github.com/GeiserX/awesome-spain""><img src=""https://img.shields.io/badge/awesome--spain-555555?style=flat-square&logo=github&logoColor=white"" alt=""awesome-spain""></a>
+<a href=""https://github.com/GeiserX/awesome-region-de-murcia""><img src=""https://img.shields.io/badge/awesome--region--de--murcia-555555?style=flat-square&logo=github&logoColor=white"" alt=""awesome-region-de-murcia""></a>
+<a href=""https://github.com/GeiserX/awesome-europe""><img src=""https://img.shields.io/badge/awesome--europe-555555?style=flat-square&logo=github&logoColor=white"" alt=""awesome-europe""></a>
+<a href=""https://github.com/GeiserX/awesome-lint-extra""><img src=""https://img.shields.io/badge/awesome--lint--extra-555555?style=flat-square&logo=github&logoColor=white"" alt=""awesome-lint-extra""></a>
+<a href=""https://github.com/GeiserX/grafana-rightsizing-dashboard""><img src=""https://img.shields.io/badge/grafana--rightsizing--dashboard-555555?style=flat-square&logo=github&logoColor=white"" alt=""grafana-rightsizing-dashboard""></a>
+<a href=""https://github.com/GeiserX/runtipi-appstore""><img src=""https://img.shields.io/badge/runtipi--appstore-555555?style=flat-square&logo=github&logoColor=white"" alt=""runtipi-appstore""></a>
+<br/>
+<a href=""https://github.com/GeiserX/genieacs-container""><img src=""https://img.shields.io/badge/genieacs--container-384d54?style=flat-square&logo=docker&logoColor=white"" alt=""genieacs-container""></a>
+<a href=""https://github.com/GeiserX/genieacs-sim-docker""><img src=""https://img.shields.io/badge/genieacs--sim--docker-384d54?style=flat-square&logo=docker&logoColor=white"" alt=""genieacs-sim-docker""></a>
+<a href=""https://github.com/GeiserX/docker-templates""><img src=""https://img.shields.io/badge/docker--templates-384d54?style=flat-square&logo=docker&logoColor=white"" alt=""docker-templates""></a>
+<a href=""https://github.com/GeiserX/duplicacy-container""><img src=""https://img.shields.io/badge/duplicacy--container-384d54?style=flat-square&logo=docker&logoColor=white"" alt=""duplicacy-container""></a>
+<br/>
+<a href=""https://github.com/GeiserX/Telegram-Archive""><img src=""https://img.shields.io/badge/Telegram--Archive-3572A5?style=flat-square&logo=python&logoColor=white"" alt=""Telegram-Archive""></a>
+<a href=""https://github.com/GeiserX/paperless-telegram-bot""><img src=""https://img.shields.io/badge/paperless--telegram--bot-3572A5?style=flat-square&logo=python&logoColor=white"" alt=""paperless-telegram-bot""></a>
+<a href=""https://github.com/GeiserX/Wayback-Archive""><img src=""https://img.shields.io/badge/Wayback--Archive-3572A5?style=flat-square&logo=python&logoColor=white"" alt=""Wayback-Archive""></a>
+<a href=""https://github.com/GeiserX/slskd-transform""><img src=""https://img.shields.io/badge/slskd--transform-3572A5?style=flat-square&logo=python&logoColor=white"" alt=""slskd-transform""></a>
+<a href=""https://github.com/GeiserX/telegram-delay-channel-cloner""><img src=""https://img.shields.io/badge/telegram--delay--channel--cloner-3572A5?style=flat-square&logo=python&logoColor=white"" alt=""telegram-delay-channel-cloner""></a>
+<a href=""https://github.com/GeiserX/telegram-slskd-local-bot""><img src=""https://img.shields.io/badge/telegram--slskd--local--bot-3572A5?style=flat-square&logo=python&logoColor=white"" alt=""telegram-slskd-local-bot""></a>
+<a href=""https://github.com/GeiserX/jellyfin-encoder""><img src=""https://img.shields.io/badge/jellyfin--encoder-3572A5?style=flat-square&logo=python&logoColor=white"" alt=""jellyfin-encoder""></a>
+<a href=""https://github.com/GeiserX/jellyfin-telegram-channel-sync""><img src=""https://img.shields.io/badge/jellyfin--telegram--channel--sync-3572A5?style=flat-square&logo=python&logoColor=white"" alt=""jellyfin-telegram-channel-sync""></a>
+<a href=""https://github.com/GeiserX/media-download""><img src=""https://img.shields.io/badge/media--download-3572A5?style=flat-square&logo=python&logoColor=white"" alt=""media-download""></a>
+<a href=""https://github.com/GeiserX/PiSpot-Deployment""><img src=""https://img.shields.io/badge/PiSpot--Deployment-3572A5?style=flat-square&logo=python&logoColor=white"" alt=""PiSpot-Deployment""></a>
+<a href=""https://github.com/GeiserX/PiSpot-Show""><img src=""https://img.shields.io/badge/PiSpot--Show-3572A5?style=flat-square&logo=python&logoColor=white"" alt=""PiSpot-Show""></a>
+<a href=""https://github.com/GeiserX/PiSpot-Watch""><img src=""https://img.shields.io/badge/PiSpot--Watch-3572A5?style=flat-square&logo=python&logoColor=white"" alt=""PiSpot-Watch""></a>
+<a href=""https://github.com/GeiserX/pumperly-ha""><img src=""https://img.shields.io/badge/pumperly--ha-3572A5?style=flat-square&logo=python&logoColor=white"" alt=""pumperly-ha""></a>
+<a href=""https://github.com/GeiserX/qbittorrent-orphaned""><img src=""https://img.shields.io/badge/qbittorrent--orphaned-3572A5?style=flat-square&logo=python&logoColor=white"" alt=""qbittorrent-orphaned""></a>
+<a href=""https://github.com/GeiserX/Way-CMS""><img src=""https://img.shields.io/badge/Way--CMS-3572A5?style=flat-square&logo=python&logoColor=white"" alt=""Way-CMS""></a>
+<a href=""https://github.com/GeiserX/AskePub""><img src=""https://img.shields.io/badge/AskePub-3572A5?style=flat-square&logo=python&logoColor=white"" alt=""AskePub""></a>
+<a href=""https://github.com/GeiserX/audio-transcode-watcher""><img src=""https://img.shields.io/badge/audio--transcode--watcher-3572A5?style=flat-square&logo=python&logoColor=white"" alt=""audio-transcode-watcher""></a>
+<a href=""https://github.com/GeiserX/BuscaPaginasBlancas""><img src=""https://img.shields.io/badge/BuscaPaginasBlancas-3572A5?style=flat-square&logo=python&logoColor=white"" alt=""BuscaPaginasBlancas""></a>
+<a href=""https://github.com/GeiserX/CashPilot""><img src=""https://img.shields.io/badge/CashPilot-3572A5?style=flat-square&logo=python&logoColor=white"" alt=""CashPilot""></a>
+<a href=""https://github.com/GeiserX/cashpilot-ha""><img src=""https://img.shields.io/badge/cashpilot--ha-3572A5?style=flat-square&logo=python&logoColor=white"" alt=""cashpilot-ha""></a>
+<a href=""https://github.com/GeiserX/duplicacy-exporter""><img src=""https://img.shields.io/badge/duplicacy--exporter-3572A5?style=flat-square&logo=python&logoColor=white"" alt=""duplicacy-exporter""></a>
+<a href=""https://github.com/GeiserX/duplicacy-ha""><img src=""https://img.shields.io/badge/duplicacy--ha-3572A5?style=flat-square&logo=python&logoColor=white"" alt=""duplicacy-ha""></a>
+<a href=""https://github.com/GeiserX/epub-and-vtt-to-llm""><img src=""https://img.shields.io/badge/epub--and--vtt--to--llm-3572A5?style=flat-square&logo=python&logoColor=white"" alt=""epub-and-vtt-to-llm""></a>
+<a href=""https://github.com/GeiserX/genieacs-ansible""><img src=""https://img.shields.io/badge/genieacs--ansible-3572A5?style=flat-square&logo=python&logoColor=white"" alt=""genieacs-ansible""></a>
+<a href=""https://github.com/GeiserX/genieacs-ha""><img src=""https://img.shields.io/badge/genieacs--ha-3572A5?style=flat-square&logo=python&logoColor=white"" alt=""genieacs-ha""></a>
+<a href=""https://github.com/GeiserX/web-mirror""><img src=""https://img.shields.io/badge/web--mirror-3572A5?style=flat-square&logo=python&logoColor=white"" alt=""web-mirror""></a>
+<a href=""https://github.com/GeiserX/Website-Diff""><img src=""https://img.shields.io/badge/Website--Diff-3572A5?style=flat-square&logo=python&logoColor=white"" alt=""Website-Diff""></a>
+<br/>
+<a href=""https://github.com/GeiserX/VPN-Bypass""><img src=""https://img.shields.io/badge/VPN--Bypass-F05138?style=flat-square&logo=swift&logoColor=white"" alt=""VPN-Bypass""></a>
+<br/>
+<a href=""https://github.com/GeiserX/CashPilot-android""><img src=""https://img.shields.io/badge/CashPilot--android-7F52FF?style=flat-square&logo=kotlin&logoColor=white"" alt=""CashPilot-android""></a>
+<a href=""https://github.com/GeiserX/Pumperly-android""><img src=""https://img.shields.io/badge/Pumperly_Android-Play_Store-34d399?style=flat-square&logo=android&logoColor=white"" alt=""Pumperly Android""></a>
+<br/>
+<a href=""https://github.com/GeiserX/LynxPrompt""><img src=""https://img.shields.io/badge/LynxPrompt-3178C6?style=flat-square&logo=typescript&logoColor=white"" alt=""LynxPrompt""></a>
+<a href=""https://github.com/GeiserX/lynxprompt-vscode""><img src=""https://img.shields.io/badge/lynxprompt--vscode-3178C6?style=flat-square&logo=typescript&logoColor=white"" alt=""lynxprompt-vscode""></a>
+<a href=""https://github.com/GeiserX/lynxprompt-action""><img src=""https://img.shields.io/badge/lynxprompt--action-3178C6?style=flat-square&logo=typescript&logoColor=white"" alt=""lynxprompt-action""></a>
+<a href=""https://github.com/GeiserX/Pumperly""><img src=""https://img.shields.io/badge/Pumperly-3178C6?style=flat-square&logo=typescript&logoColor=white"" alt=""Pumperly""></a>
+<a href=""https://github.com/GeiserX/CatsUp""><img src=""https://img.shields.io/badge/CatsUp-3178C6?style=flat-square&logo=typescript&logoColor=white"" alt=""CatsUp""></a>
+<br/>
+<a href=""https://github.com/GeiserX/n8n-nodes-cashpilot""><img src=""https://img.shields.io/badge/n8n--nodes--cashpilot-EA4B71?style=flat-square&logo=n8n&logoColor=white"" alt=""n8n-nodes-cashpilot""></a>
+<a href=""https://github.com/GeiserX/n8n-nodes-pumperly""><img src=""https://img.shields.io/badge/n8n--nodes--pumperly-EA4B71?style=flat-square&logo=n8n&logoColor=white"" alt=""n8n-nodes-pumperly""></a>
+<a href=""https://github.com/GeiserX/n8n-nodes-lynxprompt""><img src=""https://img.shields.io/badge/n8n--nodes--lynxprompt-EA4B71?style=flat-square&logo=n8n&logoColor=white"" alt=""n8n-nodes-lynxprompt""></a>
+<a href=""https://github.com/GeiserX/n8n-nodes-genieacs""><img src=""https://img.shields.io/badge/n8n--nodes--genieacs-EA4B71?style=flat-square&logo=n8n&logoColor=white"" alt=""n8n-nodes-genieacs""></a>
+<a href=""https://github.com/GeiserX/n8n-nodes-telegram-archive""><img src=""https://img.shields.io/badge/n8n--nodes--telegram--archive-EA4B71?style=flat-square&logo=n8n&logoColor=white"" alt=""n8n-nodes-telegram-archive""></a>
+<a href=""https://github.com/GeiserX/n8n-nodes-way-cms""><img src=""https://img.shields.io/badge/n8n--nodes--way--cms-EA4B71?style=flat-square&logo=n8n&logoColor=white"" alt=""n8n-nodes-way-cms""></a>
+<br/>
+<a href=""https://github.com/GeiserX/genieacs-mcp""><img src=""https://img.shields.io/badge/genieacs--mcp-00ADD8?style=flat-square&logo=go&logoColor=white"" alt=""genieacs-mcp""></a>
+<a href=""https://github.com/GeiserX/lynxprompt-mcp""><img src=""https://img.shields.io/badge/lynxprompt--mcp-00ADD8?style=flat-square&logo=go&logoColor=white"" alt=""lynxprompt-mcp""></a>
+<a href=""https://github.com/GeiserX/telegram-archive-mcp""><img src=""https://img.shields.io/badge/telegram--archive--mcp-00ADD8?style=flat-square&logo=go&logoColor=white"" alt=""telegram-archive-mcp""></a>
+<a href=""https://github.com/GeiserX/pumperly-mcp""><img src=""https://img.shields.io/badge/pumperly--mcp-00ADD8?style=flat-square&logo=go&logoColor=white"" alt=""pumperly-mcp""></a>
+<a href=""https://github.com/GeiserX/cashpilot-mcp""><img src=""https://img.shields.io/badge/cashpilot--mcp-00ADD8?style=flat-square&logo=go&logoColor=white"" alt=""cashpilot-mcp""></a>
+<a href=""https://github.com/GeiserX/duplicacy-mcp""><img src=""https://img.shields.io/badge/duplicacy--mcp-00ADD8?style=flat-square&logo=go&logoColor=white"" alt=""duplicacy-mcp""></a>
+<a href=""https://github.com/GeiserX/nginx-mailer""><img src=""https://img.shields.io/badge/nginx--mailer-00ADD8?style=flat-square&logo=go&logoColor=white"" alt=""nginx-mailer""></a>
+<a href=""https://github.com/GeiserX/redis-operator""><img src=""https://img.shields.io/badge/redis--operator-00ADD8?style=flat-square&logo=go&logoColor=white"" alt=""redis-operator""></a>
+<br/>
+<a href=""https://github.com/GeiserX/genieacs-services""><img src=""https://img.shields.io/badge/genieacs--services-89e051?style=flat-square&logo=gnubash&logoColor=white"" alt=""genieacs-services""></a>
+<a href=""https://github.com/GeiserX/duplicacy-cli-cron""><img src=""https://img.shields.io/badge/duplicacy--cli--cron-89e051?style=flat-square&logo=gnubash&logoColor=white"" alt=""duplicacy-cli-cron""></a>
+<a href=""https://github.com/GeiserX/genomics-pipeline""><img src=""https://img.shields.io/badge/genomics--pipeline-89e051?style=flat-square&logo=gnubash&logoColor=white"" alt=""genomics-pipeline""></a>
+<a href=""https://github.com/GeiserX/k8s-dockerhub-detector""><img src=""https://img.shields.io/badge/k8s--dockerhub--detector-89e051?style=flat-square&logo=gnubash&logoColor=white"" alt=""k8s-dockerhub-detector""></a>
+<a href=""https://github.com/GeiserX/migrate-psql""><img src=""https://img.shields.io/badge/migrate--psql-89e051?style=flat-square&logo=gnubash&logoColor=white"" alt=""migrate-psql""></a>
+<br/>
+<a href=""https://github.com/GeiserX/services-isp""><img src=""https://img.shields.io/badge/services--isp-198CE7?style=flat-square&logo=r&logoColor=white"" alt=""services-isp""></a>
+<a href=""https://github.com/GeiserX/secciones-nacionalidades""><img src=""https://img.shields.io/badge/secciones--nacionalidades-198CE7?style=flat-square&logo=r&logoColor=white"" alt=""secciones-nacionalidades""></a>
+<a href=""https://github.com/GeiserX/statix""><img src=""https://img.shields.io/badge/statix-198CE7?style=flat-square&logo=r&logoColor=white"" alt=""statix""></a>
+<a href=""https://github.com/GeiserX/ePubLangMerger""><img src=""https://img.shields.io/badge/ePubLangMerger-198CE7?style=flat-square&logo=r&logoColor=white"" alt=""ePubLangMerger""></a>
+<a href=""https://github.com/GeiserX/AdamPartsFinder""><img src=""https://img.shields.io/badge/AdamPartsFinder-198CE7?style=flat-square&logo=r&logoColor=white"" alt=""AdamPartsFinder""></a>
+<a href=""https://github.com/GeiserX/import-xgest-odoo""><img src=""https://img.shields.io/badge/import--xgest--odoo-198CE7?style=flat-square&logo=r&logoColor=white"" alt=""import-xgest-odoo""></a>
+<a href=""https://github.com/GeiserX/ScriptPoblar""><img src=""https://img.shields.io/badge/ScriptPoblar-198CE7?style=flat-square&logo=r&logoColor=white"" alt=""ScriptPoblar""></a>
+<a href=""https://github.com/GeiserX/search-by-surname""><img src=""https://img.shields.io/badge/search--by--surname-198CE7?style=flat-square&logo=r&logoColor=white"" alt=""search-by-surname""></a>
+<br/>
+<a href=""https://github.com/GeiserX/github-toggle-all-details""><img src=""https://img.shields.io/badge/github--toggle--all--details-f1e05a?style=flat-square&logo=javascript&logoColor=white"" alt=""github-toggle-all-details""></a>
+<a href=""https://github.com/GeiserX/Minecraft-Youtube-Follower""><img src=""https://img.shields.io/badge/Minecraft--Youtube--Follower-f1e05a?style=flat-square&logo=javascript&logoColor=white"" alt=""Minecraft-Youtube-Follower""></a>
+<br/>
+<a href=""https://github.com/GeiserX/whisper-subs""><img src=""https://img.shields.io/badge/whisper--subs-178600?style=flat-square&logo=dotnet&logoColor=white"" alt=""whisper-subs""></a>
+<a href=""https://github.com/GeiserX/jellyfin-quality-gate""><img src=""https://img.shields.io/badge/jellyfin--quality--gate-178600?style=flat-square&logo=dotnet&logoColor=white"" alt=""jellyfin-quality-gate""></a>
+<a href=""https://github.com/GeiserX/smart-covers""><img src=""https://img.shields.io/badge/smart--covers-178600?style=flat-square&logo=dotnet&logoColor=white"" alt=""smart-covers""></a>
+<br/>
+<a href=""https://github.com/GeiserX/cloud-tests-velero""><img src=""https://img.shields.io/badge/cloud--tests--velero-844FBA?style=flat-square&logo=terraform&logoColor=white"" alt=""cloud-tests-velero""></a>
+<br/>
+<a href=""https://github.com/GeiserX/GeiserX""><img src=""https://img.shields.io/badge/GeiserX-f7931e?style=flat-square&logo=handlebarsdotjs&logoColor=white"" alt=""GeiserX""></a>
+<br/>
+<a href=""https://github.com/GeiserX/homebrew-catsup""><img src=""https://img.shields.io/badge/homebrew--catsup-701516?style=flat-square&logo=ruby&logoColor=white"" alt=""homebrew-catsup""></a>
+<a href=""https://github.com/GeiserX/homebrew-lynxprompt""><img src=""https://img.shields.io/badge/homebrew--lynxprompt-701516?style=flat-square&logo=ruby&logoColor=white"" alt=""homebrew-lynxprompt""></a>
+<a href=""https://github.com/GeiserX/homebrew-vpn-bypass""><img src=""https://img.shields.io/badge/homebrew--vpn--bypass-701516?style=flat-square&logo=ruby&logoColor=white"" alt=""homebrew-vpn-bypass""></a>
+<br/>
+<a href=""https://github.com/GeiserX/geiserx.github.io""><img src=""https://img.shields.io/badge/geiserx.github.io-e34c26?style=flat-square&logo=html5&logoColor=white"" alt=""geiserx.github.io""></a>
+<a href=""https://github.com/GeiserX/router-express""><img src=""https://img.shields.io/badge/router--express-e34c26?style=flat-square&logo=html5&logoColor=white"" alt=""router-express""></a>
+<a href=""https://github.com/GeiserX/WebApp-Flotas""><img src=""https://img.shields.io/badge/WebApp--Flotas-e34c26?style=flat-square&logo=html5&logoColor=white"" alt=""WebApp-Flotas""></a>
+</p>",
+H4rryTheDev,,,England,,"MSc Financial Engineering (preceded by MSc in Mathematics), MScMathFin, MScFinStat and MScCompFin.
+Likes all things Maths, Finance and Physics 🤓
+
+",,3,51,gh:powergridmodel/power-grid-model,"### Oh hello, I'm Harry! 👋",
+Hisense1997,,,,,,,0,4,"gh:grid2op/grid2op,gh:pypsa/pypsa",,
+Hobbyist11,,,,,,,5,21,gh:natlabrockies/sam,,
+HyeonsuParkembedded,Gyeonsang National University,https://drive.google.com/file/d/1U8i4euaGOXolaWqKlEWBtW-fRFlUTd_5/view?usp=drive_link,"Jinju, Gyeonsangnamdo, Korea",hanmail.net,"Embedded systems and robotics student at Gyeongsang National University, focusing on stratospheric data logging, self-balancing robots, and autonomous drone",,1,8,gh:matpower/matpower,,
+Iroul1212,Xi’an Jiaotong University,,,,XJTU/Electrical Engineering and Automation,,11,4,gh:future-power-networks/simplus-grid-tool,,
+IsabellaHoyer,University of Utah ,,Salt Lake City ,utah.edu,,,0,0,gh:natlabrockies/reeds-2.0,,
+JialuYang98,,,,,,,0,0,gh:matpower/matpower,,
+JoacoPagani,,,,,Electronic Engineering Student at UNLP ,,21,23,gh:pypsa/pypsa,,
+JoaoLuizSalomao,,,,,,,0,5,gh:mesmo-dev/mesmo,,
+JonasBreuling,University of Stuttgart,,Stuttgart,,Akademischer Rat at the Institute for Nonlinear Mechanics at University of Stuttgart.,,11,14,gh:curent/andes,,
+Kaia010,,,,,,,0,3,gh:iiasa/message_ix,,
+KathiEsterl,Europa-Universität Flensburg,https://www.uni-flensburg.de/eum/forschung/netzmodellierung,Flensburg,,,,0,0,gh:openego/ego,,
+Keuya,,,,,,,,,gl:dlr-ve/esy/amiris/amiris,,
+Kimchangheon,@FAU,,Erlangen,,FAU erlangen,,13,13,"gh:e2niee/pandapower,gh:grid2op/grid2op","### Hi there~ 👋  I'm an AI Reseracher and Data scientist, ML enginner 🌎 <br>
+
+
+
+I love reading book, hiking, running!🏕🏻‍<br>
+I enjoy learing somthing new! 📒
+
+### Skills 💪
+
+## Platforms & Languages
+<img src=""https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=Python&logoColor=white""/> <img src=""https://img.shields.io/badge/C-A8B9CC?style=flat-square&logo=C&logoColor=white""/>
+<img src=""https://img.shields.io/badge/C++-00599C?style=flat-square&logo=C++&logoColor=white""/>
+<img src=""https://img.shields.io/badge/Java-007396?style=flat-square&logo=Java&logoColor=white""/>
+<img src=""https://img.shields.io/badge/R-276DC3?style=flat-square&logo=R&logoColor=white""/>
+<img src=""https://img.shields.io/badge/TensorFlow-FF6F00?style=flat-square&logo=TensorFlow&logoColor=white""/>
+<img src=""https://img.shields.io/badge/PyTorch-EE4C2C?style=flat-square&logo=PyTorch&logoColor=white""/>
+<img src=""https://img.shields.io/badge/Jupyter-4285F4?style=flat-square&logo=Jupyter&logoColor=white""/>
+<img src=""https://img.shields.io/badge/Google Cloud-2D3748?style=flat-square&logo=Google Colab&logoColor=white""/>
+<img src=""https://img.shields.io/badge/Google Colab-F9AB00?style=flat-square&logo=Node.js&logoColor=white""/>
+<img src=""https://img.shields.io/badge/Keras-D00000?style=flat-square&logo=Keras&logoColor=white""/>
+<img src=""https://img.shields.io/badge/MongoDB-47A248?style=flat-square&logo=MongoDB&logoColor=white""/>
+<img src=""https://img.shields.io/badge/Figma-F24E1E?style=flat-square&logo=Figma&logoColor=white""/>
+<img src=""https://img.shields.io/badge/Django-092E20?style=flat-square&logo=Django&logoColor=white""/>
+
+
+
+### 🔭 I’m currently a doctoral candidate in the Pattern Recognition LAb, FAU Erlangen.
+
+### 📫 How to reach me: chkim345@gmail.com",
+Kivet2020,,,,,,,0,0,gh:natlabrockies/sam,,
+LL0pez20,@LAFAE-UFRJ ,,Rio de Janeiro,,"Electrical Engineer using Python, TensorFlow, and ML/DL to solve problems in battery technology, power electronics, and automotive data analysis.",,2,2,"gh:e2niee/pandapower,gh:rwl/pypower",,
+Lexilex75,,,,,,,0,0,gh:akkudoktor-eos/eos,,
+LynseyNoD,,,,,,,0,1,gh:andrewlyden/pylesa,,
+MartyLTC,,,,,,,0,0,gh:erf-model/erf,,
+MaxiKingXXL,,,,,,,1,5,gh:akkudoktor-eos/eos,,
+Mflyer-sys,,,,,,,0,0,gh:spine-tools/spineopt.jl,,
+Miranda00000,,,,,,,0,0,gh:e2niee/pandapower,,
+Misaka13514,Package Maintainer @archlinuxcn & @NixOS | Tech Support @one-among-us,i.apeiria.net,Asia/Shanghai,gmail.com,天川理音 | Tech otaku neko ฅ/ᐠ•ω•ᐟ\ฅ,,272,449,"gh:ahalev/python-microgrid,gh:microgridspy/microgridspy","<a href=""#"">
+  <img width=""390""
+    src=""https://gist.githubusercontent.com/Misaka13514/c676ad963910526baf449fd4ce4696ba/raw/general.svg""><img
+    width=""390"" src=""https://gist.githubusercontent.com/Misaka13514/c676ad963910526baf449fd4ce4696ba/raw/media.svg"">
+</a>
+
+<p align=""center"">
+  <a href=""https://bsky.app/profile/apeiria.net"">
+    <img
+      src=""https://img.shields.io/badge/-@apeiria.net-0285ff?style=flat-square&logo=Bluesky&logoColor=white""
+      alt=""Bluesky"" />
+  </a>
+  <a href=""https://t.me/Misaka_0x34ca"">
+    <img src=""https://img.shields.io/badge/-@Misaka_0x34ca-26a5e4?style=flat-square&logo=Telegram&logoColor=white""
+      alt=""Telegram"" />
+  </a>
+  <a href=""https://blog.apeiria.net"">
+    <img src=""https://img.shields.io/badge/-blog.apeiria.net-0e83cd?style=flat-square&logo=Blogger&logoColor=fff""
+      alt=""Blog"" />
+  </a>
+  <a href=""https://keys.openpgp.org/vks/v1/by-fingerprint/293B93D8A471059F85D716A65BA92099D9BE2DAA"">
+    <img src=""https://img.shields.io/badge/pgp-5BA92099D9BE2DAA-informational?style=flat-square"" alt=""PGP Key"" />
+  </a>
+  <a href=""https://i.apeiria.net"">
+    <img src=""https://img.shields.io/badge/About-i.apeiria.net-blue?style=flat-square"" alt=""About"" />
+  </a>
+</p>","NixOS,archlinuxcn,MSKNET,HMUniversity,Misaka13514-AUR,bbg-contributors,one-among-us,vanilla-translation-group"
+ModestyPlus,,,,,,,1,2,gh:manuvarkey/gelectrical,,
+MvuleniK,What company ? ,,"Johannesburg, South Africa ",,"Electrical Engineer & Solution Architect. Not here not to compete or show who's the best, but to engage, observe and learn
+",mvuleni142175,6,15,gh:pypsa/pypsa,,
+Nasdero,,,,,,,0,0,gh:akkudoktor-eos/eos,,
+Noor-Mustafa123,,,,,,,2,6,gh:powsybl/powsybl-core,,"pydoe,Java-DOE"
+O-HANSON,,,Ghana,gmail.com,,,0,4,gh:e2niee/pandapower,,
+PSeros,,,,,,,1,2,gh:fzj-iek3-vsa/fine,,NOWUM
+Pent,,,,,hi it's Pent here in the technology sewer,,0,0,gh:natlabrockies/emerge,,
+PhilippAIO,@ai-omatic,https://www.ai-omatic.com/,"Hannover or Hamburg, GER",,,,2,1,gh:pypsa/pypsa,,
+Q8Mona,,,,ucl.ac.uk,,,0,0,gh:etsap-times/times_model,,
+QianBi1405,,,,,,,1,2,gh:matpower/matpower,,
+RDavidNH,rdavidnh,https://www.rdavidnh.com,"Antananarivo, Madagascar",rdavidnh.com,Full Stack Web Designer/Developer • DevOps Engineer • Tech enthusiast !,rdavidnh,23,307,gh:matpower/matpower,"# [<img src=""https://raw.githubusercontent.com/ABSphreak/ABSphreak/master/gifs/Hi.gif"" width=""30px"">][website] Hi I'm David
+
+Je suis développeur web et ingénieur DevOps  
+Passionné par le web et ses opportunités, j'ai acquis une riche expérience de plus de 5 ans grâce à mon parcours professionnel et mes projets personnels
+
+Les évolutions technologiques dans le domaine du cloud computing et du Web Design/Development ont été pour moi une source constante de motivation tout au long de mon parcours, ce qui m'a permis de me plonger dans les aspects fascinants du web et de l'optimisation des processus techniques et opérationnels
+
+https://www.rdavidnh.com/
+
+## Skills and projects
+
+Pendant mon temps libre, j'aime m'engager dans la création et la maintenance de divers projets
+
+## Let's talk about your project
+
+Contactez moi sur Linkedin https://www.linkedin.com/in/rdavidnh/  
+Par email contact@rdavidnh.com
+
+## Stats
+
+<p align=""left""> <img src=""https://komarev.com/ghpvc/?username=rdavidnh&label=Profile%20views&color=0e75b6&style=flat"" alt=""rdavidnh"" /> </p>
+
+[website]: https://www.rdavidnh.com/
+[twitter]: https://twitter.com/rdavidnh
+[instagram]: https://www.instagram.com/rdavidnh",
+RRiva,Technical University of Denmark,,,,,,2,1,gh:natlabrockies/wpgnn,,
+RuanJinghan,Tsinghua University,,"30 Shuangqing road, Haidian District, Beijing City",mails.tsinghua.edu.cn,"I am a grade 2022 undergraduate from Tsinghua University, and I hope to learn code in depth on github platform",,0,0,gh:grid2op/chronix2grid,,
+SinaHKazemi,,,"Darmstadt, Germany",,Research Assistant at TU Darmstadt,,5,9,gh:pypsa/pypsa,,
+Sriramc27,NextNRG,,"Miami, United states",,Software Engineer @NextNRG || Ex-Cognizant || FIU Graduate,,0,0,gh:adgefficiency/energy-py-linear,"👋 Hi, I’m Sriram Chennamaneni (@Sriramc27)
+
+👀 I’m passionate about Software Development and Machine Learning
+
+💻 I have experience in Software Development, Application Development, Data Analysis, and Machine Learning using technologies like Python, SQL, React, Node.js, Javascript, JCL, COBOL, and AWS.
+
+🌱 Currently learning Machine Learning, Data Analysis, and JavaScript (React & Node.js)
+
+📫 Reach me at Sriramrao.chennamaneni@gmail.com
+
+😄 Pronouns: He/Him
+
+
+<!--- Sriramc27/Sriramc27 is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile. You can click the Preview link to take a look at your changes. ---",
+StoneLL1,,,,,,,3,0,gh:genxproject/genx.jl,,
+Tildeorn,,,,,,,0,0,gh:oemof/oemof-solph,,
+Time-Lover,,,,,,,0,9,gh:natlabrockies/sam,,
+VasilisTheodor,,,,,,,1,1,gh:spine-tools/spineopt.jl,,
+VastEpiphany,South China University of Technology,,"Guangzhou, China",,"An undergraduate student majoring in AI. Always learning, always excelling.
+On a mission to exceed expectations.",,2,3,gh:matpower/matpower,,
+VonRiecken,,,,,,,0,1,gh:pypsa/pypsa,,
+Wang7274,,,,,,,0,0,gh:energyscope/energyscope,,
+WenjieWei,RWTH Aachen,,Montréal,mail.mcgill.ca,A random Simulink user.,,8,11,gh:sogno-platform/dpsim,,
+Whatsonyourmind,,,"Milano, Italy",,Financial background and tech passionate,,4,10,gh:grid2op/grid2op,,
+WilliBee,,,,,,,6,15,gh:tulipaenergy/tulipaenergymodel.jl,,
+XQ2077,,,Montreal,,HI,,0,1,gh:microgrids-x/microgrids.py,,
+XS0017,,,,,,,0,1,gh:sanpen/veragrid,,
+XenriseZPH,,,,,Mushroom,,1,5,"gh:e2niee/pandapower,gh:manuvarkey/gelectrical,gh:sanpen/veragrid",,
+Xuming031114,,,,,,,0,0,"gh:e2niee/pandapower,gh:rwl/pypower",,
+YSMitev,,,,,,,0,0,gh:ipese/reho,,
+YeZihaoo,,,,,,,0,0,gh:pypsa/pypsa,,
+YoshuaLisasi,,,,,,,0,0,gh:antaressimulatorteam/antares_simulator,,
+YuezhangHe,,,,,,,0,0,gh:genxproject/genx.jl,,
+Yumo-wyh,,,,,,,0,0,"gh:richard-weinhold/pomato,gh:unsw-ceem/nempy",,
+Zhang-Tian-Ce,,,,,,,0,3,gh:future-power-networks/simplus-grid-tool,,
+Zhangdelu,河南师范大学,,河南新乡,,学生/普通的开发者/热情的学习者/嵌入式开发爱好者,,6,22,gh:matpower/matpower,,
+Zhaochuanqiang,,,,,,,0,0,gh:pypsa/pypsa,,
+a-bayongwa,,,,,,,0,0,gh:fzj-iek3-vsa/fine,,
+aaru-techian,,,,,,,0,3,gh:sanpen/veragrid,,
+abdullah-aljarboua,,,"Riyadh, Saudi Arabia",,,,3,0,gh:etsap-times/times_model,,
+adienes,,,,,,,9,1,gh:ait-energy/iesopt.jl,,"JuliaLang,JuliaSparse"
+adijouxenergiesreunion,,,,,,,0,1,gh:roseautechnologies/roseau_load_flow,,
+ak1r4,,,,,,,8,88,gh:pypsa/pypsa,,
+akhilyad,Technical University of Berlin,,Berlin,,Just a Gamer.,,0,1,gh:pypsa/pypsa,,
+akrhodedev,,,,,,,0,0,"gh:fzj-iek3-vsa/fine,gh:mesmo-dev/mesmo",,
+alecantoniou,,,,,,,0,2,gh:andrewlyden/pylesa,,
+alrazol,,,,,,,0,0,gh:powsybl/pypowsybl,,
+altanozlu,,https://altan.ozlu.eu/,Amsterdam,,🦀 Developer,,77,139,gh:energysystemsmodellinglab/muse2,"- 🔭 I’m currently working on observability infrastructure at Adyen
+- 🌱 I’m currently learning how to use helix better to get rid of 🖱️
+- 📫 How to reach me: [mastodon](https://mastodon.social/@anoz7)
+- 😄 Pronouns: He/Him",
+amarmarrivagu,,,Bellevue,,Data Engineer focused in building scalable solutions in utilities industry leveraging AI capabilities,,0,0,gh:mzy2240/esa,,
+andy-moser,,,,,,,1,0,gh:juliaenergy/joulia.jl,,
+anukul1392001,,https://www.linkedin.com/in/anukul-anand/,Bengaluru,gmail.com,I'm a passionate embedded systems enthusiast with a deep interest in both firmware and hardware development.,,41,218,gh:upb-lea/electricgrid.jl,"<img src=""https://www.arduino.cc/en/uploads/Trademark/ArduinoCommunityLogo.png"" height=""300""/>
+<h2>Hey 👋, I'm Anukul Anand</h2>
+
+<br />
+
+ [![Gmail Badge](https://img.shields.io/badge/-Anukul%20Anand-e54448?style=flat&logo=Gmail&logoColor=white)](mailto:anukul.anand2000@gmail.com) &nbsp; [![Linkedin Badge](https://img.shields.io/badge/-Anukul%20Anand-blue?style=flat&logo=Linkedin&logoColor=white)](https://www.linkedin.com/in/anukul-anand/) &nbsp; [![Github Badge](https://img.shields.io/badge/-Anukul%20Anand-181717?style=flat&logo=github&logoColor=white)](https://www.github.com/anukul1392001/)
+<br/>
+<br />
+<h2>⚡️ A Few Quick Facts</h2>
+<ul>
+<li>🧐 I am currently learning about <strong>Embedded Systems and Design</strong> using <strong>STM32, ESP32, AVR and PIC</strong> microcontrollers, <strong>Verilog and FPGAs</strong> and <strong>Linux Kernel</strong>.</li>
+<li>👨‍💻 Most of my projects are available on <a href=""https://github.com/anukul1392001"">Github</a>.</li>
+<!-- <li>📝 I regulary write articles on <a href="""">my blog</a>.</li> -->
+<li>💬 Ping me about <strong>Embedded C, Electronics, Open Source hardware, Microcontrollers and its Firmware development</strong>.</li>
+<!--li>📙 Check out my <a href=""https://resume.aayushkumar.workers.dev/0:/Aayush%20Resume.pdf"">resume</a>.</li-->
+</ul>
+
+<br/>
+<img  align=""left"" alt=""Anukul's Github Stats"" src=""https://github-readme-stats.vercel.app/api?username=anukul1392001&show_icons=true&count_private=true&theme=vue-dark&hide_border=true&bg_color=0D1117"" />
+<img   alt=""Anukul's Top Languages"" src=""https://github-readme-stats.vercel.app/api/top-langs/?username=anukul1392001&langs_count=6&layout=compact&theme=vue-dark&hide_border=true&bg_color=0D1117"" />
+
+<br />
+
+<details> 
+  <summary>💻 More Stats</summary>
+   <img alt=""Anukul's Activity Graph"" src=""https://activity-graph.herokuapp.com/graph?username=anukul1392001&bg_color=0D1117&color=5BCDEC&line=5BCDEC&point=FFFFFF&hide_border=true"" /> 
+</details>",
+appleweiping,,,,,,,0,0,gh:powergridmodel/power-grid-model,"# Hi, I'm Weiping Yan 👋
+
+Undergraduate student in a joint program between **TU Delft** and **Eindhoven University of Technology**, pursuing an interdisciplinary curriculum in **Computer Science, Electrical Engineering, and Applied Physics**.
+
+---
+
+## 🔍 Research Focus
+
+My research focuses on:
+
+- **AI for Science**  
+- **Foundation models**  
+- **Machine learning for analog circuit design and optimization**
+
+I am particularly interested in developing **data-driven approaches to model, optimize, and automate analog circuits**, as well as exploring how modern AI systems can interact with complex physical and engineering systems.
+
+---
+
+## 🚀 Current Work
+
+- Research on **LLM for Recommendation (LLM4Rec)**  
+- Exploring **machine learning methods for physical and engineering systems**  
+- Building knowledge in **AI systems and foundation models**
+
+---
+
+## 🧠 Background
+
+With an interdisciplinary background spanning **software, hardware, and applied physics**, I work at the intersection of intelligent algorithms and real-world engineering systems.
+
+---
+
+## 🤝 Collaboration
+
+I am open to collaboration in:
+
+- AI for Science  
+- AI-driven analog circuit design  
+- Foundation models and AI systems  
+- Interdisciplinary research combining **AI and hardware**
+
+Feel free to connect if you are working on related problems.
+
+---
+
+## 🌍 Future Plan
+
+I plan to continue my undergraduate studies in the **United States**, with a focus on research in AI and engineering systems.
+## 🤝 Collaboration
+
+I am interested in collaborating on:
+
+- AI for Science projects  
+- AI-driven circuit design / optimization  
+- Interdisciplinary research at the intersection of **AI and hardware systems**
+
+If you're working on related topics or interested in collaboration, feel free to connect.",
+arehman-124,,,Gujrat,,I'm an Electrical Engineer. Happy & Blessed.,,0,0,gh:e2niee/pandapower,"# Hi there, I'm Abdur Rehman 👋
+
+<div align=""center"">
+  <img src=""https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=22&pause=1000&color=00C9FF&center=true&vCenter=true&width=600&lines=Electrical+Engineer+%7C+Power+Systems;Python+Developer+%7C+Grid+Optimization;GIS+%26+DER+Integration+Expert;6%2B+Years+in+Energy+%26+Utilities"" alt=""Typing SVG"" />
+</div>
+
+---
+
+## ⚡ About Me
+
+I'm an **Electrical Engineer** with **6+ years of experience** in power system planning, distribution network operations, and software development for grid optimization. Currently serving as **Assistant Manager (Planning & Engineering)** at **GEPCO**, managing 1,055 feeders across six districts of Pakistan.
+
+I bridge the gap between **power engineering** and **software development** — building Python tools that make grids smarter, safer, and renewable-ready.
+
+- 🔭 Currently leading **GEPCO's GIS Enterprise System** for real-time 11kV network visualization
+- 🌱 Enrolled in **MBA (Executive)** — expanding into energy business strategy
+- 🛠️ Built custom **Python-based load flow software** used in GEPCO's live distribution network
+- 🤝 Member of **Ministry-nominated Hosting Capacity Analysis Team** for DER integration across Pakistan
+- 📍 Based in **Gujrat, Pakistan** | Open to **remote global opportunities**
+- 📫 Reach me at **engrabdurrehman124@gmail.com**
+
+---
+
+## 🛠️ Tech Stack
+
+### ⚡ Power System Tools
+![Synergi Electric](https://img.shields.io/badge/Synergi_Electric-004B87?style=for-the-badge)
+![ETAP](https://img.shields.io/badge/ETAP-FF6B00?style=for-the-badge)
+![PSS/E](https://img.shields.io/badge/PSS®E-0072C6?style=for-the-badge)
+![CYME](https://img.shields.io/badge/CYME-2C8C3C?style=for-the-badge)
+![PowerWorld](https://img.shields.io/badge/PowerWorld_Simulator-6A0DAD?style=for-the-badge)
+![MATLAB](https://img.shields.io/badge/MATLAB/Simulink-EF6C00?style=for-the-badge&logo=mathworks&logoColor=white)
+
+### 💻 Programming
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![C++](https://img.shields.io/badge/C++-00599C?style=for-the-badge&logo=cplusplus&logoColor=white)
+![Java](https://img.shields.io/badge/Java-007396?style=for-the-badge&logo=java&logoColor=white)
+![LabVIEW](https://img.shields.io/badge/LabVIEW-FFDB00?style=for-the-badge&logo=ni&logoColor=black)
+
+### 🗺️ GIS Tools
+![ArcGIS](https://img.shields.io/badge/ArcGIS_Pro-2C7AC3?style=for-the-badge&logo=esri&logoColor=white)
+![QGIS](https://img.shields.io/badge/QGIS-589632?style=for-the-badge&logo=qgis&logoColor=white)
+
+---
+
+## 💼 Professional Experience
+
+| Period | Role | Organization |
+|--------|------|-------------|
+| May 2020 – Present | **Assistant Manager** — Planning & Engineering | Gujranwala Electric Power Company (GEPCO) |
+| Aug 2019 – May 2020 | **Electrical Engineer** | Fauji Fertilizer Company Limited (FFC) |
+| Jun 2018 – Jul 2018 | **Electrical Engineering Intern** | Schlumberger, Pakistan |
+
+---
+
+## 🎓 Education
+
+| Degree | Institution | Year | CGPA |
+|--------|-------------|------|------|
+| MBA (Executive) — *Enrolled* | International Institute of Science, Arts & Technology, Gujranwala | 2025 | — |
+| **MS Electrical Engineering** | University of Sialkot, Pakistan | 2023 | 3.88 / 4.00 |
+| **BSc Electrical Engineering** | UET Lahore, Pakistan | 2019 | 3.92 / 4.00 |
+
+---
+
+## 🏆 Achievements & Certifications
+
+- 🥇 **Best Final Year Project** — UET Lahore (2019): Field-Oriented Control System for Induction Motors
+- 🛠️ **Custom Load Flow Software** — Deployed in GEPCO's live 11kV distribution network
+- 📜 **Oracle Primavera P6** — Coursera & PPMI, Pakistan (2025)
+- 🤖 **Essential Generative AI Training** — Pak Angels (2024)
+- 📊 **McKinsey Forward Program** — McKinsey & Company (2024)
+- ⚡ **MV Substation: An Industrial Approach** — Coursera (2023)
+- 🏛️ **Technical Induction Course** — WAPDA Engineering Academy, Faisalabad (2021)
+
+---
+
+## 🔍 Areas of Expertise
+
+```
+⚡ Distribution Network Planning          🌍 GIS-Based Network Visualization
+🔋 DER & Renewable Energy Integration     🐍 Python Automation for Energy Systems
+📊 Load Flow Studies & Voltage Analysis   🏭 Substation Automation & SCADA
+📈 Load Forecasting Models                🔧 HV Switchgear & Preventive Maintenance
+```
+
+---
+
+## 🌐 Connect With Me
+
+<div align=""left"">
+  <a href=""https://linkedin.com/in/engrabdurrehman124"">
+    <img src=""https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white"" />
+  </a>
+  <a href=""mailto:engrabdurrehman124@gmail.com"">
+    <img src=""https://img.shields.io/badge/Gmail-EA4335?style=for-the-badge&logo=gmail&logoColor=white"" />
+  </a>
+</div>
+
+---
+
+<div align=""center"">
+  <i>""Engineering the grid of tomorrow — one feeder at a time.""</i>
+</div>",
+arunsub,,,,,,,0,0,gh:esdlmapeditoressim/essim,,
+atbarke,,,,,,,0,0,gh:mzy2240/esa,,
+attilaf3,,,,,,,1,7,gh:richard-weinhold/pomato,,
+bda838809-hash,,,,,,,0,0,gh:curent/andes,,
+benedekkupper,,,,gmail.com,Embedded Systems Engineering,,59,3,gh:akkudoktor-eos/eos,,IntergatedCircuits
+billybillymc,,https://gardnermcintyre.com,,,,,42,60,"gh:e2niee/pandapower,gh:natlabrockies/sam,gh:pypsa/pypsa",,
+caroluidhao,,,,,,,2,6,gh:natlabrockies/pysam,,
+chelsiecui,,,,,,,0,0,gh:pypsa/pypsa,,
+chs2019,,,Berlin,,,,21,5,gh:e2niee/pandapower,,
+coenvl,TNO,coenvl.nl,Groningen,,,,7,5,gh:esdlmapeditoressim/essim,,flexiblepower
+coogoaa,,,,,,,0,0,gh:pypsa/pypsa,,
+craigleroy-work,,,,,,,0,3,"gh:natlabrockies/pysam,gh:natlabrockies/sam",,
+cstegm,,,,,,,6,44,gh:akkudoktor-eos/eos,,
+cstrojan,,,,,,,0,1,gh:e2niee/pandapower,,
+danishdynamic,,,india,,Web Developer | Data science Enthusiast | Ex Business Developer & Marketing | Ex Power Trader,,1,1,gh:osemosys/osemosys,"<div align=""center"">
+
+#  Ali Dara Sk
+### ✨ Self Taught Developer : Crafting robust web solutions & exploring the data universe ✨
+
+---
+
+### 🚀 Technical Universe
+
+| 🔭 Exploring | 🛠️ Toolkit | 🎯 Goals |
+| :--- | :--- | :--- |
+| **Web Development** | ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)  ![TailwindCss](https://img.shields.io/badge/TailwindCss-20232A?style=for-the-badge&logo=tailwindcss&logoColor=61DAFB) | Frontend Development |
+| **Backend Development** | ![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)  ![Django](https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white) ![Flask](https://img.shields.io/badge/Flask-092E20?style=for-the-badge&logo=flask&logoColor=white) ![Docker](https://img.shields.io/badge/docker-092E20?style=for-the-badge&logo=docker&logoColor=blue) ![Kafka](https://img.shields.io/badge/kafka-092E20?style=for-the-badge&logo=kafka&logoColor=black) | Backend Development |
+| **Data Science** | ![Jupyter Notebook](https://img.shields.io/badge/Jupyter-20232A?style=for-the-badge&logo=jupyter&logoColor=61DAFB) ![MCP-Server](https://img.shields.io/badge/MCP-Server-20232A?style=for-the-badge&logo=MCP-Server&logoColor=61DAFB)| Data Science |
+
+---
+
+### 💻 Stack & Tools
+
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) 
+![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white) 
+![Django](https://img.shields.io/badge/django-%23092E20.svg?style=for-the-badge&logo=django&logoColor=white) 
+![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi&logoColor=white)
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
+![C](https://img.shields.io/badge/C-3670A0?style=for-the-badge&logo=C&logoColor=ffdd54)
+---
+
+### 🤝 Let's Collaborate
+
+[<img src=""https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white""/>](mailto:skalidara@gmail.com)
+
+</div>",
+daruoktab,,,Indonesia,,,,54,81,gh:curent/andes,"# 🏂 Daru Okta Buana
+**`Chess and AI enthusiast`**
+
+<div align=""center"">
+<img src=""banner.gif"" align=""center"" style=""width: 100%"" />
+</div>
+
+<br/>
+
+🎯 **Building the future, one algorithm at a time.** From crafting intelligent chess engines to architecting next-gen AI systems, I transform complex problems into elegant solutions. Currently deep-diving into LLMs, RAG pipelines, and multi-agent frameworks—because the best way to predict the future is to code it.
+
+*Where strategic thinking meets cutting-edge technology.*
+
+## 🚀 Featured Projects
+
+### 🎨 Pixel Art Generator
+<div align=""center"">
+  <a href=""https://daruoktab.github.io/pixel-art-generator/"">
+    <img src=""preview1.png"" alt=""Interactive Chess Game"" style=""width: 100%;"">
+  </a>
+</div>
+
+A web application that generates unique pixel art based on text prompts using Google's Gemini AI.
+- **Tech Stack:** React, TypeScript, Vite, Tailwind CSS, Google Gemini API
+- **Features:** AI-powered image generation, simple UI
+- **[🚀 VISIT IT!](https://daruoktab.github.io/pixel-art-generator/)**
+
+### 🎮 Interactive Chess Game
+A fully functional chess game built with modern web technologies, featuring drag-and-drop gameplay and real-time validation.
+
+<div align=""center"">
+  <a href=""https://daruoktab.github.io/react-tailwind-chess/"">
+    <img src=""preview.png"" alt=""Interactive Chess Game"" style=""width: 100%;"">
+  </a>
+</div>
+
+- **Tech Stack:** React, Tailwind CSS, Chess.js, JavaScript, HTML5
+- **Features:**
+    - 🎯 **Drag & Drop Interface** - Intuitive piece movement
+    - 🧠 **Smart Validation** - Legal moves only (Legal move validation, checkmate detection)
+    - 🏆 **Game Status** - Real-time check/checkmate detection
+    - 🔄 **New Game** - Reset anytime
+    - Responsive design
+- **[🚀 PLAY NOW](https://daruoktab.github.io/react-tailwind-chess/)**
+
+### 🤖 AI & Machine Learning
+Currently exploring cutting-edge applications in:
+- **Large Language Models (LLMs)** - Fine-tuning and deployment
+- **RAG Systems** - Retrieval-augmented generation pipelines  
+- **Agentic Frameworks** - Multi-agent AI systems
+- **Computer Vision** - YOLO, OpenCV implementations
+
+## 🌐 Socials:
+- 📫 **Reach out:** [Email](mailto:daruokta@gmail.com)
+- 💼 **LinkedIn:** [Daru Okta Buana](https://www.linkedin.com/in/daru-okta-buana/)
+
+
+## 💻 Tech Stack:
+
+<div style=""width: 100%;"""">
+
+### **Python Ecosystem**
+| **Language** | **Backend** | **Database** |
+|:------------:|:-----------:|:------------:|
+| ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) | ![Flask](https://img.shields.io/badge/flask-%23000.svg?style=for-the-badge&logo=flask&logoColor=white) | ![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white) |
+| | ![Streamlit](https://img.shields.io/badge/Streamlit-%23FE4B4B.svg?style=for-the-badge&logo=streamlit&logoColor=white) | ![Neo4j](https://img.shields.io/badge/Neo4j-008CC1?style=for-the-badge&logo=neo4j&logoColor=white) |
+| | | ![SurrealDB](https://img.shields.io/badge/SurrealDB-FF00A0?style=for-the-badge&logo=surrealdb&logoColor=white) |
+
+### **Python Libraries & Frameworks**
+| **Data Science** | **Machine Learning** | **Web Scraping** | **Computer Vision** |
+|:----------------:|:--------------------:|:----------------:|:-------------------:|
+| ![NumPy](https://img.shields.io/badge/numpy-%23013243.svg?style=for-the-badge&logo=numpy&logoColor=white) | ![TensorFlow](https://img.shields.io/badge/TensorFlow-%23FF6F00.svg?style=for-the-badge&logo=TensorFlow&logoColor=white) | ![Selenium](https://img.shields.io/badge/Selenium-43B02A?style=for-the-badge&logo=Selenium&logoColor=white) | ![OpenCV](https://img.shields.io/badge/opencv-%23white.svg?style=for-the-badge&logo=opencv&logoColor=white) |
+| ![Pandas](https://img.shields.io/badge/pandas-%23150458.svg?style=for-the-badge&logo=pandas&logoColor=white) | ![PyTorch](https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?style=for-the-badge&logo=PyTorch&logoColor=white) | ![Scrapy](https://img.shields.io/badge/scrapy-%2360a839.svg?style=for-the-badge&logo=scrapy&logoColor=d1d2d3) | ![YOLO](https://img.shields.io/badge/YOLO-111F68.svg?style=for-the-badge&logo=YOLO&logoColor=white) |
+| ![Matplotlib](https://img.shields.io/badge/-Matplotlib-11557C?style=for-the-badge&logo=python&logoColor=white&logoSize=2) | ![Keras](https://img.shields.io/badge/Keras-%23D00000.svg?style=for-the-badge&logo=Keras&logoColor=white) | | |
+| ![Plotly](https://img.shields.io/badge/Plotly-%233F4F75.svg?style=for-the-badge&logo=plotly&logoColor=white) | ![HuggingFace](https://img.shields.io/badge/-HuggingFace-FDEE21?style=for-the-badge&logo=HuggingFace&logoColor=black) | | |
+| ![Scipy](https://img.shields.io/badge/SciPy-%230C55A5.svg?style=for-the-badge&logo=scipy&logoColor=white) | ![mlflow](https://img.shields.io/badge/mlflow-%23d9ead3.svg?style=for-the-badge&logo=numpy&logoColor=blue) | | |
+
+### **Computational Mathematics**
+| **Language & Platform** |
+|:------------------------:|
+| ![Wolfram](https://img.shields.io/badge/Wolfram-DD1100?style=for-the-badge&logo=wolfram&logoColor=white) |
+
+### **JavaScript/TypeScript Ecosystem**
+| **Language** | **Backend** | **Database** | **Libraries** |
+|:------------:|:-----------:|:------------:|:-------------:|
+| ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E) | ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white) | ![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white) | ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) |
+| ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white) | ![Deno JS](https://img.shields.io/badge/deno%20js-000000?style=for-the-badge&logo=deno&logoColor=white) | ![Neo4j](https://img.shields.io/badge/Neo4j-008CC1?style=for-the-badge&logo=neo4j&logoColor=white) | ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white) |
+| ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white) | ![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB) | ![SurrealDB](https://img.shields.io/badge/SurrealDB-FF00A0?style=for-the-badge&logo=surrealdb&logoColor=white) | ![Bootstrap](https://img.shields.io/badge/bootstrap-%238511FA.svg?style=for-the-badge&logo=bootstrap&logoColor=white) |
+| | ![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens) | | ![jQuery](https://img.shields.io/badge/jquery-%230769AD.svg?style=for-the-badge&logo=jquery&logoColor=white) |
+| | ![Vercel](https://img.shields.io/badge/vercel-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white) | | ![jQuery](https://img.shields.io/badge/jquery-%230769AD.svg?style=for-the-badge&logo=jquery&logoColor=white) |
+| | ![NPM](https://img.shields.io/badge/NPM-%23CB3837.svg?style=for-the-badge&logo=npm&logoColor=white) | | ![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white) |
+| | ![Nodemon](https://img.shields.io/badge/NODEMON-%23323330.svg?style=for-the-badge&logo=nodemon&logoColor=%BBDEAD) | | ![JSON](https://img.shields.io/badge/json-5E5C5C?style=for-the-badge&logo=json&logoColor=white) |
+
+### **AI/LLM/Agents**
+| **Language Models** | **AI Frameworks** | **Vector Databases** | **Agent Frameworks** |
+|:-------------------:|:-----------------:|:--------------------:|:--------------------:|
+| ![OpenAI](https://img.shields.io/badge/OpenAI-412991?style=for-the-badge&logo=openai&logoColor=white) | ![LangChain](https://img.shields.io/badge/LangChain-121212?style=for-the-badge&logo=langchain&logoColor=white) | ![Pinecone](https://img.shields.io/badge/Pinecone-000000?style=for-the-badge&logo=pinecone&logoColor=white) | ![CrewAI](https://img.shields.io/badge/CrewAI-FF6B35?style=for-the-badge&logo=ai&logoColor=white) |
+| ![Gemini](https://img.shields.io/badge/Gemini-8E75B2?style=for-the-badge&logo=google&logoColor=white) | ![LlamaIndex](https://img.shields.io/badge/LlamaIndex-0F1419?style=for-the-badge&logo=llama&logoColor=white) | ![Chroma](https://img.shields.io/badge/Chroma-FF6B6B?style=for-the-badge&logo=chroma&logoColor=white) | ![AutoGen](https://img.shields.io/badge/AutoGen-0078D4?style=for-the-badge&logo=microsoft&logoColor=white) |
+| ![Claude](https://img.shields.io/badge/Claude-CC785C?style=for-the-badge&logo=anthropic&logoColor=white) | ![Ollama](https://img.shields.io/badge/Ollama-000000?style=for-the-badge&logo=ollama&logoColor=white) | | ![Agno](https://img.shields.io/badge/Agno-00D4AA?style=for-the-badge&logo=ai&logoColor=white) |
+| ![GitHub Copilot](https://img.shields.io/badge/github_copilot-8957E5?style=for-the-badge&logo=github-copilot&logoColor=white) | | | <img src=""https://badge.mcpx.dev"" title=""MCP""/> |
+| ![Perplexity](https://img.shields.io/badge/perplexity-000000?style=for-the-badge&logo=perplexity&logoColor=088F8F) | | | ![ADK](https://img.shields.io/badge/ADK-FF9500?style=for-the-badge&logo=development&logoColor=white) |
+
+### **Tools & DevOps**
+| **Development** | **Design** |
+|:---------------:|:----------:|
+| ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white) | ![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white) |
+| ![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white) | |
+| ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white) | |
+
+</div>",
+denimdc8008,,,,,,,0,0,gh:pypsa/pypsa,,
+designthynk,,,,,"dogs, caffeine, Porsches and AI",,4,3,gh:e2niee/pandapower,,
+dhrsh-dtu,,,,dtu.dk,,,3,0,"gh:balmorelcommunity/balmorel,gh:matthieu-str/mescal",,
+dim-sous,,https://www.linkedin.com/in/dimitrissousounis/,"Athens, Greece",,Into making things work better,,0,1,gh:nrel-sienna/powersimulations.jl,,
+divyashree-sreenivasa,,,,,,,1,1,gh:sogno-platform/pymfm,,
+duncandevs,,,,,,,11,13,gh:lkruitwagen/global-fossil-fuel-supply-chain,,
+dyzmj,,https://dyzmj.top,Hangzhou,,,,8,13,gh:pypsa/pypsa,"### Hi there 👋
+
+I'm `dyzmj`.
+
+- 🔭 I’m currently working on a  iot technology company
+
+
+- 🌱 I’m currently learning Rust
+
+
+- ❓ Ask me about anything related to IoT stack and related technologies
+
+
+- ⚡ Fun fact: I use tabs over spaces
+
+<img alt=""Coding gif"" src=""https://img.dyzmj.top/img/Developer.gif"" width=""45"" /> **这周我把时间都花在:**
+
+
+<!--START_SECTION:waka-->
+
+```txt
+From: 28 March 2026 - To: 04 April 2026
+
+Total Time: 0 secs
+
+No activity tracked
+```
+
+<!--END_SECTION:waka-->
+
+#### Technologies I use
+
+![Java](https://img.shields.io/badge/-Java-222222?style=flat&logo=Java&logoColor=6DB33F)
+![Rust](https://img.shields.io/badge/-Rust-222222?style=flat&logo=Rust&logoColor=61DAFB)
+![Git](https://img.shields.io/badge/-Git-222222?style=flat&logo=git&logoColor=F05032)
+![GitHub](https://img.shields.io/badge/-GitHub-181717?style=flat&logo=github)
+![Linux](https://img.shields.io/badge/-Linux-222222?style=flat&logo=linux&logoColor=FCC624)
+![Node.js](https://img.shields.io/badge/-Node.js-222222?style=flat&logo=node.js&logoColor=339933)
+![Vue](https://img.shields.io/badge/-Vue-222222?style=flat&logo=Vue.js&logoColor=4FC08D)
+
+
+[![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=dyzmj&layout=compact)](https://github.com/anuraghazra/github-readme-stats)
+#### 📫 Reach me
+[![Github Badge](https://img.shields.io/badge/-Github-24292e?style=flat&logo=github&logoColor=white&link=)](https://github.com/dyzmj) [![Telegram Badge](https://img.shields.io/badge/-Telegram-blue?style=flat&logo=Telegram&logoColor=white&link=)](https://t.me/dyzmj2233) [![WeiBo Badge](https://img.shields.io/badge/-微博-red?style=flat&logo=sina-weibo&logoColor=white&link=)](https://weibo.com/3973970923) [![Gmail Badge](https://img.shields.io/badge/-Gmail-c14438?style=flat-square&logo=Gmail&logoColor=white&link=mailto:guqing3478520@gmail.com)](mailto:dyzmj2233@gmail.com)
+
+![](https://hit.yhype.me/github/profile?user_id=17159188)",
+edwinmatthijssen,,,,,,,3,0,gh:esdlmapeditoressim/essim,,
+elecmohamed,,,New Delhi,,,,0,8,gh:natlabrockies/paraemt_public,,
+electrisim,,https://electrisim.com/,,,"Model, Simulate And Analyse Power System With Open-Source Electrisim App",,13,2,gh:pypsa/pypsa,,
+emmanuelbadmus,,,,,"Emmanuel Oluwatobi Badmus
+Electrical Engineer | Ph.D. Researcher at the University of Vermont
+Specializing in Power Systems and Renewable Energy Integration",,59,4,gh:gridfm/gridfm-graphkit,,
+emyt0529,,,,,,,0,0,gh:matpower/matpower,,
+energy-business,,,,,,,3,0,gh:pypsa/pypsa,,
+eqfive,,,,,,,0,0,gh:akkudoktor-eos/eos,,
+espenbodal,Sintef Energy Research,,,,,,0,3,gh:energymodelsx/energymodelsbase.jl,,
+fBaz92,Skeleton Technologies,,Heidelberg,,,,6,4,gh:e2niee/pandapower,,
+fabioshub,,,Rotterdam,,I code things,,4,0,gh:natlabrockies/reopt.jl,,
+felixduemig,,,,,,,0,0,gh:zen-universe/zen-garden,,
+fluxopt-release[bot],,,,,,,0,0,gh:fbumann/fluxopt,,
+free20252025,,,,,,,1,1,gh:pypsa/pypsa,,
+fscheller,,,,,,,0,2,gh:irpsim/irpopt,,
+fwPunsher,,,,,,,5,0,gh:akkudoktor-eos/eos,,
+gaia844444,,,,,,,0,0,gh:dynawo/dynawo,,
+getnetbogale27,Debre Berhan University,www.dbu.edu.et,Debre Berhan,gmail.com,Coding is awesome,,0,0,gh:energysystemsmodellinglab/muse_os,,
+ghackenberg,University of Applied Sciences Upper Austria,https://mentawise.com,"Wels, Upper Austria, Austria",,"I am a computer science professor, software engineer, and entrepreneur. I like working with TypeScript, Java, C#, C++, and Python.",,33,30,"gh:e2niee/pandapower,gh:rwl/pypower","![](./covers/github.png)
+
+## 👋 Welcome message
+
+**I am happy you found your way to my GitHub profile page!**
+
+My name is Georg and I am a computer science professor, software engineer, and entrepreneur from Bavaria, Germany living in Upper Austria, Austria. On my GitHub profile you find information about my software projects, including:
+
+* [**CADdrive** - A modern product design platform for schools and universities](https://caddrive.org)<br/>Designing awesome products in larger teams is a valuable skill in today's economy. However, developing product design and teamwork skills is a rather difficult endeavor for different reasons. To overcome existing barriers in the learning journey, we are developing CADdrive, an easy-to-use and modern Web-based platform for product design with state-of-the-art product design functionality.
+* [**Mentawise** - An innovative knowledge management solution for visual people](https://mentawise.com)<br/>If you like mind mapping, knowledge graphs, and graph visualization, Mentawise might be your thing! Mentawise is a platform for quickly building your own knowledge graphs and shareing them with other people. The knowledge graph approach is much easier than traditional note taking, because the structure of your knowledge graph is fluid, while the structure of your notes is rigid.
+
+Feel free to contact me via GitHub or other social network platform, which I am using actively! I am always happy to learn new things from different people and share my experience with everybody who is interested!
+
+𝒞𝒽𝓮𝓮𝓇𝓈, 𝒢𝓮𝓸𝓇𝓰
+
+## 📝 Contact sheet
+
+You want to get in touch with me? Feel free to do so anytime!
+
+```
+Dr. rer. nat. Georg Hackenberg BSc MSc
+
+Professor for Industrial Informatics
+Area Manager for Information Technology
+School of Engineering
+University of Applied Sciences Upper Austria
+
+Stelzhamerstrasse 23, 4600 Wels, Austria
+
+georg.hackenberg@fh-wels.at
+```",fhooe
+gianfranco-emissium,,,,,,,0,0,gh:pypsa/pypsa,,
+gitbutler-client,@gitbutlerapp,https://gitbutler.com,"Berlin, Germany",gitbutler.com,GitButler is a new Git client that lets you work on multiple branches at the same time.,gitbutler,53,0,gh:fbumann/fluxopt,"### Good evening
+
+Some commits on this site I have helped with, as I strive to help with everything. If you've landed here, it's probably because I have taken something off someone's plate.
+
+- 🔭 I’m currently working on a new approach to a Git client
+- 🌱 I’m currently learning Rust and Svelte, to help with my Tauri roots
+- 👯 I’m looking to collaborate with you on any code project you need help with
+- 🤔 I’m looking for help with Rust and Svelte programmers
+- 💬 Ask me anything about your code
+- 📫 How to reach me: [hello@gitbutler.com](hello@gitbutler.com)
+- ⚡ Fun fact: GitHub cofounder [Scott Chacon](https://github.com/schacon) is one of my parents",
+gokul-narayanan1,,,Berkeley,gmail.com,"VLA Eval,
+ROS,
+Reinforcement learning
+C++,
+Python,
+Algorithms,",,16,4,gh:adgefficiency/energy-py,,
+gorcig,,,,,,,0,1,gh:powsybl/pypowsybl,,
+greatnoble,,,,lge.com,,,1,1,gh:chrisyeh96/sustaingym,,
+gsuryaias,,,,,,,2,1,"gh:curent/andes,gh:lanl-ansi/powermodels.jl,gh:pypsa/pypsa,gh:sanpen/veragrid",,
+han-ol,,,,,,,8,38,gh:pypsa/pypsa,,
+hlolmar,,,,,,,0,1,gh:akkudoktor-eos/eos,,
+hungto3112,,,,,Discord: hungto3112,,2,14,"gh:ahalev/python-microgrid,gh:grid2op/grid2op",,
+hvmarco,,,,,,,0,4,gh:natlabrockies/pysam,,
+hxf-root,,,,,,,1,0,"gh:chengts95/rustpower,gh:e2niee/pandapower","# Hi 👋 I'm Han Xuefei
+
+🌐 Language
+[English](README.md) | [中文](README_CN.md)
+
+---
+
+💻 Software Developer
+🌏 Based in BeiJing
+
+I am interested in backend development, systems engineering and open-source technologies.
+
+---
+
+## 🚀 About Me
+
+* 🔭 Currently working on backend and systems projects
+* 🌱 Learning distributed systems and cloud-native development
+* ⚙️ Interested in performance optimization and architecture design
+* 👯 Open to open-source collaboration
+
+---
+
+## 🛠 Tech Stack
+
+**Languages**
+
+* Python
+* Go
+* JavaScript
+
+**Tools**
+
+* Linux
+* Git
+* Docker
+
+---
+
+## 📊 GitHub Stats
+
+![GitHub Stats](https://github-readme-stats.vercel.app/api?username=hxf-root\&show_icons=true)
+
+![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=hxf-root\&layout=compact)
+
+---
+
+## 📈 Activity
+
+![GitHub Streak](https://streak-stats.demolab.com/?user=hxf-root)
+
+---
+
+## 📫 Contact
+
+GitHub: https://github.com/hxf-root
+
+---
+
+⭐ Thanks for visiting my profile.",
+illusionxc,,,,,,,3,17,gh:nreca-bts/omf,,
+itsantilas89,"EPU, DSS, NTUA",,Greece,gmail.com,"Junior Research Associate @DSS Lab, EPU-NTUA",,1,2,"gh:curent/andes,gh:gridfm/gridfm-graphkit","# Hello 👋, I'm Ioannis (Juan) Tsantilas!
+
+Welcome to my GitHub profile! I'm a Junior Research Associate @ Institute of Communication and Computer Science (ICCS), in the Energy Perfomance Unit (EPU), in National Technical University of Athens (NTUA)! 
+
+## 🛠 Skills and Tools:
+- Languages: Python, C/C++, C#, React-JS, Django
+- Tools: Node.js, Firebase, Docker, VS-Code, Adobe, Microsoft
+
+## 🔥 My GitHub Stats:
+![GitHub stats](https://github-readme-stats.vercel.app/api?username=itsantilas89&show_icons=true&theme=tokyonight)
+
+## 📊 Most Used Languages:
+![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=itsantilas89&layout=compact&theme=tokyonight)
+
+## 📫 How to Reach Me:
+- Email: [ioannistsantilas89@gmail.com](mailto:ioannistsantilas89@gmail.com)
+- LinkedIn: [LinkedIn](https://www.linkedin.com/in/ioannis-tsantilas/)",
+jaeyeon302,"ECE, Seoul National University",https://www.jaeyeonpark.kr/,"Seoul, South Korea",icloud.com,Programming as Hobby,,17,21,gh:natlabrockies/paraemt_public,,PCSL-git
+jauricestudios,,,Oxford,,Commodity Markets | Geopolitical Risk | Market Structure | Commodity Research,,2,5,gh:temoaproject/temoa,"<h1 align=""center""><i>Jaurice O'Connor ☘️</i></h1>
+
+<p align=""center"">
+Commodity Markets | Geopolitical Risk | Financial Research | Derivatives Pricing
+</p>
+
+<p align=""center"">
+<a href=""https://www.linkedin.com/in/jaurice-o-814a79373/"">LinkedIn</a>
+</p>
+
+---
+  Final-year Mathematics student focused on commodity markets, macro cycles, derivatives pricing, and supply–demand dynamics.
+
+My work analyses commodity markets through economic frameworks, market structure analysis, and data-driven research.
+
+Current academic dissertation:  
+Pricing Asian Options using Monte Carlo methods.
+
+###  Research Interests:
+• Commodity supply–demand dynamics  
+• Inventory cycles and storage economics  
+• Energy market structure and futures curves  
+• Agricultural production shocks and weather risk  
+• Industrial metals and global economic growth  
+
+###  Current Project:
+
+### Geopolitical Commodity Risk Monitor
+
+Developing a signal-tracking dashboard to monitor geopolitical risks and potential disruptions to global commodity flows.
+
+Upcoming Research project:
+Oil Inventory Dynamics and Crude Oil Futures Structure: Analysing how crude oil inventory levels influence the shape of the WTI futures curve (contango vs backwardation).
+
+### Outside Markets
+
+Outside of markets I enjoy competition-based activities:
+
+- Football
+- Chess
+- Cycling
+
+## Connect
+[LinkedIn](https://www.linkedin.com/in/jaurice-o-814a79373/)",
+javiervicho,Ricardo EE,https://javiervicho.github.io/,London,gmail.com,I'm a data scientist @ Ricardo Energy & Environment,,3,9,gh:pypsa/pypsa,"<h1 align='center'>
+  Hi there 👋 I'm Javier 👨‍💻
+</h1>
+
+<p align='center'>
+  Data Scientist with interest in AI and Machine Learning
+</p>
+  
+  <a href=""https://www.linkedin.com/in/javiervicho?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3BcnenBbE%2BSHyWFyJ%2Fiyzjow%3D%3D"">
+    <img src=""https://img.shields.io/badge/linkedin-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white"" />
+  </a>&nbsp;&nbsp;
+  
+<p align='center'>
+  💻 My workspace<br/><br/>
+  <img src=""https://img.shields.io/badge/Ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white"" />
+  <img src=""https://img.shields.io/badge/intel-core%20i7%2014th-%230071C5.svg?&style=for-the-badge&logo=intel&logoColor=white"" />
+  <img src=""https://img.shields.io/badge/RAM-64GB-%230071C5.svg?&style=for-the-badge&logoColor=white"" />
+  <img src=""https://img.shields.io/badge/nvidia-rtx%205080%2016GB-%2376B900.svg?&style=for-the-badge&logo=nvidia&logoColor=white"" />
+</p>",
+jhat-knight,,,,,,,0,9,gh:blue-marble/gridpath,,
+jldonner,DLR,,Berlin,gmail.com,"Master (currently): Computational Engineering Science ;
+Bachelor: Energy- & Process Engineering ; Work: Apple --> BSH --> Fraunhofer --> DLR ; Berlin Based",,0,0,gh:openego/edisgo,,
+jmhrtmnn,RWTH Aachen University,,,,,,3,6,gh:fzj-iek3-vsa/fine,,
+jnicklau,,,,,,,0,0,gh:assume-framework/assume,,
+jreniel,,,,,,,19,7,gh:erf-model/erf,,schism-dev
+jsoref,@GarnerCorp ,,Toronto,,"Wondering how I'm finding spelling errors / want to
+prevent new ones? https://check-spelling.dev",,723,4,gh:natlabrockies/h2integrate,"# Spelling
+
+I'm developing [<img src=""https://raw.githubusercontent.com/check-spelling/art/master/logo/spell-check.png"" width=""16"" height=""16"">check-spelling](https://github.com/marketplace/actions/check-spelling),
+a [GitHub Action](https://github.com/features/actions) to reduce the prevalence of typos in GitHub repositories.
+
+See [how it works](https://github.com/check-spelling/check-spelling/wiki/Showcase).
+
+# Contributions
+
+I work on a number of projects.
+I contribute to projects I don't use in addition to products that I'm using.
+Sometimes I'll make a small contribution because I'm considering using a project.
+
+# Forks
+
+I keep lots of forks of other's repositories,
+in general, you probably don't want to :star: Star or :fork_and_knife: Fork most of my repositories.","argoproj,check-spelling"
+juandi-net,,,,,Glory to God.,,0,10,gh:gridfm/gridfm-graphkit,,
+juliettegiraud-2004,,,,,,,0,0,gh:powergridmodel/power-grid-model,,
+jvgkr,,,,,,,0,0,gh:assume-framework/assume,,
+jwy9mp6xcs-create,,,,,,,0,1,gh:eiagov/bluesky,,
+jxyaalto,,,,,,,2,6,gh:grid2op/grid2op,,
+kaanyurtseven,KU Leuven / EnergyVille,,Leuven - Belgium,,,,2,0,gh:eliagroup/toop,,
+kaupau,,kaushik-k.com,"Chicago, IL",,i code,,13,36,gh:pypsa/pypsa,,
+keegan-at-terawatt,Terawatt Infrastructure,,Canada,terawattinfrastructure.com,,,0,0,gh:pypsa/pypsa,,
+keeganmjgreen,Terawatt Infrastructure,https://www.linkedin.com/in/keegan-green/,"Ottawa, ON",,Software Engineer at Terawatt Infrastructure,,2,3,gh:pypsa/pypsa,,
+kennethfungch,,,,,,,0,0,gh:pypsa/pypsa,,
+ker168,,,,,,,0,0,gh:pypsa/pypsa,,
+kostemplays,,,,,"Student at TU Delft 
+",,0,0,"gh:genxproject/genx.jl,gh:macroenergy/macroenergy.jl",,
+lanthitran3,,,,,,,0,0,"gh:grid2op/chronix2grid,gh:marvinler/pypownet",,
+leandrobpedro,,,Brazil,,,,12,12,gh:thales1330/psp,,
+leo007-htun,,https://leo007-htun.github.io/,London,,AI and Robotics Practitioner,,28,108,gh:grid2op/grid2op,"<h1 align=""center"">Hi 👋, I'm Leo, an AI & Robotics Practitioner</h1>
+<h2 align=""center"">A passionate Roboticist always seeking out for challenges (FYI I'm that monkey haha, Hope this makes your day!)</h2>
+
+<p align=""center"">
+  <img src=""https://media.giphy.com/media/zOvBKUUEERdNm/giphy.gif"" alt=""Funny robot GIF"" width=""480""/>
+</p>
+
+<p align=""center"">
+  <a href=""https://www.linkedin.com/in/sithu-ye-htun-1630b11a9/"">
+    <img alt=""LinkedIn"" src=""https://img.shields.io/badge/-Linkedin-blue?style=flat-square&logo=linkedin"">
+  </a>
+  <a href=""mailto:sithu.y.htun@gmail.com"">
+    <img alt=""Email"" src=""https://img.shields.io/badge/-Email-red?style=flat-square&logo=gmail&logoColor=white"">
+  </a>
+  <a href=""https://leo007-htun.github.io/"">
+    <img alt=""Website"" src=""https://img.shields.io/badge/Website-github.io-red?style=flat-square"">
+  </a>
+</p>
+
+<hr/>
+
+- 🔭 Currently working on: <a href=""https://www.linkedin.com/posts/sithu-ye-htun-1630b11a9_gpt3-pepper-googlespeechrecognition-activity-7142130282849083392-hqfi?utm_source=share&utm_medium=member_desktop""><b>Integrating LLMs with Pepper Robot</b></a>  
+- ⚡ Fun fact: <b><i>I AM BATMAN</i></b>
+
+<hr/>
+
+<h3 align=""left"">Languages and Tools:</h3>
+<p align=""left"">
+  <a href=""https://aws.amazon.com"" target=""_blank"" rel=""noreferrer""><img src=""https://raw.githubusercontent.com/devicons/devicon/master/icons/amazonwebservices/amazonwebservices-original-wordmark.svg"" alt=""aws"" width=""40"" height=""40""/></a>
+  <a href=""https://www.gnu.org/software/bash/"" target=""_blank"" rel=""noreferrer""><img src=""https://www.vectorlogo.zone/logos/gnu_bash/gnu_bash-icon.svg"" alt=""bash"" width=""40"" height=""40""/></a>
+  <a href=""https://www.blender.org/"" target=""_blank"" rel=""noreferrer""><img src=""https://download.blender.org/branding/community/blender_community_badge_white.svg"" alt=""blender"" width=""40"" height=""40""/></a>
+  <a href=""https://www.w3schools.com/cpp/"" target=""_blank"" rel=""noreferrer""><img src=""https://raw.githubusercontent.com/devicons/devicon/master/icons/cplusplus/cplusplus-original.svg"" alt=""cplusplus"" width=""40"" height=""40""/></a>
+  <a href=""https://www.w3schools.com/cs/"" target=""_blank"" rel=""noreferrer""><img src=""https://raw.githubusercontent.com/devicons/devicon/master/icons/csharp/csharp-original.svg"" alt=""csharp"" width=""40"" height=""40""/></a>
+  <a href=""https://www.w3schools.com/css/"" target=""_blank"" rel=""noreferrer""><img src=""https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original-wordmark.svg"" alt=""css3"" width=""40"" height=""40""/></a>
+  <a href=""https://www.docker.com/"" target=""_blank"" rel=""noreferrer""><img src=""https://raw.githubusercontent.com/devicons/devicon/master/icons/docker/docker-original-wordmark.svg"" alt=""docker"" width=""40"" height=""40""/></a>
+  <a href=""https://flask.palletsprojects.com/"" target=""_blank"" rel=""noreferrer""><img src=""https://www.vectorlogo.zone/logos/pocoo_flask/pocoo_flask-icon.svg"" alt=""flask"" width=""40"" height=""40""/></a>
+  <a href=""https://www.w3.org/html/"" target=""_blank"" rel=""noreferrer""><img src=""https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original-wordmark.svg"" alt=""html5"" width=""40"" height=""40""/></a>
+  <a href=""https://kubernetes.io"" target=""_blank"" rel=""noreferrer""><img src=""https://www.vectorlogo.zone/logos/kubernetes/kubernetes-icon.svg"" alt=""kubernetes"" width=""40"" height=""40""/></a>
+  <a href=""https://www.mathworks.com/"" target=""_blank"" rel=""noreferrer""><img src=""https://upload.wikimedia.org/wikipedia/commons/2/21/Matlab_Logo.png"" alt=""matlab"" width=""40"" height=""40""/></a>
+  <a href=""https://www.mysql.com/"" target=""_blank"" rel=""noreferrer""><img src=""https://raw.githubusercontent.com/devicons/devicon/master/icons/mysql/mysql-original-wordmark.svg"" alt=""mysql"" width=""40"" height=""40""/></a>
+  <a href=""https://opencv.org/"" target=""_blank"" rel=""noreferrer""><img src=""https://www.vectorlogo.zone/logos/opencv/opencv-icon.svg"" alt=""opencv"" width=""40"" height=""40""/></a>
+  <a href=""https://pandas.pydata.org/"" target=""_blank"" rel=""noreferrer""><img src=""https://raw.githubusercontent.com/devicons/devicon/2ae2a900d2f041da66e950e4d48052658d850630/icons/pandas/pandas-original.svg"" alt=""pandas"" width=""40"" height=""40""/></a>
+  <a href=""https://www.python.org"" target=""_blank"" rel=""noreferrer""><img src=""https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg"" alt=""python"" width=""40"" height=""40""/></a>
+  <a href=""https://pytorch.org/"" target=""_blank"" rel=""noreferrer""><img src=""https://www.vectorlogo.zone/logos/pytorch/pytorch-icon.svg"" alt=""pytorch"" width=""40"" height=""40""/></a>
+  <a href=""https://scikit-learn.org/"" target=""_blank"" rel=""noreferrer""><img src=""https://upload.wikimedia.org/wikipedia/commons/0/05/Scikit_learn_logo_small.svg"" alt=""scikit_learn"" width=""40"" height=""40""/></a>
+  <a href=""https://seaborn.pydata.org/"" target=""_blank"" rel=""noreferrer""><img src=""https://seaborn.pydata.org/_images/logo-mark-lightbg.svg"" alt=""seaborn"" width=""40"" height=""40""/></a>
+  <a href=""https://www.tensorflow.org"" target=""_blank"" rel=""noreferrer""><img src=""https://www.vectorlogo.zone/logos/tensorflow/tensorflow-icon.svg"" alt=""tensorflow"" width=""40"" height=""40""/></a>
+</p>
+
+<hr/>
+
+<!-- 🎙️ Featured Project -->
+<h3 align=""center"">🎙️ Full-Duplex Assistant — Live Demo</h3>
+
+<p align=""center"">
+  <a href=""https://com-cloud.cloud"">
+    <img src=""https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-brightgreen?style=for-the-badge&logo=github"" alt=""Live Demo"">
+  </a>
+  <a href=""https://github.com/leo007-htun/full_duplex_assistant"">
+    <img src=""https://img.shields.io/badge/Source-Code-black?style=for-the-badge&logo=github"" alt=""Source Code"">
+  </a>
+</p>
+
+<p align=""center"">
+  <!-- Replace the GIF below with a real screenshot or GIF committed to your repo, e.g. ./assets/full_duplex_preview.gif -->
+  <a href=""https://leo007-htun.github.io"">
+    <img src=""./assets/full_duplex_preview.gif"" alt=""Full-Duplex Assistant preview"" width=""800"">
+  </a>
+</p>
+
+<hr/>
+
+<p align=""center"">
+  <!--img src=""https://github-readme-stats.vercel.app/api/top-langs?username=leo007-htun&langs_count=10&layout=compact&theme=dark"" alt=""Top languages""/-->
+</p>
+
+<!-- Optional extras:
+<p align=""center""><img src=""https://github-readme-streak-stats.herokuapp.com/?user=leo007-htun&theme=dark"" alt=""GitHub Streak""/></p>
+<p align=""center""><img src=""https://github-readme-stats.vercel.app/api?username=leo007-htun&show_icons=true&theme=dark"" alt=""GitHub Stats""/></p>
+-->",
+lilyWuhan,wuhan ,,wuhan,,To be a literary and artistic Technology  dog,,0,0,gh:powergridmodel/power-grid-model,,
+loapink,,,,,,,0,0,gh:pypsa/pypsa,,
+lopokROAR,,,,,,,0,0,gh:mzy2240/esa,,
+lsq642036192,,,,qq.com,,,0,3,"gh:e2niee/pandapower,gh:pypsa/pypsa,gh:richard-weinhold/pomato",,
+lwglg,Guilherme L. Gonçalves Desenvolvimento de Sistemas Ltda. CNPJ/ME: 44.867.072/0001-06,https://medium.com/@guligon90 ,Brazil ,gmail.com,Software Engineer,,3,7,gh:thales1330/psp,"- I’m a software engineer with 15 years experience, starting in a R&D setting, constructing embedded systems for data acquisition equipment and precision electromechanical devices, then later migrating to web development;
+- I studied Electrical Engineering for three years at [UFSC](https://en.ufsc.br/) (Federal University of Santa Catarina, Brazil), having then switched to Mathematics in 2016, at the same university, obtaining a bachelor’s degree in 2019;
+- I’m currently working as a back-end engineer designing scalable cloud-based software, with an emphasis on Python, TypeScript and Java languages, with a particular interest in event-driven architectures, workflow engine designs and complexity analysis;
+- Working part-time as a private Math teacher mostly for students of undergrad and high school levels.
+- My [article](https://medium.com/better-programming/determining-time-complexity-of-algorithms-experimentally-4f844a5080ec) on Medium, concerning a practical application of [asymptotic analysis](https://en.wikipedia.org/wiki/Asymptotic_analysis) of algorithms.
+- [Terry A. Davis](https://www.youtube.com/watch?v=z5CvDYFSxhU) was right.
+
+---
+<a href=""https://www.buymeacoffee.com/lwglg"" target=""_blank""><img src=""https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png"" alt=""Buy Me A Coffee"" style=""height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;"" ></a>
+
+<!-- - My sincere opinion on my years working as a software engineer [here](https://drive.google.com/file/d/1YxfnsVZJ4dFelXzAidN29Z2_HmzjwQ4_/view?usp=sharing). -->",
+m-borjesson,,,Järnskog,outlook.com,Electrical Engineer specializing in Power Engineering.,,0,1,gh:e2niee/pandapower,,
+ma447047537-sketch,,,,,,,0,1,"gh:chengts95/rustpower,gh:e2niee/pandapower",,
+manuelmusngi,,,,,,,12,11,gh:assume-framework/assume,,
+marcp-ops,,,,,,,0,2,gh:oemof/oemof-solph,,
+marcvanraalte,,,,,,,1,1,gh:powergridmodel/power-grid-model,,
+martin-hey,,,,,,,0,1,gh:flixopt/flixopt,,
+matma-mm,,,,,,,0,2,gh:e2niee/pandapower,,
+mbatchelor81,,,,,,,0,0,gh:pypsa/pypsa,,
+mehmetoguzderin,,,,,Oguz 𐱅𐰼𐰭𐰆𐰍𐰔 To compute,,89,52,gh:pypsa/pypsa,"Scopus ID
+https://www.scopus.com/authid/detail.uri?authorId=57433685000[57433685000]
+
+.Details
+[%collapsible]
+====
+ORCID
+https://orcid.org/0000-0002-6264-3509
+
+Linkedin
+https://linkedin.com/in/mehmetoguzderin[mehmetoguzderin]
+
+デリン（姓）メフメトオグズ（名）
+
+[cols=""^""]
+|===
+
+| ``𐰆𐰍𐰔``
+
+| ``ウガラ``
+
+| ``Oguz``
+
+| ``オグズ``
+
+| ``오구즈``
+
+|===
+
+デリン　メフメトオグズ
+
+데린 메흐메트오구즈
+====","w3c,UniversalDependencies,riscv,gpuweb"
+micksuffolk,,,"Suffolk, United Kingdom",,Power & Control Systems Engineer | PLC Software Engineer,,0,9,gh:matpower/matpower,,
+mika80,,,,,,,1,0,gh:oemof/oemof-solph,,
+mikelakel,,,,,,,0,0,gh:pypsa/pypsa,,
+mjschirch,,,,,,,0,0,gh:natlabrockies/reeds-2.0,,
+mkschleg,@UniversityOfCalgary,,Canada,,,,33,3,gh:curent/andes,,rlai-lab
+murathany90,,,,,,,0,4,gh:powsybl/powsybl-core,,
+nanamolo,,,,,,,0,0,gh:pypsa/pypsa,,
+natseil,,,,,,,0,0,gh:openipsl/openipsl,,
+neonglitchdev,,,,,,,6,1,gh:pypsa/pypsa,,
+ngemsokphea-ctrl,,,,,,,0,0,gh:roseautechnologies/roseau_load_flow,,
+nightingale-vivy,,,,,,,0,0,gh:anl-ceeesa/unitcommitment.jl,,
+nr282,,,,,,,2,2,gh:eiagov/bluesky,,
+nviebig,ETH Zürich,,Zürich,,"MSc Student in Physics at ETH Zurich 
+Passionate about (astro-)physics to learn more about Earth and its neighbors 🚀",,7,29,gh:nrel-sienna/powersimulations.jl,"# Hey there :)
+
+Im Niklas, a Physics MSc student at **ETH Zurich** interested in  **numerical simulation, differentiable models, and scientific machine learning**.
+
+My focus is on making **high-performance atmospheric models differentiable**, enabling gradient-based inference, calibration, and sensitivity analysis in climate and planetary systems.
+
+
+---
+
+## 🌐 Connect
+
+[![Bluesky](https://img.shields.io/badge/Bluesky-0285FF?style=flat-square&logo=bluesky&logoColor=white)](https://bsky.app/profile/nviebig.bsky.social)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=flat-square&logo=linkedin&logoColor=white)](https://linkedin.com/in/niklasviebig)
+[![Instagram](https://img.shields.io/badge/Instagram-E4405F?style=flat-square&logo=instagram&logoColor=white)](https://instagram.com/niklasvbg)
+[![Email](https://img.shields.io/badge/Email-D14836?style=flat-square&logo=gmail&logoColor=white)](mailto:niklasviebig@gmail.com)
+[![Hugging Face](https://img.shields.io/badge/HuggingFace-FFD21E?style=flat-square&logo=huggingface&logoColor=black)](https://huggingface.co/nviebig)
+---
+
+## 💻 Tech Stack
+
+**Languages & Tools**  
+![Julia](https://img.shields.io/badge/Julia-9558B2?style=flat-square&logo=julia&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3670A0?style=flat-square&logo=python&logoColor=ffdd54)
+![C++](https://img.shields.io/badge/C++-00599C?style=flat-square&logo=c%2B%2B&logoColor=white)
+![LaTeX](https://img.shields.io/badge/LaTeX-008080?style=flat-square&logo=latex&logoColor=white)
+
+**Scientific & ML**  
+![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat-square&logo=PyTorch&logoColor=white)
+![TensorFlow](https://img.shields.io/badge/TensorFlow-FF6F00?style=flat-square&logo=TensorFlow&logoColor=white)
+![Keras](https://img.shields.io/badge/Keras-D00000?style=flat-square&logo=Keras&logoColor=white)
+![NumPy](https://img.shields.io/badge/NumPy-013243?style=flat-square&logo=numpy&logoColor=white)
+![SciPy](https://img.shields.io/badge/SciPy-0C55A5?style=flat-square&logo=scipy&logoColor=white)
+![scikit-learn](https://img.shields.io/badge/scikit--learn-F7931E?style=flat-square&logo=scikit-learn&logoColor=white)
+![Pandas](https://img.shields.io/badge/Pandas-150458?style=flat-square&logo=pandas&logoColor=white)
+![Matplotlib](https://img.shields.io/badge/Matplotlib-white?style=flat-square&logo=Matplotlib&logoColor=black)
+![Plotly](https://img.shields.io/badge/Plotly-3F4F75?style=flat-square&logo=plotly&logoColor=white)
+![mlflow](https://img.shields.io/badge/mlflow-d9ead3?style=flat-square&logo=numpy&logoColor=blue)
+
+**Dev & Version Control**  
+![Git](https://img.shields.io/badge/Git-F05033?style=flat-square&logo=git&logoColor=white)
+![GitHub](https://img.shields.io/badge/GitHub-121011?style=flat-square&logo=github&logoColor=white)
+![GitLab](https://img.shields.io/badge/GitLab-181717?style=flat-square&logo=gitlab&logoColor=white)",
+olmomezger,,,,,,,1,0,gh:eliagroup/toop,,
+pano-m,,,,,,,0,0,gh:e2niee/pandapower,,
+phoerious,Bauhaus-Universität Weimar,https://keepassxc.org/,,,"Programmer, Computer Scientist, KeePassXC Maintainer",,248,23,gh:akkudoktor-eos/eos,,"nightingale-media-player,webis-de,pan-webis-de,keepassxreboot,chatnoir-eu"
+pilifengmo,,,,,,,0,7,gh:chengts95/rustpower,,
+polaberina,,,,,,,1,3,gh:assume-framework/assume,,
+potatoqueen3,,,,,,,0,0,gh:ait-energy/iesopt.jl,,
+priyamDalmia,University of Melbourne,priyamDalmia.github.io,Melbourne,,Checkout the repo and judge for yourself. ,pd,3,4,gh:grid2op/grid2op,,
+qiaoshengyu,,,,,,,1,10,"gh:curent/andes,gh:e2niee/pandapower,gh:matpower/matpower,gh:pypsa/pypsa,gh:sanpen/veragrid",,
+r3n4ud,,http://blog.renaud.io,"Paris, France",,,,4,0,gh:powsybl/pypowsybl,,
+rg20050403,,,,,,,0,0,gh:powsybl/powsybl-core,,
+rickschueller,,,,,,,0,2,gh:oemof/oemof-solph,,
+saftione,,https://saftione.github.io/blog/,Dresden,,,,2,5,gh:akkudoktor-eos/eos,,
+sh-lin24,,,,mails.tsinghua.edu.cn,,,0,0,gh:ahalev/python-microgrid,,
+shashikhaya,,,,,,,6,27,"gh:curent/andes,gh:e2niee/pandapower,gh:manuvarkey/gelectrical,gh:nrel-sienna/powersimulationsdynamics.jl,gh:pypsa/pypsa,gh:rwl/pypower,gh:sanpen/veragrid",,
+shuofangshi,,,,,,,0,1,gh:sogno-platform/dpsim,,
+sihnat24,,,,,Graduate of University of Rochester Biomedical Engineering. Currently completing MSCS at Columbia University and working at the @aqlaboratory.,,1,4,gh:natlabrockies/paraemt_public,,
+siqi928,,,,,,,0,2,gh:pypsa/pypsa,,
+sixteennightxiaoye,,,,,,,0,0,gh:ahalev/python-microgrid,,
+slcorrensi,,,,,,,0,0,gh:antaressimulatorteam/antares_simulator,,
+sol-jac,,,,,,,0,0,"gh:ahalev/python-microgrid,gh:assume-framework/assume,gh:osemosys/osemosys",,
+sondrmsk,,,,,,,1,0,gh:onsset/onsset,,
+spatch22,,,,,,,1,7,gh:e2niee/pandapower,,
+spring9978,,,,,,,4,6,"gh:ie3-institute/simona,gh:powsybl/powsybl-core,gh:powsybl/powsybl-open-loadflow,gh:powsybl/pypowsybl",,
+srlightfoote,https://www.awstruepower.com/ ,https://renewable-analytics.netlify.com/,"Needham, MA",gmail.com,"Currently at AWS Truepower, a UL Company.  My background is in Atmospheric Science.  Interests include the intersection of renewable energy and data science.",,14,1,gh:natlabrockies/pysam,,
+ssossou-liege,,,,uliege.be,I'm a PhD candidate within the Integrated Sustainable Energy System research unit at the University of Liège.,,0,0,gh:microgridspy/microgridspy,,
+t785634,,,,,,,0,0,gh:akkudoktor-eos/eos,,
+tanghannah238-code,,,,,,,0,2,gh:chrisyeh96/sustaingym,,
+tejassinghbhati,,https://tejassinghbhati.netlify.app/,,gmail.com,Developer | Machine Learning | Student IIITS,,1,6,gh:osemosys/osemosys,,
+thefechner,,,Berlin / Germany,,,thefechner,0,1,gh:akkudoktor-eos/eos,,
+thomas-durand-SGI,,,,,,,0,0,"gh:powsybl/powsybl-core,gh:powsybl/powsybl-open-loadflow,gh:powsybl/pypowsybl",,
+tibuski,,,,,,,1,2,gh:eliagroup/toop,,
+tinnaphat-kn,,,,,,,0,0,gh:manuvarkey/gelectrical,,
+titio2002,,,,,,,0,6,gh:matthieu-str/mescal,,
+tom-43,,schmitt57.de,"Siegen, Deutschland",,,,1,2,gh:akkudoktor-eos/eos,"## Hi there 👋
+
+- 💻 I’m currently learning GitHub and Git!
+- I'm always trying to help others in their projects!
+
+## About me
+
+- Student
+- I like to administrate servers and do networking
+
+Nice that you found my profile! 👌
+
+
+
+<!--
+**tom-43/tom-43** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+
+Here are some ideas to get you started:
+
+- 🔭 I’m currently working on ...
+- 🌱 I’m currently learning ...
+- 👯 I’m looking to collaborate on ...
+- 🤔 I’m looking for help with ...
+- 💬 Ask me about ...
+- 📫 How to reach me: ...
+- 😄 Pronouns: ...
+- ⚡ Fun fact: ...
+-->",
+tomasurdiales,Elia Group,,"Berlin, Germany",,Data Scientist @ Energy Industry | MSc Sustainable Energy Systems,,6,9,gh:eliagroup/toop,,
+tomcatxx,,,,,,,0,1,gh:akkudoktor-eos/eos,,
+tomislav-marinovic,Toming,,,toming.ba,Engineer,,0,3,gh:pypsa/pypsa,,
+tsufang,,,,,,,0,0,gh:etsap-times/times_model,,
+tuanljn,,,,,,,0,0,gh:dynawo/dynawo,,
+tybolalekan,PheonixLab,,Nigeria,,"Humane Engineering | AIoT & Embedded Systems | Machine Learning |  AI Prompt Engineer | Data Analysis
+",,4,15,gh:matpower/matpower,"## Hi there 👋
+
+<!--
+**tybolalekan/tybolalekan** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+
+Here are some ideas to get you started:
+
+- 🔭 I’m currently working on ...
+- 🌱 I’m currently learning ...
+- 👯 I’m looking to collaborate on ...
+- 🤔 I’m looking for help with ...
+- 💬 Ask me about ...
+- 📫 How to reach me: ...
+- 😄 Pronouns: ...
+- ⚡ Fun fact: ...
+-->
+
+
+# Toyyib A. Olalekan
+
+## Embedded Systems Engineer | Embedded Linux | AIoT | Data & Analytics
+
+I am an **Embedded Systems Engineer** with hands-on experience designing, building, and deploying **reliable firmware, embedded Linux systems, and data-driven solutions**. My work focuses on practical engineering systems that move beyond prototypes and perform reliably in real-world environments.
+
+I work comfortably across the stack: from **low-level microcontroller firmware and hardware interfaces** to **networked IoT systems, analytics, and AI-assisted workflows**. I value clarity, documentation, and engineering decisions that scale.
+
+---
+
+## Core Technical Skills
+
+### Embedded Systems & Firmware
+- ESP32, STM32, ARM-based microcontrollers  
+- Embedded C / C++  
+- Arduino Framework & PlatformIO  
+- FreeRTOS  
+- LVGL (embedded graphics and UI)
+
+### Embedded Linux
+- Buildroot & Yocto (custom lightweight Linux systems)  
+- Linux system fundamentals and device bring-up  
+- Cross-compilation toolchains  
+- System configuration and optimization
+
+### IoT & Networking
+- Wi‑Fi, Ethernet, PPP  
+- HTTPS, MQTT  
+- Secure device-to-cloud communication  
+- Edge data collection and transmission
+
+### Data & Analytics
+- SQL  
+- Power BI  
+- DAX & Power Query  
+- Python (NumPy, Pandas)
+
+### AI & Automation
+- Machine Learning fundamentals  
+- AI prompt engineering  
+- AI-assisted engineering workflows
+
+---
+
+## What This GitHub Showcases
+- Embedded systems and firmware projects  
+- Embedded Linux experiments and system builds  
+- Data analysis and visualization work  
+- Well-documented learning and exploration repositories
+
+---
+
+<!--
+**I am particularly interested in roles where hardware, software, and data meet — building dependable systems that are engineered for real-world use.**
+-->",
+vathomass,,,,,,,0,0,gh:e2niee/pandapower,,
+vitalyvch,,http://linkedin.com/in/chernooky,Gdańsk,gmail.com,"Linux guru. 20 year of experience in Linux.
+
+Usually, I already know the answer even for the most puzzling challenges related to Linux.",,20,38,gh:oemof/oemof-thermal,,
+weiliw2,,,Durham,,,,1,7,gh:natlabrockies/reeds-2.0,,
+will-falk,,,?,,,,5,6,gh:eiagov/bluesky,,
+wlgexe,,,,,,,0,0,gh:future-power-networks/simplus-grid-tool,,
+wwy050822-svg,,,,,,,0,2,gh:oemof/oemof-solph,,
+yicuer,,,,,,,0,0,gh:g-pst/inertia,,
+yxxyun,,,,,,,47,1,gh:e2niee/pandapower,,
+zeleih,,,,outlook.com,,,1,2,gh:curent/andes,,
+zhihaodeng666,,,,,,,0,4,gh:pypsa/pypsa,,
+zhouaihong,,,,outlook.com,尔时须菩提。闻说是经。深解义趣。涕泪悲泣。而白佛言。希有世尊。佛说如是甚深经典。我从昔来所得慧眼。未曾得闻如是之经。,,2,4,gh:natlabrockies/sam,,
+zzccaadd,,,,,,,0,0,gh:curent/andes,,
+zzdx713,,,,,,,3,5,gh:pypsa/pypsa,,

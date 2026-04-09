@@ -25,6 +25,7 @@ copper,https://gitlab.com/sesit/copper,COPPER,"g-pst,opensustain-tech,pre-compil
 coral,https://github.com/natlabrockies/coral,CORAL,lf-energy-landscape,
 deeco,https://github.com/robbiemorrison/deeco,deeco,pre-compiled,
 deflex,https://github.com/reegis/deflex,deflex,"lf-energy-landscape,opensustain-tech",
+dieter_jl,https://gitlab.com/users/sign_in,DIETER.jl,pre-compiled,
 dieter_py,https://gitlab.com/diw-evu/dieter_public/dieterpy,dieter_py,lf-energy-landscape,
 digripy,https://github.com/lvorspel/digripy,DiGriPy,pre-compiled,
 dispa_set,https://github.com/energy-modelling-toolkit/dispa-set,Dispa-SET,"lf-energy-landscape,opensustain-tech,pre-compiled",production-cost
@@ -52,7 +53,7 @@ energymodelsbase_jl,https://github.com/energymodelsx/energymodelsbase.jl,EnergyM
 energyrt,https://github.com/optimal2050/energyrt,"energyRt,EnergyRt","lf-energy-landscape,openmod,opensustain-tech",
 energyscope,https://github.com/energyscope/energyscope,EnergyScope,openmod,
 energysim,https://github.com/dgusain1/energysim,energysim,pre-compiled,
-enflow,https://github.com/rebase-energy/enflow,enflow,"opensustain-tech,pre-compiled",
+enflow,https://github.com/rebase-energy/emflow,enflow,"opensustain-tech,pre-compiled",
 eoles_elecres,https://github.com/behrangshirizadeh/eoles_elecres,EOLES elecRES,openmod,
 eoles_mv,https://github.com/behrangshirizadeh/eoles_mv,EOLES_mv,pre-compiled,
 epm,https://github.com/esmap-world-bank-group/epm,Electricity Planning Model,"opensustain-tech,pre-compiled","capacity-expansion,production-cost"
@@ -219,7 +220,7 @@ times_model,https://github.com/etsap-times/times_model,"TIMES_model,TIMES","open
 toop,https://github.com/eliagroup/toop,ToOp,lf-energy-landscape,
 transactive_energy_service_system,https://github.com/slacgismo/tess,Transactive Energy Service System,"lf-energy-landscape,opensustain-tech",
 transient_lib,https://github.com/transient-official/transient-lib,transient-lib,pre-compiled,
-tulipaenergymodel_jl,https://github.com/tulipaenergy/tulipaenergymodel.jl,Tulipa Energy Model,"opensustain-tech,pre-compiled",
+tulipaenergymodel_jl,https://github.com/tulipaenergy/tulipaenergymodel.jl,Tulipa Energy Model,"opensustain-tech,pre-compiled",capacity-expansion
 tz_osemosys,https://github.com/transition-zero/tz-osemosys,TZ-OSeMOSYS,"opensustain-tech,pre-compiled",capacity-expansion
 unitcommitment_jl,https://github.com/anl-ceeesa/unitcommitment.jl,UnitCommitment.jl,pre-compiled,production-cost
 urbs,https://github.com/tum-ens/urbs,"urbs,URBS","lf-energy-landscape,openmod,opensustain-tech,pre-compiled",capacity-expansion

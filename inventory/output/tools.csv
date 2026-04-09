@@ -677,7 +677,7 @@ transient_lib,transient-lib,,https://github.com/transient-official/transient-lib
 tsam,tsam,A Python package which uses different machine learning algorithms for the aggregation of time series.,https://github.com/fzj-iek3-vsa/tsam,lf-energy-landscape,
 tsam,tsam,A Python package which uses different machine learning algorithms for the aggregation of time series.,https://github.com/fzj-iek3-vsa/tsam,opensustain-tech,
 tulipa_energy_model,Tulipa Energy Model,An energy system modelling framework for investment (expansion) and dispatch (operations) optimisations using mixed-integer linear programming (MILP) - primarily for informing policy-maker & stakeholder decisions in the energy transition. Focuses on generalized & compact formulations (peer-reviewed publications) and efficient code implementation to handle large-scale problems (i.e. European) while maintaining sufficient granularity.,https://github.com/tulipaenergy/tulipaenergymodel.jl,opensustain-tech,
-tulipaenergymodel_jl,TulipaEnergyModel.jl,,https://github.com/tulipaenergy/tulipaenergymodel.jl,pre-compiled,
+tulipaenergymodel_jl,TulipaEnergyModel.jl,,https://github.com/tulipaenergy/tulipaenergymodel.jl,pre-compiled,capacity-expansion
 tz_osemosys,TZ-OSeMOSYS,A TransitionZero implementation of the OSeMOSYS systems model.,https://github.com/transition-zero/tz-osemosys,opensustain-tech,capacity-expansion
 tz_osemosys,tz-osemosys,,https://github.com/transition-zero/tz-osemosys,pre-compiled,capacity-expansion
 unitcommitment_jl,UnitCommitment.jl,,https://github.com/anl-ceeesa/unitcommitment.jl,pre-compiled,production-cost

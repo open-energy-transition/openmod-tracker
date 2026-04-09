@@ -13,6 +13,7 @@ import logging
 import argparse
 
 path_cwd = pathlib.Path().cwd()
+inventory_output_path = pathlib.Path(path_cwd, "inventory", "output")
 
 LOGGER = logging.getLogger(__name__)
 
@@ -23,7 +24,7 @@ def get_tool_name_url(file_name: str) -> pd.DataFrame:
     Returns:
         A DataFrame containing the tool name and URL for the scorecard command.
     """
-    stats_file = pathlib.Path(path_cwd, "inventory", "output", file_name)
+    stats_file = pathlib.Path(inventory_output_path, file_name)
     stats_df = pd.read_csv(stats_file)
     return stats_df[["id", "html_url"]]
 
@@ -118,7 +119,6 @@ def run_scorecard(url: str) -> str | None:
         FileNotFoundError: If the scorecard command is not found in PATH.
     """
     command: list[str] = ['scorecard', f'--repo={url}']
-    print(f"Running command: {' '.join(command)}")
     try:
         process = subprocess.Popen(
             command,
@@ -157,17 +157,40 @@ def process_repositories(file_name: str) -> None:
     """
     try:
         stats_df = get_tool_name_url(file_name)
-        tool_names = list(stats_df['id'].dropna().unique())
-        urls = list(stats_df['html_url'].dropna().unique())
-        for url in urls:
+        score_rows: list[dict] = []
+        reason_rows: list[dict] = []
+
+        for _, row in stats_df.iterrows():
+            url = row['html_url']
+            tool_name = row['id']
+
             LOGGER.info(f"Running scorecard for: {url}")
             result = run_scorecard(url)
+
             if result:
                 aggregate_score, checks_df = parse_scorecard_output(result)
-                print(f"Aggregate score for {url}: {aggregate_score}")
-                print(f"Check scores for {url}:\n{checks_df}")
+                score_record: dict = {'tool_name': tool_name, 'aggregate_score': aggregate_score}
+                reason_record: dict = {'tool_name': tool_name}
+
+                for _, check in checks_df.iterrows():
+                    name = check['name']
+                    score_record[name] = check['score']
+                    reason_record[f'Reason {name}'] = check['reason']
+
+                score_rows.append(score_record)
+                reason_rows.append(reason_record)
             else:
-                LOGGER.error(f"Failed to get  scorecard results for {url}")
+                LOGGER.error(f"Failed to get scorecard results for {url}")
+
+        if score_rows and reason_rows:
+            scores_df = pd.DataFrame(score_rows)
+            reasons_df = pd.DataFrame(reason_rows)
+            scores_df.to_csv(inventory_output_path / "scores.csv", index=False)
+            reasons_df.to_csv(inventory_output_path / "reasons.csv", index=False)
+            LOGGER.info(f"Results saved to {inventory_output_path}")
+        else:
+            LOGGER.warning("No scorecard results were collected.")
+
     except Exception as e:
         LOGGER.error(f"An error occurred while processing repositories: {e}")
 

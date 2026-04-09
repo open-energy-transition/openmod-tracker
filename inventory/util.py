@@ -41,7 +41,7 @@ def get_ecosystems_data(url: str) -> list[dict] | dict | str | None:
         url (str): Git repo URL.
 
     Returns:
-        requests.Response: If the repository exists, the ecosyste.ms API repository URL
+        list[dict] | dict | str | None: If the repository exists, the ecosyste.ms API repository URL
     """
     try:
         response = requests.get(url)

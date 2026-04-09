@@ -8,6 +8,7 @@
 import logging
 from datetime import datetime
 from pathlib import Path
+from typing import Any
 
 import click
 import pandas as pd
@@ -88,6 +89,44 @@ def _get_conda_download_df(months_ago: int = 1, retry: bool = False) -> pd.DataF
 
 
 CONDA_DOWNLOAD_DF = _get_conda_download_df()
+
+
+def _get_score_card(url: str) -> dict[str, Any] | None:
+    """
+    Retrieve the scorecard for a repository from the ecosyste.ms API.
+
+    Parameters
+    ----------
+    url : str
+        The repository URL.
+
+    Returns
+    -------
+    dict[str, Any] | None
+        The scorecard dictionary containing `id`, `data`, `last_synced_at`,
+        `repository_id`, `created_at`, and `updated_at` fields.
+        Returns None if the scorecard cannot be retrieved or does not exist.
+
+    Notes
+    -----
+    Returns None in the following cases:
+    - API request fails or times out
+    - Repository entry not found in ecosyste.ms
+    - Scorecard field is missing or empty in the response
+    """
+    try:
+        repo_data = util.get_ecosystems_repo_data(url)
+    except Exception as e:
+        LOGGER.warning(f"Error fetching ecosyste.ms repo data for {url}: {e}")
+        return None
+
+    score_card = repo_data.get("scorecard") if repo_data else None
+
+    if not score_card:
+        LOGGER.warning(f"No scorecard found for {url}")
+        return None
+
+    return score_card
 
 
 def get_ecosystems_entry_data(

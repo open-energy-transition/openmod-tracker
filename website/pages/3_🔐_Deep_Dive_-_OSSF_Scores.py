@@ -203,12 +203,20 @@ def build_html_table(scores: pd.DataFrame, reasons: pd.DataFrame) -> str:
             letter-spacing: 0.05em;
         }
 
-        tr.data-row:hover td {
+        tr.data-row:hover td.tool-name,
+        tr.data-row:hover td.agg-cell {
             background-color: #f5f5ff !important;
         }
 
-        tr.data-row:hover td.score-cell {
-            background: unset !important;
+        tr.data-row:hover td:not(.score-cell):not(.tool-name):not(.agg-cell) {
+            background-color: #f5f5ff !important;
+        }
+
+        td.score-cell:hover {
+            transform: scale(1.12);
+            box-shadow: 0 0 10px rgba(0,0,0,0.15);
+            z-index: 10;
+            position: relative;
         }
     </style>
     """

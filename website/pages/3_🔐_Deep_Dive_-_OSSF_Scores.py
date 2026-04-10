@@ -8,6 +8,7 @@ import pathlib
 
 import pandas as pd
 import streamlit as st
+import streamlit.components.v1 as components
 
 # ── Paths ─────────────────────────────────────────────────────────────────────
 
@@ -26,89 +27,63 @@ def load_data() -> tuple[pd.DataFrame, pd.DataFrame]:
 
 # ── Score colouring ───────────────────────────────────────────────────────────
 
-def score_to_color(score_str: str) -> str:
-    """Return a CSS background colour based on the numeric score."""
+def score_to_gradient(score_str: str) -> str:
     try:
         value = float(str(score_str).split("/")[0].strip())
     except (ValueError, AttributeError):
-        return "#d3d3d3"  # grey for N/A or '?'
-
+        return "background: #f0f0f0; color: #888;"
     if value >= 8:
-        return "#90ee90"  # green
+        return "background: linear-gradient(135deg, #d4edda, #a8d5b5); color: #1a6b3a;"
     elif value >= 5:
-        return "#ffd700"  # yellow
+        return "background: linear-gradient(135deg, #fff3cd, #ffe08a); color: #856404;"
     else:
-        return "#ff7f7f"  # red
+        return "background: linear-gradient(135deg, #fde8e8, #f5b7b7); color: #a93226;"
 
 
 # ── HTML table builder ────────────────────────────────────────────────────────
 
-def build_html_table(scores: pd.DataFrame, reasons: pd.DataFrame) -> str:
+def build_tool_detail_table(tool_id: str, scores: pd.DataFrame, reasons: pd.DataFrame) -> str:
     check_cols = [
         c for c in scores.columns if c not in ("html_url", "aggregated_score")
     ]
 
     reason_col_map = {
-        col.removeprefix("Reason "): col for col in reasons.columns if col.startswith("Reason ")
+        col.removeprefix("Reason "): col
+        for col in reasons.columns
+        if col.startswith("Reason ")
     }
 
-    def score_to_gradient(score_str: str) -> str:
-        try:
-            value = float(str(score_str).split("/")[0].strip())
-        except (ValueError, AttributeError):
-            return "background: #f0f0f0; color: #888;"
-        if value >= 8:
-            return "background: linear-gradient(135deg, #d4edda, #a8d5b5); color: #1a6b3a;"
-        elif value >= 5:
-            return "background: linear-gradient(135deg, #fff3cd, #ffe08a); color: #856404;"
-        else:
-            return "background: linear-gradient(135deg, #fde8e8, #f5b7b7); color: #a93226;"
+    score_row = scores.loc[tool_id]
+    reason_row = reasons.loc[tool_id] if tool_id in reasons.index else None
 
     rows_html = []
-    for tool_id, score_row in scores.iterrows():
-        cells = [
-            f'<td class="tool-name">'
-            f'<a href="{score_row["html_url"]}" target="_blank">🔧 {tool_id}</a>'
-            f'</td>'
-        ]
+    for check in check_cols:
+        score_val = score_row.get(check, "?")
+        cell_style = score_to_gradient(score_val)
 
-        agg = score_row.get("aggregated_score", "?")
-        agg_style = score_to_gradient(agg)
-        cells.append(
-            f'<td class="agg-cell"><span class="agg-badge" style="{agg_style}">{agg}</span></td>'
-        )
+        reason_col = reason_col_map.get(check)
+        if reason_col and reason_row is not None:
+            reason_text = reason_row.get(reason_col, "No reason available")
+        else:
+            reason_text = "No reason available"
 
-        for check in check_cols:
-            score_val = score_row.get(check, "?")
-            cell_style = score_to_gradient(score_val)
-
-            reason_col = reason_col_map.get(check)
-            if reason_col and tool_id in reasons.index:
-                reason_text = reasons.loc[tool_id, reason_col]
-            else:
-                reason_text = "No reason available"
-
-            safe_reason = str(reason_text).replace("'", "&#39;").replace('"', "&quot;")
-
-            cells.append(
-                f'<td class="score-cell" style="{cell_style}" title="{safe_reason}">'
-                f'{score_val}'
-                f'</td>'
-            )
-
-        rows_html.append("<tr class='data-row'>" + "".join(cells) + "</tr>")
-
-    header_cells = (
-        "<th>🛠 Tool</th>"
-        "<th>⭐ Aggregated</th>"
-        + "".join(f"<th>{c}</th>" for c in check_cols)
-    )
+        rows_html.append(f"""
+            <tr class="detail-row">
+                <td class="score-col">
+                    <span class="score-badge" style="{cell_style}">{score_val}</span>
+                </td>
+                <td class="check-col">
+                    <div class="check-name">{check}</div>
+                    <div class="check-reason">{reason_text}</div>
+                </td>
+            </tr>
+        """)
 
     table_style = """
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
 
-        .scorecard-wrapper {
+        .detail-wrapper {
             overflow-x: auto;
             border-radius: 12px;
             box-shadow: 0 4px 16px rgba(0,0,0,0.08);
@@ -117,121 +92,86 @@ def build_html_table(scores: pd.DataFrame, reasons: pd.DataFrame) -> str:
             padding: 4px;
         }
 
-        table.scorecard {
+        table.detail-table {
             border-collapse: separate;
             border-spacing: 0;
             width: 100%;
-            font-size: 0.78rem;
             font-family: 'Inter', sans-serif;
             background: #ffffff;
             border-radius: 10px;
             overflow: hidden;
         }
 
-        table.scorecard thead tr {
+        table.detail-table thead tr {
             background: #ffffff;
         }
 
-        table.scorecard th {
+        table.detail-table th {
             color: #3c3c6e;
-            padding: 10px 14px;
+            padding: 10px 16px;
             white-space: nowrap;
             font-weight: 600;
             letter-spacing: 0.04em;
             border-bottom: 2px solid #c5cae9;
-            text-align: center;
-        }
-
-        table.scorecard th:first-child {
             text-align: left;
+            font-size: 0.82rem;
         }
 
-        table.scorecard td {
-            padding: 7px 12px;
-            white-space: nowrap;
+        table.detail-table td {
+            padding: 10px 16px;
             border-bottom: 1px solid #f0f0f0;
-            transition: all 0.2s ease;
+            vertical-align: middle;
+        }
+
+        td.score-col {
+            width: 80px;
             text-align: center;
-            color: #333;
+            vertical-align: middle;
         }
 
-        td.tool-name {
-            text-align: left;
-            background: #fafafa;
-            font-weight: 600;
-        }
-
-        td.tool-name a {
-            color: #5c6bc0;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-
-        td.tool-name a:hover {
-            color: #3949ab;
-            text-decoration: underline;
-        }
-
-        td.score-cell {
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 0.75rem;
-            cursor: help;
-            box-shadow: inset 0 0 4px rgba(0,0,0,0.06);
-            transition: transform 0.15s ease, box-shadow 0.15s ease;
-        }
-
-        td.score-cell:hover {
-            transform: scale(1.12);
-            box-shadow: 0 0 10px rgba(0,0,0,0.15);
-            z-index: 10;
-            position: relative;
-        }
-
-        td.agg-cell {
-            background: transparent !important;
-            text-align: center;
-        }
-
-        .agg-badge {
+        .score-badge {
             display: inline-block;
-            padding: 4px 10px;
+            padding: 6px 14px;
             border-radius: 20px;
             font-weight: 700;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.10);
+            letter-spacing: 0.04em;
+            white-space: nowrap;
+        }
+
+        td.check-col {
+            text-align: left;
+        }
+
+        .check-name {
+            font-weight: 600;
             font-size: 0.85rem;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.12);
-            letter-spacing: 0.05em;
+            color: #3c3c6e;
+            margin-bottom: 4px;
         }
 
-        tr.data-row:hover td.tool-name,
-        tr.data-row:hover td.agg-cell {
-            background-color: #f5f5ff !important;
+        .check-reason {
+            font-size: 0.78rem;
+            color: #666;
+            line-height: 1.4;
         }
 
-        tr.data-row:hover td:not(.score-cell):not(.tool-name):not(.agg-cell) {
-            background-color: #f5f5ff !important;
-        }
-
-        td.score-cell:hover {
-            transform: scale(1.12);
-            box-shadow: 0 0 10px rgba(0,0,0,0.15);
-            z-index: 10;
-            position: relative;
+        tr.detail-row:hover td {
+            background-color: #f5f5ff;
         }
     </style>
     """
 
-
     html = (
         table_style
-        + '<div class="scorecard-wrapper">'
-        + '<table class="scorecard">'
-        + "<thead><tr>" + header_cells + "</tr></thead>"
+        + '<div class="detail-wrapper">'
+        + '<table class="detail-table">'
+        + "<thead><tr><th>Score</th><th>Check &amp; Reason</th></tr></thead>"
         + "<tbody>" + "\n".join(rows_html) + "</tbody>"
         + "</table></div>"
     )
     return html
-
 
 
 # ── App ───────────────────────────────────────────────────────────────────────
@@ -239,65 +179,63 @@ def build_html_table(scores: pd.DataFrame, reasons: pd.DataFrame) -> str:
 def main() -> None:
     st.set_page_config(page_title="OpenSSF Scorecard Dashboard", layout="wide")
     st.title("🔐 OpenSSF Scorecard Dashboard")
-    st.markdown(
-        """
-        <div style="display:flex; gap:12px; align-items:center; margin-bottom:12px; flex-wrap:wrap;">
-            <span style="font-size:0.8rem; color:#666; font-weight:600; font-family:'Inter',sans-serif;">Score legend:</span>
-            <span style="background:linear-gradient(135deg,#d4edda,#a8d5b5); color:#1a6b3a;
-                         padding:3px 12px; border-radius:20px; font-size:0.78rem; font-weight:600;
-                         box-shadow:0 1px 4px rgba(0,0,0,0.1);">≥ 8 — High</span>
-            <span style="background:linear-gradient(135deg,#fff3cd,#ffe08a); color:#856404;
-                         padding:3px 12px; border-radius:20px; font-size:0.78rem; font-weight:600;
-                         box-shadow:0 1px 4px rgba(0,0,0,0.1);">≥ 5 — Medium</span>
-            <span style="background:linear-gradient(135deg,#fde8e8,#f5b7b7); color:#a93226;
-                         padding:3px 12px; border-radius:20px; font-size:0.78rem; font-weight:600;
-                         box-shadow:0 1px 4px rgba(0,0,0,0.1);">< 5 — Low</span>
-            <span style="background:#f0f0f0; color:#888;
-                         padding:3px 12px; border-radius:20px; font-size:0.78rem; font-weight:600;
-                         box-shadow:0 1px 4px rgba(0,0,0,0.1);">N/A</span>
-            <span style="font-size:0.75rem; color:#999; font-style:italic;">— hover any cell to see the reason</span>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
 
     scores, reasons = load_data()
 
     # ── Sidebar filters ───────────────────────────────────────────────────────
     st.sidebar.header("Filters")
 
-    tool_filter = st.sidebar.multiselect(
-        "Select tools",
+    selected_tool = st.sidebar.selectbox(
+        "Select a tool",
         options=scores.index.tolist(),
-        default=scores.index.tolist(),
     )
 
-    min_agg = st.sidebar.slider(
-        "Minimum aggregated score",
-        min_value=0.0,
-        max_value=10.0,
-        value=0.0,
-        step=0.1,
-    )
+    if selected_tool:
+        score_row = scores.loc[selected_tool]
+        agg = score_row.get("aggregated_score", "?")
+        agg_style = score_to_gradient(agg)
+        html_url = score_row.get("html_url", "#")
 
-    # ── Apply filters ─────────────────────────────────────────────────────────
-    filtered_scores = scores.loc[tool_filter].copy()
-    filtered_reasons = reasons.loc[
-        [i for i in tool_filter if i in reasons.index]
-    ].copy()
+        st.markdown(
+            f"""
+            <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px; flex-wrap:wrap;">
+                <a href="{html_url}" target="_blank"
+                   style="font-size:1.1rem; font-weight:700; color:#5c6bc0;
+                          text-decoration:none; font-family:'Inter',sans-serif;">
+                    🔧 {selected_tool}
+                </a>
+                <span style="{agg_style} padding:5px 16px; border-radius:20px;
+                             font-weight:700; font-size:0.95rem;
+                             box-shadow:0 2px 6px rgba(0,0,0,0.12);">
+                    ⭐ {agg}
+                </span>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
-    try:
-        filtered_scores = filtered_scores[
-            pd.to_numeric(filtered_scores["aggregated_score"], errors="coerce") >= min_agg
-        ]
-    except Exception:
-        pass
-
-    st.markdown(f"Showing **{len(filtered_scores)}** tool(s)")
-    st.markdown(
-        build_html_table(filtered_scores, filtered_reasons),
-        unsafe_allow_html=True,
-    )
+        st.markdown(
+            """
+            <div style="display:flex; gap:12px; align-items:center; margin-bottom:12px; flex-wrap:wrap;">
+                <span style="font-size:0.8rem; color:#666; font-weight:600; font-family:'Inter',sans-serif;">Score legend:</span>
+                <span style="background:linear-gradient(135deg,#d4edda,#a8d5b5); color:#1a6b3a;
+                             padding:3px 12px; border-radius:20px; font-size:0.78rem; font-weight:600;
+                             box-shadow:0 1px 4px rgba(0,0,0,0.1);">≥ 8 — High</span>
+                <span style="background:linear-gradient(135deg,#fff3cd,#ffe08a); color:#856404;
+                             padding:3px 12px; border-radius:20px; font-size:0.78rem; font-weight:600;
+                             box-shadow:0 1px 4px rgba(0,0,0,0.1);">≥ 5 — Medium</span>
+                <span style="background:linear-gradient(135deg,#fde8e8,#f5b7b7); color:#a93226;
+                             padding:3px 12px; border-radius:20px; font-size:0.78rem; font-weight:600;
+                             box-shadow:0 1px 4px rgba(0,0,0,0.1);">< 5 — Low</span>
+                <span style="background:#f0f0f0; color:#888;
+                             padding:3px 12px; border-radius:20px; font-size:0.78rem; font-weight:600;
+                             box-shadow:0 1px 4px rgba(0,0,0,0.1);">N/A</span>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+        html_content = build_tool_detail_table(selected_tool, scores, reasons)
+        components.html(html_content, height=800, scrolling=True)
 
 
 if __name__ == "__main__":

@@ -5,52 +5,127 @@
 
 """Get OpenSSF Scorecard stats for defined projects."""
 
-import argparse
 import logging
 import pathlib
 import re
 import subprocess
 
+import click
 import pandas as pd
 
 path_cwd = pathlib.Path().cwd()
-inventory_output_path = pathlib.Path(path_cwd, "inventory", "output")
 
 LOGGER = logging.getLogger(__name__)
 
 
-def get_tool_name_url(file_name: str) -> pd.DataFrame:
-    """Get the tool name and URL for the scorecard command.
+# def get_score_card(existing_data: pd.DataFrame) -> pd.DataFrame | None:
+#     """Retrieve the scorecard for a repository from the ecosyste.ms API with CSV fallback.
+#
+#     Parameters
+#     ----------
+#     existing_data : pd.DataFrame
+#         Existing scorecard data to use as a fallback if API retrieval fails.
+#
+#     Returns
+#     -------
+#     pandas.DataFrame| None
+#         The scorecard DataFrame containing `id`, `data`, `last_synced_at`,
+#         `repository_id`, `created_at`, and `updated_at` fields.
+#         Returns None if the scorecard cannot be retrieved from API or CSV.
+#
+#     Notes
+#     -----
+#     Retrieval strategy:
+#     1. First attempts to fetch from ecosyste.ms API
+#     2. Falls back to CSV file if API data is unavailable
+#     3. Returns None if scorecard not found in either source
+#     """
+#     #Try API first --> This part needs to be finalized once the API is stable. Make it such that it returns a pandas DataFrame,
+#     try:
+#        repo_data = util.get_ecosystems_repo_data(url)
+#        if repo_data and (score_card := repo_data.get("scorecard")):
+#            return score_card
+#     except Exception as e:
+#        LOGGER.warning(f"Error fetching ecosyste.ms repo data for {url}: {e}")
+#
+#     # Fallback to CSV
+#     score_card = _load_scorecard_from_csv(inventory_output_path / "scores.csv")
+#     if not score_card:
+#         LOGGER.warning(f"No scorecard found for {url} in API or CSV")
+#
+#     return score_card
+
+
+def _load_scorecard_from_csv(csv_path: pathlib.Path) -> pd.DataFrame | None:
+    """Load scorecard data from CSV file.
+
+    Parameters
+    ------------
+    csv_path : Path
+        The path to the CSV file containing scorecard data.
 
     Returns:
+    --------
+    pd.DataFrame | None
+        The scorecard DataFrame if found, None otherwise.
+    """
+    if csv_path.exists():
+        try:
+            score_card = pd.read_csv(csv_path, index_col="id")
+            return score_card
+        except Exception as e:
+            LOGGER.error(f"Error reading CSV file {csv_path}: {e}")
+            return None
+    else:
+        LOGGER.debug(f"CSV file not found at {csv_path}")
+        return None
+
+
+def get_tool_name_url(file_name: pathlib.Path) -> pd.DataFrame:
+    """Get the tool name and URL for the scorecard command.
+
+    Parameters
+    ------------
+    file_name : Path
+        The path to the CSV file containing the repository stats.
+
+    Returns:
+    --------
+    pd.DataFrame
         A DataFrame containing the tool name and URL for the scorecard command.
     """
-    stats_file = pathlib.Path(inventory_output_path, file_name)
-    stats_df = pd.read_csv(stats_file)
+    stats_df = pd.read_csv(file_name)
     return stats_df[["id", "html_url"]]
 
 
-def extract_aggregate_score(output: str) -> float | None:
+def extract_aggregate_score(output: str) -> str | None:
     """Extract the aggregate score from scorecard output.
 
-    Args:
+    Parameters
+    ------------
         output: The full scorecard command output.
 
     Returns:
-        The aggregate score as a float, or None if not found.
+    --------
+    str | None
+        The aggregate score as a string, or None if not found.
     """
-    match = re.search(r"Aggregate score:\s+([\d.]+)\s+/\s+10", output)
-    return float(match.group(1)) if match else None
+    match = re.search(r"Aggregate score:\s+([\d.]+\s+/\s+10)", output)
+    return match.group(1) if match else None
 
 
 def extract_check_scores(output: str) -> list[dict[str, str]]:
     """Extract individual check scores from scorecard output table.
 
-    Args:
-        output: The full scorecard command output.
+    Parameters
+    ------------
+    output: str
+        The full scorecard command output.
 
     Returns:
-        A list of dictionaries with keys: score, name, reason.
+    --------
+    list[dict[str, str]]
+        A list of dictionaries with keys: score, name, reason, documentation url.
     """
     checks: list[dict[str, str]] = []
 
@@ -87,12 +162,15 @@ def extract_check_scores(output: str) -> list[dict[str, str]]:
 def parse_scorecard_output(output: str) -> tuple[float | None, pd.DataFrame]:
     """Parse the complete scorecard output and return structured data.
 
-    Args:
-        output: The full scorecard command output.
+    Parameters
+    ------------
+    output: str
+        The full scorecard command output.
 
     Returns:
-        A tuple containing (aggregate_score, DataFrame with check results).
-        The DataFrame has columns: score, name, reason.
+    --------
+    tuple[float | None, pd.DataFrame]
+        A tuple containing the aggregate score (or None if not found) and a DataFrame of individual check scores with columns: name, score, reason, doc_url.
     """
     aggregate_score = extract_aggregate_score(output)
     checks = extract_check_scores(output)
@@ -103,14 +181,20 @@ def parse_scorecard_output(output: str) -> tuple[float | None, pd.DataFrame]:
 def run_scorecard(url: str) -> str | None:
     """Run the scorecard command for a given repository URL and return the output.
 
-    Args:
-        url: The repository URL to pass to scorecard.
+    Parameters
+    ------------
+    url: str
+        The repository URL to run scorecard on.
 
     Returns:
-        The stdout output from the scorecard command, or None if the command failed.
+    --------
+    str | None
+        The full output from the scorecard command if successful, None otherwise.
 
     Raises:
-        FileNotFoundError: If the scorecard command is not found in PATH.
+    ------
+    FileNotFoundError
+        If the 'scorecard' command is not found in the system PATH.
     """
     command: list[str] = ["scorecard", f"--repo={url}"]
     try:
@@ -122,7 +206,7 @@ def run_scorecard(url: str) -> str | None:
 
         # Read stdout line by line
         for line in process.stdout:
-            print(line, end=" ")  # Print to console
+            print(line, end=" ")
             output_lines.append(line)
 
         process.wait()
@@ -143,14 +227,22 @@ def run_scorecard(url: str) -> str | None:
         return None
 
 
-def process_repositories(file_name: str) -> None:
+def process_repositories(
+    stats_path: pathlib.Path, scores_path: pathlib.Path, reasons_path: pathlib.Path
+) -> None:
     """Read repository URLs from the stats.csv file and run scorecard on each one.
 
-    Args:
-        file_name: The name of the CSV file containing repository URLs (default: "stats.csv").
+    Parameters
+    ----------
+    stats_path : Path
+        The path to the stats.csv file containing repository URLs.
+    scores_path : Path
+        The path to save the scores.csv output file.
+    reasons_path : Path
+        The path to save the reasons.csv output file.
     """
     try:
-        stats_df = get_tool_name_url(file_name)
+        stats_df = get_tool_name_url(stats_path)
         score_rows: list[dict] = []
         reason_rows: list[dict] = []
 
@@ -158,16 +250,20 @@ def process_repositories(file_name: str) -> None:
             url = row["html_url"]
             tool_name = row["id"]
 
+            if "pypsa" not in url.casefold():
+                continue
+
             LOGGER.info(f"Running scorecard for: {url}")
             result = run_scorecard(url)
 
             if result:
                 aggregate_score, checks_df = parse_scorecard_output(result)
                 score_record: dict = {
-                    "tool_name": tool_name,
-                    "aggregate_score": aggregate_score,
+                    "id": tool_name,
+                    "html_url": url,
+                    "aggregated_score": aggregate_score,
                 }
-                reason_record: dict = {"tool_name": tool_name}
+                reason_record: dict = {"id": tool_name, "html_url": url}
 
                 for _, check in checks_df.iterrows():
                     name = check["name"]
@@ -182,9 +278,8 @@ def process_repositories(file_name: str) -> None:
         if score_rows and reason_rows:
             scores_df = pd.DataFrame(score_rows)
             reasons_df = pd.DataFrame(reason_rows)
-            scores_df.to_csv(inventory_output_path / "scores.csv", index=False)
-            reasons_df.to_csv(inventory_output_path / "reasons.csv", index=False)
-            LOGGER.info(f"Results saved to {inventory_output_path}")
+            scores_df.astype(str).to_csv(scores_path, index=False)
+            reasons_df.astype(str).to_csv(reasons_path, index=False)
         else:
             LOGGER.warning("No scorecard results were collected.")
 
@@ -192,21 +287,40 @@ def process_repositories(file_name: str) -> None:
         LOGGER.error(f"An error occurred while processing repositories: {e}")
 
 
-def parse_args() -> argparse.Namespace:
-    """Parse command-line arguments for the benchmark generation script.
-
-    Returns:
-    -------
-    argparse.Namespace
-        An object containing the parsed command-line arguments as attributes.
-        The attributes include `benchmark_name`, `file_extension`, `output_dir`,
-        `dry_run`, `clusters`, and `time_resolutions`.
-    """
-    p = argparse.ArgumentParser()
-    p.add_argument("--file_name", default="stats.csv")
-    return p.parse_args()
+@click.command()
+@click.option(
+    "--stats-file",
+    type=click.Path(
+        exists=False, dir_okay=False, file_okay=True, path_type=pathlib.Path
+    ),
+    help="Path to the stats.csv file.",
+    default="inventory/output/stats.csv",
+)
+@click.option(
+    "--scores-file",
+    type=click.Path(
+        exists=False, dir_okay=False, file_okay=True, path_type=pathlib.Path
+    ),
+    help="Output path for the scores file.",
+    default="inventory/output/scores.csv",
+)
+@click.option(
+    "--reasons-file",
+    type=click.Path(
+        exists=False, dir_okay=False, file_okay=True, path_type=pathlib.Path
+    ),
+    help="Output path for the reasons of the scores file.",
+    default="inventory/output/reasons.csv",
+)
+def cli(
+    stats_file: pathlib.Path, scores_file: pathlib.Path, reasons_file: pathlib.Path
+):
+    """CLI entry point to get OpenSSF Scorecard stats for defined projects."""
+    stats_path = pathlib.Path(path_cwd, stats_file)
+    scores_path = pathlib.Path(path_cwd, scores_file)
+    reasons_path = pathlib.Path(path_cwd, reasons_file)
+    process_repositories(stats_path, scores_path, reasons_path)
 
 
 if __name__ == "__main__":
-    args = parse_args()
-    process_repositories(args.file_name)
+    cli()

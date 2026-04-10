@@ -26,6 +26,11 @@ inputs = ["inventory/output/filtered.csv", "inventory/get_stats.py"]
 outputs = ["inventory/output/stats.csv"]
 depends-on = ["filter-tools"]
 
+[tasks.get-scores]
+cmd = "python $PIXI_PROJECT_ROOT/inventory/get_scores.py --stats-file inventory/output/stats.csv --scores-file inventory/output/scores.csv --reasons-file inventory/output/reasons.csv"
+inputs = ["inventory/output/stats.csv", "inventory/get_scores.py"]
+outputs = ["inventory/output/scores.csv", "inventory/output/reasons.csv"]
+
 [tasks.get-docs]
 cmd = "python $PIXI_PROJECT_ROOT/inventory/get_docs.py inventory/output/stats.csv inventory/output/docs.csv"
 inputs = ["inventory/output/stats.csv", "inventory/get_docs.py"]

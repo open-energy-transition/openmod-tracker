@@ -8,7 +8,6 @@
 import logging
 from datetime import datetime
 from pathlib import Path
-from typing import Any
 
 import click
 import pandas as pd
@@ -89,44 +88,6 @@ def _get_conda_download_df(months_ago: int = 1, retry: bool = False) -> pd.DataF
 
 
 CONDA_DOWNLOAD_DF = _get_conda_download_df()
-
-
-def _get_score_card(url: str) -> dict[str, Any] | None:
-    """Retrieve the scorecard for a repository from the ecosyste.ms API with CSV fallback.
-
-    Parameters
-    ----------
-    url : str
-        The repository URL.
-
-    Returns:
-    -------
-    dict[str, Any] | None
-        The scorecard dictionary containing `id`, `data`, `last_synced_at`,
-        `repository_id`, `created_at`, and `updated_at` fields.
-        Returns None if the scorecard cannot be retrieved from API or CSV.
-
-    Notes:
-    -----
-    Retrieval strategy:
-    1. First attempts to fetch from ecosyste.ms API
-    2. Falls back to CSV file if API data is unavailable
-    3. Returns None if scorecard not found in either source
-    """
-    # Try API first
-    try:
-        repo_data = util.get_ecosystems_repo_data(url)
-        if repo_data and (score_card := repo_data.get("scorecard")):
-            return score_card
-    except Exception as e:
-        LOGGER.warning(f"Error fetching ecosyste.ms repo data for {url}: {e}")
-
-    # Fallback to CSV
-    score_card = _load_scorecard_from_csv(url)
-    if not score_card:
-        LOGGER.warning(f"No scorecard found for {url} in API or CSV")
-
-    return score_card
 
 
 def get_ecosystems_entry_data(

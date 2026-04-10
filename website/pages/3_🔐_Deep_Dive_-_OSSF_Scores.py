@@ -56,13 +56,13 @@ def build_html_table(scores: pd.DataFrame, reasons: pd.DataFrame) -> str:
         try:
             value = float(str(score_str).split("/")[0].strip())
         except (ValueError, AttributeError):
-            return "background: linear-gradient(135deg, #e0e0e0, #bdbdbd); color: #666;"
+            return "background: #f0f0f0; color: #888;"
         if value >= 8:
-            return "background: linear-gradient(135deg, #56ab2f, #a8e063); color: #fff;"
+            return "background: linear-gradient(135deg, #d4edda, #a8d5b5); color: #1a6b3a;"
         elif value >= 5:
-            return "background: linear-gradient(135deg, #f7971e, #ffd200); color: #fff;"
+            return "background: linear-gradient(135deg, #fff3cd, #ffe08a); color: #856404;"
         else:
-            return "background: linear-gradient(135deg, #cb2d3e, #ef473a); color: #fff;"
+            return "background: linear-gradient(135deg, #fde8e8, #f5b7b7); color: #a93226;"
 
     rows_html = []
     for tool_id, score_row in scores.iterrows():
@@ -111,8 +111,9 @@ def build_html_table(scores: pd.DataFrame, reasons: pd.DataFrame) -> str:
         .scorecard-wrapper {
             overflow-x: auto;
             border-radius: 12px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.18);
-            background: #1a1a2e;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
             padding: 4px;
         }
 
@@ -122,22 +123,22 @@ def build_html_table(scores: pd.DataFrame, reasons: pd.DataFrame) -> str:
             width: 100%;
             font-size: 0.78rem;
             font-family: 'Inter', sans-serif;
-            background: #16213e;
+            background: #ffffff;
             border-radius: 10px;
             overflow: hidden;
         }
 
         table.scorecard thead tr {
-            background: linear-gradient(90deg, #0f3460, #533483);
+            background: linear-gradient(90deg, #e8eaf6, #ede7f6);
         }
 
         table.scorecard th {
-            color: #e0e0e0;
+            color: #3c3c6e;
             padding: 10px 14px;
             white-space: nowrap;
             font-weight: 600;
             letter-spacing: 0.04em;
-            border-bottom: 2px solid #533483;
+            border-bottom: 2px solid #c5cae9;
             text-align: center;
         }
 
@@ -148,25 +149,26 @@ def build_html_table(scores: pd.DataFrame, reasons: pd.DataFrame) -> str:
         table.scorecard td {
             padding: 7px 12px;
             white-space: nowrap;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid #f0f0f0;
             transition: all 0.2s ease;
             text-align: center;
+            color: #333;
         }
 
         td.tool-name {
             text-align: left;
-            background: rgba(255,255,255,0.03);
+            background: #fafafa;
             font-weight: 600;
         }
 
         td.tool-name a {
-            color: #a78bfa;
+            color: #5c6bc0;
             text-decoration: none;
             transition: color 0.2s;
         }
 
         td.tool-name a:hover {
-            color: #c4b5fd;
+            color: #3949ab;
             text-decoration: underline;
         }
 
@@ -175,13 +177,13 @@ def build_html_table(scores: pd.DataFrame, reasons: pd.DataFrame) -> str:
             font-weight: 600;
             font-size: 0.75rem;
             cursor: help;
-            box-shadow: inset 0 0 6px rgba(0,0,0,0.2);
+            box-shadow: inset 0 0 4px rgba(0,0,0,0.06);
             transition: transform 0.15s ease, box-shadow 0.15s ease;
         }
 
         td.score-cell:hover {
             transform: scale(1.12);
-            box-shadow: 0 0 12px rgba(255,255,255,0.3);
+            box-shadow: 0 0 10px rgba(0,0,0,0.15);
             z-index: 10;
             position: relative;
         }
@@ -197,19 +199,20 @@ def build_html_table(scores: pd.DataFrame, reasons: pd.DataFrame) -> str:
             border-radius: 20px;
             font-weight: 700;
             font-size: 0.85rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.12);
             letter-spacing: 0.05em;
         }
 
         tr.data-row:hover td {
-            background-color: rgba(255,255,255,0.05) !important;
+            background-color: #f5f5ff !important;
         }
 
         tr.data-row:hover td.score-cell {
-            background-color: unset !important;
+            background: unset !important;
         }
     </style>
     """
+
 
     html = (
         table_style

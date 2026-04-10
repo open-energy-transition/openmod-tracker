@@ -129,7 +129,7 @@ def build_html_table(scores: pd.DataFrame, reasons: pd.DataFrame) -> str:
         }
 
         table.scorecard thead tr {
-            background: linear-gradient(90deg, #e8eaf6, #ede7f6);
+            background: #ffffff;
         }
 
         table.scorecard th {
@@ -239,9 +239,26 @@ def build_html_table(scores: pd.DataFrame, reasons: pd.DataFrame) -> str:
 def main() -> None:
     st.set_page_config(page_title="OpenSSF Scorecard Dashboard", layout="wide")
     st.title("🔐 OpenSSF Scorecard Dashboard")
-    st.caption(
-        "Hover over any score cell to read the reason behind that score. "
-        "Colors: 🟢 ≥ 8 · 🟡 ≥ 5 · 🔴 < 5 · ⬜ N/A"
+    st.markdown(
+        """
+        <div style="display:flex; gap:12px; align-items:center; margin-bottom:12px; flex-wrap:wrap;">
+            <span style="font-size:0.8rem; color:#666; font-weight:600; font-family:'Inter',sans-serif;">Score legend:</span>
+            <span style="background:linear-gradient(135deg,#d4edda,#a8d5b5); color:#1a6b3a;
+                         padding:3px 12px; border-radius:20px; font-size:0.78rem; font-weight:600;
+                         box-shadow:0 1px 4px rgba(0,0,0,0.1);">≥ 8 — High</span>
+            <span style="background:linear-gradient(135deg,#fff3cd,#ffe08a); color:#856404;
+                         padding:3px 12px; border-radius:20px; font-size:0.78rem; font-weight:600;
+                         box-shadow:0 1px 4px rgba(0,0,0,0.1);">≥ 5 — Medium</span>
+            <span style="background:linear-gradient(135deg,#fde8e8,#f5b7b7); color:#a93226;
+                         padding:3px 12px; border-radius:20px; font-size:0.78rem; font-weight:600;
+                         box-shadow:0 1px 4px rgba(0,0,0,0.1);">< 5 — Low</span>
+            <span style="background:#f0f0f0; color:#888;
+                         padding:3px 12px; border-radius:20px; font-size:0.78rem; font-weight:600;
+                         box-shadow:0 1px 4px rgba(0,0,0,0.1);">N/A</span>
+            <span style="font-size:0.75rem; color:#999; font-style:italic;">— hover any cell to see the reason</span>
+        </div>
+        """,
+        unsafe_allow_html=True,
     )
 
     scores, reasons = load_data()

@@ -98,8 +98,8 @@ def get_tool_name_url(file_name: pathlib.Path) -> pd.DataFrame:
     return stats_df[["id", "html_url"]]
 
 
-def extract_aggregate_score(output: str) -> str | None:
-    """Extract the aggregate score from scorecard output.
+def extract_aggregated_score(output: str) -> str | None:
+    """Extract the aggregated score from scorecard output.
 
     Parameters
     ------------
@@ -172,7 +172,7 @@ def parse_scorecard_output(output: str) -> tuple[float | None, pd.DataFrame]:
     tuple[float | None, pd.DataFrame]
         A tuple containing the aggregate score (or None if not found) and a DataFrame of individual check scores with columns: name, score, reason, doc_url.
     """
-    aggregate_score = extract_aggregate_score(output)
+    aggregate_score = extract_aggregated_score(output)
     checks = extract_check_scores(output)
     df = pd.DataFrame(checks)
     return aggregate_score, df

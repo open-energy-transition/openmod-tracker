@@ -62,6 +62,7 @@ dev_metrics = load_module_from_file(
     WEBSITE_DIR / "pages" / "2_📊_Deep_Dive_-_Project_Development_Metrics.py",
     "dev_metrics",
 )
+get_scores = load_module_from_file(INVENTORY_DIR.parent / "get_scores.py", "get_scores")
 
 
 # ===== Tests for util.py =====

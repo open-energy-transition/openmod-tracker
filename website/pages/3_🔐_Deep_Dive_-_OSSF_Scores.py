@@ -18,6 +18,7 @@ reasons_path = pathlib.Path(path_cwd, "inventory", "output", "reasons.csv")
 
 # ── Data loading ──────────────────────────────────────────────────────────────
 
+
 @st.cache_data
 def load_data() -> tuple[pd.DataFrame, pd.DataFrame]:
     scores = pd.read_csv(scores_path, index_col="id")
@@ -26,6 +27,7 @@ def load_data() -> tuple[pd.DataFrame, pd.DataFrame]:
 
 
 # ── Score colouring ───────────────────────────────────────────────────────────
+
 
 def score_to_gradient(score_str: str) -> str:
     try:
@@ -42,7 +44,10 @@ def score_to_gradient(score_str: str) -> str:
 
 # ── HTML table builder ────────────────────────────────────────────────────────
 
-def build_tool_detail_table(tool_id: str, scores: pd.DataFrame, reasons: pd.DataFrame) -> str:
+
+def build_tool_detail_table(
+    tool_id: str, scores: pd.DataFrame, reasons: pd.DataFrame
+) -> str:
     check_cols = [
         c for c in scores.columns if c not in ("html_url", "aggregated_score")
     ]
@@ -168,13 +173,16 @@ def build_tool_detail_table(tool_id: str, scores: pd.DataFrame, reasons: pd.Data
         + '<div class="detail-wrapper">'
         + '<table class="detail-table">'
         + "<thead><tr><th>Score</th><th>Check &amp; Reason</th></tr></thead>"
-        + "<tbody>" + "\n".join(rows_html) + "</tbody>"
+        + "<tbody>"
+        + "\n".join(rows_html)
+        + "</tbody>"
         + "</table></div>"
     )
     return html
 
 
 # ── App ───────────────────────────────────────────────────────────────────────
+
 
 def main() -> None:
     st.set_page_config(page_title="OpenSSF Scorecard Dashboard", layout="wide")
@@ -185,10 +193,7 @@ def main() -> None:
     # ── Sidebar filters ───────────────────────────────────────────────────────
     st.sidebar.header("Filters")
 
-    selected_tool = st.sidebar.selectbox(
-        "Select a tool",
-        options=scores.index.tolist(),
-    )
+    selected_tool = st.sidebar.selectbox("Select a tool", options=scores.index.tolist())
 
     if selected_tool:
         score_row = scores.loc[selected_tool]

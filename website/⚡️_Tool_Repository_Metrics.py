@@ -36,6 +36,7 @@ COLUMN_NAME_MAPPING: dict[str, str] = {
     "category": "Category",
     "language": "Language",
     "license_category": "License Type",
+    "aggregated_score": "OSSF Score",
 }
 
 COLUMN_DTYPES: dict[str, Callable] = {
@@ -50,6 +51,7 @@ COLUMN_DTYPES: dict[str, Callable] = {
     "last_month_downloads": pd.to_numeric,
     "category": lambda x: x.str.split(","),
     "license_category": lambda x: x.astype("string"),
+    "aggregated_score": pd.to_numeric,
 }
 
 NUMBER_FORMAT: dict[str, str] = {
@@ -59,6 +61,7 @@ NUMBER_FORMAT: dict[str, str] = {
     "Forks": "localized",
     "Dependents": "localized",
     "1 Month Downloads": "localized",
+    "OSSF Score": "localized",
 }
 
 COLUMN_HELP: dict[str, str] = {
@@ -79,6 +82,7 @@ COLUMN_HELP: dict[str, str] = {
     "It is an indicator of potential licensing issues (if the language is proprietary) and development community size. "
     "This may not be the language same as the interface language used by the tool.",
     "License Type": "Tool categorization based on license and language: permissive (e.g., MIT, Apache), copyleft (e.g., GPL), or commercial (e.g., MATLAB, proprietary licenses)",
+    "OSSF Score": "The OpenSSF Scorecard aggregated security score, on a scale from 0 to 10.",
 }
 
 LICENSE_GROUPS: dict[str, list[str]] = {
@@ -124,7 +128,13 @@ def create_vis_table(tool_stats_dir: Path, user_stats_dir: Path) -> pd.DataFrame
     stats_df = pd.read_csv(tool_stats_dir / "stats.csv", index_col="id")
     tools_df = pd.read_csv(tool_stats_dir / "filtered.csv", index_col="id")
     docs_df = pd.read_csv(tool_stats_dir / "docs.csv", index_col="id")
+    scores_df = pd.read_csv(tool_stats_dir / "scores.csv", index_col="id")[
+        ["aggregated_score"]
+    ]
     df = pd.merge(left=stats_df, right=tools_df, right_index=True, left_index=True)
+    # Merge in the scores dataframe to add the OSSF Score column.
+    # This is done as a left join because the scores dataframe has some missing entries.
+    df = df.merge(scores_df, left_index=True, right_index=True, how="left")
     df["Interactions"] = (
         _create_repo_interactions_timeseries(user_stats_dir)
         .reindex(df.url.values)

@@ -215,7 +215,8 @@ def preamble():
         The dashboard provides a detailed view of the [OpenSSF Scorecard](https://github.com/ossf/scorecard?tab=readme-ov-file#what-is-scorecard) results for each tool in our inventory.
         Select a tool from the dropdown to see its overall score and a breakdown of individual checks along with
         the reasons for any failed or low-scoring checks. The scores are colour-coded to help you quickly identify
-        areas of strength and weakness in the security posture of each tool.
+        areas of strength and weakness in the security posture of each tool. The scores shown below are
+        on a scale from **0 to 10**, where **10** represents the highest level of security compliance.
          """
     )
 

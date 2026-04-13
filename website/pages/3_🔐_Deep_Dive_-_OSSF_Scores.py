@@ -21,6 +21,7 @@ reasons_path = pathlib.Path(path_cwd, "inventory", "output", "reasons.csv")
 
 @st.cache_data
 def load_data() -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Loads scores and reasons data from CSV files."""
     scores = pd.read_csv(scores_path, index_col="id")
     reasons = pd.read_csv(reasons_path, index_col="id")
     return scores, reasons
@@ -30,6 +31,7 @@ def load_data() -> tuple[pd.DataFrame, pd.DataFrame]:
 
 
 def score_to_gradient(score_str: str) -> str:
+    """Converts a score string (e.g. '7/10') to a CSS style string with a color gradient."""
     try:
         value = float(str(score_str).split("/")[0].strip())
     except (ValueError, AttributeError):
@@ -48,6 +50,7 @@ def score_to_gradient(score_str: str) -> str:
 def build_tool_detail_table(
     tool_id: str, scores: pd.DataFrame, reasons: pd.DataFrame
 ) -> str:
+    """Builds an HTML table showing detailed scores and reasons for a specific tool."""
     check_cols = [
         c for c in scores.columns if c not in ("html_url", "aggregated_score")
     ]
@@ -185,6 +188,7 @@ def build_tool_detail_table(
 
 
 def main() -> None:
+    """Main function to run the Streamlit app."""
     st.set_page_config(page_title="OpenSSF Scorecard Dashboard", layout="wide")
     st.title("🔐 OpenSSF Scorecard Dashboard")
 

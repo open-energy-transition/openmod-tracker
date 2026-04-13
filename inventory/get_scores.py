@@ -6,14 +6,14 @@
 """Get OpenSSF Scorecard stats for defined projects."""
 
 import logging
-import pathlib
 import re
 import subprocess
+from pathlib import Path
 
 import click
 import pandas as pd
 
-path_cwd = pathlib.Path().cwd()
+path_cwd = Path().cwd()
 
 LOGGER = logging.getLogger(__name__)
 
@@ -56,7 +56,7 @@ LOGGER = logging.getLogger(__name__)
 #     return score_card
 
 
-def _load_scorecard_from_csv(csv_path: pathlib.Path) -> pd.DataFrame | None:
+def _load_scorecard_from_csv(csv_path: Path) -> pd.DataFrame | None:
     """Load scorecard data from CSV file.
 
     Parameters
@@ -81,7 +81,7 @@ def _load_scorecard_from_csv(csv_path: pathlib.Path) -> pd.DataFrame | None:
         return None
 
 
-def get_tool_name_url(file_name: pathlib.Path) -> pd.DataFrame:
+def get_tool_name_url(file_name: Path) -> pd.DataFrame:
     """Get the tool name and URL for the scorecard command.
 
     Parameters
@@ -110,7 +110,7 @@ def extract_aggregated_score(output: str) -> str | None:
     str | None
         The aggregate score as a string, or None if not found.
     """
-    match = re.search(r"Aggregate score:\s+([\d.]+\s+/\s+10)", output)
+    match = re.search(r"Aggregate score:\s+([\d.]+)\s+/\s+10", output)
     return match.group(1) if match else None
 
 
@@ -151,6 +151,11 @@ def extract_check_scores(output: str) -> list[dict[str, str]]:
         # Only keep rows where score looks like a numeric score or N/A
         if not re.match(r"^[\d]+\s*/\s*10$|^N/A$|^\?$", score):
             continue
+
+        # Extract only the numerator from scores like "10 / 10"
+        numeric_match = re.match(r"^([\d]+)\s*/\s*10$", score)
+        if numeric_match:
+            score = numeric_match.group(1)
 
         checks.append(
             {"score": score, "name": name, "reason": reason, "doc_url": doc_url}
@@ -228,7 +233,7 @@ def run_scorecard(url: str) -> str | None:
 
 
 def process_repositories(
-    stats_path: pathlib.Path, scores_path: pathlib.Path, reasons_path: pathlib.Path
+    stats_path: Path, scores_path: Path, reasons_path: Path
 ) -> None:
     """Read repository URLs from the stats.csv file and run scorecard on each one.
 
@@ -268,7 +273,7 @@ def process_repositories(
                 for _, check in checks_df.iterrows():
                     name = check["name"]
                     score_record[name] = check["score"]
-                    reason_record[f"Reason {name}"] = check["reason"]
+                    reason_record[f"Reason {name}"] = check["reason"].capitalize()
 
                 score_rows.append(score_record)
                 reason_rows.append(reason_record)
@@ -290,35 +295,27 @@ def process_repositories(
 @click.command()
 @click.option(
     "--stats-file",
-    type=click.Path(
-        exists=False, dir_okay=False, file_okay=True, path_type=pathlib.Path
-    ),
+    type=click.Path(exists=False, dir_okay=False, file_okay=True, path_type=Path),
     help="Path to the stats.csv file.",
     default="inventory/output/stats.csv",
 )
 @click.option(
     "--scores-file",
-    type=click.Path(
-        exists=False, dir_okay=False, file_okay=True, path_type=pathlib.Path
-    ),
+    type=click.Path(exists=False, dir_okay=False, file_okay=True, path_type=Path),
     help="Output path for the scores file.",
     default="inventory/output/scores.csv",
 )
 @click.option(
     "--reasons-file",
-    type=click.Path(
-        exists=False, dir_okay=False, file_okay=True, path_type=pathlib.Path
-    ),
+    type=click.Path(exists=False, dir_okay=False, file_okay=True, path_type=Path),
     help="Output path for the reasons of the scores file.",
     default="inventory/output/reasons.csv",
 )
-def cli(
-    stats_file: pathlib.Path, scores_file: pathlib.Path, reasons_file: pathlib.Path
-):
+def cli(stats_file: Path, scores_file: Path, reasons_file: Path):
     """CLI entry point to get OpenSSF Scorecard stats for defined projects."""
-    stats_path = pathlib.Path(path_cwd, stats_file)
-    scores_path = pathlib.Path(path_cwd, scores_file)
-    reasons_path = pathlib.Path(path_cwd, reasons_file)
+    stats_path = path_cwd / stats_file
+    scores_path = path_cwd / scores_file
+    reasons_path = path_cwd / reasons_file
     process_repositories(stats_path, scores_path, reasons_path)
 
 

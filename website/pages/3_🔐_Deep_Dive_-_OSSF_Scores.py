@@ -4,7 +4,7 @@
 
 """Streamlit dashboard to visualize OpenSSF Scorecard results."""
 
-import pathlib
+from pathlib import Path
 
 import pandas as pd
 import streamlit as st
@@ -12,9 +12,9 @@ import streamlit.components.v1 as components
 
 # ── Paths ─────────────────────────────────────────────────────────────────────
 
-path_cwd = pathlib.Path.cwd()
-scores_path = pathlib.Path(path_cwd, "inventory", "output", "scores.csv")
-reasons_path = pathlib.Path(path_cwd, "inventory", "output", "reasons.csv")
+path_cwd = Path.cwd()
+scores_path = path_cwd / "inventory" / "output" / "scores.csv"
+reasons_path = path_cwd / "inventory" / "output" / "reasons.csv"
 
 # ── Data loading ──────────────────────────────────────────────────────────────
 
@@ -31,9 +31,11 @@ def load_data() -> tuple[pd.DataFrame, pd.DataFrame]:
 
 
 def score_to_gradient(score_str: str) -> str:
-    """Converts a score string (e.g. '7/10') to a CSS style string with a color gradient."""
+    """Converts a score string (e.g. '7') to a CSS style string with a color gradient."""
+    if str(score_str).strip() in ("?", "N/A", ""):
+        return "background: #f0f0f0; color: #888;"
     try:
-        value = float(str(score_str).split("/")[0].strip())
+        value = float(str(score_str).strip())
     except (ValueError, AttributeError):
         return "background: #f0f0f0; color: #888;"
     if value >= 8:
@@ -63,11 +65,21 @@ def build_tool_detail_table(
 
     score_row = scores.loc[tool_id]
     reason_row = reasons.loc[tool_id] if tool_id in reasons.index else None
+    SCORECARD_DOCS_BASE = "https://github.com/ossf/scorecard/blob/main/docs/checks.md#"
 
     rows_html = []
     for check in check_cols:
-        score_val = score_row.get(check, "?")
-        cell_style = score_to_gradient(score_val)
+        raw_score = score_row.get(check, "?")
+
+        # Normalise missing/unknown values
+        is_na = str(raw_score).strip() in ("?", "nan", "None", "N/A", "")
+        try:
+            is_na = is_na or pd.isna(raw_score)
+        except (TypeError, ValueError):
+            pass
+
+        display_val = "None" if is_na else raw_score
+        cell_style = score_to_gradient(raw_score)
 
         reason_col = reason_col_map.get(check)
         if reason_col and reason_row is not None:
@@ -75,13 +87,20 @@ def build_tool_detail_table(
         else:
             reason_text = "No reason available"
 
+        # Build docs anchor: lowercase, spaces → hyphens
+        doc_url = f"{SCORECARD_DOCS_BASE}{check.casefold()}"
+
         rows_html.append(f"""
             <tr class="detail-row">
                 <td class="score-col">
-                    <span class="score-badge" style="{cell_style}">{score_val}</span>
+                    <span class="score-badge" style="{cell_style}">{display_val}</span>
                 </td>
                 <td class="check-col">
-                    <div class="check-name">{check}</div>
+                    <div class="check-name">
+                        <a href="{doc_url}" target="_blank" style="color:#5c6bc0; text-decoration:none;">
+                            {check}
+                        </a>
+                    </div>
                     <div class="check-reason">{reason_text}</div>
                 </td>
             </tr>
@@ -187,11 +206,22 @@ def build_tool_detail_table(
 # ── App ───────────────────────────────────────────────────────────────────────
 
 
-def main() -> None:
-    """Main function to run the Streamlit app."""
+def preamble():
+    """Text to show before the user data plots."""
     st.set_page_config(page_title="OpenSSF Scorecard Dashboard", layout="wide")
     st.title("🔐 OpenSSF Scorecard Dashboard")
+    st.markdown(
+        """
+        The dashboard provides a detailed view of the [OpenSSF Scorecard](https://github.com/ossf/scorecard?tab=readme-ov-file#what-is-scorecard) results for each tool in our inventory.
+        Select a tool from the dropdown to see its overall score and a breakdown of individual checks along with
+        the reasons for any failed or low-scoring checks. The scores are colour-coded to help you quickly identify
+        areas of strength and weakness in the security posture of each tool.
+         """
+    )
 
+
+def main() -> None:
+    """Main function to run the Streamlit app."""
     scores, reasons = load_data()
 
     # ── Sidebar filters ───────────────────────────────────────────────────────
@@ -238,7 +268,7 @@ def main() -> None:
                              box-shadow:0 1px 4px rgba(0,0,0,0.1);">< 5 — Low</span>
                 <span style="background:#f0f0f0; color:#888;
                              padding:3px 12px; border-radius:20px; font-size:0.78rem; font-weight:600;
-                             box-shadow:0 1px 4px rgba(0,0,0,0.1);">N/A</span>
+                             box-shadow:0 1px 4px rgba(0,0,0,0.1);">None</span>
             </div>
             """,
             unsafe_allow_html=True,
@@ -248,4 +278,5 @@ def main() -> None:
 
 
 if __name__ == "__main__":
+    preamble()
     main()

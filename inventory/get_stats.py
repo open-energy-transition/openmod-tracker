@@ -186,7 +186,7 @@ def _get_number_of_maintainers(url: str) -> int:
         url (str): Repository URL.
 
     Returns:
-        int: Number of active maintainers. Returns -1 data is unavailable.
+        int: Number of active maintainers. Returns -1 if data is unavailable.
             Returns 0 if there are no active maintainers, and a positive integer for the
             number of active maintainers if data is available.
     """

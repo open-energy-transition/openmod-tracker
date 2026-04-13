@@ -164,6 +164,12 @@ def create_vis_table(tool_stats_dir: Path, user_stats_dir: Path) -> pd.DataFrame
 
     for col, dtype_func in COLUMN_DTYPES.items():
         df[col] = dtype_func(df[col])
+
+    # Replace 0 and -1 values in "active_maintainers_count" with NaN.
+    df["active_maintainers_count"] = df["active_maintainers_count"].replace(
+        {0: np.nan, -1: np.nan}
+    )
+
     df["Docs"] = (
         docs_df["pages"]
         .fillna(docs_df["rtd"])

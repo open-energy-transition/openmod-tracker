@@ -30,6 +30,7 @@ depends-on = ["filter-tools"]
 cmd = "python $PIXI_PROJECT_ROOT/inventory/get_scores.py --stats-file inventory/output/stats.csv --scores-file inventory/output/scores.csv --reasons-file inventory/output/reasons.csv"
 inputs = ["inventory/output/stats.csv", "inventory/get_scores.py"]
 outputs = ["inventory/output/scores.csv", "inventory/output/reasons.csv"]
+depends-on = ["get-stats"]
 
 [tasks.get-docs]
 cmd = "python $PIXI_PROJECT_ROOT/inventory/get_docs.py inventory/output/stats.csv inventory/output/docs.csv"

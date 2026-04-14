@@ -82,7 +82,7 @@ COLUMN_HELP: dict[str, str] = {
     "It is an indicator of potential licensing issues (if the language is proprietary) and development community size. "
     "This may not be the language same as the interface language used by the tool.",
     "License Type": "Tool categorization based on license and language: permissive (e.g., MIT, Apache), copyleft (e.g., GPL), or commercial (e.g., MATLAB, proprietary licenses)",
-    "OSSF Score": "The OpenSSF Scorecard aggregated security score, on a scale from 0 to 10.",
+    "OSSF Score": "The [OpenSSF Scorecard](https://github.com/ossf/scorecard?tab=readme-ov-file#aggregate-score) aggregated security score, on a scale from 0 to 10.",
 }
 
 LICENSE_GROUPS: dict[str, list[str]] = {

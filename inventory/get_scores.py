@@ -6,57 +6,85 @@
 """Get OpenSSF Scorecard stats for defined projects."""
 
 import logging
+import os
 import re
 import subprocess
 from pathlib import Path
 
 import click
 import pandas as pd
+import util
 
 path_cwd = Path().cwd()
 
 LOGGER = logging.getLogger(__name__)
+OSSF_SCORECARD_API = "https://api.securityscorecards.dev/projects/"
 
 
-# def get_score_card(existing_data: pd.DataFrame) -> pd.DataFrame | None:
-#     """Retrieve the scorecard for a repository from the ecosyste.ms API with CSV fallback.
-#
-#     Parameters
-#     ----------
-#     existing_data : pd.DataFrame
-#         Existing scorecard data to use as a fallback if API retrieval fails.
-#
-#     Returns
-#     -------
-#     pandas.DataFrame| None
-#         The scorecard DataFrame containing `id`, `data`, `last_synced_at`,
-#         `repository_id`, `created_at`, and `updated_at` fields.
-#         Returns None if the scorecard cannot be retrieved from API or CSV.
-#
-#     Notes
-#     -----
-#     Retrieval strategy:
-#     1. First attempts to fetch from ecosyste.ms API
-#     2. Falls back to CSV file if API data is unavailable
-#     3. Returns None if scorecard not found in either source
-#     """
-#     #Try API first --> This part needs to be finalized once the API is stable. Make it such that it returns a pandas DataFrame,
-#     try:
-#        repo_data = util.get_ecosystems_repo_data(url)
-#        if repo_data and (score_card := repo_data.get("scorecard")):
-#            return score_card
-#     except Exception as e:
-#        LOGGER.warning(f"Error fetching ecosyste.ms repo data for {url}: {e}")
-#
-#     # Fallback to CSV
-#     score_card = _load_scorecard_from_csv(inventory_output_path / "scores.csv")
-#     if not score_card:
-#         LOGGER.warning(f"No scorecard found for {url} in API or CSV")
-#
-#     return score_card
+def check_auth_token(url):
+    """Check if required auth token environment variable is set for the given URL.
+
+    Parameters
+    ------------
+    url:  str
+        The URL to check
+
+    Returns:
+    --------
+        bool: True if the required auth token is set, False otherwise
+    """
+    url_lower = url.casefold()
+
+    if "github" in url_lower:
+        github_tokens = [
+            "GITHUB_AUTH_TOKEN",
+            "GITHUB_TOKEN",
+            "GH_AUTH_TOKEN",
+            "GH_TOKEN",
+        ]
+        return any(os.getenv(token) for token in github_tokens)
+
+    elif "gitlab" in url_lower:
+        return bool(os.getenv("GITLAB_AUTH_TOKEN"))
+
+    return False
 
 
-def _load_scorecard_from_csv(csv_path: Path) -> pd.DataFrame | None:
+def get_scorecard_from_api(url: str) -> tuple[float | None, pd.DataFrame] | None:
+    """Retrieve the scorecard for a repository from the scorecard API.
+
+    Parameters
+    ------------
+    url : str
+        The repository URL to retrieve the scorecard for.
+
+    Returns:
+    -------
+    pandas.DataFrame| None
+        A DataFrame containing the scorecard data if found, or None if not found in either source.
+
+    """
+    try:
+        safe_query = url.removeprefix("https://")
+        repo_data = util.get_ecosystems_data(OSSF_SCORECARD_API + safe_query)
+        if repo_data:
+            aggregated_score = repo_data.get("score", None)
+            checks = repo_data.get("checks", [])
+            rows = [
+                {
+                    "name": check["name"],
+                    "score": check["score"],
+                    "reason": check["reason"],
+                }
+                for check in checks
+            ]
+            df = pd.DataFrame(rows, columns=["name", "score", "reason"])
+            return aggregated_score, df
+    except Exception as e:
+        LOGGER.warning(f"Error fetching ecosyste.ms repo data for {url}: {e}")
+
+
+def get_scorecard_from_csv(csv_path: Path) -> pd.DataFrame | None:
     """Load scorecard data from CSV file.
 
     Parameters
@@ -183,7 +211,7 @@ def parse_scorecard_output(output: str) -> tuple[float | None, pd.DataFrame]:
     return aggregate_score, df
 
 
-def run_scorecard(url: str) -> str | None:
+def get_scorecard_from_cli(url: str) -> str | None:
     """Run the scorecard command for a given repository URL and return the output.
 
     Parameters
@@ -201,6 +229,10 @@ def run_scorecard(url: str) -> str | None:
     FileNotFoundError
         If the 'scorecard' command is not found in the system PATH.
     """
+    if not check_auth_token(url):
+        LOGGER.warning(f"No auth token available for {url}, skipping scorecard CLI.")
+        return None
+
     command: list[str] = ["scorecard", f"--repo={url}"]
     try:
         process = subprocess.Popen(
@@ -235,61 +267,80 @@ def run_scorecard(url: str) -> str | None:
 def process_repositories(
     stats_path: Path, scores_path: Path, reasons_path: Path
 ) -> None:
-    """Read repository URLs from the stats.csv file and run scorecard on each one.
+    """Read repository URLs and run scorecard on each one.
 
     Parameters
-    ----------
-    stats_path : Path
-        The path to the stats.csv file containing repository URLs.
-    scores_path : Path
-        The path to save the scores.csv output file.
-    reasons_path : Path
-        The path to save the reasons.csv output file.
+    ------------
+    stats_path: Path
+        The path to the CSV file containing repository stats with 'id' and 'html_url'
+    scores_path: Path
+        The output path for the scores CSV file.
+    reasons_path: Path
+        The output path for the reasons CSV file.
+
+    Raises:
+    ------
+    ValueError
+        If no scorecard results were collected or processing fails.
     """
-    try:
-        stats_df = get_tool_name_url(stats_path)
-        score_rows: list[dict] = []
-        reason_rows: list[dict] = []
+    stats_df = get_tool_name_url(stats_path)
+    score_rows: list[dict] = []
+    reason_rows: list[dict] = []
 
-        for _, row in stats_df.iterrows():
-            url = row["html_url"]
-            tool_name = row["id"]
+    for _, row in stats_df.iterrows():
+        url = row["html_url"]
+        tool_name = row["id"]
 
-            if "pypsa" not in url.casefold() and "ego" not in url.casefold():
-                continue
+        if "pypsa" not in url.casefold() and "ego" not in url.casefold():
+            continue
 
-            LOGGER.info(f"Running scorecard for: {url}")
-            result = run_scorecard(url)
+        LOGGER.info(f"Trying scorecard API for: {url}")
+        api_result = get_scorecard_from_api(url)
 
-            if result:
-                aggregate_score, checks_df = parse_scorecard_output(result)
-                score_record: dict = {
-                    "id": tool_name,
-                    "html_url": url,
-                    "aggregated_score": aggregate_score,
-                }
-                reason_record: dict = {"id": tool_name, "html_url": url}
-
-                for _, check in checks_df.iterrows():
-                    name = check["name"]
-                    score_record[name] = check["score"]
-                    reason_record[f"Reason {name}"] = check["reason"].capitalize()
-
-                score_rows.append(score_record)
-                reason_rows.append(reason_record)
-            else:
-                LOGGER.error(f"Failed to get scorecard results for {url}")
-
-        if score_rows and reason_rows:
-            scores_df = pd.DataFrame(score_rows)
-            reasons_df = pd.DataFrame(reason_rows)
-            scores_df.astype(str).to_csv(scores_path, index=False)
-            reasons_df.astype(str).to_csv(reasons_path, index=False)
+        if api_result is not None:
+            aggregate_score, checks_df = api_result
+            print(f"Got scorecard from API for: {url}")
         else:
-            LOGGER.warning("No scorecard results were collected.")
+            LOGGER.info(f"API failed, running scorecard command for: {url}")
+            result = get_scorecard_from_cli(url)
+            if not result:
+                raise ValueError(f"Failed to get scorecard results for {url}")
+            aggregate_score, checks_df = parse_scorecard_output(result)
 
-    except Exception as e:
-        LOGGER.error(f"An error occurred while processing repositories: {e}")
+        checks_df = checks_df.sort_values("name").reset_index(drop=True)
+
+        score_rows.append(
+            {
+                "id": tool_name,
+                "html_url": url,
+                "aggregated_score": aggregate_score,
+                **{check["name"]: check["score"] for _, check in checks_df.iterrows()},
+            }
+        )
+        reason_rows.append(
+            {
+                "id": tool_name,
+                "html_url": url,
+                **{
+                    f"Reason {check['name']}": check["reason"].capitalize()
+                    for _, check in checks_df.iterrows()
+                },
+            }
+        )
+
+    if not score_rows or not reason_rows:
+        raise ValueError("No scorecard results were collected.")
+
+    # It can happen that the API response and the CLI response return different sets of checks.
+    # For example tool A (API) might have checks X, Y, Z while tool B (CLI) might have checks X, Y, W.
+    # When we convert these to DataFrames and save to CSV, the missing check W for tool A will be
+    # NaN in the scores and reasons DataFrames. Similarly, for the missing check Z for tool B.
+    # Hence, we fill missing values with "N/A" and convert
+    # all to string before saving to CSV to ensure consistent formatting.
+    pd.DataFrame(score_rows).fillna("N/A").astype(str).to_csv(scores_path, index=False)
+    pd.DataFrame(reason_rows).fillna("N/A").astype(str).to_csv(
+        reasons_path, index=False
+    )
 
 
 @click.command()

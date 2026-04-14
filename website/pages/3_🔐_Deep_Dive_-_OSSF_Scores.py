@@ -71,21 +71,41 @@ def build_tool_detail_table(
     for check in check_cols:
         raw_score = score_row.get(check, "?")
 
-        # Normalise missing/unknown values
-        is_na = str(raw_score).strip() in ("?", "nan", "None", "N/A", "")
+        # Check if score is NaN — skip the row entirely
         try:
-            is_na = is_na or pd.isna(raw_score)
+            if pd.isna(raw_score):
+                continue
         except (TypeError, ValueError):
             pass
 
-        display_val = "None" if is_na else raw_score
-        cell_style = score_to_gradient(raw_score)
+        if str(raw_score).strip() in ("nan", "None", "N/A", ""):
+            continue
+
+        # If score is -1, display as "None"
+        try:
+            if float(str(raw_score).strip()) == -1:
+                display_val = "None"
+                cell_style = score_to_gradient("?")
+            else:
+                display_val = raw_score
+                cell_style = score_to_gradient(raw_score)
+        except (ValueError, AttributeError):
+            display_val = raw_score
+            cell_style = score_to_gradient(raw_score)
 
         reason_col = reason_col_map.get(check)
         if reason_col and reason_row is not None:
             reason_text = reason_row.get(reason_col, "No reason available")
+            # Also skip if reason is NaN
+            try:
+                if pd.isna(reason_text):
+                    continue
+            except (TypeError, ValueError):
+                pass
         else:
             reason_text = "No reason available"
+        if not reason_text.endswith("."):
+            reason_text = reason_text + "."
 
         # Build docs anchor: lowercase, spaces → hyphens
         doc_url = f"{SCORECARD_DOCS_BASE}{check.casefold()}"
@@ -238,17 +258,31 @@ def main() -> None:
 
         st.markdown(
             f"""
-            <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px; flex-wrap:wrap;">
-                <a href="{html_url}" target="_blank"
-                   style="font-size:1.1rem; font-weight:700; color:#5c6bc0;
-                          text-decoration:none; font-family:'Inter',sans-serif;">
-                    🔧 {selected_tool}
-                </a>
-                <span style="{agg_style} padding:5px 16px; border-radius:20px;
-                             font-weight:700; font-size:0.95rem;
-                             box-shadow:0 2px 6px rgba(0,0,0,0.12);">
-                    ⭐ {agg}
-                </span>
+            <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px;">
+                <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+                    <span style="font-size:0.78rem; font-weight:600; color:#888; font-family:'Inter',sans-serif; text-transform:uppercase; letter-spacing:0.06em;">
+                        Tool:
+                    </span>
+                    <a href="{html_url}" target="_blank"
+                       style="font-size:1.1rem; font-weight:700; color:#5c6bc0;
+                              text-decoration:none; font-family:'Inter',sans-serif;">
+                        🔧 {selected_tool}
+                    </a>
+                </div>
+                <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+                    <span style="font-size:0.78rem; font-weight:600; font-family:'Inter',sans-serif; text-transform:uppercase; letter-spacing:0.06em;">
+                        <a href="https://github.com/ossf/scorecard?tab=readme-ov-file#aggregate-score"
+                           target="_blank"
+                           style="color:#5c6bc0; text-decoration:none;">
+                            Aggregated score:
+                        </a>
+                    </span>
+                    <span style="{agg_style} padding:5px 16px; border-radius:20px;
+                                 font-weight:700; font-size:0.95rem;
+                                 box-shadow:0 2px 6px rgba(0,0,0,0.12);">
+                        ⭐ {agg}
+                    </span>
+                </div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -257,7 +291,7 @@ def main() -> None:
         st.markdown(
             """
             <div style="display:flex; gap:12px; align-items:center; margin-bottom:12px; flex-wrap:wrap;">
-                <span style="font-size:0.8rem; color:#666; font-weight:600; font-family:'Inter',sans-serif;">Score legend:</span>
+                <span style="font-size:0.78rem; font-weight:600; color:#888; font-family:'Inter',sans-serif; text-transform:uppercase; letter-spacing:0.06em;">Score legend:</span>
                 <span style="background:linear-gradient(135deg,#d4edda,#a8d5b5); color:#1a6b3a;
                              padding:3px 12px; border-radius:20px; font-size:0.78rem; font-weight:600;
                              box-shadow:0 1px 4px rgba(0,0,0,0.1);">≥ 8 — High</span>

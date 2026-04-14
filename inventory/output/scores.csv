@@ -1,5 +1,5 @@
-id,html_url,aggregated_score,Binary-Artifacts,Branch-Protection,CI-Tests,CII-Best-Practices,Code-Review,Contributors,Dangerous-Workflow,Dependency-Update-Tool,Fuzzing,License,Maintained,Packaging,Pinned-Dependencies,SAST,Security-Policy,Signed-Releases,Token-Permissions,Vulnerabilities
-edisgo,https://github.com/openego/eDisGo,5.2,10,1,10,0,0,10,10,10,0,10,10,?,0,0,0,?,0,10
-ego,https://github.com/openego/eGo,3.9,10,0,0,0,6,3,?,0,0,10,6,?,?,0,0,?,?,10
-lego,https://github.com/IEE-TUGraz/LEGO,2.7,10,0,?,0,0,3,?,0,0,10,0,?,?,0,0,?,?,10
-pypsa,https://github.com/PyPSA/PyPSA,6.3,10,1,10,0,8,10,10,10,0,10,10,10,0,10,10,?,0,0
+id,html_url,aggregated_score,Binary-Artifacts,Branch-Protection,CII-Best-Practices,Code-Review,Dangerous-Workflow,Fuzzing,License,Maintained,Packaging,Pinned-Dependencies,SAST,Security-Policy,Signed-Releases,Token-Permissions,CI-Tests,Contributors,Dependency-Update-Tool,Vulnerabilities
+edisgo,https://github.com/openego/eDisGo,4.2,10,-1,0,0,10,0,10,10,-1,0,0,0,-1,0,nan,nan,nan,nan
+ego,https://github.com/openego/eGo,3.8,10,0,0,6,-1,0,10,6,-1,-1,0,0,-1,-1,nan,nan,nan,nan
+lego,https://github.com/IEE-TUGraz/LEGO,2.7,10,0,0,0,?,0,10,0,?,?,0,0,?,?,?,3,0,10
+pypsa,https://github.com/PyPSA/PyPSA,6.4,10,1,0,8,10,0,10,10,10,0,10,10,-1,0,nan,nan,nan,nan

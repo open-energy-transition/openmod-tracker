@@ -255,7 +255,7 @@ def process_repositories(
             url = row["html_url"]
             tool_name = row["id"]
 
-            if "pypsa" not in url.casefold():
+            if "pypsa" not in url.casefold() and "ego" not in url.casefold():
                 continue
 
             LOGGER.info(f"Running scorecard for: {url}")

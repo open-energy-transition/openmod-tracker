@@ -193,6 +193,7 @@ def get_scorecard_from_api(url: str) -> tuple[float | None, pd.DataFrame] | None
             return aggregated_score, df
     except Exception as e:
         LOGGER.warning(f"Error fetching ecosyste.ms repo data for {url}: {e}")
+        return None
 
 
 def get_scorecard_from_cli(url: str) -> str | None:

@@ -1,0 +1,121 @@
+{# SPDX-FileCopyrightText: openmod-tracker contributors #}
+{# SPDX-License-Identifier: MIT #}
+
+{#
+  Variables expected:
+    rows – list of dicts, each with keys:
+             cell_style  – inline CSS for the score badge
+             display_val – score to display (string, e.g. "7" or "None")
+             doc_url     – URL to the OSSF Scorecard check documentation
+             check       – check name (string)
+             reason_text – reason text (string)
+#}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+    .detail-wrapper {
+        overflow-x: auto;
+        border-radius: 12px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        padding: 4px;
+    }
+
+    table.detail-table {
+        border-collapse: separate;
+        border-spacing: 0;
+        width: 100%;
+        font-family: 'Inter', sans-serif;
+        background: #ffffff;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    table.detail-table thead tr {
+        background: #ffffff;
+    }
+
+    table.detail-table th {
+        color: #3c3c6e;
+        padding: 10px 16px;
+        white-space: nowrap;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        border-bottom: 2px solid #c5cae9;
+        text-align: left;
+        font-size: 0.82rem;
+    }
+
+    table.detail-table td {
+        padding: 10px 16px;
+        border-bottom: 1px solid #f0f0f0;
+        vertical-align: middle;
+    }
+
+    td.score-col {
+        width: 80px;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .score-badge {
+        display: inline-block;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.10);
+        letter-spacing: 0.04em;
+        white-space: nowrap;
+    }
+
+    td.check-col {
+        text-align: left;
+    }
+
+    .check-name {
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: #3c3c6e;
+        margin-bottom: 4px;
+    }
+
+    .check-reason {
+        font-size: 0.78rem;
+        color: #666;
+        line-height: 1.4;
+    }
+
+    tr.detail-row:hover td {
+        background-color: #f5f5ff;
+    }
+</style>
+
+<div class="detail-wrapper">
+    <table class="detail-table">
+        <thead>
+            <tr>
+                <th>Score</th>
+                <th>Check &amp; Reason</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in rows %}
+            <tr class="detail-row">
+                <td class="score-col">
+                    <span class="score-badge" style="{{ row.cell_style }}">{{ row.display_val }}</span>
+                </td>
+                <td class="check-col">
+                    <div class="check-name">
+                        <a href="{{ row.doc_url }}" target="_blank" style="color:#5c6bc0; text-decoration:none;">
+                            {{ row.check }}
+                        </a>
+                    </div>
+                    <div class="check-reason">{{ row.reason_text }}</div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

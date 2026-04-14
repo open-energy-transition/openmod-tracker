@@ -13,100 +13,15 @@ from pathlib import Path
 
 import click
 import pandas as pd
-import util
+import yaml
+
+import tqdm
+import requests
 
 path_cwd = Path().cwd()
 
 LOGGER = logging.getLogger(__name__)
 OSSF_SCORECARD_API = "https://api.securityscorecards.dev/projects/"
-
-
-def check_auth_token(url):
-    """Check if required auth token environment variable is set for the given URL.
-
-    Parameters
-    ------------
-    url:  str
-        The URL to check
-
-    Returns:
-    --------
-        bool: True if the required auth token is set, False otherwise
-    """
-    url_lower = url.casefold()
-
-    if "github" in url_lower:
-        github_tokens = [
-            "GITHUB_AUTH_TOKEN",
-            "GITHUB_TOKEN",
-            "GH_AUTH_TOKEN",
-            "GH_TOKEN",
-        ]
-        return any(os.getenv(token) for token in github_tokens)
-
-    elif "gitlab" in url_lower:
-        return bool(os.getenv("GITLAB_AUTH_TOKEN"))
-
-    return False
-
-
-def get_scorecard_from_api(url: str) -> tuple[float | None, pd.DataFrame] | None:
-    """Retrieve the scorecard for a repository from the scorecard API.
-
-    Parameters
-    ------------
-    url : str
-        The repository URL to retrieve the scorecard for.
-
-    Returns:
-    -------
-    pandas.DataFrame| None
-        A DataFrame containing the scorecard data if found, or None if not found in either source.
-
-    """
-    try:
-        safe_query = url.removeprefix("https://")
-        repo_data = util.get_ecosystems_data(OSSF_SCORECARD_API + safe_query)
-        if repo_data:
-            aggregated_score = repo_data.get("score", None)
-            checks = repo_data.get("checks", [])
-            rows = [
-                {
-                    "name": check["name"],
-                    "score": check["score"],
-                    "reason": check["reason"],
-                }
-                for check in checks
-            ]
-            df = pd.DataFrame(rows, columns=["name", "score", "reason"])
-            return aggregated_score, df
-    except Exception as e:
-        LOGGER.warning(f"Error fetching ecosyste.ms repo data for {url}: {e}")
-
-
-def get_scorecard_from_csv(csv_path: Path) -> pd.DataFrame | None:
-    """Load scorecard data from CSV file.
-
-    Parameters
-    ------------
-    csv_path : Path
-        The path to the CSV file containing scorecard data.
-
-    Returns:
-    --------
-    pd.DataFrame | None
-        The scorecard DataFrame if found, None otherwise.
-    """
-    if csv_path.exists():
-        try:
-            score_card = pd.read_csv(csv_path, index_col="id")
-            return score_card
-        except Exception as e:
-            LOGGER.error(f"Error reading CSV file {csv_path}: {e}")
-            return None
-    else:
-        LOGGER.debug(f"CSV file not found at {csv_path}")
-        return None
 
 
 def get_tool_name_url(file_name: Path) -> pd.DataFrame:
@@ -117,7 +32,7 @@ def get_tool_name_url(file_name: Path) -> pd.DataFrame:
     file_name : Path
         The path to the CSV file containing the repository stats.
 
-    Returns:
+    Returns
     --------
     pd.DataFrame
         A DataFrame containing the tool name and URL for the scorecard command.
@@ -133,7 +48,7 @@ def extract_aggregated_score(output: str) -> str | None:
     ------------
         output: The full scorecard command output.
 
-    Returns:
+    Returns
     --------
     str | None
         The aggregate score as a string, or None if not found.
@@ -150,7 +65,7 @@ def extract_check_scores(output: str) -> list[dict[str, str]]:
     output: str
         The full scorecard command output.
 
-    Returns:
+    Returns
     --------
     list[dict[str, str]]
         A list of dictionaries with keys: score, name, reason, documentation url.
@@ -200,7 +115,7 @@ def parse_scorecard_output(output: str) -> tuple[float | None, pd.DataFrame]:
     output: str
         The full scorecard command output.
 
-    Returns:
+    Returns
     --------
     tuple[float | None, pd.DataFrame]
         A tuple containing the aggregate score (or None if not found) and a DataFrame of individual check scores with columns: name, score, reason, doc_url.
@@ -211,6 +126,75 @@ def parse_scorecard_output(output: str) -> tuple[float | None, pd.DataFrame]:
     return aggregate_score, df
 
 
+def check_auth_token(url):
+    """Check if required auth token environment variable is set for the given URL.
+
+    Parameters
+    ------------
+    url:  str
+        The URL to check
+
+    Returns
+    --------
+        bool: True if the required auth token is set, False otherwise
+    """
+    url_lower = url.casefold()
+
+    if "github" in url_lower:
+        github_tokens = [
+            "GITHUB_AUTH_TOKEN",
+            "GITHUB_TOKEN",
+            "GH_AUTH_TOKEN",
+            "GH_TOKEN",
+        ]
+        return any(os.getenv(token) for token in github_tokens)
+
+    elif "gitlab" in url_lower:
+        return bool(os.getenv("GITLAB_AUTH_TOKEN"))
+
+    return False
+
+
+def get_scorecard_from_api(url: str) -> tuple[float | None, pd.DataFrame] | None:
+    """Retrieve the scorecard for a repository from the scorecard API.
+
+    Parameters
+    ------------
+    url : str
+        The repository URL to retrieve the scorecard for.
+
+    Returns
+    -------
+    pandas.DataFrame| None
+        A DataFrame containing the scorecard data if found, or None if not found in either source.
+
+    """
+    repo_data = None
+    try:
+        safe_query = url.removeprefix("https://")
+        response = requests.get(OSSF_SCORECARD_API + safe_query)
+        if response.ok and response.status_code != 500:
+            repo_data = yaml.safe_load(response.content.decode("utf-8"))
+        else:
+            LOGGER.info(f"Static URL {url} returned {response.status_code} status code.")
+
+        if repo_data:
+            aggregated_score = repo_data.get("score", None)
+            checks = repo_data.get("checks", [])
+            rows = [
+                {
+                    "name": check["name"],
+                    "score": check["score"],
+                    "reason": check["reason"],
+                }
+                for check in checks
+            ]
+            df = pd.DataFrame(rows, columns=["name", "score", "reason"])
+            return aggregated_score, df
+    except Exception as e:
+        LOGGER.warning(f"Error fetching ecosyste.ms repo data for {url}: {e}")
+
+
 def get_scorecard_from_cli(url: str) -> str | None:
     """Run the scorecard command for a given repository URL and return the output.
 
@@ -219,12 +203,12 @@ def get_scorecard_from_cli(url: str) -> str | None:
     url: str
         The repository URL to run scorecard on.
 
-    Returns:
+    Returns
     --------
     str | None
         The full output from the scorecard command if successful, None otherwise.
 
-    Raises:
+    Raises
     ------
     FileNotFoundError
         If the 'scorecard' command is not found in the system PATH.
@@ -243,7 +227,8 @@ def get_scorecard_from_cli(url: str) -> str | None:
 
         # Read stdout line by line
         for line in process.stdout:
-            print(line, end=" ")
+            if "error" in line.lower():
+                print(line, end ="")
             output_lines.append(line)
 
         process.wait()
@@ -263,73 +248,227 @@ def get_scorecard_from_cli(url: str) -> str | None:
         )
         return None
 
-
-def process_repositories(
-    stats_path: Path, scores_path: Path, reasons_path: Path
-) -> None:
-    """Read repository URLs and run scorecard on each one.
+def get_scorecard_from_csv(csv_path: Path) -> pd.DataFrame | None:
+    """Load scorecard data from CSV file.
 
     Parameters
     ------------
-    stats_path: Path
-        The path to the CSV file containing repository stats with 'id' and 'html_url'
-    scores_path: Path
-        The output path for the scores CSV file.
-    reasons_path: Path
-        The output path for the reasons CSV file.
+    csv_path : Path
+        The path to the CSV file containing scorecard data.
 
-    Raises:
+    Returns
+    --------
+    pd.DataFrame | None
+        The scorecard DataFrame if found, None otherwise.
+    """
+    if csv_path.exists():
+        score_card = pd.read_csv(csv_path, index_col="id")
+        return score_card
+    else:
+        LOGGER.warning(f"CSV file not found at {csv_path}")
+        return None
+
+def process_repositories(
+    stats_path: Path, scores_path: Path, reasons_path: Path, batch_size: int = 5,
+) -> None:
+    """
+    Read repository URLs and run scorecard on each one.
+
+    Parameters
+    ----------
+    stats_path : Path
+        Path to the CSV file containing repository stats with 'id' and 'html_url'
+        columns.
+    scores_path : Path
+        Output path for the scores CSV file. Columns include 'id', 'html_url',
+        'aggregated_score', and individual check scores.
+    reasons_path : Path
+        Output path for the reasons CSV file. Columns include 'id', 'html_url',
+        and individual check reasons prefixed with 'Reason '.
+    batch_size : int, optional
+        Number of repositories to process before writing a batch to CSV. Default is 5.
+
+    Raises
     ------
     ValueError
-        If no scorecard results were collected or processing fails.
+        If no scorecard results were collected after processing all repositories
+        or if a repository fails all fallback methods (API → CLI → CSV).
     """
     stats_df = get_tool_name_url(stats_path)
+    existing_scores_df = get_scorecard_from_csv(scores_path)
+    existing_reasons_df = get_scorecard_from_csv(reasons_path)
+
     score_rows: list[dict] = []
     reason_rows: list[dict] = []
 
-    for _, row in stats_df.iterrows():
+    rows = list(stats_df.iterrows())
+    pbar = tqdm.tqdm(rows, total=len(rows), desc="Processing repositories")
+    for _, row in rows:
+        pbar.update(1)
         url = row["html_url"]
         tool_name = row["id"]
+        LOGGER.info(f"Processing repository: {tool_name} ({url})")
 
-        if "pypsa" not in url.casefold() and "ego" not in url.casefold():
+        scorecard_data = _get_scorecard_data(
+            url, tool_name, existing_scores_df, existing_reasons_df
+        )
+
+        if scorecard_data is None:
+            LOGGER.warning(f"Failed to get scorecard results for {tool_name}")
             continue
 
-        LOGGER.info(f"Trying scorecard API for: {url}")
-        api_result = get_scorecard_from_api(url)
-
-        if api_result is not None:
-            aggregate_score, checks_df = api_result
-            print(f"Got scorecard from API for: {url}")
-        else:
-            LOGGER.info(f"API failed, running scorecard command for: {url}")
-            result = get_scorecard_from_cli(url)
-            if not result:
-                raise ValueError(f"Failed to get scorecard results for {url}")
-            aggregate_score, checks_df = parse_scorecard_output(result)
-
-        checks_df = checks_df.sort_values("name").reset_index(drop=True)
-
-        score_rows.append(
-            {
-                "id": tool_name,
-                "html_url": url,
-                "aggregated_score": aggregate_score,
-                **{check["name"]: check["score"] for _, check in checks_df.iterrows()},
-            }
+        aggregate_score, checks_df = scorecard_data
+        score_row, reason_row = _append_scorecard_rows(
+            tool_name, url, aggregate_score, checks_df
         )
-        reason_rows.append(
-            {
-                "id": tool_name,
-                "html_url": url,
-                **{
-                    f"Reason {check['name']}": check["reason"].capitalize()
-                    for _, check in checks_df.iterrows()
-                },
-            }
-        )
+        score_rows.append(score_row)
+        reason_rows.append(reason_row)
+
+        # Write batch every N rows
+        if len(score_rows) >= batch_size:
+            _write_batch_to_csv(score_rows, scores_path, "scores")
+            _write_batch_to_csv(reason_rows, reasons_path, "reasons")
+            score_rows.clear()
+            reason_rows.clear()
+
+    # Write remaining rows
+    if score_rows or reason_rows:
+        _write_batch_to_csv(score_rows, scores_path, "scores")
+        _write_batch_to_csv(reason_rows, reasons_path, "reasons")
 
     if not score_rows or not reason_rows:
         raise ValueError("No scorecard results were collected.")
+    pbar.close()
+
+def _get_scorecard_data(
+    url: str,
+    tool_name: str,
+    cache_scores_df: pd.DataFrame,
+    cache_reasons_df: pd.DataFrame,
+) -> tuple[float, pd.DataFrame] | None:
+    """
+    Retrieve scorecard data using fallback strategy (API → CLI → CSV).
+
+    Parameters
+    ----------
+    url : str
+        Repository URL to fetch scorecard data for.
+    tool_name : str
+        Identifier of the tool/repository (used for CSV lookup).
+    cache_scores_df : pd.DataFrame
+        DataFrame with existing scores, indexed by tool name. Used as fallback.
+    cache_reasons_df : pd.DataFrame
+        DataFrame with existing reasons, indexed by tool name. Used as fallback.
+
+    Returns
+    -------
+    tuple[float, pd.DataFrame] or None
+        A tuple of (aggregated_score, checks_df) where aggregated_score is a
+        float and checks_df is a DataFrame with 'name', 'score', and 'reason'
+        columns. Returns None if all fallback methods fail.
+    """
+    # Try API
+    api_result = get_scorecard_from_api(url)
+    if api_result is not None:
+        LOGGER.info(f"Got scorecard from API for: {url}")
+        return api_result
+
+    # Try CLI
+    LOGGER.info(f"API failed, running scorecard command for: {url}")
+    result = get_scorecard_from_cli(url)
+    if result:
+        aggregate_score, checks_df = parse_scorecard_output(result)
+        return aggregate_score, checks_df
+
+    # Try CSV fallback
+    LOGGER.warning(f"CLI failed, falling back to CSV for: {url}")
+    if (tool_name in cache_scores_df.index
+        and tool_name in cache_reasons_df.index
+    ):
+        LOGGER.info(f"Loaded scorecard from CSV for: {url}")
+        return None
+
+    LOGGER.error(f"No CSV fallback available for: {url}")
+    return None
+
+
+def _append_scorecard_rows(
+    tool_name: str,
+    url: str,
+    aggregate_score: float,
+    checks_df: pd.DataFrame,
+) -> tuple[dict, dict]:
+    """Extract scorecard data and return score and reason rows.
+
+    Processes a single repository's scorecard results and returns formatted
+    dictionaries ready to be appended to result lists.
+
+    Parameters
+    ----------
+    tool_name : str
+        Identifier of the tool/repository.
+    url : str
+        Repository URL.
+    aggregate_score : float
+        The aggregated scorecard score (typically 0-10).
+    checks_df : pd.DataFrame
+        DataFrame with columns: 'name' (check name), 'score' (numeric score),
+        'reason' (explanation string). Rows are sorted alphabetically before
+        processing.
+
+    Returns
+    -------
+    tuple[dict, dict]
+        A tuple of (score_row, reason_row) where:
+        - score_row contains 'id', 'html_url', 'aggregated_score', and
+          individual check scores.
+        - reason_row contains 'id', 'html_url', and individual check reasons
+          prefixed with 'Reason '.
+
+    Notes
+    -----
+    Check reasons are capitalized. Missing values are filled with 'N/A'
+    during CSV export by the caller.
+    """
+    checks_df = checks_df.sort_values("name").reset_index(drop=True)
+
+    check_scores = {check["name"]: check["score"] for _, check in checks_df.iterrows()}
+    check_reasons = {
+        f"Reason {check['name']}": check["reason"].capitalize()
+        for _, check in checks_df.iterrows()
+    }
+
+    score_row = {
+        "id": tool_name,
+        "html_url": url,
+        "aggregated_score": aggregate_score,
+        **check_scores,
+    }
+
+    reason_row = {
+        "id": tool_name,
+        "html_url": url,
+        **check_reasons,
+    }
+
+    return score_row, reason_row
+
+
+def _write_batch_to_csv(rows: list[dict], path: Path, file_type: str) -> None:
+    """
+    Write a batch of rows to CSV, appending if file exists.
+
+    Parameters
+    ------------
+    rows : list[dict]
+        List of dictionaries representing rows to write to CSV.
+    path : Path
+        The path to the CSV file to write to.
+    file_type : str
+        A string indicating the type of file being written (e.g., "scores" or "reasons") for logging purposes.
+    """
+    if not rows:
+        return
 
     # It can happen that the API response and the CLI response return different sets of checks.
     # For example tool A (API) might have checks X, Y, Z while tool B (CLI) might have checks X, Y, W.
@@ -337,10 +476,15 @@ def process_repositories(
     # NaN in the scores and reasons DataFrames. Similarly, for the missing check Z for tool B.
     # Hence, we fill missing values with "N/A" and convert
     # all to string before saving to CSV to ensure consistent formatting.
-    pd.DataFrame(score_rows).fillna("N/A").astype(str).to_csv(scores_path, index=False)
-    pd.DataFrame(reason_rows).fillna("N/A").astype(str).to_csv(
-        reasons_path, index=False
+    df = pd.DataFrame(rows).fillna("N/A").astype(str)
+
+    df.to_csv(
+        path,
+        mode="a",
+        header=not path.exists(),  # Write header only if file doesn't exist
+        index=False
     )
+    LOGGER.info(f" ---> Written {len(rows)} rows to {file_type} CSV")
 
 
 @click.command()
@@ -364,6 +508,7 @@ def process_repositories(
 )
 def cli(stats_file: Path, scores_file: Path, reasons_file: Path):
     """CLI entry point to get OpenSSF Scorecard stats for defined projects."""
+    logging.basicConfig(level=logging.INFO)
     stats_path = path_cwd / stats_file
     scores_path = path_cwd / scores_file
     reasons_path = path_cwd / reasons_file

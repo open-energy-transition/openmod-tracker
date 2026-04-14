@@ -71,27 +71,12 @@ def build_tool_detail_table(
     for check in check_cols:
         raw_score = score_row.get(check, "?")
 
-        # Check if score is NaN — skip the row entirely
-        try:
-            if pd.isna(raw_score):
-                continue
-        except (TypeError, ValueError):
-            pass
+        if str(raw_score).strip() in ("-1", "?", "N/A", ""):
+            display_val = "None"
+        else:
+            display_val = str(int(raw_score)).strip()
 
-        if str(raw_score).strip() in ("nan", "None", "N/A", ""):
-            continue
-
-        # If score is -1, display as "None"
-        try:
-            if float(str(raw_score).strip()) == -1:
-                display_val = "None"
-                cell_style = score_to_gradient("?")
-            else:
-                display_val = raw_score
-                cell_style = score_to_gradient(raw_score)
-        except (ValueError, AttributeError):
-            display_val = raw_score
-            cell_style = score_to_gradient(raw_score)
+        cell_style = score_to_gradient(display_val)
 
         reason_col = reason_col_map.get(check)
         if reason_col and reason_row is not None:

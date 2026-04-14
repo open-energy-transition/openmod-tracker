@@ -13,10 +13,9 @@ from pathlib import Path
 
 import click
 import pandas as pd
-import yaml
-
-import tqdm
 import requests
+import tqdm
+import yaml
 
 path_cwd = Path().cwd()
 
@@ -32,7 +31,7 @@ def get_tool_name_url(file_name: Path) -> pd.DataFrame:
     file_name : Path
         The path to the CSV file containing the repository stats.
 
-    Returns
+    Returns:
     --------
     pd.DataFrame
         A DataFrame containing the tool name and URL for the scorecard command.
@@ -48,7 +47,7 @@ def extract_aggregated_score(output: str) -> str | None:
     ------------
         output: The full scorecard command output.
 
-    Returns
+    Returns:
     --------
     str | None
         The aggregate score as a string, or None if not found.
@@ -65,7 +64,7 @@ def extract_check_scores(output: str) -> list[dict[str, str]]:
     output: str
         The full scorecard command output.
 
-    Returns
+    Returns:
     --------
     list[dict[str, str]]
         A list of dictionaries with keys: score, name, reason, documentation url.
@@ -115,7 +114,7 @@ def parse_scorecard_output(output: str) -> tuple[float | None, pd.DataFrame]:
     output: str
         The full scorecard command output.
 
-    Returns
+    Returns:
     --------
     tuple[float | None, pd.DataFrame]
         A tuple containing the aggregate score (or None if not found) and a DataFrame of individual check scores with columns: name, score, reason, doc_url.
@@ -134,7 +133,7 @@ def check_auth_token(url):
     url:  str
         The URL to check
 
-    Returns
+    Returns:
     --------
         bool: True if the required auth token is set, False otherwise
     """
@@ -163,7 +162,7 @@ def get_scorecard_from_api(url: str) -> tuple[float | None, pd.DataFrame] | None
     url : str
         The repository URL to retrieve the scorecard for.
 
-    Returns
+    Returns:
     -------
     pandas.DataFrame| None
         A DataFrame containing the scorecard data if found, or None if not found in either source.
@@ -176,7 +175,9 @@ def get_scorecard_from_api(url: str) -> tuple[float | None, pd.DataFrame] | None
         if response.ok and response.status_code != 500:
             repo_data = yaml.safe_load(response.content.decode("utf-8"))
         else:
-            LOGGER.info(f"Static URL {url} returned {response.status_code} status code.")
+            LOGGER.info(
+                f"Static URL {url} returned {response.status_code} status code."
+            )
 
         if repo_data:
             aggregated_score = repo_data.get("score", None)
@@ -204,12 +205,12 @@ def get_scorecard_from_cli(url: str) -> str | None:
     url: str
         The repository URL to run scorecard on.
 
-    Returns
+    Returns:
     --------
     str | None
         The full output from the scorecard command if successful, None otherwise.
 
-    Raises
+    Raises:
     ------
     FileNotFoundError
         If the 'scorecard' command is not found in the system PATH.
@@ -229,7 +230,7 @@ def get_scorecard_from_cli(url: str) -> str | None:
         # Read stdout line by line
         for line in process.stdout:
             if "error" in line.lower():
-                print(line, end ="")
+                print(line, end="")
             output_lines.append(line)
 
         process.wait()
@@ -249,6 +250,7 @@ def get_scorecard_from_cli(url: str) -> str | None:
         )
         return None
 
+
 def get_scorecard_from_csv(csv_path: Path) -> pd.DataFrame | None:
     """Load scorecard data from CSV file.
 
@@ -257,7 +259,7 @@ def get_scorecard_from_csv(csv_path: Path) -> pd.DataFrame | None:
     csv_path : Path
         The path to the CSV file containing scorecard data.
 
-    Returns
+    Returns:
     --------
     pd.DataFrame | None
         The scorecard DataFrame if found, None otherwise.
@@ -269,11 +271,11 @@ def get_scorecard_from_csv(csv_path: Path) -> pd.DataFrame | None:
         LOGGER.warning(f"CSV file not found at {csv_path}")
         return None
 
+
 def process_repositories(
-    stats_path: Path, scores_path: Path, reasons_path: Path, batch_size: int = 5,
+    stats_path: Path, scores_path: Path, reasons_path: Path, batch_size: int = 5
 ) -> None:
-    """
-    Read repository URLs and run scorecard on each one.
+    """Read repository URLs and run scorecard on each one.
 
     Parameters
     ----------
@@ -289,7 +291,7 @@ def process_repositories(
     batch_size : int, optional
         Number of repositories to process before writing a batch to CSV. Default is 5.
 
-    Raises
+    Raises:
     ------
     ValueError
         If no scorecard results were collected after processing all repositories
@@ -341,14 +343,14 @@ def process_repositories(
         raise ValueError("No scorecard results were collected.")
     pbar.close()
 
+
 def _get_scorecard_data(
     url: str,
     tool_name: str,
     cache_scores_df: pd.DataFrame,
     cache_reasons_df: pd.DataFrame,
 ) -> tuple[float, pd.DataFrame] | None:
-    """
-    Retrieve scorecard data using fallback strategy (API → CLI → CSV).
+    """Retrieve scorecard data using fallback strategy (API → CLI → CSV).
 
     Parameters
     ----------
@@ -361,7 +363,7 @@ def _get_scorecard_data(
     cache_reasons_df : pd.DataFrame
         DataFrame with existing reasons, indexed by tool name. Used as fallback.
 
-    Returns
+    Returns:
     -------
     tuple[float, pd.DataFrame] or None
         A tuple of (aggregated_score, checks_df) where aggregated_score is a
@@ -383,9 +385,7 @@ def _get_scorecard_data(
 
     # Try CSV fallback
     LOGGER.warning(f"CLI failed, falling back to CSV for: {url}")
-    if (tool_name in cache_scores_df.index
-        and tool_name in cache_reasons_df.index
-    ):
+    if tool_name in cache_scores_df.index and tool_name in cache_reasons_df.index:
         LOGGER.info(f"Loaded scorecard from CSV for: {url}")
         return None
 
@@ -394,10 +394,7 @@ def _get_scorecard_data(
 
 
 def _append_scorecard_rows(
-    tool_name: str,
-    url: str,
-    aggregate_score: float,
-    checks_df: pd.DataFrame,
+    tool_name: str, url: str, aggregate_score: float, checks_df: pd.DataFrame
 ) -> tuple[dict, dict]:
     """Extract scorecard data and return score and reason rows.
 
@@ -417,7 +414,7 @@ def _append_scorecard_rows(
         'reason' (explanation string). Rows are sorted alphabetically before
         processing.
 
-    Returns
+    Returns:
     -------
     tuple[dict, dict]
         A tuple of (score_row, reason_row) where:
@@ -426,7 +423,7 @@ def _append_scorecard_rows(
         - reason_row contains 'id', 'html_url', and individual check reasons
           prefixed with 'Reason '.
 
-    Notes
+    Notes:
     -----
     Check reasons are capitalized. Missing values are filled with 'N/A'
     during CSV export by the caller.
@@ -446,18 +443,13 @@ def _append_scorecard_rows(
         **check_scores,
     }
 
-    reason_row = {
-        "id": tool_name,
-        "html_url": url,
-        **check_reasons,
-    }
+    reason_row = {"id": tool_name, "html_url": url, **check_reasons}
 
     return score_row, reason_row
 
 
 def _write_batch_to_csv(rows: list[dict], path: Path, file_type: str) -> None:
-    """
-    Write a batch of rows to CSV, appending if file exists.
+    """Write a batch of rows to CSV, appending if file exists.
 
     Parameters
     ------------
@@ -483,7 +475,7 @@ def _write_batch_to_csv(rows: list[dict], path: Path, file_type: str) -> None:
         path,
         mode="a",
         header=not path.exists(),  # Write header only if file doesn't exist
-        index=False
+        index=False,
     )
     LOGGER.info(f" ---> Written {len(rows)} rows to {file_type} CSV")
 

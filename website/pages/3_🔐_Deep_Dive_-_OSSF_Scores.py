@@ -114,7 +114,7 @@ def build_tool_detail_table(
             }
         )
 
-    template = _jinja_env.get_template("ossf_detail_table.html")
+    template = _jinja_env.get_template("ossf_detail_table.html.jinja")
     return template.render(rows=rows)
 
 
@@ -151,7 +151,7 @@ def main() -> None:
         agg_style = score_to_gradient(agg)
         html_url = score_row.get("html_url", "#")
 
-        header_template = _jinja_env.get_template("ossf_tool_header.html")
+        header_template = _jinja_env.get_template("ossf_tool_header.html.jinja")
         header_html = header_template.render(
             html_url=html_url, selected_tool=selected_tool, agg_style=agg_style, agg=agg
         )

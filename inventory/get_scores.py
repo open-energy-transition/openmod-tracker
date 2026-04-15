@@ -329,17 +329,21 @@ def process_repositories(
         score_rows.append(score_row)
         reason_rows.append(reason_row)
 
-        # Write batch every N rows
-        if len(score_rows) >= batch_size:
-            _write_batch_to_csv(score_rows, scores_path, "scores")
-            _write_batch_to_csv(reason_rows, reasons_path, "reasons")
-            score_rows.clear()
-            reason_rows.clear()
-
     # Write remaining rows
     if score_rows or reason_rows:
-        _write_batch_to_csv(score_rows, scores_path, "scores")
-        _write_batch_to_csv(reason_rows, reasons_path, "reasons")
+        # It can happen that the API response and the CLI response return different sets of checks.
+        # For example tool A (API) might have checks X, Y, Z while tool B (CLI) might have checks X, Y, W.
+        # When we convert these to DataFrames and save to CSV, the missing check W for tool A will be
+        # NaN in the scores and reasons DataFrames. Similarly, for the missing check Z for tool B.
+        # Hence, we fill missing values with "N/A" and convert
+        # all to string before saving to CSV to ensure consistent formatting.
+        pd.DataFrame(score_rows).fillna("N/A").astype(str).sort_values("id").to_csv(
+            scores_path, index=False
+        )
+        pd.DataFrame(reason_rows).fillna("N/A").astype(str).sort_values("id").to_csv(
+            reasons_path, index=False
+        )
+        LOGGER.info(f"Saved scorecard results to {scores_path} and {reasons_path}")
 
     if not score_rows or not reason_rows:
         raise ValueError("No scorecard results were collected.")
@@ -355,7 +359,7 @@ def _get_scorecard_data(
     """Retrieve scorecard data using fallback strategy (API → CLI → CSV).
 
     Parameters
-    ----------
+    -----------
     url : str
         Repository URL to fetch scorecard data for.
     tool_name : str
@@ -366,7 +370,7 @@ def _get_scorecard_data(
         DataFrame with existing reasons, indexed by tool name. Used as fallback.
 
     Returns:
-    -------
+    --------
     tuple[float, pd.DataFrame] or None
         A tuple of (aggregated_score, checks_df) where aggregated_score is a
         float and checks_df is a DataFrame with 'name', 'score', and 'reason'
@@ -404,7 +408,7 @@ def _append_scorecard_rows(
     dictionaries ready to be appended to result lists.
 
     Parameters
-    ----------
+    -----------
     tool_name : str
         Identifier of the tool/repository.
     url : str
@@ -417,7 +421,7 @@ def _append_scorecard_rows(
         processing.
 
     Returns:
-    -------
+    --------
     tuple[dict, dict]
         A tuple of (score_row, reason_row) where:
         - score_row contains 'id', 'html_url', 'aggregated_score', and
@@ -426,7 +430,7 @@ def _append_scorecard_rows(
           prefixed with 'Reason '.
 
     Notes:
-    -----
+    ------
     Check reasons are capitalized. Missing values are filled with 'N/A'
     during CSV export by the caller.
     """
@@ -448,38 +452,6 @@ def _append_scorecard_rows(
     reason_row = {"id": tool_name, "html_url": url, **check_reasons}
 
     return score_row, reason_row
-
-
-def _write_batch_to_csv(rows: list[dict], path: Path, file_type: str) -> None:
-    """Write a batch of rows to CSV, appending if file exists.
-
-    Parameters
-    ------------
-    rows : list[dict]
-        List of dictionaries representing rows to write to CSV.
-    path : Path
-        The path to the CSV file to write to.
-    file_type : str
-        A string indicating the type of file being written (e.g., "scores" or "reasons") for logging purposes.
-    """
-    if not rows:
-        return
-
-    # It can happen that the API response and the CLI response return different sets of checks.
-    # For example tool A (API) might have checks X, Y, Z while tool B (CLI) might have checks X, Y, W.
-    # When we convert these to DataFrames and save to CSV, the missing check W for tool A will be
-    # NaN in the scores and reasons DataFrames. Similarly, for the missing check Z for tool B.
-    # Hence, we fill missing values with "N/A" and convert
-    # all to string before saving to CSV to ensure consistent formatting.
-    df = pd.DataFrame(rows).fillna("N/A").astype(str)
-
-    df.to_csv(
-        path,
-        mode="a",
-        header=not path.exists(),  # Write header only if file doesn't exist
-        index=False,
-    )
-    LOGGER.info(f" ---> Written {len(rows)} rows to {file_type} CSV")
 
 
 @click.command()

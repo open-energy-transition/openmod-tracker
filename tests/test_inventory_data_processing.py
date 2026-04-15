@@ -43,6 +43,7 @@ class TestInventoryUtil:
         assert result["full_name"].casefold() == "pypsa/pypsa"
         assert result["created_at"] == "2023-05-09T10:34:52.973Z"
 
+
 class TestGetStats:
     """Test suite for get_stats functions."""
 
@@ -118,6 +119,7 @@ class TestGetStats:
             result = get_stats._get_number_of_maintainers(TEST_URL)
             assert isinstance(result, int)
             assert result == expected
+
 
 class TestGetScores:
     """Test suite for get_scores.py functions."""

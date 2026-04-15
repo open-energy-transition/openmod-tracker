@@ -162,7 +162,7 @@ def get_scorecard_from_api(url: str) -> tuple[float | None, pd.DataFrame] | None
     url : str
         The repository URL to retrieve the scorecard for.
 
-    Returns
+    Returns:
     -------
     pandas.DataFrame| None
         A DataFrame containing the scorecard data if found, or None if not found in either source.

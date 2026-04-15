@@ -26,7 +26,9 @@ get_scores = load_module_from_file(INVENTORY_DIR / "get_scores.py", "get_scores"
 @pytest.fixture
 def ecosystems_issue_api():
     """Skip test if ecosystems API is unavailable."""
-    response = requests.get(util.ECOSYSTEMS_ISSUES_LOOKUP_API + TEST_URL, timeout=5)
+    response = requests.get(
+        util.ECOSYSTEMS_ISSUES_LOOKUP_API + TEST_URL_GITHUB, timeout=5
+    )
     if response.status_code != 200:
         pytest.skip(
             f"Ecosystems issues API unavailable (status {response.status_code})"
@@ -38,7 +40,7 @@ class TestInventoryUtil:
 
     def test_get_ecosystems_data(self, ecosystems_issue_api) -> None:
         """Test get_ecosystems_issues_data function."""
-        result = util.get_ecosystems_issues_data(TEST_URL)
+        result = util.get_ecosystems_issues_data(TEST_URL_GITHUB)
         assert isinstance(result, dict)
         assert result["full_name"].casefold() == "pypsa/pypsa"
         assert result["created_at"] == "2023-05-09T10:34:52.973Z"
@@ -116,7 +118,7 @@ class TestGetStats:
         with patch.object(
             get_stats.util, "get_ecosystems_issues_data", return_value=mock_response
         ):
-            result = get_stats._get_number_of_maintainers(TEST_URL)
+            result = get_stats._get_number_of_maintainers(TEST_URL_GITHUB)
             assert isinstance(result, int)
             assert result == expected
 

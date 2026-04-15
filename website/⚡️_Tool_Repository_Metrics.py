@@ -69,7 +69,7 @@ COLUMN_HELP: dict[str, str] = {
     "Updated": "Most recent repository commit",
     "Stars": "Repository bookmarks",
     "Contributors": "All-time source code contributors",
-    "Active Maintainers": "Active maintainers of the source code",
+    "Active Maintainers": "Maintainers currently engaged with the project, defined as those with recent contributions (past year).",
     "DDS": "Development distribution score (the bigger the number the better, 0 means only one contributor. [Click for more info](https://report.opensustain.tech/chapters/development-distribution-score))",
     "Forks": "Number of Git forks",
     "Dependents": "Packages dependent on this project (only available if the project is indexed on a package repository)",

@@ -225,9 +225,9 @@ def _get_number_of_maintainers(url: str) -> int:
 
     if maintainers:
         LOGGER.warning(
-            f"No active maintainers for {url}, falling back to {len(maintainers)} total maintainers"
+            f"No active maintainers for {url}, but {len(maintainers)} maintainers listed in ecosyste.ms issues data."
         )
-        return len(maintainers)
+        return 0
 
     LOGGER.debug(f"No active or inactive maintainers found for {url}")
     return -1

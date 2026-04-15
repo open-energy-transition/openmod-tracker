@@ -99,7 +99,7 @@ class TestGetStats:
                     "maintainers": MOCK_ECOSYSTEMS_RESPONSE["maintainers"],
                     "active_maintainers": [],
                 },
-                5,
+                0,
             ),  # no active -> fallback to maintainers
             (
                 {"maintainers": [], "active_maintainers": []},

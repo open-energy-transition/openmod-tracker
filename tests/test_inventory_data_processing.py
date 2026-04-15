@@ -5,6 +5,7 @@
 """Inventory test suite."""
 
 from pathlib import Path
+from unittest.mock import patch
 
 import pytest
 import requests
@@ -44,8 +45,75 @@ class TestInventoryUtil:
 class TestGetStats:
     """Test suite for get_stats functions."""
 
-    def test_get_number_of_maintainers(self, ecosystems_issue_api) -> None:
-        """Test _get_number_of_maintainers function."""
-        result = get_stats._get_number_of_maintainers(TEST_URL)
-        assert isinstance(result, int)
-        assert result == 5
+    MOCK_ECOSYSTEMS_RESPONSE = {
+        "maintainers": [
+            {
+                "login": "user1",
+                "count": 264,
+                "url": "https://issues.ecosyste.ms/api/v1/hosts/GitHub/authors/user1",
+            },
+            {
+                "login": "user2",
+                "count": 254,
+                "url": "https://issues.ecosyste.ms/api/v1/hosts/GitHub/authors/user2",
+            },
+            {
+                "login": "user3",
+                "count": 140,
+                "url": "https://issues.ecosyste.ms/api/v1/hosts/GitHub/authors/user3",
+            },
+            {
+                "login": "user4",
+                "count": 36,
+                "url": "https://issues.ecosyste.ms/api/v1/hosts/GitHub/authors/user4",
+            },
+            {
+                "login": "user5",
+                "count": 26,
+                "url": "https://issues.ecosyste.ms/api/v1/hosts/GitHub/authors/user5",
+            },
+        ],
+        "active_maintainers": [
+            {
+                "login": "user1",
+                "count": 98,
+                "url": "https://issues.ecosyste.ms/api/v1/hosts/GitHub/authors/user1",
+            },
+            {
+                "login": "user2",
+                "count": 31,
+                "url": "https://issues.ecosyste.ms/api/v1/hosts/GitHub/authors/user2",
+            },
+        ],
+    }
+
+    @pytest.mark.parametrize(
+        ("mock_response", "expected"),
+        [
+            (
+                MOCK_ECOSYSTEMS_RESPONSE,
+                2,
+            ),  # has active_maintainers -> returns len(active_maintainers)
+            (
+                {
+                    "maintainers": MOCK_ECOSYSTEMS_RESPONSE["maintainers"],
+                    "active_maintainers": [],
+                },
+                5,
+            ),  # no active -> fallback to maintainers
+            (
+                {"maintainers": [], "active_maintainers": []},
+                -1,
+            ),  # no maintainers at all
+        ],
+    )
+    def test_get_number_of_maintainers(
+        self, mock_response: dict, expected: int
+    ) -> None:
+        """Test _get_number_of_maintainers function with mocked API response."""
+        with patch.object(
+            get_stats.util, "get_ecosystems_issues_data", return_value=mock_response
+        ):
+            result = get_stats._get_number_of_maintainers(TEST_URL)
+            assert isinstance(result, int)
+            assert result == expected

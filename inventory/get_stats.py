@@ -182,13 +182,19 @@ def _get_nested_dict_entry(
 def _get_number_of_maintainers(url: str) -> int:
     """Get the number of active maintainers for a repository from ecosyste.ms issues API.
 
-    Args:
-        url (str): Repository URL.
+    Parameters
+    ------------
+    url: str
+        Repository URL.
 
     Returns:
-        int: Number of active maintainers. Returns -1 if data is unavailable.
-            Returns 0 if there are no active maintainers, and a positive integer for the
-            number of active maintainers if data is available.
+    --------
+    int
+        Number of active maintainers. Returns -1 if data is unavailable.
+        Returns 0 if there are no active maintainers, and a positive integer for the
+        number of active maintainers if data is available.
+         If there are no active maintainers but maintainers are listed,
+        returns the number of maintainers listed (with a warning).
     """
     try:
         issues_data = util.get_ecosystems_issues_data(url)
@@ -202,15 +208,29 @@ def _get_number_of_maintainers(url: str) -> int:
 
     try:
         active_maintainers = issues_data["active_maintainers"]
-    except (IndexError, KeyError, TypeError) as e:
+    except (KeyError, TypeError) as e:
         LOGGER.warning(f"Unexpected issues data structure for {url}: {e}")
         return -1
 
-    if not active_maintainers:
-        LOGGER.debug(f"No active maintainers found for {url}")
-        return 0
+    # If active_maintainers is not empty, return its count
+    if active_maintainers:
+        return len(active_maintainers)
 
-    return len(active_maintainers)
+    # active_maintainers is empty, try fallback to all maintainers
+    try:
+        maintainers = issues_data["maintainers"]
+    except (KeyError, TypeError) as e:
+        LOGGER.debug(f"Could not find maintainers field for {url}: {e}")
+        return -1
+
+    if maintainers:
+        LOGGER.warning(
+            f"No active maintainers for {url}, falling back to {len(maintainers)} total maintainers"
+        )
+        return len(maintainers)
+
+    LOGGER.debug(f"No active or inactive maintainers found for {url}")
+    return -1
 
 
 def _get_package_data(url: str) -> dict:

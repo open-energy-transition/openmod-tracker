@@ -1,4 +1,5 @@
 id,category,comment
+antares_simulator,"production-cost,power-flow","resource-adequacy"
 andes,"power-flow",
 dispa_set,"production-cost",
 dynawo,"power-flow",

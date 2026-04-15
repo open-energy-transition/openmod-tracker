@@ -29,6 +29,7 @@ ENTRIES_TO_KEEP = [
     "commit_stats.dds",
     "commit_stats.total_committers",
     "homepage",
+    "active_maintainers_count",
 ]
 EXTRA_COLS = [
     "last_month_downloads",
@@ -131,6 +132,8 @@ def get_ecosystems_entry_data(
         for entry in ENTRIES_TO_KEEP:
             if "." in entry:
                 val = _get_nested_dict_entry(repo_data, entry)
+            elif entry == "active_maintainers_count":
+                val = _get_number_of_maintainers(repo_data["html_url"])
             else:
                 val = repo_data[entry]
             repo_data_to_keep[entry] = val
@@ -174,6 +177,60 @@ def _get_nested_dict_entry(
     else:
         val = subdict.get(key_2, None)
     return val
+
+
+def _get_number_of_maintainers(url: str) -> int:
+    """Get the number of active maintainers for a repository from ecosyste.ms issues API.
+
+    Parameters
+    ------------
+    url: str
+        Repository URL.
+
+    Returns:
+    --------
+    int
+        Number of active maintainers. Returns -1 if data is unavailable.
+        Returns 0 if there are no active maintainers, and a positive integer for the
+        number of active maintainers if data is available.
+         If there are no active maintainers but maintainers are listed,
+        returns the number of maintainers listed (with a warning).
+    """
+    try:
+        issues_data = util.get_ecosystems_issues_data(url)
+    except Exception as e:
+        LOGGER.warning(f"Error fetching ecosyste.ms issues data for {url}: {e}")
+        return -1
+
+    if not issues_data or issues_data == "not-found":
+        LOGGER.warning(f"Could not find ecosyste.ms issues entry for {url}")
+        return -1
+
+    try:
+        active_maintainers = issues_data["active_maintainers"]
+    except (KeyError, TypeError) as e:
+        LOGGER.warning(f"Unexpected issues data structure for {url}: {e}")
+        return -1
+
+    # If active_maintainers is not empty, return its count
+    if active_maintainers:
+        return len(active_maintainers)
+
+    # active_maintainers is empty, try fallback to all maintainers
+    try:
+        maintainers = issues_data["maintainers"]
+    except (KeyError, TypeError) as e:
+        LOGGER.debug(f"Could not find maintainers field for {url}: {e}")
+        return -1
+
+    if maintainers:
+        LOGGER.warning(
+            f"No active maintainers for {url}, but {len(maintainers)} maintainers listed in ecosyste.ms issues data."
+        )
+        return 0
+
+    LOGGER.debug(f"No active or inactive maintainers found for {url}")
+    return -1
 
 
 def _get_package_data(url: str) -> dict:

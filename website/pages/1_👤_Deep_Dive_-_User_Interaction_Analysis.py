@@ -26,7 +26,9 @@ def map_repo_to_tool(user_stats_df: pd.DataFrame, repo_col: str) -> list[dict]:
         list[dict]: List of dictionaries mapping repository names to tool names.
     """
     available_repos = set(
-        (",".join(user_stats_df[repo_col].str.lower().values)).split(",")
+        (
+            ",".join(v for v in user_stats_df[repo_col].values if isinstance(v, str))
+        ).split(",")
     )
     tools_df = pd.read_csv(
         Path(__file__).parent.parent.parent / "inventory" / "output" / "filtered.csv"

@@ -29,6 +29,7 @@ COLUMN_NAME_MAPPING: dict[str, str] = {
     "pushed_at": "Updated",
     "stargazers_count": "Stars",
     "commit_stats.total_committers": "Contributors",
+    "active_maintainers_count": "Active Maintainers",
     "commit_stats.dds": "DDS",
     "forks_count": "Forks",
     "dependent_repos_count": "Dependents",
@@ -45,6 +46,7 @@ COLUMN_DTYPES: dict[str, Callable] = {
     "updated_at": pd.to_datetime,
     "stargazers_count": pd.to_numeric,
     "commit_stats.total_committers": pd.to_numeric,
+    "active_maintainers_count": pd.to_numeric,
     "commit_stats.dds": lambda x: 100 * pd.to_numeric(x),
     "forks_count": pd.to_numeric,
     "dependent_repos_count": pd.to_numeric,
@@ -61,6 +63,7 @@ NUMBER_FORMAT: dict[str, str] = {
     "Forks": "localized",
     "Dependents": "localized",
     "1 Month Downloads": "localized",
+    "Active Maintainers": "localized",
     "OSSF Score": "localized",
 }
 
@@ -69,6 +72,7 @@ COLUMN_HELP: dict[str, str] = {
     "Updated": "Most recent repository commit",
     "Stars": "Repository bookmarks",
     "Contributors": "All-time source code contributors",
+    "Active Maintainers": "Maintainers currently engaged with the project, defined as those with recent contributions (past year).",
     "DDS": "Development distribution score (the bigger the number the better, 0 means only one contributor. [Click for more info](https://report.opensustain.tech/chapters/development-distribution-score))",
     "Forks": "Number of Git forks",
     "Dependents": "Packages dependent on this project (only available if the project is indexed on a package repository)",
@@ -170,6 +174,12 @@ def create_vis_table(tool_stats_dir: Path, user_stats_dir: Path) -> pd.DataFrame
 
     for col, dtype_func in COLUMN_DTYPES.items():
         df[col] = dtype_func(df[col])
+
+    # Replace 0 and -1 values in "active_maintainers_count" with NaN.
+    df["active_maintainers_count"] = df["active_maintainers_count"].replace(
+        {0: np.nan, -1: np.nan}
+    )
+
     df["Docs"] = (
         docs_df["pages"]
         .fillna(docs_df["rtd"])

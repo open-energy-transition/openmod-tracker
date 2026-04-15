@@ -13,6 +13,9 @@ import requests
 import yaml
 
 ECOSYSTEMS_REPO_LOOKUP_API = "https://repos.ecosyste.ms/api/v1/repositories/lookup?url="
+ECOSYSTEMS_ISSUES_LOOKUP_API = (
+    "https://issues.ecosyste.ms/api/v1/repositories/lookup?url="
+)
 ECOSYSTEMS_PACKAGES_LOOKUP_API = (
     "https://packages.ecosyste.ms/api/v1/packages/lookup?repository_url="
 )
@@ -111,6 +114,21 @@ def get_ecosystems_package_data(url: str) -> requests.Response:
         ]
 
     return package_data
+
+
+def get_ecosystems_issues_data(url: str) -> list[dict] | dict | str | None:
+    """Get issues lookup API call response from ecosyste.ms based on the provided repo URL.
+
+    Args:
+        url (str): Git repo URL.
+
+    Returns:
+        list[dict] | dict | str | None:
+        Content of data for packages linked to `url`.
+    """
+    safe_query = get_safe_url_string(url)
+    issue_data = get_ecosystems_data(ECOSYSTEMS_ISSUES_LOOKUP_API + safe_query)
+    return issue_data
 
 
 def get_safe_url_string(url: str) -> str:

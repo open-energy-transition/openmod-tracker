@@ -196,6 +196,8 @@ def get_scorecard_from_api(url: str) -> tuple[float | None, pd.DataFrame] | None
         LOGGER.warning(f"Error fetching ecosyste.ms repo data for {url}: {e}")
         return None
 
+    return None
+
 
 def get_scorecard_from_cli(url: str) -> str | None:
     """Run the scorecard command for a given repository URL and return the output.

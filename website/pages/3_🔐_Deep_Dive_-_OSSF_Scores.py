@@ -74,16 +74,25 @@ def build_tool_detail_table(
 
     score_row = scores.loc[tool_id]
     reason_row = reasons.loc[tool_id] if tool_id in reasons.index else None
+
+    if isinstance(score_row, pd.DataFrame) or isinstance(reason_row, pd.DataFrame):
+        raise ValueError(
+            f"Duplicate rows found for tool_id '{tool_id}' in scores or reasons DataFrame. "
+            "Each tool must appear only once."
+        )
     SCORECARD_DOCS_BASE = "https://github.com/ossf/scorecard/blob/main/docs/checks.md#"
 
     rows = []
     for check in check_cols:
         raw_score = score_row.get(check, "?")
-
-        if str(raw_score).strip() in ("-1", "?", "N/A", ""):
+        try:
+            val = float(raw_score)
+            if val < 0 or pd.isna(val):
+                display_val = "None"
+            else:
+                display_val = str(int(val)).strip()
+        except (ValueError, TypeError):
             display_val = "None"
-        else:
-            display_val = str(int(raw_score)).strip()
 
         cell_style = score_to_gradient(display_val)
 

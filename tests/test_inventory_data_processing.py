@@ -21,7 +21,9 @@ TEST_URL = "https://github.com/pypsa/pypsa"
 # Import modules
 util = load_module_from_file(INVENTORY_DIR / "util.py", "util")
 get_stats = load_module_from_file(INVENTORY_DIR / "get_stats.py", "get_stats")
-get_download_data = load_module_from_file(INVENTORY_DIR / "get_download_data.py", "get_download_data")
+get_download_data = load_module_from_file(
+    INVENTORY_DIR / "get_download_data.py", "get_download_data"
+)
 
 
 @pytest.fixture
@@ -121,9 +123,9 @@ class TestGetStats:
             assert isinstance(result, int)
             assert result == expected
 
+
 class TestGetDownloadData:
     """Test suite for get_download_data functions."""
-
 
     @pytest.mark.parametrize(
         "value,expected",

@@ -1,29 +1,29 @@
+# SPDX-FileCopyrightText: openmod-tracker contributors
+#
+# SPDX-License-Identifier: MIT
+
+"""Get download trends for the repository packages."""
+
 from pathlib import Path
 
 import click
 import pandas as pd
 import util
-from colorama import reinit
 from pandas import Series
 from tqdm import tqdm
 
-COLS = [
-    "id",
-    "html_url",
-    "pypi_package_url",
-    "pypi_package_name",
-]
+COLS = ["id", "html_url", "pypi_package_url", "pypi_package_name"]
+
 
 def get_pypi_package_info(url: str) -> tuple[str | None, str | None]:
-    """
-    Get the PyPI package URL from the repository URL.
+    """Get the PyPI package URL from the repository URL.
 
     Parameters
     -----------
     url : str
         Repository URL.
 
-    Returns
+    Returns:
     --------
     tuple[str | None, str | None]
         Tuple of (package_url, package_name), or (None, None) if not found.
@@ -38,9 +38,9 @@ def get_pypi_package_info(url: str) -> tuple[str | None, str | None]:
         return registry_url, package_name
     return None, None
 
+
 def _is_populated(row: Series, col: str) -> bool:
-    """
-    Check if a DataFrame cell is non-null and non-empty.
+    """Check if a DataFrame cell is non-null and non-empty.
 
     Parameters
     ----------
@@ -49,7 +49,7 @@ def _is_populated(row: Series, col: str) -> bool:
     col : str
         The column name to check.
 
-    Returns
+    Returns:
     -------
     bool
         True if the cell is non-null and contains non-whitespace content,
@@ -85,24 +85,30 @@ def cli(stats_file: Path, out_path: Path):
     stats_df = pd.read_csv(stats_file, usecols=["id", "html_url"])
 
     rows_out = []
-    for _, row in tqdm(stats_df.iterrows(), total=len(stats_df), desc="Collecting package downloads"):
+    for _, row in tqdm(
+        stats_df.iterrows(), total=len(stats_df), desc="Collecting package downloads"
+    ):
         tool_id = row["id"]
 
         # Use cached data if complete
         if tool_id in existing_by_id:
             existing_row = existing_by_id[tool_id]
-            if _is_populated(existing_row, "pypi_package_url") and _is_populated(existing_row, "pypi_package_name"):
+            if _is_populated(existing_row, "pypi_package_url") and _is_populated(
+                existing_row, "pypi_package_name"
+            ):
                 rows_out.append(existing_row.to_dict())
                 continue
 
         # Fetch missing data
         pypi_url, pypi_name = get_pypi_package_info(row["html_url"])
-        rows_out.append({
-            "id": tool_id,
-            "html_url": row["html_url"],
-            "pypi_package_url": pypi_url,
-            "pypi_package_name": pypi_name,
-        })
+        rows_out.append(
+            {
+                "id": tool_id,
+                "html_url": row["html_url"],
+                "pypi_package_url": pypi_url,
+                "pypi_package_name": pypi_name,
+            }
+        )
 
     pd.DataFrame(rows_out, columns=COLS).to_csv(out_path, index=False)
 

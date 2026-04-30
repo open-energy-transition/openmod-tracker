@@ -7,6 +7,8 @@
 from pathlib import Path
 from unittest.mock import patch
 
+import numpy as np
+import pandas as pd
 import pytest
 import requests
 from conftest import load_module_from_file
@@ -19,6 +21,7 @@ TEST_URL = "https://github.com/pypsa/pypsa"
 # Import modules
 util = load_module_from_file(INVENTORY_DIR / "util.py", "util")
 get_stats = load_module_from_file(INVENTORY_DIR / "get_stats.py", "get_stats")
+get_download_data = load_module_from_file(INVENTORY_DIR / "get_download_data.py", "get_download_data")
 
 
 @pytest.fixture
@@ -117,3 +120,28 @@ class TestGetStats:
             result = get_stats._get_number_of_maintainers(TEST_URL)
             assert isinstance(result, int)
             assert result == expected
+
+class TestGetDownloadData:
+    """Test suite for get_download_data functions."""
+
+
+    @pytest.mark.parametrize(
+        "value,expected",
+        [
+            # Valid cases
+            ("valid_package", True),
+            ("https://pypi.org/project/package", True),
+            # Invalid cases
+            ("", False),
+            ("   ", False),
+            ("\t\n  ", False),
+            (" ", False),
+            (None, False),
+            (np.nan, False),
+            (pd.NA, False),
+        ],
+    )
+    def test_is_populated(self, value, expected):
+        """Test _is_populated with various value types and edge cases."""
+        row = pd.Series({"col": value})
+        assert get_download_data._is_populated(row, "col") is expected

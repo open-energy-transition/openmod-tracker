@@ -46,7 +46,7 @@ energy_py,https://github.com/ADGEfficiency/energy-py,,
 energy_py_linear,https://github.com/ADGEfficiency/energy-py-linear,,
 energymodelsbase_jl,https://github.com/EnergyModelsX/EnergyModelsBase.jl,https://juliahub.com/ui/Packages/General/EnergyModelsBase,EnergyModelsBase
 energyrt,https://github.com/optimal2050/energyRt,,
-energyscope,https://github.com/energyscope/EnergyScope,,
+energyscope,https://github.com/energyscope/EnergyScope,https://pypi.org/project/energyscope,energyscope
 energysim,https://github.com/dgusain1/energysim,https://pypi.org/project/energysim,energysim
 enflow,https://github.com/rebase-energy/enflow,https://pypi.org/project/enflow,enflow
 eoles_elecres,https://github.com/BehrangShirizadeh/EOLES_elecRES,,
@@ -77,14 +77,14 @@ gridlab_d,https://github.com/arras-energy/gridlabd,,
 gridpack,https://github.com/GridOPTICS/GridPACK,,
 gridpath,https://github.com/blue-marble/gridpath,https://pypi.org/project/gridpath,gridpath
 grimsel_flex,https://github.com/arthurrinaldi/grimsel,,
-h2integrate,https://github.com/NatLabRockies/H2Integrate,,
+h2integrate,https://github.com/NatLabRockies/H2Integrate,https://pypi.org/project/h2integrate,h2integrate
 hamlet,https://github.com/tum-ens/HAMLET,,
 heron,https://github.com/idaholab/HERON,https://pypi.org/project/heron-ravenframework,heron-ravenframework
 highres_europe,https://github.com/highRES-model/highRES-Europe,,
 hope,https://github.com/HOPE-Model-Project/HOPE,,
-hopp,https://github.com/NatLabRockies/HOPP,,
+hopp,https://github.com/NatLabRockies/HOPP,https://pypi.org/project/hopp,hopp
 hybrid,https://github.com/idaholab/HYBRID,,
-hybridbosse,https://github.com/NatLabRockies/HybridBOSSE,,
+hybridbosse,https://github.com/NatLabRockies/HybridBOSSE,https://pypi.org/project/hybridbosse,hybridbosse
 hydrogenmod_jl,https://github.com/LukasBarner/HydrOGEnMod.jl,,
 idea,https://gitlab.com/sesit/idea,,
 iesopt_jl,https://github.com/ait-energy/IESopt.jl,https://juliahub.com/ui/Packages/General/IESopt,IESopt

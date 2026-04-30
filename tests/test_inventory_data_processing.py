@@ -128,7 +128,7 @@ class TestGetDownloadData:
     """Test suite for get_download_data functions."""
 
     @pytest.mark.parametrize(
-        "value,expected",
+        ("value", "expected"),
         [
             # Valid cases
             ("valid_package", True),

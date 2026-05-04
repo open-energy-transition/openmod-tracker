@@ -130,8 +130,8 @@ opender,https://github.com/epri-dev/OpenDER,https://pypi.org/project/opender,ope
 opendss_c,https://github.com/epri-dev/OpenDSS-C,,
 openipsl,https://github.com/OpenIPSL/OpenIPSL,,
 openmaster,https://github.com/IIT-EnergySystemModels/openMASTER,,
-opensduc,https://github.com/IIT-EnergySystemModels/openSDUC,,
-opentepes,https://github.com/IIT-EnergySystemModels/openTEPES,,
+opensduc,https://github.com/IIT-EnergySystemModels/openSDUC,https://pypi.org/project/openSDUC,openSDUC
+opentepes,https://github.com/IIT-EnergySystemModels/openTEPES,https://pypi.org/project/openTEPES,openTEPES
 opentumflex,https://github.com/tum-ewk/OpenTUMFlex,,
 optihood,https://github.com/SPF-OST/optihood,,
 osemosys,https://github.com/OSeMOSYS/OSeMOSYS,,

@@ -120,7 +120,7 @@ nemomod_jl,https://github.com/sei-international/NemoMod.jl,,
 nempy,https://github.com/UNSW-CEEM/nempy,https://pypi.org/project/nempy,nempy
 oemof_solph,https://github.com/oemof/oemof-solph,https://pypi.org/project/oemof.solph,oemof.solph
 oemof_thermal,https://github.com/oemof/oemof-thermal,https://pypi.org/project/oemof.thermal,oemof.thermal
-omegalpes,https://gricad-gitlab.univ-grenoble-alpes.fr/omegalpes/omegalpes,,
+omegalpes,https://gricad-gitlab.univ-grenoble-alpes.fr/omegalpes/omegalpes,https://pypi.org/project/omegalpes,omegalpes
 onsset,https://github.com/OnSSET/onsset,https://pypi.org/project/onsset,onsset
 open,https://github.com/EPGOxford/OPEN,,
 open_energy_cell_simulation,https://github.com/fabmid/Open-Energy-Cell-Simulation,,

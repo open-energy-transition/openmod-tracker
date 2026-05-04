@@ -23,7 +23,7 @@ def get_pypi_package_info(url: str) -> tuple[str | None, str | None]:
     url : str
         Repository URL.
 
-    Returns:
+    Returns
     --------
     tuple[str | None, str | None]
         Tuple of (package_url, package_name), or (None, None) if not found.

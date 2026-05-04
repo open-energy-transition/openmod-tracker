@@ -12,7 +12,7 @@ import util
 from pandas import Series
 from tqdm import tqdm
 
-COLS = ["id", "html_url", "pypi_package_url", "pypi_package_name"]
+COLS = ["id", "html_url", "pypi_package_url", "pypi_package_name","other_source"]
 
 
 def get_pypi_package_info(url: str) -> tuple[str | None, str | None]:

@@ -155,9 +155,9 @@ pras,https://github.com/NatLabRockies/PRAS,,
 prep_shot,https://github.com/PREP-NexT/PREP-SHOT,,
 psatools_python,https://github.com/yanzhaochang/PSATools-Python,,
 psp_ufu,https://github.com/Thales1330/PSP,,
-psst,https://github.com/ames-market/psst,,
-pycity_scheduling,https://git.rwth-aachen.de/acs/public/simulation/pycity_scheduling,,
-pyetm,https://github.com/quintel/pyetm,,
+psst,https://github.com/ames-market/psst,https://pypi.org/project/psst,psst
+pycity_scheduling,https://git.rwth-aachen.de/acs/public/simulation/pycity_scheduling,https://pypi.org/project/pycity-scheduling,pycity-scheduling
+pyetm,https://github.com/quintel/pyetm,https://pypi.org/project/pyetm,pyetm
 pylesa,https://github.com/andrewlyden/PyLESA,,
 pymarket,https://github.com/kiedanski/pymarket,,
 pymfm,https://github.com/sogno-platform/pymfm,https://pypi.org/project/pymfm,pymfm
@@ -185,7 +185,7 @@ rodeo,https://github.com/NatLabRockies/RODeO,,
 roseau_load_flow,https://github.com/RoseauTechnologies/Roseau_Load_Flow,https://pypi.org/project/roseau-load-flow,roseau-load-flow
 rumi,https://github.com/prayas-energy/Rumi,,
 rustpower,https://github.com/chengts95/rustpower,https://crates.io/crates/rustpower-sol-klu,rustpower-sol-klu
-sam,https://github.com/NatLabRockies/SAM,,
+sam,https://github.com/NatLabRockies/SAM,https://pypi.org/project/NREL-PySAM,NREL-PySAM
 sddpdso_jl,https://github.com/psrenergy/SDDPDSO.jl,,
 silver,https://gitlab.com/sesit/silver,,
 simona,https://github.com/ie3-institute/simona,,
@@ -197,7 +197,7 @@ spineopt_jl,https://github.com/spine-tools/SpineOpt.jl,https://juliahub.com/ui/P
 ssmd,https://git.rwth-aachen.de/acs/public/simulation/ssmd,,
 starlite,https://github.com/IIT-EnergySystemModels/StarLite,,
 stelmod,https://github.com/frkunz/stELMOD,,
-steps,https://github.com/changgang/steps,,
+steps,https://github.com/changgang/steps,https://pypi.org/project/stepspy,stepspy
 supergrid,https://github.com/niclasmattsson/Supergrid,,
 sustaingym,https://github.com/chrisyeh96/sustaingym,https://pypi.org/project/sustaingym,sustaingym
 switch,https://github.com/switch-model/switch,https://anaconda.org/conda-forge/switch_model,switch_model

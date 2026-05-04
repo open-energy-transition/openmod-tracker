@@ -88,7 +88,7 @@ hybridbosse,https://github.com/NatLabRockies/HybridBOSSE,https://pypi.org/projec
 hydrogenmod_jl,https://github.com/LukasBarner/HydrOGEnMod.jl,,,
 idea,https://gitlab.com/sesit/idea,,,
 iesopt_jl,https://github.com/ait-energy/IESopt.jl,https://pypi.org/project/iesopt,iesopt,https://juliahub.com/ui/Packages/General/IESopt
-inertia,https://github.com/G-PST/inertia,,,https://pkg.go.dev/github.com/G-PST/inertia,
+inertia,https://github.com/G-PST/inertia,,,https://pkg.go.dev/github.com/G-PST/inertia
 interactive_power_flow_(ipf),https://github.com/mbheinen/bpa-ipf-tsp,,,
 inve2st,https://github.com/CSenkpiel/Inve2st,,,
 irena_flextool,https://github.com/irena-flextool/flextool,,,

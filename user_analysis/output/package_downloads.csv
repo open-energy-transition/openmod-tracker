@@ -76,7 +76,7 @@ gridfm,https://github.com/gridfm/gridfm-graphkit,https://pypi.org/project/gridfm
 gridlab_d,https://github.com/arras-energy/gridlabd,,
 gridpack,https://github.com/GridOPTICS/GridPACK,,
 gridpath,https://github.com/blue-marble/gridpath,https://pypi.org/project/gridpath,gridpath
-grimsel_flex,https://github.com/arthurrinaldi/grimsel,,
+grimsel_flex,https://github.com/arthurrinaldi/grimsel,https://pypi.org/project/Grimsel,Grimsel
 h2integrate,https://github.com/NatLabRockies/H2Integrate,https://pypi.org/project/h2integrate,h2integrate
 hamlet,https://github.com/tum-ens/HAMLET,,
 heron,https://github.com/idaholab/HERON,https://pypi.org/project/heron-ravenframework,heron-ravenframework
@@ -100,7 +100,7 @@ lego,https://github.com/IEE-TUGraz/LEGO,,
 macroenergy_jl,https://github.com/macroenergy/MacroEnergy.jl,https://juliahub.com/ui/Packages/General/MacroEnergy,MacroEnergy
 mafrit,https://github.com/NatLabRockies/MAFRIT,,
 match_model,https://github.com/pencleanenergy/MATCH-model,,
-matpower,https://github.com/MATPOWER/matpower,,
+matpower,https://github.com/MATPOWER/matpower,https://pypi.org/project/matpower,matpower
 medea,https://github.com/inwe-boku/medea,,
 mescal,https://github.com/matthieu-str/mescal,https://pypi.org/project/mescal,mescal
 mesmo,https://github.com/mesmo-dev/mesmo,,
@@ -114,12 +114,12 @@ mosaik,https://gitlab.com/mosaik/mosaik,https://pypi.org/project/mosaik,mosaik
 most,https://github.com/MATPOWER/most,,
 multi_vector_simulator,https://github.com/rl-institut/multi-vector-simulator,https://pypi.org/project/multi-vector-simulator,multi-vector-simulator
 muse2,https://github.com/EnergySystemsModellingLab/MUSE2,https://crates.io/crates/muse2,muse2
-muse_os,https://github.com/EnergySystemsModellingLab/MUSE_OS,,
-nemo,https://github.com/bje-/NEMO,,
+muse_os,https://github.com/EnergySystemsModellingLab/MUSE_OS,https://pypi.org/project/MUSE-OS,MUSE-OS
+nemo,https://github.com/bje-/NEMO,https://pypi.org/project/nemopt,nemopt
 nemomod_jl,https://github.com/sei-international/NemoMod.jl,,
 nempy,https://github.com/UNSW-CEEM/nempy,https://pypi.org/project/nempy,nempy
 oemof_solph,https://github.com/oemof/oemof-solph,https://pypi.org/project/oemof.solph,oemof.solph
-oemof_thermal,https://github.com/oemof/oemof-thermal,,
+oemof_thermal,https://github.com/oemof/oemof-thermal,https://pypi.org/project/oemof.thermal,oemof.thermal
 omegalpes,https://gricad-gitlab.univ-grenoble-alpes.fr/omegalpes/omegalpes,,
 onsset,https://github.com/OnSSET/onsset,https://pypi.org/project/onsset,onsset
 open,https://github.com/EPGOxford/OPEN,,

@@ -159,7 +159,7 @@ psst,https://github.com/ames-market/psst,https://pypi.org/project/psst,psst
 pycity_scheduling,https://git.rwth-aachen.de/acs/public/simulation/pycity_scheduling,https://pypi.org/project/pycity-scheduling,pycity-scheduling
 pyetm,https://github.com/quintel/pyetm,https://pypi.org/project/pyetm,pyetm
 pylesa,https://github.com/andrewlyden/PyLESA,,
-pymarket,https://github.com/kiedanski/pymarket,,
+pymarket,https://github.com/kiedanski/pymarket,https://pypi.org/project/pymarket,pymarket
 pymfm,https://github.com/sogno-platform/pymfm,https://pypi.org/project/pymfm,pymfm
 pymicrogridcontrol,https://github.com/soheilmohseni/pyMicrogridControl,,
 pypower,https://github.com/rwl/PYPOWER,https://pypi.org/project/pypower,pypower
@@ -173,7 +173,7 @@ python_microgrid,https://github.com/ahalev/python-microgrid,https://pypi.org/pro
 reeds_2_0,https://github.com/NatLabRockies/ReEDS-2.0,,
 reho,https://github.com/IPESE/REHO,https://pypi.org/project/reho,reho
 reise_jl,https://github.com/Breakthrough-Energy/REISE.jl,,
-remix,https://gitlab.com/dlr-ve/esy/remix/framework,,
+remix,https://gitlab.com/dlr-ve/esy/remix/framework,https://pypi.org/project/remix.framework,remix.framework
 renpass,https://github.com/fraukewiese/renpass,,
 reopt_jl,https://github.com/NatLabRockies/REopt.jl,https://juliahub.com/ui/Packages/General/REopt,REopt
 resie,https://github.com/QuaSi-Software/resie,,

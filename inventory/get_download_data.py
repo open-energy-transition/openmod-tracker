@@ -134,14 +134,16 @@ def enrich_with_monthly_downloads(
     stats = stats.dropna(subset=["month", "_join_pkg"])
     stats["month_col"] = stats["month"].dt.strftime("%Y-%m")
 
-    # This makes sure that each package-month pair appears uniquely.
-    # If two occurrences happen sum them up. Potential duplicates would
-    # make the pivot fail.
-    stats_agg = stats.groupby(["_join_pkg", "month_col"], as_index=False)[
-        "num_downloads"
-    ].sum()
+    # Check whether some package-month appears more than once.
+    # Potential duplicates would make the pivot fail.
+    dup_mask = stats.duplicated(subset=["_join_pkg", "month_col"], keep=False)
+    if dup_mask.any():
+        raise ValueError(
+            "Duplicate package-month rows found in download stats; expected unique pairs "
+            "of (project, month)."
+        )
 
-    wide = stats_agg.pivot(
+    wide = stats.pivot(
         index="_join_pkg", columns="month_col", values="num_downloads"
     ).reset_index()
 

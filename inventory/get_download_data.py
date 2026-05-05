@@ -9,6 +9,7 @@ from pathlib import Path
 import click
 import pandas as pd
 import util
+from google.cloud import bigquery
 from pandas import Series
 from tqdm import tqdm
 
@@ -49,7 +50,7 @@ def _is_populated(row: Series, col: str) -> bool:
     col : str
         The column name to check.
 
-    Returns:
+    Returns
     -------
     bool
         True if the cell is non-null and contains non-whitespace content,
@@ -57,6 +58,99 @@ def _is_populated(row: Series, col: str) -> bool:
     """
     return bool(pd.notna(row[col]) and str(row[col]).strip() != "")
 
+def query_file_downloads(package_name_list: list[str], bigquery_project_name: str ="compute-app-427709 ") -> pd.DataFrame:
+    """
+    Perform the BigQuery query to get the number of downloads for each package in the list over the past year, grouped by month and project.
+
+    Parameters
+    ------------
+    package_name_list : list[str]
+        List of package names to query.
+    bigquery_project_name : str, optional
+        The BigQuery project name, by default "compute-app-427709".
+
+    Returns
+    --------
+    pd.DataFrame
+        DataFrame containing the number of downloads for each package, grouped by month and project.
+    """
+
+    # Create a BigQuery client
+    client = bigquery.Client(project=bigquery_project_name)
+
+    query = """
+    SELECT
+      COUNT(*) AS num_downloads,
+      DATE_TRUNC(DATE(timestamp), MONTH) AS `month`,
+      file.project AS `project`
+    FROM `bigquery-public-data.pypi.file_downloads`
+    WHERE
+      details.ci is NULL
+      AND DATE(timestamp)
+        BETWEEN DATE_TRUNC(DATE_SUB(CURRENT_DATE(), INTERVAL 1 YEAR), MONTH)
+        AND CURRENT_DATE()
+      AND file.project IN UNNEST(@projects)
+    GROUP BY `month`, `project`
+    ORDER BY `month` DESC
+    """
+    job_config = bigquery.QueryJobConfig(
+        query_parameters=[
+            bigquery.ArrayQueryParameter("projects", "STRING", package_name_list),
+        ]
+    )
+    query_job = client.query(query, job_config=job_config)
+    df = query_job.to_dataframe()
+    return df
+
+def enrich_with_monthly_downloads(
+    download_df: pd.DataFrame, download_stats_df: pd.DataFrame
+) -> pd.DataFrame:
+    """
+    Add monthly download columns (wide format) to each tool row.
+
+    Parameters
+    ----------
+    download_df : pd.DataFrame
+        DataFrame containing the base download data.
+    download_stats_df : pd.DataFrame
+        DataFrame containing the monthly download statistics.
+
+    Returns
+    --------
+    pd.DataFrame
+        DataFrame containing the monthly download statistics.
+    """
+    base = download_df.copy()
+    stats = download_stats_df.copy()
+
+    # Keep original package names untouched; normalize only helper join keys
+    base["_join_pkg"] = (
+        base["pypi_package_name"].astype("string").str.casefold().str.strip()
+    )
+    stats["_join_pkg"] = stats["project"].astype("string").str.casefold().str.strip()
+
+    stats["month"] = pd.to_datetime(stats["month"], errors="coerce")
+    stats = stats.dropna(subset=["month", "_join_pkg"])
+    stats["month_col"] = stats["month"].dt.strftime("%Y-%m")
+
+    stats_agg = (
+        stats.groupby(["_join_pkg", "month_col"], as_index=False)["num_downloads"].sum()
+    )
+
+    wide = stats_agg.pivot(
+        index="_join_pkg", columns="month_col", values="num_downloads"
+    ).reset_index()
+
+    month_cols = sorted([c for c in wide.columns if c != "_join_pkg"], reverse=True)
+    wide = wide[["_join_pkg", *month_cols]]
+
+    enriched = base.merge(
+        wide,
+        how="left",
+        on="_join_pkg",
+    ).drop(columns=["_join_pkg"])
+
+    return enriched
 
 @click.command()
 @click.option(
@@ -71,7 +165,20 @@ def _is_populated(row: Series, col: str) -> bool:
     help="Output path for the user interactions data file.",
     default="user_analysis/output/package_downloads.csv",
 )
-def cli(stats_file: Path, out_path: Path):
+@click.option(
+    "--use_bigquery",
+    type=bool,
+    is_flag=True,
+    default=False,
+    help="Query BigQuery for the package downloads programmatically.",
+)
+@click.option(
+    "--pypi-path",
+    type=click.Path(exists=False, dir_okay=False, file_okay=True, path_type=Path),
+    help="Path to the CSV file containing the PyPI downloads per month and package..",
+    default="inventory/output/pypi_downloads.csv",
+)
+def cli(stats_file: Path, out_path: Path, use_bigquery: bool, pypi_path: Path) -> None:
     """CLI entry point to collect all users who interact with repositories listed in a stats file."""
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -101,16 +208,34 @@ def cli(stats_file: Path, out_path: Path):
 
         # Fetch missing data
         pypi_url, pypi_name = get_pypi_package_info(row["html_url"])
-        rows_out.append(
-            {
-                "id": tool_id,
-                "html_url": row["html_url"],
-                "pypi_package_url": pypi_url,
-                "pypi_package_name": pypi_name,
-            }
-        )
 
-    pd.DataFrame(rows_out, columns=COLS).to_csv(out_path, index=False)
+        row_data = {
+            "id": tool_id,
+            "html_url": row["html_url"],
+        }
+
+        if pypi_url and pypi_name:
+            if "pypi" in pypi_url:
+                row_data["pypi_package_url"] = pypi_url
+                row_data["pypi_package_name"] = pypi_name
+            else:
+                row_data["other_source"] = pypi_url
+
+        rows_out.append(row_data)
+
+    download_df = pd.DataFrame(rows_out, columns=COLS)
+    package_name_list = list(download_df["pypi_package_name"].str.casefold().unique())
+
+    if use_bigquery:
+        # BigQuery is currently not enable for the GCP project compute-app
+        download_stats_df = query_file_downloads(package_name_list)
+    else:
+        # Process a csv file with the queried data from the BigQuery Web UI
+        download_stats_df = pd.read_csv(pypi_path)
+
+    updated_df = enrich_with_monthly_downloads(download_df, download_stats_df)
+
+    updated_df.to_csv(out_path, index=False)
 
 
 if __name__ == "__main__":

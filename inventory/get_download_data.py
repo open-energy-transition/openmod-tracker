@@ -13,7 +13,7 @@ from google.cloud import bigquery
 from pandas import Series
 from tqdm import tqdm
 
-COLS = ["id", "html_url", "pypi_package_url", "pypi_package_name","other_source"]
+COLS = ["id", "html_url", "pypi_package_url", "pypi_package_name", "other_source"]
 
 
 def get_pypi_package_info(url: str) -> tuple[str | None, str | None]:
@@ -24,7 +24,7 @@ def get_pypi_package_info(url: str) -> tuple[str | None, str | None]:
     url : str
         Repository URL.
 
-    Returns
+    Returns:
     --------
     tuple[str | None, str | None]
         Tuple of (package_url, package_name), or (None, None) if not found.
@@ -50,7 +50,7 @@ def _is_populated(row: Series, col: str) -> bool:
     col : str
         The column name to check.
 
-    Returns
+    Returns:
     -------
     bool
         True if the cell is non-null and contains non-whitespace content,
@@ -58,9 +58,11 @@ def _is_populated(row: Series, col: str) -> bool:
     """
     return bool(pd.notna(row[col]) and str(row[col]).strip() != "")
 
-def query_file_downloads(package_name_list: list[str], bigquery_project_name: str ="compute-app-427709 ") -> pd.DataFrame:
-    """
-    Perform the BigQuery query to get the number of downloads for each package in the list over the past year, grouped by month and project.
+
+def query_file_downloads(
+    package_name_list: list[str], bigquery_project_name: str = "compute-app-427709 "
+) -> pd.DataFrame:
+    """Perform the BigQuery query to get the number of downloads for each package in the list over the past year, grouped by month and project.
 
     Parameters
     ------------
@@ -69,12 +71,11 @@ def query_file_downloads(package_name_list: list[str], bigquery_project_name: st
     bigquery_project_name : str, optional
         The BigQuery project name, by default "compute-app-427709".
 
-    Returns
+    Returns:
     --------
     pd.DataFrame
         DataFrame containing the number of downloads for each package, grouped by month and project.
     """
-
     # Create a BigQuery client
     client = bigquery.Client(project=bigquery_project_name)
 
@@ -95,18 +96,18 @@ def query_file_downloads(package_name_list: list[str], bigquery_project_name: st
     """
     job_config = bigquery.QueryJobConfig(
         query_parameters=[
-            bigquery.ArrayQueryParameter("projects", "STRING", package_name_list),
+            bigquery.ArrayQueryParameter("projects", "STRING", package_name_list)
         ]
     )
     query_job = client.query(query, job_config=job_config)
     df = query_job.to_dataframe()
     return df
 
+
 def enrich_with_monthly_downloads(
     download_df: pd.DataFrame, download_stats_df: pd.DataFrame
 ) -> pd.DataFrame:
-    """
-    Add monthly download columns (wide format) to each tool row.
+    """Add monthly download columns (wide format) to each tool row.
 
     Parameters
     ----------
@@ -115,7 +116,7 @@ def enrich_with_monthly_downloads(
     download_stats_df : pd.DataFrame
         DataFrame containing the monthly download statistics.
 
-    Returns
+    Returns:
     --------
     pd.DataFrame
         DataFrame containing the monthly download statistics.
@@ -133,9 +134,9 @@ def enrich_with_monthly_downloads(
     stats = stats.dropna(subset=["month", "_join_pkg"])
     stats["month_col"] = stats["month"].dt.strftime("%Y-%m")
 
-    stats_agg = (
-        stats.groupby(["_join_pkg", "month_col"], as_index=False)["num_downloads"].sum()
-    )
+    stats_agg = stats.groupby(["_join_pkg", "month_col"], as_index=False)[
+        "num_downloads"
+    ].sum()
 
     wide = stats_agg.pivot(
         index="_join_pkg", columns="month_col", values="num_downloads"
@@ -144,13 +145,10 @@ def enrich_with_monthly_downloads(
     month_cols = sorted([c for c in wide.columns if c != "_join_pkg"], reverse=True)
     wide = wide[["_join_pkg", *month_cols]]
 
-    enriched = base.merge(
-        wide,
-        how="left",
-        on="_join_pkg",
-    ).drop(columns=["_join_pkg"])
+    enriched = base.merge(wide, how="left", on="_join_pkg").drop(columns=["_join_pkg"])
 
     return enriched
+
 
 @click.command()
 @click.option(
@@ -209,10 +207,7 @@ def cli(stats_file: Path, out_path: Path, use_bigquery: bool, pypi_path: Path) -
         # Fetch missing data
         pypi_url, pypi_name = get_pypi_package_info(row["html_url"])
 
-        row_data = {
-            "id": tool_id,
-            "html_url": row["html_url"],
-        }
+        row_data = {"id": tool_id, "html_url": row["html_url"]}
 
         if pypi_url and pypi_name:
             if "pypi" in pypi_url:

@@ -110,14 +110,14 @@ def enrich_with_monthly_downloads(
     """Add monthly download columns (wide format) to each tool row.
 
     Parameters
-    ----------
+    ------------
     download_df : pd.DataFrame
         DataFrame containing the base download data.
     download_stats_df : pd.DataFrame
         DataFrame containing the monthly download statistics.
 
     Returns:
-    --------
+    ---------
     pd.DataFrame
         DataFrame containing the monthly download statistics.
     """
@@ -134,6 +134,9 @@ def enrich_with_monthly_downloads(
     stats = stats.dropna(subset=["month", "_join_pkg"])
     stats["month_col"] = stats["month"].dt.strftime("%Y-%m")
 
+    # This makes sure that each package-month pair appears uniquely.
+    # If two occurrences happen sum them up. Potential duplicates would
+    # make the pivot fail.
     stats_agg = stats.groupby(["_join_pkg", "month_col"], as_index=False)[
         "num_downloads"
     ].sum()

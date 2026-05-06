@@ -75,7 +75,17 @@ def download_stats_df():
                 "2026-04-01",
                 "2026-03-01",
             ],
-            "project": ["pack_one", "pack_two", "pack_four"] * 3,
+            "project": [
+                "pack_one",
+                "pack_one",
+                "pack_one",
+                "pack_two",
+                "pack_two",
+                "pack_two",
+                "pack_four",
+                "pack_four",
+                "pack_four",
+            ],
         }
     )
 
@@ -196,7 +206,9 @@ class TestGetDownloadData:
         self, download_df: pd.DataFrame, download_stats_df: pd.DataFrame
     ) -> None:
         """Test enrich_with_monthly_downloads function."""
-        output_df = get_download_data.enrich_with_monthly_downloads()
+        output_df = get_download_data.enrich_with_monthly_downloads(
+            download_df, download_stats_df
+        )
         expected_df = pd.DataFrame(
             {
                 "id": ["pack_one", "pack_two", "pack_three"],
@@ -212,9 +224,11 @@ class TestGetDownloadData:
                 ],
                 "pypi_package_name": ["pack_ONE", "pack_two", "PACK_three"],
                 "other_source": ["source_one", "source_two", "source_three"],
-                "2026-05-01": ["1", "4", None],
-                "2026-04-01": ["2", "5", None],
-                "2026-03-01": ["3", "6", None],
+                "2026-05": ["1", "4", None],
+                "2026-04": ["2", "5", None],
+                "2026-03": ["3", "6", None],
             }
         )
+        print(output_df)
+        print(expected_df)
         pd.testing.assert_frame_equal(output_df, expected_df)

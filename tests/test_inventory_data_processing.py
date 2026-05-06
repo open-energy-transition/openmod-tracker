@@ -36,6 +36,50 @@ def ecosystems_issue_api():
         )
 
 
+@pytest.fixture(scope="function")
+def download_df():
+    """Fixture to generate a DataFrame with PyPI package url and name."""
+    return pd.DataFrame(
+        {
+            "id": ["pack_one", "pack_two", "pack_three"],
+            "html_url": [
+                "https://github.com/pack_one/pack_one",
+                "https://github.com/pack_two/pack_two",
+                "https://github.com/pack_three/pack_three",
+            ],
+            "pypi_package_url": [
+                "https://pypi.org/project/pack_ONE",
+                "https://pypi.org/project/pack_two",
+                "https://pypi.org/project/PACK_three",
+            ],
+            "pypi_package_name": ["pack_ONE", "pack_two", "PACK_three"],
+            "other_source": ["source_one", "source_two", "source_three"],
+        }
+    )
+
+
+@pytest.fixture(scope="function")
+def download_stats_df():
+    """Fixture to generate a DataFrame with PyPI package download stats."""
+    return pd.DataFrame(
+        {
+            "num_downloads": ["1", "2", "3", "4", "5", "6", "7", "8", "9"],
+            "month": [
+                "2026-05-01",
+                "2026-04-01",
+                "2026-03-01",
+                "2026-05-01",
+                "2026-04-01",
+                "2026-03-01",
+                "2026-05-01",
+                "2026-04-01",
+                "2026-03-01",
+            ],
+            "project": ["pack_one", "pack_two", "pack_four"] * 3,
+        }
+    )
+
+
 class TestInventoryUtil:
     """Test suite for inventory util functions."""
 
@@ -147,3 +191,30 @@ class TestGetDownloadData:
         """Test _is_populated with various value types and edge cases."""
         row = pd.Series({"col": value})
         assert get_download_data._is_populated(row, "col") is expected
+
+    def test_enrich_with_monthly_downloads(
+        self, download_df: pd.DataFrame, download_stats_df: pd.DataFrame
+    ) -> None:
+        """Test enrich_with_monthly_downloads function."""
+        output_df = get_download_data.enrich_with_monthly_downloads()
+        expected_df = pd.DataFrame(
+            {
+                "id": ["pack_one", "pack_two", "pack_three"],
+                "html_url": [
+                    "https://github.com/pack_one/pack_one",
+                    "https://github.com/pack_two/pack_two",
+                    "https://github.com/pack_three/pack_three",
+                ],
+                "pypi_package_url": [
+                    "https://pypi.org/project/pack_ONE",
+                    "https://pypi.org/project/pack_two",
+                    "https://pypi.org/project/PACK_three",
+                ],
+                "pypi_package_name": ["pack_ONE", "pack_two", "PACK_three"],
+                "other_source": ["source_one", "source_two", "source_three"],
+                "2026-05-01": ["1", "4", None],
+                "2026-04-01": ["2", "5", None],
+                "2026-03-01": ["3", "6", None],
+            }
+        )
+        pd.testing.assert_frame_equal(output_df, expected_df)

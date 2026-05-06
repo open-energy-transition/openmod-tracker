@@ -136,8 +136,7 @@ def enrich_with_monthly_downloads(
 
     # Check whether some package-month appears more than once.
     # Potential duplicates would make the pivot fail.
-    dup_mask = stats.duplicated(subset=["_join_pkg", "month_col"], keep=False)
-    if dup_mask.any():
+    if stats.duplicated(subset=["_join_pkg", "month_col"], keep=False).any():
         raise ValueError(
             "Duplicate package-month rows found in download stats; expected unique pairs "
             "of (project, month)."

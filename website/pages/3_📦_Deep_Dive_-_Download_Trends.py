@@ -14,57 +14,7 @@ import streamlit as st
 
 TOP_N_DEFAULT = 20
 
-GLOW_CSS = """
-<style>
-    /* Glowing header text */
-    [data-testid="stAppViewContainer"] h1 {
-        text-shadow: 0 0 12px #00d4ff, 0 0 24px #00d4ff88, 0 0 48px #00d4ff44;
-        letter-spacing: 1px;
-    }
-    [data-testid="stAppViewContainer"] h2,
-    [data-testid="stAppViewContainer"] h3 {
-        text-shadow: 0 0 8px #a78bfa88;
-    }
-    /* Glowing metric cards */
-    [data-testid="stMetric"] {
-        background: linear-gradient(
-            135deg,
-            rgba(0, 212, 255, 0.06) 0%,
-            rgba(123, 47, 247, 0.08) 100%
-        );
-        border: 1px solid rgba(0, 212, 255, 0.25);
-        border-radius: 14px;
-        padding: 18px 22px !important;
-        box-shadow:
-            0 0 18px rgba(0, 212, 255, 0.15),
-            0 0 40px rgba(123, 47, 247, 0.08),
-            inset 0 0 60px rgba(0, 212, 255, 0.02);
-        transition: box-shadow 0.3s ease;
-    }
-    [data-testid="stMetric"]:hover {
-        box-shadow:
-            0 0 28px rgba(0, 212, 255, 0.3),
-            0 0 60px rgba(123, 47, 247, 0.15),
-            inset 0 0 60px rgba(0, 212, 255, 0.04);
-    }
-    [data-testid="stMetricValue"] {
-        color: #00d4ff !important;
-        text-shadow: 0 0 12px rgba(0, 212, 255, 0.8);
-    }
-    [data-testid="stMetricLabel"] p {
-        font-weight: 600;
-        opacity: 0.9;
-    }
-    [data-testid="stMetricDelta"] {
-        text-shadow: 0 0 8px currentColor;
-    }
-    /* Subtle section dividers */
-    hr {
-        border-color: rgba(0, 212, 255, 0.15) !important;
-        box-shadow: 0 0 6px rgba(0, 212, 255, 0.1);
-    }
-</style>
-"""
+
 
 PLOT_BG = "rgba(8, 8, 24, 0.85)"
 PAPER_BG = "rgba(0, 0, 0, 0)"
@@ -174,7 +124,7 @@ def show_metrics(metrics: dict) -> None:
     )
 
 
-def _base_layout(height: int = 480, extra: dict | None = None) -> dict:
+def _base_layout(height: int = 480, extra: dict = None) -> dict:
     """Return a shared Plotly layout dict with the glowy dark theme.
 
     Args:
@@ -420,27 +370,24 @@ def preamble() -> None:
     """Introductory text shown before the charts."""
     st.markdown(
         """
-        Package downloads are a strong proxy for **real-world tool usage**.
-        Unlike repository interactions (stars, forks), download counts capture users who
-        actually install and run a tool — regardless of whether they have a GitHub account.
+        Package downloads are a strong proxy for **real-world tool usage** as they capture users who actually install and run a tool.
 
-        Here we track **monthly PyPI downloads** for energy modelling tools that publish
+       Here we track **monthly PyPI downloads** for energy modelling tools that publish
         Python packages, spanning the past year.
         """
     )
-    with st.expander("ℹ️ Notes on the data", icon="ℹ️"):
-        st.markdown(
-            """
-            - **PyPI only.** Tools distributed exclusively via conda-forge, Julia's General
-              registry, Maven Central, or other ecosystems are not reflected here.
-            - **Bot & CI traffic.** PyPI counts include automated downloads by CI pipelines
-              and mirrors. Numbers are inflated, but consistently so across all tools —
-              making *relative* comparisons and *trend direction* reliable.
-            - **Partial current month.** The most recently started month may show lower counts
-              simply because it is not yet complete; look to the previous full month for a
-              stable baseline.
-            """
-        )
+    st.info(
+        """
+        **Notes on the data**
+        - **PyPI only.** Tools distributed exclusively via conda-forge, Julia's General
+          registry, Maven Central, or other ecosystems are not reflected here.
+        - **Bot & CI traffic.** Automated downloads by CI pipelines are not considered in this infographic.
+        - **Partial current month.** The most recently started month may show lower counts
+          simply because it is not yet complete; look to the previous full month for a
+          stable baseline.
+        """,
+        icon="ℹ️",
+    )
 
 
 def main(df: pd.DataFrame) -> None:
@@ -478,8 +425,6 @@ def main(df: pd.DataFrame) -> None:
         help="Controls how many tools appear in the bar chart and heatmap.",
     )
 
-    # ── Inject glowing CSS ───────────────────────────────────────────────────
-    st.html(GLOW_CSS)
 
     # ── Metric widgets ───────────────────────────────────────────────────────
     show_metrics(metrics)
@@ -510,14 +455,14 @@ if __name__ == "__main__":
         layout="wide",
     )
 
-    st.title("⚡ Package Download Trends")
+    st.title("Package Download Trends")
     st.text(
         "Explore how energy modelling tools are downloaded month by month "
         "across the open-source community."
     )
 
     data_path = (
-        Path(__file__).parent.parent.parent
+        Path().cwd()
         / "user_analysis"
         / "output"
         / "package_downloads.csv"

@@ -32,6 +32,7 @@ and this project adheres to [Calendar Versioning](https://calver.org/).
 - Repo interaction and user detail cleaning when removing a repo with existing downloaded data.
 - Warning on category assignments referring to IDs not defined in the tool list.
 - Active maintainer number.
+- Add a Download Data page to the dashboard.
 
 ### Fixed
 

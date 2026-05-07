@@ -5,24 +5,23 @@
 
 """Create Streamlit web app sub-page to visualise package download trends."""
 
+import re
 from pathlib import Path
 
 import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
-import re
 
 
 @st.cache_data
 def load_downloads(filepath: Path) -> pd.DataFrame:
-    """
-    Load and reshape the package downloads CSV into long format.
+    """Load and reshape the package downloads CSV into long format.
 
     Parameters
     ------------
         filepath: Path to package_downloads.csv.
 
-    Returns
+    Returns:
     --------
         Long-format DataFrame with columns: id, display_name, html_url,
         pypi_package_url, date, downloads.
@@ -30,7 +29,7 @@ def load_downloads(filepath: Path) -> pd.DataFrame:
     raw = pd.read_csv(filepath)
 
     # Identify date columns (format YYYY-MM)
-    date_cols = [c for c in raw.columns if re.match(r'^\d{4}-\d{2}$', c)]
+    date_cols = [c for c in raw.columns if re.match(r"^\d{4}-\d{2}$", c)]
 
     # Prefer pypi_package_name as display name, fall back to id
     raw["display_name"] = raw["pypi_package_name"].fillna(raw["id"])
@@ -49,15 +48,14 @@ def load_downloads(filepath: Path) -> pd.DataFrame:
 
 
 def compute_metrics(df: pd.DataFrame) -> dict:
-    """
-    Compute summary statistics for the metric widgets.
+    """Compute summary statistics for the metric widgets.
 
     Parameters
     ------------
         df: DataFrame
             Long-format downloads DataFrame.
 
-    Returns
+    Returns:
     --------
         Dict with latest_month, prev_month, totals, top tool name/count,
         all_time_total, and tool count.
@@ -88,8 +86,7 @@ def compute_metrics(df: pd.DataFrame) -> dict:
 
 
 def show_metrics(metrics: dict) -> None:
-    """
-    Render st.metric widgets in a four-column row.
+    """Render st.metric widgets in a four-column row.
 
     Parameters
     ------------
@@ -127,9 +124,7 @@ def show_metrics(metrics: dict) -> None:
 
 
 def plot_download_trends(df: pd.DataFrame, selected_tool: str) -> None:
-    """
-    Line chart of monthly download trends for a single selected tool,
-    preceded by three month-over-month metric widgets.
+    """Line chart of monthly download trends for a single selected tool, preceded by three month-over-month metric widgets.
 
     Parameters
     ------------
@@ -233,8 +228,7 @@ def plot_download_trends(df: pd.DataFrame, selected_tool: str) -> None:
 
 
 def show_all_packages_list(df: pd.DataFrame) -> None:
-    """
-    Scrollable list of all packages with 6-month download totals and trend.
+    """Scrollable list of all packages with 6-month download totals and trend.
 
     Parameters
     ------------
@@ -247,8 +241,10 @@ def show_all_packages_list(df: pd.DataFrame) -> None:
     full_months = all_months[:-1]  # drop current partial month
 
     last_6 = full_months[-6:] if len(full_months) >= 6 else full_months
-    prev_6 = full_months[-12:-6] if len(full_months) >= 12 else (
-        full_months[: max(0, len(full_months) - 6)]
+    prev_6 = (
+        full_months[-12:-6]
+        if len(full_months) >= 12
+        else (full_months[: max(0, len(full_months) - 6)])
     )
 
     # Per-tool aggregation
@@ -315,7 +311,8 @@ def show_all_packages_list(df: pd.DataFrame) -> None:
                         f'<a href="{url}" target="_blank" style="text-decoration:none; color:inherit; margin-right:12px;">'
                         + (
                             f'<img src="{icon}" width="13" style="vertical-align:middle; margin-right:4px; border-radius:2px">'
-                            if icon else ""
+                            if icon
+                            else ""
                         )
                         + f"{host}</a>"
                     )
@@ -333,18 +330,24 @@ def show_all_packages_list(df: pd.DataFrame) -> None:
                     st.markdown(links_html, unsafe_allow_html=True)
 
             with col_metric:
-                last_total = int(row["last_6_total"]) if pd.notna(row["last_6_total"]) else 0
+                last_total = (
+                    int(row["last_6_total"]) if pd.notna(row["last_6_total"]) else 0
+                )
                 prev_total = (
                     int(row["prev_6_total"])
                     if "prev_6_total" in row.index and pd.notna(row["prev_6_total"])
                     else None
                 )
-                delta = f"{last_total - prev_total:+,}" if prev_total is not None else None
+                delta = (
+                    f"{last_total - prev_total:+,}" if prev_total is not None else None
+                )
                 st.metric(
                     label="Downloads (6 mo.)",
                     value=f"{last_total:,}",
                     delta=delta,
-                    help=f"Δ vs previous period ({prev_6_label})" if prev_6_label else None,
+                    help=f"Δ vs previous period ({prev_6_label})"
+                    if prev_6_label
+                    else None,
                 )
 
             st.divider()

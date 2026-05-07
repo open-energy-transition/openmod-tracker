@@ -36,7 +36,7 @@ def ecosystems_issue_api():
         )
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture
 def download_df():
     """Fixture to generate a DataFrame with PyPI package url and name."""
     return pd.DataFrame(
@@ -58,7 +58,7 @@ def download_df():
     )
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture
 def download_stats_df():
     """Fixture to generate a DataFrame with PyPI package download stats."""
     return pd.DataFrame(

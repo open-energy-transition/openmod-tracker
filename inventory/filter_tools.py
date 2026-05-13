@@ -150,9 +150,9 @@ def resolve_duplicated_urls(df: pd.DataFrame) -> pd.DataFrame:
                 df = df[df.url != url]
             elif repo_data is None:
                 LOGGER.warning(
-                    f"Removing {url} as we cannot access the ecosyste.ms server right now."
+                    f"Keeping {url} as we cannot access the ecosyste.ms server right now."
                 )
-                df = df[df.url != url]
+                continue
             elif url != (new_url := repo_data["html_url"].lower()):
                 LOGGER.warning(f"Found redirect for: {url} -> {new_url}.")
                 df.loc[df.url == url, "url"] = new_url

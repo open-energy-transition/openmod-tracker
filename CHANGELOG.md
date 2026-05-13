@@ -25,13 +25,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Calendar Versioning](https://calver.org/).
 
+## Unreleased
+
+### Added
+
+- Active maintainer number (#182).
+- Repo dependabot, code quality, and secret scanning in `openmod-tracker` source code repo.
+- Automated release process following monthly inventory auto-update.
+
+### Fixed
+
+- Failing duplicated URL filtering when ecosyste.ms server is down.
+
+### Changed
+
+- Tulipa energy & antares_simulator categories updated
+
 ## 2026-03-12
 
 ### Added
 
 - Repo interaction and user detail cleaning when removing a repo with existing downloaded data.
 - Warning on category assignments referring to IDs not defined in the tool list.
-- Active maintainer number.
 
 ### Fixed
 

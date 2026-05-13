@@ -39,3 +39,4 @@ unitcommitment_jl,"production-cost",
 urbs,"capacity-expansion",
 veragrid,"power-flow",
 zen_garden,"capacity-expansion",
+cairnopen,"capacity-expansion,production-cost,power-flow"

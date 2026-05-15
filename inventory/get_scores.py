@@ -21,7 +21,32 @@ path_cwd = Path().cwd()
 
 LOGGER = logging.getLogger(__name__)
 OSSF_SCORECARD_API = "https://api.securityscorecards.dev/projects/"
+OSSF_BRANCH_PROTECTION_ERROR_RE = re.compile(
+    r"internal error.*brancheshandler.*fine-grained-auth-token\.md",
+    re.IGNORECASE | re.DOTALL,
+)
+OSSF_BRANCH_PROTECTION_REPHRASED = (
+    "OpenSSF Scorecard could not read branch protection rules due to github token issues. "
+    "See: https://github.com/ossf/scorecard-action/blob/main/docs/authentication/fine-grained-auth-token.md"
+)
 
+def sanitise_ossf_reason(text: str) -> str:
+    """
+    Rephrase known OpenSSF Scorecard internal errors to avoid misleading users.
+
+    Parameters
+    ----------
+    text : str
+        Raw reason string returned by the OpenSSF Scorecard API or CLI.
+
+    Returns
+    -------
+    str
+        The original text, or a rephrased message if a known internal error is detected.
+    """
+    if OSSF_BRANCH_PROTECTION_ERROR_RE.search(text):
+        return OSSF_BRANCH_PROTECTION_REPHRASED
+    return text
 
 def get_tool_name_url(file_name: Path) -> pd.DataFrame:
     """Get the tool name and URL for the scorecard command.
@@ -293,7 +318,7 @@ def process_repositories(
     batch_size : int, optional
         Number of repositories to process before writing a batch to CSV. Default is 5.
 
-    Raises:
+    Raises
     ------
     ValueError
         If no scorecard results were collected after processing all repositories
@@ -438,7 +463,7 @@ def _append_scorecard_rows(
 
     check_scores = {check["name"]: check["score"] for _, check in checks_df.iterrows()}
     check_reasons = {
-        f"Reason {check['name']}": check["reason"].capitalize()
+         f"Reason {check['name']}": sanitise_ossf_reason(check["reason"]).capitalize()
         for _, check in checks_df.iterrows()
     }
 

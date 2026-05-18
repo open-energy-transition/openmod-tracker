@@ -70,7 +70,7 @@ jobs:
           BRANCH_NAME="pre-release-${{ steps.version.outputs.date }}"
           git checkout -b $BRANCH_NAME
           git add pixi.toml CHANGELOG.md
-          git commit -m "chore: bump version to ${{ steps.version.outputs.date }}"
+          git diff --staged --quiet || git commit -m "chore: bump version to ${{ steps.version.outputs.date }}"
           git push origin $BRANCH_NAME
           echo "name=$BRANCH_NAME" >> $GITHUB_OUTPUT
 

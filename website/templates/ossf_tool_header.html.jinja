@@ -1,0 +1,52 @@
+{# SPDX-FileCopyrightText: openmod-tracker contributors #}
+{# SPDX-License-Identifier: MIT #}
+
+{#
+  Variables expected:
+    html_url      – URL of the tool's repository
+    selected_tool – display name / id of the tool
+    agg_style     – inline CSS string for the aggregated-score badge
+    agg           – aggregated score value (string)
+#}
+<div style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px;">
+    <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+        <span style="font-size:0.78rem; font-weight:600; color:#888; font-family:'Inter',sans-serif; text-transform:uppercase; letter-spacing:0.06em;">
+            Tool:
+        </span>
+        <a href="{{ html_url }}" target="_blank"
+           style="font-size:1.1rem; font-weight:700; color:#5c6bc0;
+                  text-decoration:none; font-family:'Inter',sans-serif;">
+            🔧 {{ selected_tool }}
+        </a>
+    </div>
+    <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+        <span style="font-size:0.78rem; font-weight:600; font-family:'Inter',sans-serif; text-transform:uppercase; letter-spacing:0.06em;">
+            <a href="https://github.com/ossf/scorecard?tab=readme-ov-file#aggregate-score"
+               target="_blank"
+               style="color:#5c6bc0; text-decoration:none;">
+                Aggregated score:
+            </a>
+        </span>
+        <span style="{{ agg_style }} padding:5px 16px; border-radius:20px;
+                     font-weight:700; font-size:0.95rem;
+                     box-shadow:0 2px 6px rgba(0,0,0,0.12);">
+            ⭐ {{ agg }}
+        </span>
+    </div>
+</div>
+
+<div style="display:flex; gap:12px; align-items:center; margin-bottom:12px; flex-wrap:wrap;">
+    <span style="font-size:0.78rem; font-weight:600; color:#888; font-family:'Inter',sans-serif; text-transform:uppercase; letter-spacing:0.06em;">Score legend:</span>
+    <span style="background:linear-gradient(135deg,#d4edda,#a8d5b5); color:#1a6b3a;
+                 padding:3px 12px; border-radius:20px; font-size:0.78rem; font-weight:600;
+                 box-shadow:0 1px 4px rgba(0,0,0,0.1);">&#8805; 8 &#8212; High</span>
+    <span style="background:linear-gradient(135deg,#fff3cd,#ffe08a); color:#856404;
+                 padding:3px 12px; border-radius:20px; font-size:0.78rem; font-weight:600;
+                 box-shadow:0 1px 4px rgba(0,0,0,0.1);">&#8805; 5 &#8212; Medium</span>
+    <span style="background:linear-gradient(135deg,#fde8e8,#f5b7b7); color:#a93226;
+                 padding:3px 12px; border-radius:20px; font-size:0.78rem; font-weight:600;
+                 box-shadow:0 1px 4px rgba(0,0,0,0.1);">&lt; 5 &#8212; Low</span>
+    <span style="background:#f0f0f0; color:#888;
+                 padding:3px 12px; border-radius:20px; font-size:0.78rem; font-weight:600;
+                 box-shadow:0 1px 4px rgba(0,0,0,0.1);">None</span>
+</div>

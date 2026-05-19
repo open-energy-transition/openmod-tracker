@@ -26,6 +26,9 @@ jobs:
           # Use a token that can create PRs and push to branches
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Pull Scorecard Docker image
+        run: docker pull ghcr.io/ossf/scorecard:latest
+
       - name: Setup Pixi
         uses: prefix-dev/setup-pixi@v0.9.5
         with:

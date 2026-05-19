@@ -1,0 +1,106 @@
+# SPDX-FileCopyrightText: openmod-tracker contributors
+#
+# SPDX-License-Identifier: CC0-1.0
+
+name: Pre-release PR
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      date:
+        description: "Release date (YYYY-MM-DD). Defaults to today's date."
+        required: false
+        default: ""
+
+jobs:
+  create-prerelease-pr:
+    if: github.event_name == 'workflow_dispatch' || (github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'inventory-update-'))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set today's date as version
+        id: version
+        run: |
+          INPUT_DATE="${{ github.event.inputs.date }}"
+          if [[ -n "$INPUT_DATE" ]]; then
+            echo "date=$INPUT_DATE" >> $GITHUB_OUTPUT
+          else
+            echo "date=$(date +%Y-%m-%d)" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Update pixi.toml version
+        run: |
+          sed -i 's/^version = .*/version = "${{ steps.version.outputs.date }}"/' pixi.toml
+
+      - name: Update CHANGELOG.md Unreleased heading
+        run: |
+          sed -i 's/^## [Uu]nreleased/## ${{ steps.version.outputs.date }}/' CHANGELOG.md
+
+      - name: Generate changelog since last release
+        id: changelog
+        run: |
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          if [[ -n "$LAST_TAG" ]]; then
+            git log "${LAST_TAG}..HEAD" --pretty=format:"- %s" --no-merges > changelog.txt
+            echo "last_tag=$LAST_TAG" >> $GITHUB_OUTPUT
+          else
+            git log --pretty=format:"- %s" --no-merges > changelog.txt
+            echo "last_tag=" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Configure Git
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+
+      - name: Create pre-release branch and commit
+        id: branch
+        run: |
+          BRANCH_NAME="pre-release-${{ steps.version.outputs.date }}"
+          git checkout -b $BRANCH_NAME
+          git add pixi.toml CHANGELOG.md
+          git diff --staged --quiet || git commit -m "chore: bump version to ${{ steps.version.outputs.date }}"
+          git push origin $BRANCH_NAME
+          echo "name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+
+      - name: Create pre-release PR
+        run: |
+          LAST_TAG="${{ steps.changelog.outputs.last_tag }}"
+          if [[ -n "$LAST_TAG" ]]; then
+            SINCE_TEXT="since \`${LAST_TAG}\`"
+          else
+            SINCE_TEXT="(no previous release found)"
+          fi
+          CHANGELOG=$(cat changelog.txt)
+          {
+            echo "## Pre-release ${{ steps.version.outputs.date }}"
+            echo ""
+            echo "This PR prepares the pre-release for **${{ steps.version.outputs.date }}**, triggered by the merge of the monthly inventory update."
+            echo ""
+            echo "### Changes"
+            echo ""
+            echo "- Bumped \`pixi.toml\` version to \`${{ steps.version.outputs.date }}\`"
+            echo "- Updated \`CHANGELOG.md\` \`Unreleased\` heading to \`${{ steps.version.outputs.date }}\`"
+            echo ""
+            echo "### Changelog ${SINCE_TEXT}"
+            echo ""
+            echo "${CHANGELOG}"
+          } > pr_body.md
+          gh pr create \
+            --title "chore: pre-release ${{ steps.version.outputs.date }}" \
+            --body-file pr_body.md \
+            --base main \
+            --head "${{ steps.branch.outputs.name }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -26,6 +26,12 @@ inputs = ["inventory/output/filtered.csv", "inventory/get_stats.py"]
 outputs = ["inventory/output/stats.csv"]
 depends-on = ["filter-tools"]
 
+[tasks.get-scores]
+cmd = "python $PIXI_PROJECT_ROOT/inventory/get_scores.py --stats-file inventory/output/stats.csv --scores-file inventory/output/scores.csv --reasons-file inventory/output/reasons.csv"
+inputs = ["inventory/output/stats.csv", "inventory/get_scores.py"]
+outputs = ["inventory/output/scores.csv", "inventory/output/reasons.csv"]
+depends-on = ["get-stats"]
+
 [tasks.get-docs]
 cmd = "python $PIXI_PROJECT_ROOT/inventory/get_docs.py inventory/output/stats.csv inventory/output/docs.csv"
 inputs = ["inventory/output/stats.csv", "inventory/get_docs.py"]
@@ -36,7 +42,7 @@ depends-on = ["get-stats"]
 cmd = "python $PIXI_PROJECT_ROOT/user_analysis/get_repo_interactions.py --stats-file inventory/output/stats.csv --out-path user_analysis/output/repo_interactions.csv"
 inputs = ["inventory/output/stats.csv", "user_analysis/get_repo_interactions.py"]
 outputs = ["user_analysis/output/repo_interactions.csv"]
-depends-on = ["get-stats"]
+depends-on = ["get-stats", "get-docs", "get-scores"]
 
 [tasks.get-download-data]
 cmd = "python $PIXI_PROJECT_ROOT/inventory/get_download_data.py --stats-file inventory/output/stats.csv --out-path user_analysis/output/package_downloads.csv"

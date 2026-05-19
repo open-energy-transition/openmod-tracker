@@ -4,16 +4,166 @@
 
 """Get download trends for the repository packages."""
 
+import json
+import logging
+import subprocess
+from datetime import datetime
 from pathlib import Path
 
 import click
 import pandas as pd
 import util
+from dateutil.relativedelta import relativedelta
+from get_stats import _get_conda_download_df
 from google.cloud import bigquery
 from pandas import Series
 from tqdm import tqdm
 
-COLS = ["id", "html_url", "pypi_package_url", "pypi_package_name", "other_source"]
+LOGGER = logging.getLogger(__name__)
+COLS = [
+    "id",
+    "html_url",
+    "pypi_package_url",
+    "pypi_package_name",
+    "anaconda_package_url",
+    "other_source",
+]
+
+
+def get_conda_download_trends(previous_months: int = 12) -> pd.DataFrame:
+    """Retrieve conda package download statistics for the specified period.
+
+    This function collects conda download data going back from the current month
+    for a specified number of months. It validates that each month's data is
+    within the expected date range and gracefully skips missing months.
+
+    Parameters
+    ----------
+    previous_months : int, optional
+        Number of months to retrieve download data for, going back from the
+        current month. Default is 12.
+
+    Returns:
+    -------
+    pd.DataFrame
+        A concatenated DataFrame containing conda download statistics for all
+        successfully retrieved months. The DataFrame includes a "time" column
+        (in YYYY-MM format) and other download-related metrics.
+
+    Raises:
+    ------
+    ValueError
+        If the "time" column in the data for a given month contains more than
+        one unique value (expected exactly one).
+
+    Warnings:
+    --------
+    Logs a warning if a month's data falls outside the valid date range
+    [min_month, max_month] or if data for a particular month cannot be found.
+    """
+    dfs = []
+
+    now = datetime.now()
+    # Current month in YYYY-MM format
+    max_month = now.strftime("%Y-%m")
+    # previous_months ago in YYYY-MM format
+    min_month = (now - relativedelta(months=previous_months)).strftime("%Y-%m")
+
+    for months_ago in range(1, previous_months + 1):
+        try:
+            df = _get_conda_download_df(months_ago=months_ago)
+
+            # Check that time column contains only one unique value
+            unique_months = df["time"].unique()
+            if len(unique_months) != 1:
+                raise ValueError(
+                    f"Expected time column to have 1 unique value, but found {len(unique_months)}: {unique_months}"
+                )
+            df_month = unique_months[0]  # Get the single unique month
+            if df_month < min_month or df_month > max_month:
+                LOGGER.warning(
+                    f"Month {df_month} is outside the valid range [{min_month}, {max_month}], stopping"
+                )
+                break
+            dfs.append(df)
+        except FileNotFoundError:
+            LOGGER.warning(f"No conda download for month {months_ago}")
+            continue
+
+    previous_months_df = pd.concat(dfs, ignore_index=True)
+    return previous_months_df
+
+
+def find_conda_package(package_name: str) -> str | None:
+    """Check if conda is installed and search for a package on Anaconda channels.
+
+    Searches all specified channels simultaneously: conda-forge, bioconda, anaconda.
+    Returns the package URL if found, None otherwise.
+
+    Parameters
+    ----------
+    package_name : str
+        The name of the package to search for
+
+    Returns:
+    -------
+    Optional[str]
+        The URL to the package if found, None if not found or conda is not installed
+    """
+    # Check if conda is installed
+    try:
+        result = subprocess.run(
+            ["conda", "--version"], capture_output=True, text=True, timeout=5
+        )
+        if result.returncode != 0:
+            print("Conda is not installed")
+            return None
+    except FileNotFoundError:
+        print("Conda is not installed")
+        return None
+    except subprocess.TimeoutExpired:
+        print("Conda check timed out")
+        return None
+
+    # Build command with multiple channels
+    cmd = [
+        "conda",
+        "search",
+        "--json",
+        "--channel",
+        "conda-forge",
+        "--channel",
+        "bioconda",
+        "--channel",
+        "anaconda",
+        package_name,
+    ]
+
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=10)
+
+        data = json.loads(result.stdout)
+
+        # Check if response is empty or contains PackagesNotFoundError
+        if not data or "PackagesNotFoundError" in data.get("exception_name", ""):
+            LOGGER.warning(f"Package '{package_name}' not found in any channel")
+            return None
+
+        # Determine which channel the package came from
+        # The first channel in the search list has priority
+        url = f"https://anaconda.org/conda-forge/{package_name}"
+        LOGGER.info(f"Package '{package_name}' found")
+        return url
+
+    except subprocess.TimeoutExpired:
+        print("Conda search timed out")
+        return None
+    except json.JSONDecodeError:
+        print("Error parsing conda response")
+        return None
+    except Exception as e:
+        print(f"Error searching for package: {e}")
+        return None
 
 
 def get_pypi_package_info(url: str) -> tuple[str | None, str | None]:
@@ -44,14 +194,14 @@ def _is_populated(row: Series, col: str) -> bool:
     """Check if a DataFrame cell is non-null and non-empty.
 
     Parameters
-    ----------
+    ------------
     row : pandas.Series
         A row from a DataFrame.
     col : str
         The column name to check.
 
     Returns:
-    -------
+    --------
     bool
         True if the cell is non-null and contains non-whitespace content,
         False otherwise.
@@ -59,8 +209,49 @@ def _is_populated(row: Series, col: str) -> bool:
     return bool(pd.notna(row[col]) and str(row[col]).strip() != "")
 
 
+def skip_tool(
+    row: pd.Series,
+    months_back: int = 2,
+    required_fields: list[str] = [
+        "pypi_package_url",
+        "pypi_package_name",
+        "anaconda_package_url",
+    ],
+) -> bool:
+    """Skip tool row if all required fields are populated.
+
+    Determines whether to skip processing a tool row by checking if all
+    required fields contain populated values. The required fields include
+    a set of base fields plus dynamically generated month-based fields
+    for the specified time period.
+
+    Parameters
+    ----------
+    row : pd.Series
+        A pandas Series representing a single row of data for a tool.
+    months_back : int, default=2
+        Number of months to generate in the past from the current date.
+        Each month is formatted as "YYYY-MM" and added to the required fields.
+    required_fields : list[str], default=["pypi_package_url", "pypi_package_name", "anaconda_package_url"]
+        Base list of required field names that must be populated.
+
+    Returns:
+    -------
+    bool
+        True if all required fields (including month-based fields) are
+        populated in the row, False otherwise.
+    """
+    months = (
+        pd.date_range(end=pd.Timestamp.now(), periods=months_back, freq="MS")
+        .strftime("%Y-%m")
+        .tolist()
+    )
+    required_fields.extend(months)
+    return all(_is_populated(row, field) for field in required_fields)
+
+
 def query_file_downloads(
-    package_name_list: list[str], bigquery_project_name: str = "compute-app-427709 "
+    package_name_list: list[str], bigquery_project_name: str = "openmod-tracker"
 ) -> pd.DataFrame:
     """Perform the BigQuery query to get the number of downloads for each package in the list over the past year, grouped by month and project.
 
@@ -69,7 +260,7 @@ def query_file_downloads(
     package_name_list : list[str]
         List of package names to query.
     bigquery_project_name : str, optional
-        The BigQuery project name, by default "compute-app-427709".
+        The BigQuery project name, by default "openmod-tracker".
 
     Returns:
     --------
@@ -104,8 +295,45 @@ def query_file_downloads(
     return df
 
 
+def get_conda_pkg_download_stats(list_of_packages: list[str]) -> pd.DataFrame:
+    """Get conda download stats for a list of packages.
+
+    Parameters
+    ------------
+    list_of_packages : list[str]
+        List of package names to query.
+
+    Returns:
+    --------
+    pd.DataFrame
+        DataFrame containing the number of downloads for each package, grouped by month and project.
+    """
+    previous_months_df = get_conda_download_trends()
+    filtered = previous_months_df[
+        previous_months_df["pkg_name"]
+        .str.casefold()
+        .isin([pkg.casefold() for pkg in list_of_packages])
+    ]
+    grouped = filtered.groupby(["pkg_name", "time"])["counts"].sum().reset_index()
+    wide = (
+        grouped.pivot(index="pkg_name", columns="time", values="counts")
+        .reset_index()
+        .rename_axis(None, axis=1)
+    )
+
+    # Reorder columns: keep pkg_name first, then sort month columns in descending order
+    time_columns = sorted(
+        [col for col in wide.columns if col != "pkg_name"], reverse=True
+    )
+    wide = wide[["pkg_name"] + time_columns]
+
+    return wide
+
+
 def enrich_with_monthly_downloads(
-    download_df: pd.DataFrame, download_stats_df: pd.DataFrame
+    download_df: pd.DataFrame,
+    pypi_download_stats_df: pd.DataFrame,
+    conda_download_stats_df: pd.DataFrame,
 ) -> pd.DataFrame:
     """Add monthly download columns (wide format) to each tool row.
 
@@ -113,8 +341,10 @@ def enrich_with_monthly_downloads(
     ------------
     download_df : pd.DataFrame
         DataFrame containing the base download data.
-    download_stats_df : pd.DataFrame
-        DataFrame containing the monthly download statistics.
+    pypi_download_stats_df : pd.DataFrame
+        DataFrame containing the monthly download statistics for pypi.
+    conda_download_stats_df : pd.DataFrame
+        DataFrame containing the monthly download statistics for anaconda..
 
     Returns:
     ---------
@@ -122,27 +352,33 @@ def enrich_with_monthly_downloads(
         DataFrame containing the monthly download statistics.
     """
     base = download_df.copy()
-    stats = download_stats_df.copy()
+    pypi_stats = pypi_download_stats_df.copy()
+    conda_stats = conda_download_stats_df.copy()
 
     # Keep original package names untouched; normalize only helper join keys
     base["_join_pkg"] = (
         base["pypi_package_name"].astype("string").str.casefold().str.strip()
     )
-    stats["_join_pkg"] = stats["project"].astype("string").str.casefold().str.strip()
+    pypi_stats["_join_pkg"] = (
+        pypi_stats["project"].astype("string").str.casefold().str.strip()
+    )
+    conda_stats["_join_pkg"] = (
+        conda_stats["pkg_name"].astype("string").str.casefold().str.strip()
+    )
 
-    stats["month"] = pd.to_datetime(stats["month"], errors="coerce")
-    stats = stats.dropna(subset=["month", "_join_pkg"])
-    stats["month_col"] = stats["month"].dt.strftime("%Y-%m")
+    pypi_stats["month"] = pd.to_datetime(pypi_stats["month"], errors="coerce")
+    pypi_stats = pypi_stats.dropna(subset=["month", "_join_pkg"])
+    pypi_stats["month_col"] = pypi_stats["month"].dt.strftime("%Y-%m")
 
     # Check whether some package-month appears more than once.
     # Potential duplicates would make the pivot fail.
-    if stats.duplicated(subset=["_join_pkg", "month_col"], keep=False).any():
+    if pypi_stats.duplicated(subset=["_join_pkg", "month_col"], keep=False).any():
         raise ValueError(
             "Duplicate package-month rows found in download stats; expected unique pairs "
             "of (project, month)."
         )
 
-    wide = stats.pivot(
+    wide = pypi_stats.pivot(
         index="_join_pkg", columns="month_col", values="num_downloads"
     ).reset_index()
 
@@ -199,26 +435,31 @@ def cli(stats_file: Path, out_path: Path, use_bigquery: bool, pypi_path: Path) -
     ):
         tool_id = row["id"]
 
-        # Use cached data if complete
+        # Start from cached row if present, otherwise create a new one
         if tool_id in existing_by_id:
             existing_row = existing_by_id[tool_id]
-            if _is_populated(existing_row, "pypi_package_url") and _is_populated(
-                existing_row, "pypi_package_name"
-            ):
+
+            # If all the relevant columns are already populated, skip the tool to save time
+            if skip_tool(existing_row):
                 rows_out.append(existing_row.to_dict())
                 continue
+            # If some of the relevant columns are not populated, store the cached data
+            row_data = existing_row.to_dict()
+        else:
+            row_data = {"id": tool_id, "html_url": row["html_url"]}
 
-        # Fetch missing data
+        # Preserve existing values. Only fill missing fields. Use .setdefault https://docs.python.org/3/library/stdtypes.html#dict.setdefault
         pypi_url, pypi_name = get_pypi_package_info(row["html_url"])
-
-        row_data = {"id": tool_id, "html_url": row["html_url"]}
-
         if pypi_url and pypi_name:
             if "pypi" in pypi_url:
-                row_data["pypi_package_url"] = pypi_url
-                row_data["pypi_package_name"] = pypi_name
+                row_data.setdefault("pypi_package_url", pypi_url)
+                row_data.setdefault("pypi_package_name", pypi_name)
             else:
-                row_data["other_source"] = pypi_url
+                row_data.setdefault("other_source", pypi_url)
+
+        anaconda_package_url = find_conda_package(pypi_name) if pypi_name else None
+        if anaconda_package_url:
+            row_data.setdefault("anaconda_package_url", anaconda_package_url)
 
         rows_out.append(row_data)
 
@@ -227,13 +468,15 @@ def cli(stats_file: Path, out_path: Path, use_bigquery: bool, pypi_path: Path) -
 
     if use_bigquery:
         # BigQuery is currently not enable for the GCP project compute-app
-        download_stats_df = query_file_downloads(package_name_list)
+        pypi_download_stats_df = query_file_downloads(package_name_list)
     else:
         # Process a csv file with the queried data from the BigQuery Web UI
-        download_stats_df = pd.read_csv(pypi_path)
+        pypi_download_stats_df = pd.read_csv(pypi_path)
 
-    updated_df = enrich_with_monthly_downloads(download_df, download_stats_df)
-
+    anaconda_download_stats_df = get_conda_pkg_download_stats(package_name_list)
+    updated_df = enrich_with_monthly_downloads(
+        download_df, pypi_download_stats_df, anaconda_download_stats_df
+    )
     updated_df.to_csv(out_path, index=False)
 
 

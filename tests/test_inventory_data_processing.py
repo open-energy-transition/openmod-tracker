@@ -232,3 +232,59 @@ class TestGetDownloadData:
         print(output_df)
         print(expected_df)
         pd.testing.assert_frame_equal(output_df, expected_df)
+
+    def test_get_conda_pkg_download_stats(self) -> None:
+        """Test that conda download stats are returned with correct column ordering and structure."""
+        # Expected data
+        expected = pd.DataFrame(
+            {
+                "pkg_name": ["pypsa"],
+                "2026-04": [8783],
+                "2026-03": [9235],
+                "2026-02": [10370],
+                "2026-01": [10106],
+                "2025-08": [5021],
+                "2025-07": [5836],
+                "2025-06": [5880],
+                "2025-05": [7773],
+            }
+        )
+        result = get_download_data.get_conda_pkg_download_stats(["pypsa"])
+        assert list(result.columns) == list(expected.columns)
+        pd.testing.assert_frame_equal(result, expected)
+
+    @pytest.mark.parametrize(
+        ("pypi_url", "pypi_name", "anaconda_url", "month_a", "month_b", "expected"),
+        [
+            ("https://pypi.org/pkg", "package", "https://anaconda.org/pkg", 1, 1, True),
+            (
+                "https://pypi.org/pkg",
+                "package",
+                "https://anaconda.org/pkg",
+                1,
+                None,
+                False,
+            ),
+        ],
+    )
+    def test_skip_tool_with_default_fields(
+        self,
+        pypi_url: str,
+        pypi_name: str,
+        anaconda_url: str,
+        month_a: int,
+        month_b: int,
+        expected: bool,
+    ) -> None:
+        """Test skip_tool with default required fields."""
+        row = pd.Series(
+            {
+                "pypi_package_url": pypi_url,
+                "pypi_package_name": pypi_name,
+                "anaconda_package_url": anaconda_url,
+                "2026-05": month_a,
+                "2026-04": month_b,
+            }
+        )
+        result = get_download_data.skip_tool(row)
+        assert result == expected

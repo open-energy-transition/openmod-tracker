@@ -213,6 +213,7 @@ class TestGetScores:
         with patch.dict(os.environ, {token_name: token_value}, clear=True):
             assert get_scores.check_auth_token(TEST_URL_GITLAB) is expected_result
 
+
 class TestGetDownloadData:
     """Test suite for get_download_data functions."""
 

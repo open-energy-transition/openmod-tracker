@@ -9,6 +9,7 @@ https://git.rwth-aachen.de/acs/public/simulation/ssmd: https://repos.ecosyste.ms
 https://git.tu-berlin.de/etus/public/aristopy: https://repos.ecosyste.ms/api/v1/hosts/git.tu-berlin.de/repositories/etus%2Fpublic%2Faristopy
 https://git.tu-berlin.de/genesysmod/genesys-mod-public: https://repos.ecosyste.ms/api/v1/hosts/git.tu-berlin.de/repositories/genesysmod%2Fgenesys-mod-public
 https://git.tu-berlin.de/users/sign_in: not-found
+https://gitee.com/lichgang/steps: not-found
 https://github.com/GENeSYS-MOD/GENeSYS_MOD.gms: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/GENeSYS-MOD%2FGENeSYS_MOD.gms
 https://github.com/adamgreenhall/minpower: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/adamgreenhall%2Fminpower
 https://github.com/adgefficiency/energy-py: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/ADGEfficiency%2Fenergy-py
@@ -19,8 +20,10 @@ https://github.com/akkudoktor-eos/eos: https://repos.ecosyste.ms/api/v1/hosts/Gi
 https://github.com/ames-market/psst: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/ames-market%2Fpsst
 https://github.com/ancillaryservicesacquisitionmodel/asam: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/AncillaryServicesAcquisitionModel%2FASAM
 https://github.com/andrewlyden/pylesa: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/andrewlyden%2FPyLESA
+https://github.com/anl-ceeesa/stream: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/ANL-CEEESA%2FSTREAM
 https://github.com/anl-ceeesa/unitcommitment.jl: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/ANL-CEEESA%2FUnitCommitment.jl
 https://github.com/antaressimulatorteam/antares_simulator: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/AntaresSimulatorTeam%2FAntares_Simulator
+https://github.com/arfc/osier: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/arfc%2Fosier
 https://github.com/arras-energy/gridlabd: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/arras-energy%2Fgridlabd
 https://github.com/arthurrinaldi/grimsel: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/arthurrinaldi%2Fgrimsel
 https://github.com/assume-framework/assume: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/assume-framework%2Fassume
@@ -35,6 +38,7 @@ https://github.com/breakthrough-energy/reise.jl: https://repos.ecosyste.ms/api/v
 https://github.com/btu-enerecon/em.power-invest: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/BTU-EnerEcon%2FEM.POWER-INVEST
 https://github.com/caaficus/bewhere-model: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/caaficus%2FBeWhere-model
 https://github.com/calliope-project/calliope: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/calliope-project%2Fcalliope
+https://github.com/cea-liten/cairnopen: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/CEA-Liten%2FCairnOpen
 https://github.com/changgang/steps: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/changgang%2Fsteps
 https://github.com/chengts95/rustpower: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/chengts95%2Frustpower
 https://github.com/chrisyeh96/sustaingym: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/chrisyeh96%2Fsustaingym
@@ -49,6 +53,7 @@ https://github.com/dss-extensions/dss_capi: https://repos.ecosyste.ms/api/v1/hos
 https://github.com/dynawo/dynawo: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/dynawo%2Fdynawo
 https://github.com/e2niee/pandapower: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/e2nIEE%2Fpandapower
 https://github.com/e3-/resolve: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/e3-%2Fresolve
+https://github.com/e4st-dev/e4st.jl: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/e4st-dev%2FE4ST.jl
 https://github.com/eiagov/bluesky: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/EIAgov%2FBlueSky
 https://github.com/electa-git/flexplan.jl: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/Electa-Git%2FFlexPlan.jl
 https://github.com/eliagroup/toop: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/eliagroup%2FToOp
@@ -219,6 +224,9 @@ https://github.com/sanpen/gridcal: https://repos.ecosyste.ms/api/v1/hosts/GitHub
 https://github.com/sanpen/veragrid: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/SanPen%2FVeraGrid
 https://github.com/sei-international/nemomod.jl: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/sei-international%2FNemoMod.jl
 https://github.com/sesam-polimi/microgridspy-sesam: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/SESAM-Polimi%2FMicroGridsPy-SESAM
+https://github.com/sienna-platform/powersimulations.jl: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/Sienna-Platform%2FPowerSimulations.jl
+https://github.com/sienna-platform/powersimulationsdynamics.jl: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/Sienna-Platform%2FPowerSimulationsDynamics.jl
+https://github.com/sienna-platform/powersystemsinvestments.jl: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/Sienna-Platform%2FPowerSystemsInvestments.jl
 https://github.com/simjunky/leelo: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/simjunky%2FLeelo
 https://github.com/slacgismo/tess: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/slacgismo%2FTESS
 https://github.com/sogno-platform/dpsim: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/sogno-platform%2Fdpsim
@@ -259,6 +267,7 @@ https://gitlab.com/dlr-ve/esy/amiris/amiris: https://repos.ecosyste.ms/api/v1/ho
 https://gitlab.com/dlr-ve/esy/remix: not-found
 https://gitlab.com/dlr-ve/esy/remix/framework: https://repos.ecosyste.ms/api/v1/hosts/gitlab.com/repositories/dlr-ve%2Fesy%2Fremix%2Fframework
 https://gitlab.com/energyincities/python-ehub: https://repos.ecosyste.ms/api/v1/hosts/gitlab.com/repositories/energyincities%2Fpython-ehub
+https://gitlab.com/energyscope/energyscope: https://repos.ecosyste.ms/api/v1/hosts/gitlab.com/repositories/energyscope%2Fenergyscope
 https://gitlab.com/fame-framework: not-found
 https://gitlab.com/fame-framework/fame-core: https://repos.ecosyste.ms/api/v1/hosts/gitlab.com/repositories/fame-framework%2Ffame-core
 https://gitlab.com/mosaik: not-found

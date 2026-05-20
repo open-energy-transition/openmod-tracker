@@ -32,12 +32,13 @@ and this project adheres to [Calendar Versioning](https://calver.org/).
 - Active maintainer number (#182).
 - Repo dependabot, code quality, and secret scanning in `openmod-tracker` source code repo.
 - Automated release process following monthly inventory auto-update.
+- Add the `get_scores.py` script to process the OpenSSF scores and a dedicated visualisation page in the dashboard (#217).
 
 ### Fixed
 
 - Failing duplicated URL filtering when ecosyste.ms server is down.
 
-### Changed
+## Changed
 
 - Tulipa energy & antares_simulator categories updated
 

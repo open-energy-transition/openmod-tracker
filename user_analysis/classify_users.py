@@ -21,6 +21,7 @@ from urllib.parse import urlparse
 import click
 import pandas as pd
 import pycountry
+import country_converter as cc
 import requests
 import unidecode
 import util
@@ -336,15 +337,9 @@ def query_geocode_cache(user_data: pd.Series) -> str | None:
     """Get data from the geocode country cache dict, returning an attempt at geolocating using email domains if no data is in the cache."""
     location = GECODE_CACHE.get(user_data["location"]) or classify_country(user_data)
 
-    if location is None:
-        return None
-
-    try:
-        # Strip and capitalize the location. To avoid the situation where the search_fuzzy fails because location = 'turkey'
-        location = location.strip().title()
-        country = pycountry.countries.search_fuzzy(location)[0]
-        return country.alpha_3
-    except (IndexError, AttributeError, TypeError, LookupError):
+    if location:
+        return cc.convert(names=location, to="ISO3")
+    else:
         return None
 
 

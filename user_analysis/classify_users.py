@@ -19,9 +19,9 @@ from typing import Literal
 from urllib.parse import urlparse
 
 import click
+import country_converter as cc
 import pandas as pd
 import pycountry
-import country_converter as cc
 import requests
 import unidecode
 import util

@@ -28,11 +28,16 @@ and this project adheres to [Calendar Versioning](https://calver.org/).
 ## Unreleased
 
 ### Added
+
 - Active maintainer number (#182).
 - Repo dependabot, code quality, and secret scanning in `openmod-tracker` source code repo.
 - Automated release process following monthly inventory auto-update.
 - Add the `get_scores.py` script to process the OpenSSF scores and a dedicated visualisation page in the dashboard (#217).
 - Add the `get_download_data.py` script to process package downloads and a dedicated visualisation page in the dashboard (#125)
+
+### Fixed
+
+- Failing duplicated URL filtering when ecosyste.ms server is down.
 
 ## Changed
 

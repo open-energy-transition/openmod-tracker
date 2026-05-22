@@ -21,7 +21,7 @@ def load_downloads(filepath: Path) -> pd.DataFrame:
     ------------
         filepath: Path to package_downloads.csv.
 
-    Returns
+    Returns:
     --------
         Long-format DataFrame with columns: id, display_name, html_url,
         pypi_package_url, date, downloads.
@@ -55,7 +55,7 @@ def compute_metrics(df: pd.DataFrame) -> dict:
         df: DataFrame
             Long-format downloads DataFrame.
 
-    Returns
+    Returns:
     --------
         Dict with latest_month, prev_month, totals, top tool name/count,
         all_time_total, and tool count.

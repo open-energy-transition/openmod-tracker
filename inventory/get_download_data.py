@@ -96,18 +96,17 @@ def get_conda_download_trends(previous_months: int = 12) -> pd.DataFrame:
 
 
 def is_conda_installed() -> bool:
-    """
-    Check if Conda is installed and accessible.
+    """Check if Conda is installed and accessible.
 
     This function attempts to run the `conda --version` command to verify
     that Conda is installed and available on the system PATH.
 
-    Returns
+    Returns:
     -------
     bool
         True if Conda is installed and accessible, False otherwise.
 
-    Notes
+    Notes:
     -----
     If Conda is not found or the check times out (5 seconds), a warning
     is logged and False is returned.
@@ -133,12 +132,11 @@ def find_conda_package(package_name: str) -> str | None:
     package_name : str
         The name of the package to search for
 
-    Returns
+    Returns:
     -------
     Optional[str]
         The URL to the package if found, None if not found or conda is not installed
     """
-
     # Build command with multiple channels
     cmd = [
         "conda",
@@ -169,13 +167,13 @@ def find_conda_package(package_name: str) -> str | None:
         LOGGER.info(f"Package '{package_name}' found")
         return url
     except subprocess.TimeoutExpired:
-        print("Conda search timed out")
+        LOGGER.info("Conda search timed out")
         return None
     except json.JSONDecodeError:
-        print("Error parsing conda response")
+        LOGGER.info("Error parsing conda response")
         return None
     except Exception as e:
-        print(f"Error searching for package: {e}")
+        LOGGER.info(f"Error searching for package: {e}")
         return None
 
 
@@ -187,7 +185,7 @@ def clean_url(url_str: str) -> str:
     url_str : str
         The URL string to clean.
 
-    Returns
+    Returns:
     -------
     str
         The cleaned URL string with leading/trailing whitespace and trailing slashes removed.
@@ -195,7 +193,9 @@ def clean_url(url_str: str) -> str:
     return url_str.strip().rstrip("/")
 
 
-def get_package_info(url: str, known_ecosystems = ["julia", "conda", "pypi"]) -> tuple[str | None, str | None, str | None, str | None, str | None]:
+def get_package_info(
+    url: str, known_ecosystems=["julia", "conda", "pypi"]
+) -> tuple[str | None, str | None, str | None, str | None, str | None]:
     """Get the package URL and name for PyPI, Anaconda and Juliahub from the repository URL.
 
     Parameters
@@ -205,7 +205,7 @@ def get_package_info(url: str, known_ecosystems = ["julia", "conda", "pypi"]) ->
     known_ecosystems : list[str], default=["julia", "conda", "pypi"]
         List of known ecosystems to check for packages.
 
-    Returns
+    Returns:
     --------
     tuple[str | None, str | None, str | None, str | None, str | None, str | None]
         Tuple of (pypi_url, conda_url, julia_url, other_url, pypi_pkg_name), or (None, None, None, None, None) if not found.
@@ -220,9 +220,21 @@ def get_package_info(url: str, known_ecosystems = ["julia", "conda", "pypi"]) ->
     # Map ecosystems to packages
     package_map = {pkg["ecosystem"]: pkg for pkg in packages}
 
-    pypi_url = clean_url(package_map["pypi"]["registry_url"]) if "pypi" in package_map else None
-    conda_url = clean_url(package_map["conda"]["registry_url"]) if "conda" in package_map else None
-    julia_url = clean_url(package_map["julia"]["registry_url"]) if "julia" in package_map else None
+    pypi_url = (
+        clean_url(package_map["pypi"]["registry_url"])
+        if "pypi" in package_map
+        else None
+    )
+    conda_url = (
+        clean_url(package_map["conda"]["registry_url"])
+        if "conda" in package_map
+        else None
+    )
+    julia_url = (
+        clean_url(package_map["julia"]["registry_url"])
+        if "julia" in package_map
+        else None
+    )
     if pypi_url:
         pypi_pkg_name = package_map.get("pypi", {}).get("name", "").strip()
 
@@ -280,7 +292,7 @@ def skip_tool(
     required_fields : list[str], default=["pypi_package_url", "pypi_package_name", "anaconda_package_url", "julia_package_url"]
         Base list of required field names that must be populated.
 
-    Returns
+    Returns:
     -------
     bool
         True if all required fields (including month-based fields) are
@@ -379,7 +391,7 @@ def enrich_with_monthly_downloads(
     conda_download_stats_df : pd.DataFrame
         DataFrame containing the monthly download statistics for anaconda.
 
-    Returns
+    Returns:
     ---------
     pd.DataFrame
         DataFrame containing the monthly download statistics.
@@ -470,10 +482,11 @@ def enrich_with_monthly_downloads(
 )
 def cli(stats_file: Path, out_path: Path, use_bigquery: bool, pypi_path: Path) -> None:
     """CLI entry point to collect all users who interact with repositories listed in a stats file."""
-
     is_conda_available = is_conda_installed()
     if not is_conda_available:
-        raise SystemExit("Conda is not installed or not accessible. Please install conda and try again.")
+        raise SystemExit(
+            "Conda is not installed or not accessible. Please install conda and try again."
+        )
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -509,7 +522,9 @@ def cli(stats_file: Path, out_path: Path, use_bigquery: bool, pypi_path: Path) -
         row_data = {"id": tool_id, "html_url": row["html_url"]}
 
         # Preserve existing values. Only fill missing fields. Use .setdefault https://docs.python.org/3/library/stdtypes.html#dict.setdefault
-        pypi_pkg_url, conda_pkg_url, julia_pkg_url, other_pkg_url, pypi_pkg_name = get_package_info(row["html_url"])
+        pypi_pkg_url, conda_pkg_url, julia_pkg_url, other_pkg_url, pypi_pkg_name = (
+            get_package_info(row["html_url"])
+        )
         row_data.setdefault("pypi_package_url", pypi_pkg_url)
         row_data.setdefault("pypi_package_name", pypi_pkg_name)
         row_data.setdefault("anaconda_package_url", conda_pkg_url)

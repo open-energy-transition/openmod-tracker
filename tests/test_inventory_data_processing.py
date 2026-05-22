@@ -358,7 +358,14 @@ class TestGetDownloadData:
         assert result == expected
 
     @pytest.mark.parametrize(
-        ("url","expected_pypi_url","expected_conda_url","expected_julia_url","expected_other_url","expected_package_name"),
+        (
+            "url",
+            "expected_pypi_url",
+            "expected_conda_url",
+            "expected_julia_url",
+            "expected_other_url",
+            "expected_package_name",
+        ),
         [
             (
                 TEST_URL_GITHUB,

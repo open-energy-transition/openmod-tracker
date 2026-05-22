@@ -491,14 +491,14 @@ def cli(stats_file: Path, out_path: Path, use_bigquery: bool, pypi_path: Path) -
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
     # Load existing data into a dict for fast lookup
-    existing_by_id = {}
-    if out_path.exists():
-        existing = pd.read_csv(out_path).drop_duplicates(subset=["id"], keep="last")
-        existing_by_id = {row["id"]: row for _, row in existing.iterrows()}
+    # existing_by_id = {}
+    #if out_path.exists():
+    #    #existing = pd.read_csv(out_path).drop_duplicates(subset=["id"], keep="last")
+    #    # existing_by_id = {row["id"]: row for _, row in existing.iterrows()}
 
     # Load stats
     stats_df = pd.read_csv(stats_file, usecols=["id", "html_url"])
-    repo_to_pkg_df = pd.read_csv("user_analysis/output/repo_to_package.csv")
+    # repo_to_pkg_df = pd.read_csv("user_analysis/output/repo_to_package.csv")
 
     rows_out = []
     for _, row in tqdm(

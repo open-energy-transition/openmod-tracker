@@ -168,7 +168,6 @@ def find_conda_package(package_name: str) -> str | None:
         url = f"https://anaconda.org/conda-forge/{package_name}"
         LOGGER.info(f"Package '{package_name}' found")
         return url
-
     except subprocess.TimeoutExpired:
         print("Conda search timed out")
         return None
@@ -180,28 +179,59 @@ def find_conda_package(package_name: str) -> str | None:
         return None
 
 
-def get_pypi_package_info(url: str) -> tuple[str | None, str | None]:
-    """Get the PyPI package URL from the repository URL.
+def clean_url(url_str: str) -> str:
+    """Remove whitespace and trailing slashes from a URL string.
+
+    Parameters
+    ----------
+    url_str : str
+        The URL string to clean.
+
+    Returns
+    -------
+    str
+        The cleaned URL string with leading/trailing whitespace and trailing slashes removed.
+    """
+    return url_str.strip().rstrip("/")
+
+
+def get_package_info(url: str, known_ecosystems = ["julia", "conda", "pypi"]) -> tuple[str | None, str | None, str | None, str | None, str | None]:
+    """Get the package URL and name for PyPI, Anaconda and Juliahub from the repository URL.
 
     Parameters
     -----------
     url : str
         Repository URL.
+    known_ecosystems : list[str], default=["julia", "conda", "pypi"]
+        List of known ecosystems to check for packages.
 
     Returns
     --------
-    tuple[str | None, str | None]
-        Tuple of (package_url, package_name), or (None, None) if not found.
+    tuple[str | None, str | None, str | None, str | None, str | None, str | None]
+        Tuple of (pypi_url, conda_url, julia_url, other_url, pypi_pkg_name), or (None, None, None, None, None) if not found.
     """
     packages = util.get_ecosystems_package_data(url)
-    if packages:
-        package = packages[0]
-        registry_url = package["registry_url"].strip()
-        if registry_url.endswith("/"):
-            registry_url = registry_url[:-1]
-        package_name = package["name"].strip()
-        return registry_url, package_name
-    return None, None
+    other_url = None
+    pypi_pkg_name = None
+
+    if not packages:
+        return None, None, None, None, None
+
+    # Map ecosystems to packages
+    package_map = {pkg["ecosystem"]: pkg for pkg in packages}
+
+    pypi_url = clean_url(package_map["pypi"]["registry_url"]) if "pypi" in package_map else None
+    conda_url = clean_url(package_map["conda"]["registry_url"]) if "conda" in package_map else None
+    julia_url = clean_url(package_map["julia"]["registry_url"]) if "julia" in package_map else None
+    if pypi_url:
+        pypi_pkg_name = package_map.get("pypi", {}).get("name", "").strip()
+
+    for ecosystem, pkg in package_map.items():
+        if ecosystem not in known_ecosystems:
+            LOGGER.info(f"Other ecosystem: {ecosystem}")
+            other_url = clean_url(package_map[ecosystem]["registry_url"])
+
+    return pypi_url, conda_url, julia_url, other_url, pypi_pkg_name
 
 
 def _is_populated(row: Series, col: str) -> bool:
@@ -479,32 +509,12 @@ def cli(stats_file: Path, out_path: Path, use_bigquery: bool, pypi_path: Path) -
         row_data = {"id": tool_id, "html_url": row["html_url"]}
 
         # Preserve existing values. Only fill missing fields. Use .setdefault https://docs.python.org/3/library/stdtypes.html#dict.setdefault
-        pkg_url, pkg_name = get_pypi_package_info(row["html_url"])
-        if pkg_url and pkg_name:
-            if "pypi.org" in pkg_url:
-                row_data.setdefault("pypi_package_url", pkg_url)
-                row_data.setdefault("pypi_package_name", pkg_name)
-            elif "anaconda.org" in pkg_url:
-                row_data.setdefault("anaconda_package_url", pkg_url)
-            elif "juliahub.com" in pkg_url:
-                row_data.setdefault("juliahub_package_url", pkg_url)
-            else:
-                row_data.setdefault("other_source", pkg_url)
-        else:
-            match = repo_to_pkg_df[repo_to_pkg_df["html_url"] == row["html_url"]]
-            if not match.empty:
-                pkg_url = match.iloc[0]["pypi_package_url"] or None
-                pkg_name = match.iloc[0]["pypi_package_name"] or None
-                if pkg_url:
-                    row_data.setdefault("pypi_package_url", pkg_url)
-                if pkg_name:
-                    row_data.setdefault("pypi_package_name", pkg_name)
-
-
-        if not row_data.get("anaconda_package_url"):
-            anaconda_package_url = find_conda_package(pkg_name) if pkg_name else None
-            if anaconda_package_url:
-                row_data.setdefault("anaconda_package_url", anaconda_package_url)
+        pypi_pkg_url, conda_pkg_url, julia_pkg_url, other_pkg_url, pypi_pkg_name = get_package_info(row["html_url"])
+        row_data.setdefault("pypi_package_url", pypi_pkg_url)
+        row_data.setdefault("pypi_package_name", pypi_pkg_name)
+        row_data.setdefault("anaconda_package_url", conda_pkg_url)
+        row_data.setdefault("juliahub_package_url", julia_pkg_url)
+        row_data.setdefault("other_source", other_pkg_url)
 
         rows_out.append(row_data)
 

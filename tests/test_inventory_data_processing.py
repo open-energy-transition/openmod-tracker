@@ -356,3 +356,42 @@ class TestGetDownloadData:
         )
         result = get_download_data.skip_tool(row)
         assert result == expected
+
+    @pytest.mark.parametrize(
+        "url,expected_pypi_url,expected_conda_url,expected_julia_url,expected_other_url,expected_package_name",
+        [
+            (
+                    TEST_URL_GITHUB,
+                    "https://pypi.org/project/pypsa",
+                    "https://anaconda.org/conda-forge/pypsa",
+                    None,
+                    None,
+                    "pypsa",
+            ),
+            (
+                    "https://gitlab.com/fame-framework/fame-core",
+                    None,
+                    None,
+                    None,
+                    "https://central.sonatype.com/artifact/de.dlr.gitlab.fame/core",
+                    None,
+            ),
+            (
+                    "https://github.com/YoungFaithful/CapacityExpansion.jl",
+                    None,
+                    None,
+                    "https://juliahub.com/ui/Packages/General/CapacityExpansion",
+                    None,
+                    None,
+            ),
+        ],
+    )
+    def test_get_package_info(self, url: str, expected_pypi_url: str, expected_conda_url: str, expected_julia_url: str, expected_other_url: str,
+                              expected_package_name: str) -> None:
+        """Test get_package_info function."""
+        pypi_url, conda_url, julia_url, other_url, package_name = get_download_data.get_package_info(url)
+        assert pypi_url == expected_pypi_url
+        assert conda_url == expected_conda_url
+        assert julia_url == expected_julia_url
+        assert other_url == expected_other_url
+        assert package_name == expected_package_name

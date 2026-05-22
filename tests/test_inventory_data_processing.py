@@ -41,7 +41,7 @@ def ecosystems_issue_api():
 
 
 @pytest.fixture
-def download_df():
+def download_df() -> pd.DataFrame:
     """Fixture to generate a DataFrame with PyPI package url and name."""
     return pd.DataFrame(
         {
@@ -63,7 +63,7 @@ def download_df():
 
 
 @pytest.fixture
-def download_stats_df():
+def pypi_download_stats_df() -> pd.DataFrame:
     """Fixture to generate a DataFrame with PyPI package download stats."""
     return pd.DataFrame(
         {
@@ -87,6 +87,34 @@ def download_stats_df():
                 "pack_two",
                 "pack_two",
                 "pack_four",
+                "pack_four",
+                "pack_four",
+            ],
+        }
+    )
+
+
+@pytest.fixture
+def conda_download_stats_df() -> pd.DataFrame:
+    """Fixture to generate a DataFrame with Anaconda package download stats."""
+    return pd.DataFrame(
+        {
+            "counts": ["1", "2", "3", "4", "6", "7", "8"],
+            "time": [
+                "2026-05-01",
+                "2026-04-01",
+                "2026-03-01",
+                "2026-05-01",
+                "2026-03-01",
+                "2026-05-01",
+                "2026-04-01",
+            ],
+            "pkg_name": [
+                "pack_one",
+                "pack_one",
+                "pack_one",
+                "pack_two",
+                "pack_two",
                 "pack_four",
                 "pack_four",
             ],
@@ -239,11 +267,14 @@ class TestGetDownloadData:
         assert get_download_data._is_populated(row, "col") is expected
 
     def test_enrich_with_monthly_downloads(
-        self, download_df: pd.DataFrame, download_stats_df: pd.DataFrame
+        self,
+        download_df: pd.DataFrame,
+        pypi_download_stats_df: pd.DataFrame,
+        conda_download_stats_df: pd.DataFrame,
     ) -> None:
         """Test enrich_with_monthly_downloads function."""
         output_df = get_download_data.enrich_with_monthly_downloads(
-            download_df, download_stats_df
+            download_df, pypi_download_stats_df, conda_download_stats_df
         )
         expected_df = pd.DataFrame(
             {
@@ -260,13 +291,11 @@ class TestGetDownloadData:
                 ],
                 "pypi_package_name": ["pack_ONE", "pack_two", "PACK_three"],
                 "other_source": ["source_one", "source_two", "source_three"],
-                "2026-05": ["1", "4", None],
-                "2026-04": ["2", "5", None],
-                "2026-03": ["3", "6", None],
+                "2026-05": [2.0, 8.0, None],
+                "2026-04": [4.0, 5.0, None],
+                "2026-03": [6.0, 12.0, None],
             }
         )
-        print(output_df)
-        print(expected_df)
         pd.testing.assert_frame_equal(output_df, expected_df)
 
     def test_get_conda_pkg_download_stats(self) -> None:
@@ -274,15 +303,18 @@ class TestGetDownloadData:
         # Expected data
         expected = pd.DataFrame(
             {
-                "pkg_name": ["pypsa"],
-                "2026-04": [8783],
-                "2026-03": [9235],
-                "2026-02": [10370],
-                "2026-01": [10106],
-                "2025-08": [5021],
-                "2025-07": [5836],
-                "2025-06": [5880],
-                "2025-05": [7773],
+                "pkg_name": ["pypsa"] * 8,
+                "time": [
+                    "2025-05",
+                    "2025-06",
+                    "2025-07",
+                    "2025-08",
+                    "2026-01",
+                    "2026-02",
+                    "2026-03",
+                    "2026-04",
+                ],
+                "counts": [7773, 5880, 5836, 5021, 10106, 10370, 9235, 8783],
             }
         )
         result = get_download_data.get_conda_pkg_download_stats(["pypsa"])

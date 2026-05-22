@@ -315,19 +315,19 @@ def get_conda_pkg_download_stats(list_of_packages: list[str]) -> pd.DataFrame:
         .isin([pkg.casefold() for pkg in list_of_packages])
     ]
     grouped = filtered.groupby(["pkg_name", "time"])["counts"].sum().reset_index()
-    wide = (
-        grouped.pivot(index="pkg_name", columns="time", values="counts")
-        .reset_index()
-        .rename_axis(None, axis=1)
-    )
+    # wide = (
+    #     grouped.pivot(index="pkg_name", columns="time", values="counts")
+    #     .reset_index()
+    #     .rename_axis(None, axis=1)
+    # )
+    #
+    # # Reorder columns: keep pkg_name first, then sort month columns in descending order
+    # time_columns = sorted(
+    #     [col for col in wide.columns if col != "pkg_name"], reverse=True
+    # )
+    # wide = wide[["pkg_name"] + time_columns]
 
-    # Reorder columns: keep pkg_name first, then sort month columns in descending order
-    time_columns = sorted(
-        [col for col in wide.columns if col != "pkg_name"], reverse=True
-    )
-    wide = wide[["pkg_name"] + time_columns]
-
-    return wide
+    return grouped
 
 
 def enrich_with_monthly_downloads(
@@ -344,7 +344,7 @@ def enrich_with_monthly_downloads(
     pypi_download_stats_df : pd.DataFrame
         DataFrame containing the monthly download statistics for pypi.
     conda_download_stats_df : pd.DataFrame
-        DataFrame containing the monthly download statistics for anaconda..
+        DataFrame containing the monthly download statistics for anaconda.
 
     Returns:
     ---------
@@ -366,17 +366,47 @@ def enrich_with_monthly_downloads(
         conda_stats["pkg_name"].astype("string").str.casefold().str.strip()
     )
 
-    pypi_stats["month"] = pd.to_datetime(pypi_stats["month"], errors="coerce")
-    pypi_stats = pypi_stats.dropna(subset=["month", "_join_pkg"])
-    pypi_stats["month_col"] = pypi_stats["month"].dt.strftime("%Y-%m")
+    pypi_stats["month"] = pd.to_datetime(
+        pypi_stats["month"], errors="coerce"
+    ).dt.strftime("%Y-%m")
+    pypi_stats["num_downloads"] = pd.to_numeric(
+        pypi_stats["num_downloads"], errors="coerce"
+    )
+    pypi_stats = pypi_stats[["_join_pkg", "month", "num_downloads"]].dropna()
+
+    conda_stats["month"] = pd.to_datetime(
+        conda_stats["time"], errors="coerce"
+    ).dt.strftime("%Y-%m")
+    conda_stats["num_downloads"] = pd.to_numeric(conda_stats["counts"], errors="coerce")
+    conda_stats = conda_stats[["_join_pkg", "month", "num_downloads"]].dropna()
 
     # Check whether some package-month appears more than once.
     # Potential duplicates would make the pivot fail.
-    if pypi_stats.duplicated(subset=["_join_pkg", "month_col"], keep=False).any():
+    if pypi_stats.duplicated(subset=["_join_pkg", "month"], keep=False).any():
         raise ValueError(
-            "Duplicate package-month rows found in download stats; expected unique pairs "
-            "of (project, month)."
+            "Duplicate _join_pkg-month rows found in the PyPI download stats; expected unique pairs."
         )
+
+    # Check whether some package-month appears more than once.
+    # Potential duplicates would make the pivot fail.
+    if conda_stats.duplicated(subset=["_join_pkg", "month"], keep=False).any():
+        raise ValueError(
+            "Duplicate _join_pkg-month rows found in the Anaconda download stats; expected unique pairs."
+        )
+
+    # Combine both sources and pivot
+    combined = pd.concat([pypi_stats, conda_stats], ignore_index=True).dropna()
+    monthly = (
+        combined.groupby(["_join_pkg", "month"])["num_downloads"]
+        .sum()
+        .unstack(fill_value=0)
+        .reset_index()
+    )
+    month_cols = sorted([c for c in monthly.columns if c != "_join_pkg"], reverse=True)
+    monthly = monthly[["_join_pkg", *month_cols]]
+
+    # Merge back to base
+    return base.merge(monthly, how="left", on="_join_pkg").drop(columns=["_join_pkg"])
 
     wide = pypi_stats.pivot(
         index="_join_pkg", columns="month_col", values="num_downloads"

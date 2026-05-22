@@ -408,17 +408,6 @@ def enrich_with_monthly_downloads(
     # Merge back to base
     return base.merge(monthly, how="left", on="_join_pkg").drop(columns=["_join_pkg"])
 
-    wide = pypi_stats.pivot(
-        index="_join_pkg", columns="month_col", values="num_downloads"
-    ).reset_index()
-
-    month_cols = sorted([c for c in wide.columns if c != "_join_pkg"], reverse=True)
-    wide = wide[["_join_pkg", *month_cols]]
-
-    enriched = base.merge(wide, how="left", on="_join_pkg").drop(columns=["_join_pkg"])
-
-    return enriched
-
 
 @click.command()
 @click.option(

@@ -26,6 +26,7 @@ COLS = [
     "pypi_package_url",
     "pypi_package_name",
     "anaconda_package_url",
+    "julia_package_url",
     "other_source",
 ]
 
@@ -94,6 +95,33 @@ def get_conda_download_trends(previous_months: int = 12) -> pd.DataFrame:
     return previous_months_df
 
 
+def is_conda_installed() -> bool:
+    """
+    Check if Conda is installed and accessible.
+
+    This function attempts to run the `conda --version` command to verify
+    that Conda is installed and available on the system PATH.
+
+    Returns
+    -------
+    bool
+        True if Conda is installed and accessible, False otherwise.
+
+    Notes
+    -----
+    If Conda is not found or the check times out (5 seconds), a warning
+    is logged and False is returned.
+    """
+    try:
+        result = subprocess.run(
+            ["conda", "--version"], capture_output=True, text=True, timeout=5
+        )
+        return result.returncode == 0
+    except (FileNotFoundError, subprocess.TimeoutExpired):
+        LOGGER.warning("Conda is not installed or check timed out")
+        return False
+
+
 def find_conda_package(package_name: str) -> str | None:
     """Check if conda is installed and search for a package on Anaconda channels.
 
@@ -105,25 +133,11 @@ def find_conda_package(package_name: str) -> str | None:
     package_name : str
         The name of the package to search for
 
-    Returns:
+    Returns
     -------
     Optional[str]
         The URL to the package if found, None if not found or conda is not installed
     """
-    # Check if conda is installed
-    try:
-        result = subprocess.run(
-            ["conda", "--version"], capture_output=True, text=True, timeout=5
-        )
-        if result.returncode != 0:
-            print("Conda is not installed")
-            return None
-    except FileNotFoundError:
-        print("Conda is not installed")
-        return None
-    except subprocess.TimeoutExpired:
-        print("Conda check timed out")
-        return None
 
     # Build command with multiple channels
     cmd = [
@@ -174,7 +188,7 @@ def get_pypi_package_info(url: str) -> tuple[str | None, str | None]:
     url : str
         Repository URL.
 
-    Returns:
+    Returns
     --------
     tuple[str | None, str | None]
         Tuple of (package_url, package_name), or (None, None) if not found.
@@ -216,6 +230,7 @@ def skip_tool(
         "pypi_package_url",
         "pypi_package_name",
         "anaconda_package_url",
+        "julia_package_url",
     ],
 ) -> bool:
     """Skip tool row if all required fields are populated.
@@ -232,10 +247,10 @@ def skip_tool(
     months_back : int, default=2
         Number of months to generate in the past from the current date.
         Each month is formatted as "YYYY-MM" and added to the required fields.
-    required_fields : list[str], default=["pypi_package_url", "pypi_package_name", "anaconda_package_url"]
+    required_fields : list[str], default=["pypi_package_url", "pypi_package_name", "anaconda_package_url", "julia_package_url"]
         Base list of required field names that must be populated.
 
-    Returns:
+    Returns
     -------
     bool
         True if all required fields (including month-based fields) are
@@ -315,18 +330,6 @@ def get_conda_pkg_download_stats(list_of_packages: list[str]) -> pd.DataFrame:
         .isin([pkg.casefold() for pkg in list_of_packages])
     ]
     grouped = filtered.groupby(["pkg_name", "time"])["counts"].sum().reset_index()
-    # wide = (
-    #     grouped.pivot(index="pkg_name", columns="time", values="counts")
-    #     .reset_index()
-    #     .rename_axis(None, axis=1)
-    # )
-    #
-    # # Reorder columns: keep pkg_name first, then sort month columns in descending order
-    # time_columns = sorted(
-    #     [col for col in wide.columns if col != "pkg_name"], reverse=True
-    # )
-    # wide = wide[["pkg_name"] + time_columns]
-
     return grouped
 
 
@@ -346,7 +349,7 @@ def enrich_with_monthly_downloads(
     conda_download_stats_df : pd.DataFrame
         DataFrame containing the monthly download statistics for anaconda.
 
-    Returns:
+    Returns
     ---------
     pd.DataFrame
         DataFrame containing the monthly download statistics.
@@ -437,6 +440,11 @@ def enrich_with_monthly_downloads(
 )
 def cli(stats_file: Path, out_path: Path, use_bigquery: bool, pypi_path: Path) -> None:
     """CLI entry point to collect all users who interact with repositories listed in a stats file."""
+
+    is_conda_available = is_conda_installed()
+    if not is_conda_available:
+        raise SystemExit("Conda is not installed or not accessible. Please install conda and try again.")
+
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
     # Load existing data into a dict for fast lookup
@@ -447,6 +455,7 @@ def cli(stats_file: Path, out_path: Path, use_bigquery: bool, pypi_path: Path) -
 
     # Load stats
     stats_df = pd.read_csv(stats_file, usecols=["id", "html_url"])
+    repo_to_pkg_df = pd.read_csv("user_analysis/output/repo_to_package.csv")
 
     rows_out = []
     for _, row in tqdm(
@@ -454,31 +463,48 @@ def cli(stats_file: Path, out_path: Path, use_bigquery: bool, pypi_path: Path) -
     ):
         tool_id = row["id"]
 
-        # Start from cached row if present, otherwise create a new one
-        if tool_id in existing_by_id:
-            existing_row = existing_by_id[tool_id]
+        # # Start from cached row if present, otherwise create a new one
+        # if tool_id in existing_by_id:
+        #     existing_row = existing_by_id[tool_id]
+        #
+        #     # If all the relevant columns are already populated, skip the tool to save time
+        #     if skip_tool(existing_row):
+        #         rows_out.append(existing_row.to_dict())
+        #         continue
+        #     # If some of the relevant columns are not populated, store the cached data
+        #     row_data = existing_row.to_dict()
+        # else:
+        #     row_data = {"id": tool_id, "html_url": row["html_url"]}
 
-            # If all the relevant columns are already populated, skip the tool to save time
-            if skip_tool(existing_row):
-                rows_out.append(existing_row.to_dict())
-                continue
-            # If some of the relevant columns are not populated, store the cached data
-            row_data = existing_row.to_dict()
-        else:
-            row_data = {"id": tool_id, "html_url": row["html_url"]}
+        row_data = {"id": tool_id, "html_url": row["html_url"]}
 
         # Preserve existing values. Only fill missing fields. Use .setdefault https://docs.python.org/3/library/stdtypes.html#dict.setdefault
-        pypi_url, pypi_name = get_pypi_package_info(row["html_url"])
-        if pypi_url and pypi_name:
-            if "pypi" in pypi_url:
-                row_data.setdefault("pypi_package_url", pypi_url)
-                row_data.setdefault("pypi_package_name", pypi_name)
+        pkg_url, pkg_name = get_pypi_package_info(row["html_url"])
+        if pkg_url and pkg_name:
+            if "pypi.org" in pkg_url:
+                row_data.setdefault("pypi_package_url", pkg_url)
+                row_data.setdefault("pypi_package_name", pkg_name)
+            elif "anaconda.org" in pkg_url:
+                row_data.setdefault("anaconda_package_url", pkg_url)
+            elif "juliahub.com" in pkg_url:
+                row_data.setdefault("juliahub_package_url", pkg_url)
             else:
-                row_data.setdefault("other_source", pypi_url)
+                row_data.setdefault("other_source", pkg_url)
+        else:
+            match = repo_to_pkg_df[repo_to_pkg_df["html_url"] == row["html_url"]]
+            if not match.empty:
+                pkg_url = match.iloc[0]["pypi_package_url"] or None
+                pkg_name = match.iloc[0]["pypi_package_name"] or None
+                if pkg_url:
+                    row_data.setdefault("pypi_package_url", pkg_url)
+                if pkg_name:
+                    row_data.setdefault("pypi_package_name", pkg_name)
 
-        anaconda_package_url = find_conda_package(pypi_name) if pypi_name else None
-        if anaconda_package_url:
-            row_data.setdefault("anaconda_package_url", anaconda_package_url)
+
+        if not row_data.get("anaconda_package_url"):
+            anaconda_package_url = find_conda_package(pkg_name) if pkg_name else None
+            if anaconda_package_url:
+                row_data.setdefault("anaconda_package_url", anaconda_package_url)
 
         rows_out.append(row_data)
 

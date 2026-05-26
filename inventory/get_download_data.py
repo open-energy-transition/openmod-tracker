@@ -492,7 +492,7 @@ def cli(stats_file: Path, out_path: Path, use_bigquery: bool, pypi_path: Path) -
 
     # Load existing data into a dict for fast lookup
     # existing_by_id = {}
-    #if out_path.exists():
+    # if out_path.exists():
     #    #existing = pd.read_csv(out_path).drop_duplicates(subset=["id"], keep="last")
     #    # existing_by_id = {row["id"]: row for _, row in existing.iterrows()}
 

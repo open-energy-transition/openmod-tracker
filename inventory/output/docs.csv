@@ -161,7 +161,7 @@ psatools_python,,,
 psp_ufu,,http://Thales1330.github.io/PSP,
 psst,http://psst.readthedocs.io,http://ames-market.github.io/psst,
 pycity_scheduling,,,https://git.rwth-aachen.de/acs/public/simulation/pycity_scheduling.wiki.git
-pyetm,,,
+pyetm,,http://quintel.github.io/pyetm,
 pylesa,,,
 pymarket,http://pymarket.readthedocs.io,,
 pymfm,,,

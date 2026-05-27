@@ -25,9 +25,12 @@ jobs:
           fetch-depth: 0
           # Use a token that can create PRs and push to branches
           token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set up Homebrew
+        id: set-up-homebrew
+        uses: Homebrew/actions/setup-homebrew@main
 
-      - name: Pull Scorecard Docker image
-        run: docker pull ghcr.io/ossf/scorecard:latest
+      - name: Install scorecard
+        run: brew install scorecard
 
       - name: Setup Pixi
         uses: prefix-dev/setup-pixi@v0.9.5

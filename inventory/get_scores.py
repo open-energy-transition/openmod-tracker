@@ -12,11 +12,13 @@ import subprocess
 from pathlib import Path
 
 import click
+import dotenv
 import pandas as pd
 import requests
 import tqdm
 import yaml
 
+dotenv.load_dotenv()
 path_cwd = Path().cwd()
 
 LOGGER = logging.getLogger(__name__)
@@ -25,9 +27,14 @@ OSSF_BRANCH_PROTECTION_ERROR_RE = re.compile(
     r"internal error.*brancheshandler.*fine-grained-auth-token\.md",
     re.IGNORECASE | re.DOTALL,
 )
+OSSF_OTHER_ERROR_RE = re.compile(r"internal error.*", re.IGNORECASE | re.DOTALL)
 OSSF_BRANCH_PROTECTION_REPHRASED = (
     "OpenSSF Scorecard could not read branch protection rules due to github token issues. "
     "See: https://github.com/ossf/scorecard-action/blob/main/docs/authentication/fine-grained-auth-token.md"
+)
+OSSF_OTHER_ERROR_REPHRASED = (
+    "OpenSSF Scorecard encountered an internal error while processing this check. "
+    "This may be due to issues with the scorecard service or the repository's configuration."
 )
 
 
@@ -46,6 +53,8 @@ def sanitise_ossf_reason(text: str) -> str:
     """
     if OSSF_BRANCH_PROTECTION_ERROR_RE.search(text):
         return OSSF_BRANCH_PROTECTION_REPHRASED
+    elif OSSF_OTHER_ERROR_RE.search(text):
+        return OSSF_OTHER_ERROR_REPHRASED
     return text
 
 
@@ -254,17 +263,17 @@ def get_scorecard_from_cli(url: str) -> str | None:
         )
 
         output_lines = []
-
+        has_partial_error = False
         # Read stdout line by line
         for line in process.stdout:
             if "error" in line.lower():
-                print(line, end="")
+                has_partial_error = True
             output_lines.append(line)
 
         process.wait()
 
         full_output = "".join(output_lines)
-        if process.returncode == 0:
+        if process.returncode == 0 or has_partial_error:
             return full_output
         else:
             LOGGER.error(

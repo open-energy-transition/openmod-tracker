@@ -12,11 +12,13 @@ import subprocess
 from pathlib import Path
 
 import click
+import dotenv
 import pandas as pd
 import requests
 import tqdm
 import yaml
 
+dotenv.load_dotenv()
 path_cwd = Path().cwd()
 
 LOGGER = logging.getLogger(__name__)
@@ -254,17 +256,17 @@ def get_scorecard_from_cli(url: str) -> str | None:
         )
 
         output_lines = []
-
+        has_partial_error = False
         # Read stdout line by line
         for line in process.stdout:
             if "error" in line.lower():
-                print(line, end="")
+                has_partial_error = True
             output_lines.append(line)
 
         process.wait()
 
         full_output = "".join(output_lines)
-        if process.returncode == 0:
+        if process.returncode == 0 or has_partial_error:
             return full_output
         else:
             LOGGER.error(

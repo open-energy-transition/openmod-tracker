@@ -25,6 +25,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Calendar Versioning](https://calver.org/).
 
+## 2026-05-28
+
+### Added
+
+- Test docker image in CI
+
+### Fixed
+
+- Delete github pagination cache to get a correct representation of repo interactions
+- Drop duplicates in repo interactions CSV
+- Ensure duplicates are removed from repo interactions
+
+## Changed
+
+- Updated development page bot regex
+- Start scorecard page on empty
+- Move score further left in main dashboard table
+
 ## 2026-05-27
 
 ### Added

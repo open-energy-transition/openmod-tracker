@@ -59,9 +59,6 @@ jobs:
             echo "last_tag=" >> $GITHUB_OUTPUT
           fi
 
-      - name: Build Docker image
-        run: docker build --tag open-esm-analysis:pre-release-test .
-
       - name: Configure Git
         run: |
           git config --local user.email "action@github.com"

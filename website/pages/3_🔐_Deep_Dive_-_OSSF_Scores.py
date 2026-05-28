@@ -152,9 +152,13 @@ def main() -> None:
     # ── Sidebar filters ───────────────────────────────────────────────────────
     st.sidebar.header("Filters")
 
-    selected_tool = st.sidebar.selectbox("Select a tool", options=scores.index.tolist())
+    selected_tool = st.sidebar.selectbox(
+        "Select a tool", options=scores.index.tolist(), index=None
+    )
 
-    if selected_tool:
+    if selected_tool is None:
+        st.warning("Please select a tool to analyse.")
+    else:
         score_row = scores.loc[selected_tool]
         agg = score_row.get("aggregated_score", "?")
         agg_style = score_to_gradient(agg)

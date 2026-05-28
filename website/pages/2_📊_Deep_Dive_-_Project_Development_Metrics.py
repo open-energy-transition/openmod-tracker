@@ -81,8 +81,10 @@ def create_vis_table(filepath: Path) -> pd.DataFrame:
         DataFrame containing user interactions with parsed datetime columns.
     """
     # Check if user analysis data exists
-    df = pd.read_csv(filepath, parse_dates=["created", "closed", "merged"]).dropna(
-        subset=["username", "repo"], how="any"
+    df = (
+        pd.read_csv(filepath, parse_dates=["created", "closed", "merged"])
+        .dropna(subset=["username", "repo"], how="any")
+        .drop_duplicates()
     )
     st.session_state["interaction_df"] = df
 
@@ -108,13 +110,14 @@ def filter_interactions(
     """
     bot_patterns = [
         "-bot",
+        r"\[bot\]",
         "actions",
         "dependabot",
         "JuliaTagBot",
         "pudlbot",
         "codebot",
         "renovate",
-        "sonarqubecloud",
+        "sonarqube",
         "codecov",
         "coveralls",
         "pre-commit-ci",

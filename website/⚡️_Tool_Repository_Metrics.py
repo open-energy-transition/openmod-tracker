@@ -34,10 +34,10 @@ COLUMN_NAME_MAPPING: dict[str, str] = {
     "forks_count": "Forks",
     "dependent_repos_count": "Dependents",
     "last_month_downloads": "1 Month Downloads",
+    "aggregated_score": "OSSF Score",
     "category": "Category",
     "language": "Language",
     "license_category": "License Type",
-    "aggregated_score": "OSSF Score",
 }
 
 COLUMN_DTYPES: dict[str, Callable] = {
@@ -51,9 +51,9 @@ COLUMN_DTYPES: dict[str, Callable] = {
     "forks_count": pd.to_numeric,
     "dependent_repos_count": pd.to_numeric,
     "last_month_downloads": pd.to_numeric,
+    "aggregated_score": pd.to_numeric,
     "category": lambda x: x.str.split(","),
     "license_category": lambda x: x.astype("string"),
-    "aggregated_score": pd.to_numeric,
 }
 
 NUMBER_FORMAT: dict[str, str] = {

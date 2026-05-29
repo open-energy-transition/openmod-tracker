@@ -146,6 +146,9 @@ def select_package_info(packages: list[dict], ecosystem: str) -> dict | None:
 
     If multiple packages exist for the same ecosystem, prefer the one with
     a populated registry_url matching the expected pattern for that ecosystem.
+    As an example consider the response body of the GET call
+    https://packages.ecosyste.ms/api/v1/packages/lookup?repository_url=https%3A%2F%2Fgithub.com%2FCURENT%2Fandes, which contains two
+    packages for the "pypi" ecosystem, but only one of them has a valid registry_url starting with "https://pypi.org/project/".
 
     Parameters
     ------------

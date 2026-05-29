@@ -15,7 +15,7 @@ bewhere_model,https://github.com/caaficus/bewhere-model,BeWhere-model,pre-compil
 bluesky,https://github.com/eiagov/bluesky,BlueSky,"opensustain-tech,pre-compiled",
 breakthrough_energy_model,https://github.com/breakthrough-energy,Breakthrough Energy Model,openmod,
 bridges,https://github.com/stanford-eao/bridges,BRIDGES,pre-compiled,
-cairnopen,https://github.com/cea-liten/cairnopen,CairnOpen,opensustain-tech,
+cairnopen,https://github.com/cea-liten/cairnopen,CairnOpen,"opensustain-tech,pre-compiled",
 calliope,https://github.com/calliope-project/calliope,Calliope,"g-pst,lf-energy-landscape,openmod,opensustain-tech,pre-compiled","capacity-expansion,production-cost"
 capacityexpansion_jl,https://github.com/youngfaithful/capacityexpansion.jl,"CapacityExpansion.jl,CapacityExpansion","lf-energy-landscape,openmod,opensustain-tech,pre-compiled",
 capow,https://github.com/romulus97/capow_py36,CAPOW,openmod,
@@ -213,7 +213,7 @@ spineopt_jl,https://github.com/spine-tools/spineopt.jl,SpineOpt.jl,"lf-energy-la
 ssmd,https://git.rwth-aachen.de/acs/public/simulation/ssmd,ssmd,pre-compiled,
 starlite,https://github.com/iit-energysystemmodels/starlite,StarLite,pre-compiled,
 stelmod,https://github.com/frkunz/stelmod,StELMOD,"openmod,pre-compiled",
-steps,https://github.com/changgang/steps,steps,pre-compiled,
+steps,https://github.com/changgang/steps,STEPS,"opensustain-tech,pre-compiled",
 stre³am,https://github.com/anl-ceeesa/stream,STRE³AM,opensustain-tech,
 supergrid,https://github.com/niclasmattsson/supergrid,Supergrid,pre-compiled,
 sustaingym,https://github.com/chrisyeh96/sustaingym,SustainGym,opensustain-tech,

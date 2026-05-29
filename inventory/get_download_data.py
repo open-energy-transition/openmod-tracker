@@ -4,7 +4,6 @@
 
 """Get download trends for the repository packages."""
 
-import json
 import logging
 import subprocess
 from datetime import datetime
@@ -29,6 +28,11 @@ COLS = [
     "julia_package_url",
     "other_source",
 ]
+ECOSYSTEM_URL_PATTERNS = {
+    "pypi": "https://pypi.org/project/",
+    "conda": "https://anaconda.org/",
+    "julia": "https://juliahub.com/",
+}
 
 
 def get_conda_download_trends(previous_months: int = 12) -> pd.DataFrame:
@@ -121,62 +125,6 @@ def is_conda_installed() -> bool:
         return False
 
 
-def find_conda_package(package_name: str) -> str | None:
-    """Check if conda is installed and search for a package on Anaconda channels.
-
-    Searches all specified channels simultaneously: conda-forge, bioconda, anaconda.
-    Returns the package URL if found, None otherwise.
-
-    Parameters
-    ----------
-    package_name : str
-        The name of the package to search for
-
-    Returns:
-    -------
-    Optional[str]
-        The URL to the package if found, None if not found or conda is not installed
-    """
-    # Build command with multiple channels
-    cmd = [
-        "conda",
-        "search",
-        "--json",
-        "--channel",
-        "conda-forge",
-        "--channel",
-        "bioconda",
-        "--channel",
-        "anaconda",
-        package_name,
-    ]
-
-    try:
-        result = subprocess.run(cmd, capture_output=True, text=True, timeout=10)
-
-        data = json.loads(result.stdout)
-
-        # Check if response is empty or contains PackagesNotFoundError
-        if not data or "PackagesNotFoundError" in data.get("exception_name", ""):
-            LOGGER.warning(f"Package '{package_name}' not found in any channel")
-            return None
-
-        # Determine which channel the package came from
-        # The first channel in the search list has priority
-        url = f"https://anaconda.org/conda-forge/{package_name}"
-        LOGGER.info(f"Package '{package_name}' found")
-        return url
-    except subprocess.TimeoutExpired:
-        LOGGER.info("Conda search timed out")
-        return None
-    except json.JSONDecodeError:
-        LOGGER.info("Error parsing conda response")
-        return None
-    except Exception as e:
-        LOGGER.info(f"Error searching for package: {e}")
-        return None
-
-
 def clean_url(url_str: str) -> str:
     """Remove whitespace and trailing slashes from a URL string.
 
@@ -191,6 +139,55 @@ def clean_url(url_str: str) -> str:
         The cleaned URL string with leading/trailing whitespace and trailing slashes removed.
     """
     return url_str.strip().rstrip("/")
+
+
+def select_package_info(packages: list[dict], ecosystem: str) -> dict | None:
+    """Select the best package for a given ecosystem.
+
+    If multiple packages exist for the same ecosystem, prefer the one with
+    a populated registry_url matching the expected pattern for that ecosystem.
+
+    Parameters
+    ------------
+    packages : list[dict]
+        List of package dictionaries, each containing at least an "ecosystem" key and optionally a "registry_url".
+    ecosystem : str
+        The ecosystem to filter packages by (e.g., "pypi", "conda", "julia").
+
+    Returns:
+    --------
+    dict | None:
+        The selected package dictionary for the specified ecosystem, or None if no matching package is found.
+    """
+    matching_packages = [pkg for pkg in packages if pkg["ecosystem"] == ecosystem]
+
+    if not matching_packages:
+        LOGGER.warning("No packages found for ecosystem %s", ecosystem)
+        return None
+
+    if len(matching_packages) == 1:
+        return matching_packages[0]
+
+    LOGGER.warning("Multiple packages found for ecosystem %s", ecosystem)
+    pattern = ECOSYSTEM_URL_PATTERNS.get(ecosystem)
+
+    # Find a package with valid registry_url
+    pkg = next(
+        (
+            p
+            for p in matching_packages
+            if p.get("registry_url")
+            and clean_url(p["registry_url"]).startswith(pattern)
+        ),
+        None,
+    )
+
+    if not pkg:
+        LOGGER.warning(
+            "No packages with a valid registry_url found for ecosystem %s", ecosystem
+        )
+
+    return pkg
 
 
 def get_package_info(
@@ -217,26 +214,18 @@ def get_package_info(
     if not packages:
         return None, None, None, None, None
 
+    pypi_pkg = select_package_info(packages, "pypi")
+    conda_pkg = select_package_info(packages, "conda")
+    julia_pkg = select_package_info(packages, "julia")
+
+    pypi_url = clean_url(pypi_pkg["registry_url"]) if pypi_pkg else None
+    conda_url = clean_url(conda_pkg["registry_url"]) if conda_pkg else None
+    julia_url = clean_url(julia_pkg["registry_url"]) if julia_pkg else None
+    if pypi_url:
+        pypi_pkg_name = pypi_pkg.get("name", "").strip()
+
     # Map ecosystems to packages
     package_map = {pkg["ecosystem"]: pkg for pkg in packages}
-
-    pypi_url = (
-        clean_url(package_map["pypi"]["registry_url"])
-        if "pypi" in package_map
-        else None
-    )
-    conda_url = (
-        clean_url(package_map["conda"]["registry_url"])
-        if "conda" in package_map
-        else None
-    )
-    julia_url = (
-        clean_url(package_map["julia"]["registry_url"])
-        if "julia" in package_map
-        else None
-    )
-    if pypi_url:
-        pypi_pkg_name = package_map.get("pypi", {}).get("name", "").strip()
 
     for ecosystem, pkg in package_map.items():
         if ecosystem not in known_ecosystems:
@@ -534,7 +523,9 @@ def cli(stats_file: Path, out_path: Path, use_bigquery: bool, pypi_path: Path) -
         rows_out.append(row_data)
 
     download_df = pd.DataFrame(rows_out, columns=COLS)
-    package_name_list = list(download_df["pypi_package_name"].str.casefold().unique())
+    package_name_list = list(
+        download_df["pypi_package_name"].dropna().str.casefold().unique()
+    )
 
     if use_bigquery:
         # BigQuery is currently not enable for the GCP project compute-app

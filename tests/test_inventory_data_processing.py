@@ -322,39 +322,58 @@ class TestGetDownloadData:
         pd.testing.assert_frame_equal(result, expected)
 
     @pytest.mark.parametrize(
-        ("pypi_url", "pypi_name", "anaconda_url", "month_a", "month_b", "expected"),
+        (
+            "pypi_url",
+            "pypi_name",
+            "anaconda_url",
+            "julia_url",
+            "month_a",
+            "month_b",
+            "expected",
+        ),
         [
-            ("https://pypi.org/pkg", "package", "https://anaconda.org/pkg", 1, 1, True),
             (
                 "https://pypi.org/pkg",
                 "package",
                 "https://anaconda.org/pkg",
+                "julia.org",
+                1,
+                1,
+                True,
+            ),
+            (
+                "https://pypi.org/pkg",
+                "package",
+                "https://anaconda.org/pkg",
+                None,
                 1,
                 None,
                 False,
             ),
         ],
     )
-    def test_skip_tool_with_default_fields(
+    def test_use_cache_with_default_fields(
         self,
         pypi_url: str,
         pypi_name: str,
         anaconda_url: str,
+        julia_url: str,
         month_a: int,
         month_b: int,
         expected: bool,
     ) -> None:
-        """Test skip_tool with default required fields."""
+        """Test use_cache with default required fields."""
         row = pd.Series(
             {
                 "pypi_package_url": pypi_url,
                 "pypi_package_name": pypi_name,
                 "anaconda_package_url": anaconda_url,
+                "julia_package_url": julia_url,
                 "2026-05": month_a,
                 "2026-04": month_b,
             }
         )
-        result = get_download_data.skip_tool(row)
+        result = get_download_data.use_cache(row)
         assert result == expected
 
     @pytest.mark.parametrize(

@@ -265,7 +265,7 @@ def _is_populated(row: Series, col: str) -> bool:
     return bool(pd.notna(row[col]) and str(row[col]).strip() != "")
 
 
-def skip_tool(
+def use_cache(
     row: pd.Series,
     months_back: int = 2,
     required_fields: list[str] = [
@@ -275,7 +275,7 @@ def skip_tool(
         "julia_package_url",
     ],
 ) -> bool:
-    """Skip tool row if all required fields are populated.
+    """Use cached row if all required fields are populated.
 
     Determines whether to skip processing a tool row by checking if all
     required fields contain populated values. The required fields include
@@ -511,7 +511,7 @@ def cli(stats_file: Path, out_path: Path, use_bigquery: bool, pypi_path: Path) -
         #     existing_row = existing_by_id[tool_id]
         #
         #     # If all the relevant columns are already populated, skip the tool to save time
-        #     if skip_tool(existing_row):
+        #     if use_cache(existing_row):
         #         rows_out.append(existing_row.to_dict())
         #         continue
         #     # If some of the relevant columns are not populated, store the cached data

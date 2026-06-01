@@ -132,7 +132,7 @@ def cli(stats_file: Path, out_path: Path):
         existing_interactions["number"] = existing_interactions["number"].astype(
             "Int32"
         )
-        existing_interactions.sort_values(["repo", "created"]).to_csv(
+        existing_interactions.drop_duplicates().sort_values(["repo", "created"]).to_csv(
             out_path, index=False
         )
 

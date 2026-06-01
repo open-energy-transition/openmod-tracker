@@ -43,3 +43,6 @@ jobs:
 
       - name: Run tests
         run: pixi run test -v
+
+      - name: Check tests run in Docker image
+        run: docker build --tag open-esm-analysis:pre-release-test .

@@ -33,7 +33,7 @@ jobs:
         run: brew install scorecard
 
       - name: Setup Pixi
-        uses: prefix-dev/setup-pixi@v0.9.5
+        uses: prefix-dev/setup-pixi@v0.9.6
         with:
           pixi-version: v0.44.0
           cache: true

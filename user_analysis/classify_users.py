@@ -19,6 +19,7 @@ from typing import Literal
 from urllib.parse import urlparse
 
 import click
+import country_converter as cc
 import pandas as pd
 import pycountry
 import requests
@@ -334,11 +335,12 @@ def extract_country(location: str) -> str | None:
 
 def query_geocode_cache(user_data: pd.Series) -> str | None:
     """Get data from the geocode country cache dict, returning an attempt at geolocating using email domains if no data is in the cache."""
-    cached_location = GECODE_CACHE.get(user_data["location"])
-    if pd.isnull(cached_location):
-        return classify_country(user_data)
+    location = GECODE_CACHE.get(user_data["location"]) or classify_country(user_data)
+
+    if location:
+        return cc.convert(names=location, to="ISO3")
     else:
-        return cached_location
+        return None
 
 
 @click.command()

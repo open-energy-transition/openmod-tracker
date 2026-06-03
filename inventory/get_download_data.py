@@ -665,7 +665,7 @@ def cli(
     out_path: Path,
     use_bigquery: bool,
     pypi_path: Path,
-    manual_cache: Path,
+    package_cache_path: Path,
 ) -> None:
     """CLI entry point to collect all users who interact with repositories listed in a stats file."""
     is_conda_available = is_conda_installed()
@@ -709,7 +709,7 @@ def cli(
 
         # Preserve existing values. Only fill missing fields. Use .setdefault https://docs.python.org/3/library/stdtypes.html#dict.setdefault
         pypi_pkg_url, conda_pkg_url, julia_pkg_url, other_pkg_url, pypi_pkg_name = (
-            get_package_info(row["html_url"], manual_cache)
+            get_package_info(row["html_url"], package_cache_path)
         )
         row_data.setdefault("pypi_package_url", pypi_pkg_url)
         row_data.setdefault("pypi_package_name", pypi_pkg_name)

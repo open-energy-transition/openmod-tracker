@@ -1,0 +1,12 @@
+id,column,old_value,new_value
+balmorel,pypi_package_url,https://pypi.org/project/pybalmorel,ttps://pypi.org/project/pybalmorel
+enflow,pypi_package_name,enflow,emflow
+enflow,pypi_package_url,https://pypi.org/project/enflow,https://pypi.org/project/emflow
+fine,anaconda_package_url,,https://anaconda.org/conda-forge/fine
+powsybl,other_source,https://central.sonatype.com/artifact/com.powsybl/powsybl-config-classic,https://central.sonatype.com/artifact/com.powsybl/powsybl-dynamic-simulation-tool
+powsybl_open_load_flow,pypi_package_name,pypowsybl,
+powsybl_open_load_flow,pypi_package_url,https://pypi.org/project/pypowsybl,
+pypowsybl,other_source,,https://central.sonatype.com/artifact/com.powsybl/pypowsybl
+pypsa,pypi_package_url,https://anaconda.org/conda-forge/pypsa,https://pypi.org/project/pypsa
+pypsa,anaconda_package_url,,https://anaconda.org/conda-forge/pypsa
+switch,anaconda_package_url,,https://anaconda.org/conda-forge/switch_model

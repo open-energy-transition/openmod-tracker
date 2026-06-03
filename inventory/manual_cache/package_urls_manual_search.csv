@@ -1,7 +1,7 @@
 id,html_url,pypi_package_url,pypi_package_name,anaconda_package_url,juliahub_package_url,other_source
 amiris,https://gitlab.com/dlr-ve/esy/amiris/amiris,https://pypi.org/project/amirispy,amirispy,,,
 aristopy,https://git.tu-berlin.de/etus/public/aristopy,https://pypi.org/project/aristopy,aristopy,,,
-balmorel,https://github.com/balmorelcommunity/Balmorel,ttps://pypi.org/project/pybalmorel,pybalmorel,,,
+balmorel,https://github.com/balmorelcommunity/Balmorel,https://pypi.org/project/pybalmorel,pybalmorel,,,
 chronix2grid,https://github.com/Grid2op/chronix2grid,https://pypi.org/project/Chronix2Grid,Chronix2Grid,,,
 dieter_py,https://gitlab.com/diw-evu/dieter_public/dieterpy,https://pypi.org/project/dieterpy,dieterpy,,,
 dynawo,https://github.com/dynawo/dynawo,https://pypi.org/project/dynawo,dynawo,,,

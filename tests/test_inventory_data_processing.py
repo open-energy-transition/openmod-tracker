@@ -27,6 +27,9 @@ get_download_data = load_module_from_file(
     INVENTORY_DIR / "get_download_data.py", "get_download_data"
 )
 
+# Path to cache data (CSV file, not a module)
+CACHE_DATA_PATH = INVENTORY_DIR / "manual_cache" / "package_urls_manual_search.csv"
+
 
 @pytest.fixture
 def ecosystems_issue_api():
@@ -368,7 +371,7 @@ class TestGetDownloadData:
                 "pypi_package_url": pypi_url,
                 "pypi_package_name": pypi_name,
                 "anaconda_package_url": anaconda_url,
-                "julia_package_url": julia_url,
+                "juliahub_package_url": julia_url,
                 "2026-05": month_a,
                 "2026-04": month_b,
             }
@@ -410,6 +413,46 @@ class TestGetDownloadData:
                 None,
                 None,
             ),
+            (
+                "https://github.com/leonardgoeke/AnyMOD.jl",
+                None,
+                None,
+                "https://juliahub.com/ui/Packages/General/AnyMOD",
+                None,
+                None,
+            ),
+            (
+                "https://github.com/rebase-energy/enflow",
+                "https://pypi.org/project/enflow",
+                None,
+                None,
+                None,
+                "enflow",
+            ),
+            (
+                "https://github.com/ait-energy/IESopt.jl",
+                "https://pypi.org/project/iesopt",
+                None,
+                "https://juliahub.com/ui/Packages/General/IESopt",
+                None,
+                "iesopt",
+            ),
+            (
+                "https://github.com/Sienna-Platform/PowerSimulationsDynamics.jl",
+                None,
+                None,
+                "https://juliahub.com/ui/Packages/General/PowerSimulationsDynamics",
+                None,
+                None,
+            ),
+            (
+                "https://github.com/RoseauTechnologies/Roseau_Load_Flow",
+                "https://pypi.org/project/roseau-load-flow",
+                None,
+                None,
+                None,
+                "roseau-load-flow",
+            ),
         ],
     )
     def test_get_package_info(
@@ -423,7 +466,7 @@ class TestGetDownloadData:
     ) -> None:
         """Test get_package_info function."""
         pypi_url, conda_url, julia_url, other_url, package_name = (
-            get_download_data.get_package_info(url)
+            get_download_data.get_package_info(url, manual_cache=CACHE_DATA_PATH)
         )
         assert pypi_url == expected_pypi_url
         assert conda_url == expected_conda_url

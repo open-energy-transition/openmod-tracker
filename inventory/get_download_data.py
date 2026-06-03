@@ -25,7 +25,7 @@ COLS = [
     "pypi_package_url",
     "pypi_package_name",
     "anaconda_package_url",
-    "julia_package_url",
+    "juliahub_package_url",
     "other_source",
 ]
 ECOSYSTEM_URL_PATTERNS = {
@@ -193,49 +193,231 @@ def select_package_info(packages: list[dict], ecosystem: str) -> dict | None:
     return pkg
 
 
-def get_package_info(
-    url: str, known_ecosystems=["julia", "conda", "pypi"]
-) -> tuple[str | None, str | None, str | None, str | None, str | None]:
-    """Get the package URL and name for PyPI, Anaconda and Juliahub from the repository URL.
+def pick_cached_or_current(row: pd.Series, current: str | None, col: str) -> str | None:
+    """Return current value if populated, otherwise fall back to cache.
 
     Parameters
-    -----------
-    url : str
-        Repository URL.
-    known_ecosystems : list[str], default=["julia", "conda", "pypi"]
-        List of known ecosystems to check for packages.
+    ----------
+    row : pd.Series
+        Row from the cache DataFrame.
+    current : str | None
+        Currently fetched value (may be None).
+    col : str
+        Column name in the cache row to check.
 
     Returns:
-    --------
-    tuple[str | None, str | None, str | None, str | None, str | None, str | None]
-        Tuple of (pypi_url, conda_url, julia_url, other_url, pypi_pkg_name), or (None, None, None, None, None) if not found.
+    -------
+    str | None
+        The current value if not None, otherwise the cached value if populated, otherwise None.
     """
-    packages = util.get_ecosystems_package_data(url)
+    # If we have a current value, use it
+    if current is not None:
+        return current
+
+    # Otherwise, try to use the cached value if it's populated
+    if pd.notna(row[col]) and str(row[col]).strip() != "":
+        return row[col]
+
+    # No current value and no cached value
+    return None
+
+
+def use_package_info_cache(
+    url: str,
+    pypi_url: str | None,
+    conda_url: str | None,
+    julia_url: str | None,
+    other_url: str | None,
+    pypi_pkg_name: str | None,
+    manual_cache_path: Path,
+) -> tuple[str | None, str | None, str | None, str | None, str | None]:
+    """Enrich package info with values from a manual cache CSV, filling only None fields.
+
+    This function looks up the repository URL in a manual cache CSV file and uses
+    cached values to fill in any missing (None) package information. Current values
+    normally take precedence over cached values, except for specific URLs that require
+    cache override.
+
+    Parameters
+    ----------
+    url : str
+        Repository URL to look up in the cache.
+    pypi_url : str | None
+        Currently fetched PyPI package URL.
+    conda_url : str | None
+        Currently fetched Conda package URL.
+    julia_url : str | None
+        Currently fetched Julia package URL.
+    other_url : str | None
+        Currently fetched other ecosystem URL.
+    pypi_pkg_name : str | None
+        Currently fetched PyPI package name.
+    manual_cache_path : Path
+        Path to the CSV file containing cached package information.
+
+    Returns:
+    -------
+    tuple[str | None, str | None, str | None, str | None, str | None]
+        Tuple of (pypi_url, conda_url, julia_url, other_url, pypi_pkg_name) with
+        current values taking precedence, falling back to cached values when current is None.
+        For specific URLs, cached values always take precedence.
+    """
+    # Special case: URLs that should always use cache values
+    FORCE_CACHE_URLS = {
+        "https://github.com/RoseauTechnologies/Roseau_Load_Flow".casefold()
+    }
+
+    force_cache = url.casefold() in FORCE_CACHE_URLS
+
+    # If all current values are already populated and we're not forcing cache, no need to check cache
+    all_populated = all(
+        val is not None
+        for val in [pypi_url, conda_url, julia_url, other_url, pypi_pkg_name]
+    )
+    if all_populated and not force_cache:
+        return pypi_url, conda_url, julia_url, other_url, pypi_pkg_name
+
+    # Try to load the cache file
+    try:
+        manual_cache_df = pd.read_csv(manual_cache_path)
+    except FileNotFoundError:
+        LOGGER.warning(f"Manual cache not found: {manual_cache_path}")
+        return pypi_url, conda_url, julia_url, other_url, pypi_pkg_name
+
+    # Look for a matching row in the cache
+    match = manual_cache_df[
+        manual_cache_df["html_url"].str.casefold() == url.casefold()
+    ]
+
+    if match.empty:
+        # No cache entry for this URL
+        return pypi_url, conda_url, julia_url, other_url, pypi_pkg_name
+
+    # Use the first matching row to fill in missing values
+    row = match.iloc[0]
+
+    # If forcing cache, return cache values directly (ignoring current values)
+    if force_cache:
+        LOGGER.info(f"Forcing cache values for {url}")
+        return (
+            row["pypi_package_url"]
+            if pd.notna(row["pypi_package_url"])
+            and str(row["pypi_package_url"]).strip() != ""
+            else pypi_url,
+            row["anaconda_package_url"]
+            if pd.notna(row["anaconda_package_url"])
+            and str(row["anaconda_package_url"]).strip() != ""
+            else conda_url,
+            row["juliahub_package_url"]
+            if pd.notna(row["juliahub_package_url"])
+            and str(row["juliahub_package_url"]).strip() != ""
+            else julia_url,
+            row["other_source"]
+            if pd.notna(row["other_source"]) and str(row["other_source"]).strip() != ""
+            else other_url,
+            row["pypi_package_name"]
+            if pd.notna(row["pypi_package_name"])
+            and str(row["pypi_package_name"]).strip() != ""
+            else pypi_pkg_name,
+        )
+
+    # Normal case: current values take precedence, cache fills in gaps
+    return (
+        pick_cached_or_current(row, pypi_url, "pypi_package_url"),
+        pick_cached_or_current(row, conda_url, "anaconda_package_url"),
+        pick_cached_or_current(row, julia_url, "juliahub_package_url"),
+        pick_cached_or_current(row, other_url, "other_source"),
+        pick_cached_or_current(row, pypi_pkg_name, "pypi_package_name"),
+    )
+
+
+def get_package_info(
+    url: str, manual_cache: Path, known_ecosystems: set[str] | None = None
+) -> tuple[str | None, str | None, str | None, str | None, str | None]:
+    """Get the package URL and name for PyPI, Anaconda, JuliaHub, and others from repository URL.
+
+    This function queries the ecosyste.ms API for package information and falls back
+    to a manual cache for missing values. It extracts package URLs and names for
+    known ecosystems (PyPI, Conda, Julia) and identifies any other ecosystems.
+
+    Parameters
+    ----------
+    url : str
+        Repository URL to look up.
+    manual_cache : Path
+        Path to the CSV file containing cached package information.
+    known_ecosystems : set[str] | None
+        Set of ecosystem names to exclude from "other_url". Defaults to {"julia", "conda", "pypi"}.
+
+    Returns:
+    -------
+    tuple[str | None, str | None, str | None, str | None, str | None]
+        Tuple of (pypi_url, conda_url, julia_url, other_url, pypi_pkg_name).
+    """
+    if known_ecosystems is None:
+        known_ecosystems = {"julia", "conda", "pypi"}
+
+    pypi_url = None
+    conda_url = None
+    julia_url = None
     other_url = None
     pypi_pkg_name = None
 
-    if not packages:
-        return None, None, None, None, None
+    # Try to fetch package data from ecosyste.ms API
+    try:
+        packages = util.get_ecosystems_package_data(url)
+    except Exception as e:
+        LOGGER.error(f"Failed to fetch package data for {url}: {e}")
+        packages = None
 
-    pypi_pkg = select_package_info(packages, "pypi")
-    conda_pkg = select_package_info(packages, "conda")
-    julia_pkg = select_package_info(packages, "julia")
+    # Extract package info if available
+    if packages:
+        # Extract package info for known ecosystems
+        pypi_pkg = select_package_info(packages, "pypi")
+        conda_pkg = select_package_info(packages, "conda")
+        julia_pkg = select_package_info(packages, "julia")
 
-    pypi_url = clean_url(pypi_pkg["registry_url"]) if pypi_pkg else None
-    conda_url = clean_url(conda_pkg["registry_url"]) if conda_pkg else None
-    julia_url = clean_url(julia_pkg["registry_url"]) if julia_pkg else None
-    if pypi_url:
-        pypi_pkg_name = pypi_pkg.get("name", "").strip()
+        pypi_url = clean_url(pypi_pkg["registry_url"]) if pypi_pkg else None
+        conda_url = clean_url(conda_pkg["registry_url"]) if conda_pkg else None
+        julia_url = clean_url(julia_pkg["registry_url"]) if julia_pkg else None
+        pypi_pkg_name = pypi_pkg.get("name", "").strip() if pypi_pkg else None
 
-    # Map ecosystems to packages
-    package_map = {pkg["ecosystem"]: pkg for pkg in packages}
+        # Find first "other" ecosystem (not in known_ecosystems)
+        other_url = next(
+            (
+                clean_url(pkg["registry_url"])
+                for pkg in packages
+                if pkg["ecosystem"] not in known_ecosystems and pkg.get("registry_url")
+            ),
+            None,
+        )
 
-    for ecosystem, pkg in package_map.items():
-        if ecosystem not in known_ecosystems:
-            LOGGER.info(f"Other ecosystem: {ecosystem}")
-            other_url = clean_url(package_map[ecosystem]["registry_url"])
+        if other_url:
+            other_ecosystem = next(
+                pkg["ecosystem"]
+                for pkg in packages
+                if pkg["ecosystem"] not in known_ecosystems and pkg.get("registry_url")
+            )
+            LOGGER.info(f"Found other ecosystem for {url}: {other_ecosystem}")
 
-    return pypi_url, conda_url, julia_url, other_url, pypi_pkg_name
+    # Fill in any missing values from manual cache
+    (
+        enriched_pypi_url,
+        enriched_conda_url,
+        enriched_julia_url,
+        enriched_other_url,
+        enriched_pypi_pkg_name,
+    ) = use_package_info_cache(
+        url, pypi_url, conda_url, julia_url, other_url, pypi_pkg_name, manual_cache
+    )
+
+    return (
+        enriched_pypi_url,
+        enriched_conda_url,
+        enriched_julia_url,
+        enriched_other_url,
+        enriched_pypi_pkg_name,
+    )
 
 
 def _is_populated(row: Series, col: str) -> bool:
@@ -264,7 +446,7 @@ def use_cache(
         "pypi_package_url",
         "pypi_package_name",
         "anaconda_package_url",
-        "julia_package_url",
+        "juliahub_package_url",
     ],
 ) -> bool:
     """Use cached row if all required fields are populated.
@@ -281,7 +463,7 @@ def use_cache(
     months_back : int, default=2
         Number of months to generate in the past from the current date.
         Each month is formatted as "YYYY-MM" and added to the required fields.
-    required_fields : list[str], default=["pypi_package_url", "pypi_package_name", "anaconda_package_url", "julia_package_url"]
+    required_fields : list[str], default=["pypi_package_url", "pypi_package_name", "anaconda_package_url", "juliahub_package_url"]
         Base list of required field names that must be populated.
 
     Returns:
@@ -472,7 +654,19 @@ def enrich_with_monthly_downloads(
     help="Path to the CSV file containing the PyPI downloads per month and package..",
     default="inventory/output/pypi_downloads.csv",
 )
-def cli(stats_file: Path, out_path: Path, use_bigquery: bool, pypi_path: Path) -> None:
+@click.option(
+    "--package-cache-path",
+    type=click.Path(exists=False, dir_okay=False, file_okay=True, path_type=Path),
+    help="Path to the CSV file containing the Package information.",
+    default="inventory/manual_cache/package_urls_manual_search.csv",
+)
+def cli(
+    stats_file: Path,
+    out_path: Path,
+    use_bigquery: bool,
+    pypi_path: Path,
+    manual_cache: Path,
+) -> None:
     """CLI entry point to collect all users who interact with repositories listed in a stats file."""
     is_conda_available = is_conda_installed()
     if not is_conda_available:
@@ -515,7 +709,7 @@ def cli(stats_file: Path, out_path: Path, use_bigquery: bool, pypi_path: Path) -
 
         # Preserve existing values. Only fill missing fields. Use .setdefault https://docs.python.org/3/library/stdtypes.html#dict.setdefault
         pypi_pkg_url, conda_pkg_url, julia_pkg_url, other_pkg_url, pypi_pkg_name = (
-            get_package_info(row["html_url"])
+            get_package_info(row["html_url"], manual_cache)
         )
         row_data.setdefault("pypi_package_url", pypi_pkg_url)
         row_data.setdefault("pypi_package_name", pypi_pkg_name)

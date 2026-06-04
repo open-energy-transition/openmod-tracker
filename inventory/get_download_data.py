@@ -5,7 +5,6 @@
 """Get download trends for the repository packages."""
 
 import logging
-import subprocess
 from datetime import datetime
 from pathlib import Path
 
@@ -97,6 +96,7 @@ def get_conda_download_trends(previous_months: int = 12) -> pd.DataFrame:
 
     previous_months_df = pd.concat(dfs, ignore_index=True)
     return previous_months_df
+
 
 def clean_url(url_str: str) -> str:
     """Remove whitespace and trailing slashes from a URL string.
@@ -420,7 +420,7 @@ def use_cache(
         "pypi_package_name",
         "anaconda_package_url",
         "juliahub_package_url",
-        "other_source"
+        "other_source",
     ],
 ) -> bool:
     """Use cached row if all required fields are populated.
@@ -458,10 +458,9 @@ def use_cache(
 def query_file_downloads(
     package_name_list: list[str],
     bigquery_project_name: str = "openmod-tracker",
-    months_back: int = 12
+    months_back: int = 12,
 ) -> pd.DataFrame:
-    """
-    Perform the BigQuery query to get the number of downloads for each package over a specified period, grouped by month and project.
+    """Perform the BigQuery query to get the number of downloads for each package over a specified period, grouped by month and project.
 
     Parameters
     ------------
@@ -477,7 +476,6 @@ def query_file_downloads(
     pd.DataFrame
         DataFrame containing the number of downloads for each package, grouped by month and project.
     """
-
     # Validate and sanitize months_back
     try:
         months_back = int(months_back)
@@ -513,7 +511,10 @@ def query_file_downloads(
     df = query_job.to_dataframe()
     return df
 
-def get_conda_pkg_download_stats(list_of_packages: list[str], months_back: int = 12) -> pd.DataFrame:
+
+def get_conda_pkg_download_stats(
+    list_of_packages: list[str], months_back: int = 12
+) -> pd.DataFrame:
     """Get conda download stats for a list of packages.
 
     Parameters
@@ -528,7 +529,6 @@ def get_conda_pkg_download_stats(list_of_packages: list[str], months_back: int =
     pd.DataFrame
         DataFrame containing the number of downloads for each package, grouped by month and project.
     """
-
     # Validate and sanitize months_back
     try:
         months_back = int(months_back)
@@ -725,12 +725,16 @@ def cli(
 
     if use_bigquery:
         # BigQuery is currently not enable for the GCP project compute-app
-        pypi_download_stats_df = query_file_downloads(package_name_list, months_back=months_back)
+        pypi_download_stats_df = query_file_downloads(
+            package_name_list, months_back=months_back
+        )
     else:
         # Process a csv file with the queried data from the BigQuery Web UI
         pypi_download_stats_df = pd.read_csv(pypi_path)
 
-    anaconda_download_stats_df = get_conda_pkg_download_stats(package_name_list, months_back=months_back)
+    anaconda_download_stats_df = get_conda_pkg_download_stats(
+        package_name_list, months_back=months_back
+    )
     updated_df = enrich_with_monthly_downloads(
         package_info_df, pypi_download_stats_df, anaconda_download_stats_df
     )

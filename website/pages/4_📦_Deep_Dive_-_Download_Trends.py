@@ -328,7 +328,8 @@ def show_all_packages_list(df: pd.DataFrame) -> None:
                 )
                 prev_total = (
                     int(row["prev_months_total"])
-                    if "prev_months_total" in row.index and pd.notna(row["prev_months_total"])
+                    if "prev_months_total" in row.index
+                    and pd.notna(row["prev_months_total"])
                     else None
                 )
                 delta = (

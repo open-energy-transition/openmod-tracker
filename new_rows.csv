@@ -1,6 +1,0 @@
-id,html_url,pypi_package_url,pypi_package_name,anaconda_package_url,juliahub_package_url,other_source
-cairnopen,https://github.com/CEA-Liten/CairnOpen,,,,,
-e4st,https://github.com/e4st-dev/E4ST.jl,,,,https://juliahub.com/ui/Packages/General/E4ST,
-energyscope_library,https://gitlab.com/energyscope/energyscope,https://pypi.org/project/energyscope,energyscope,,,
-osier,https://github.com/arfc/osier,https://pypi.org/project/osier,osier,,,
-stre³am,https://github.com/ANL-CEEESA/STREAM,,,,,

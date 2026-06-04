@@ -176,7 +176,11 @@ def plot_download_trends(df: pd.DataFrame, selected_tools: list) -> None:
 
             if not selected_tools:
                 # Average downloads per tool
-                value = int(row["downloads"].sum() / df["display_name"].nunique()) if not row.empty else None
+                value = (
+                    int(row["downloads"].sum() / df["display_name"].nunique())
+                    if not row.empty
+                    else None
+                )
             else:
                 # Total for selected tools
                 value = int(row["downloads"].sum()) if not row.empty else None
@@ -185,16 +189,28 @@ def plot_download_trends(df: pd.DataFrame, selected_tools: list) -> None:
             if prev_idx >= 0:
                 prev_row = tool_df[tool_df["date"] == all_months[prev_idx]]
                 if not selected_tools:
-                    prev_value = int(prev_row["downloads"].sum() / df["display_name"].nunique()) if not prev_row.empty else None
+                    prev_value = (
+                        int(prev_row["downloads"].sum() / df["display_name"].nunique())
+                        if not prev_row.empty
+                        else None
+                    )
                 else:
-                    prev_value = int(prev_row["downloads"].sum()) if not prev_row.empty else None
+                    prev_value = (
+                        int(prev_row["downloads"].sum()) if not prev_row.empty else None
+                    )
                 prev_label_str = all_months[prev_idx].strftime("%B %Y")
             else:
                 prev_value = None
                 prev_label_str = None
 
-            delta = f"{value - prev_value:+,}" if (value is not None and prev_value is not None) else None
-            help_text = f"Change compared to {prev_label_str}" if prev_label_str else None
+            delta = (
+                f"{value - prev_value:+,}"
+                if (value is not None and prev_value is not None)
+                else None
+            )
+            help_text = (
+                f"Change compared to {prev_label_str}" if prev_label_str else None
+            )
             col.metric(
                 label=label,
                 value=f"{value:,}" if value is not None else "—",
@@ -227,7 +243,9 @@ def plot_download_trends(df: pd.DataFrame, selected_tools: list) -> None:
         )
     elif len(selected_tools) == 1:
         # Single tool - show with fill
-        trend_df = tool_df[tool_df["display_name"] == selected_tools[0]].sort_values("date")
+        trend_df = tool_df[tool_df["display_name"] == selected_tools[0]].sort_values(
+            "date"
+        )
         fig.add_trace(
             go.Scatter(
                 x=trend_df["date"],
@@ -252,7 +270,9 @@ def plot_download_trends(df: pd.DataFrame, selected_tools: list) -> None:
                     mode="lines+markers",
                     name=tool,
                     line=dict(color=colors[idx % len(colors)], width=2),
-                    marker=dict(size=6, symbol="circle", color=colors[idx % len(colors)]),
+                    marker=dict(
+                        size=6, symbol="circle", color=colors[idx % len(colors)]
+                    ),
                     hovertemplate=f"<b>{tool}</b><br>%{{x|%b %Y}}: %{{y:,}}<extra></extra>",
                 )
             )
@@ -294,18 +314,14 @@ def plot_download_trends(df: pd.DataFrame, selected_tools: list) -> None:
         ),
         hovermode="x unified",
         showlegend=len(selected_tools) > 1,
-        legend=dict(
-            orientation="h",
-            yanchor="bottom",
-            y=1.02,
-            xanchor="right",
-            x=1
-        ),
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
     )
     st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
 
 
-def show_all_packages_list(df: pd.DataFrame, filepath: Path, selected_tools: list, tools_with_data_count: int) -> None:
+def show_all_packages_list(
+    df: pd.DataFrame, filepath: Path, selected_tools: list, tools_with_data_count: int
+) -> None:
     """Scrollable list of all packages with 6-month download totals and trend.
 
     Parameters
@@ -387,7 +403,9 @@ def show_all_packages_list(df: pd.DataFrame, filepath: Path, selected_tools: lis
         else None
     )
 
-    filter_text = f" (filtered to {len(selected_tools)} selected)" if selected_tools else ""
+    filter_text = (
+        f" (filtered to {len(selected_tools)} selected)" if selected_tools else ""
+    )
     st.caption(
         f"Showing {len(summary)} packages{filter_text} ({tools_with_data_count} with download data) · "
         f"Latest period: **{last_6_label}**"
@@ -540,7 +558,6 @@ def main(df: pd.DataFrame, filepath: Path) -> None:
         filepath: Path to the original CSV file.
     """
     metrics = compute_metrics(df)
-    latest_month = metrics["latest_month"]
 
     # ── Sidebar controls ─────────────────────────────────────────────────────
     all_tools = sorted(df["display_name"].unique())

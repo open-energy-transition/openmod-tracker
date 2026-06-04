@@ -254,7 +254,7 @@ def show_all_packages_list(df: pd.DataFrame) -> None:
         df[df["date"].isin(prev_months)]
         .groupby("display_name")["downloads"]
         .sum()
-        .rename("prev_6_total")
+        .rename("prev_months_total")
         if prev_months
         else pd.Series(dtype=int, name="prev_months_total")
     )

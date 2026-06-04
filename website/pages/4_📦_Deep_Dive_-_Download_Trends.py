@@ -24,7 +24,8 @@ def load_downloads(filepath: Path) -> pd.DataFrame:
     Returns:
     --------
         Long-format DataFrame with columns: id, display_name, html_url,
-        pypi_package_url, date, downloads.
+        pypi_package_url, anaconda_package_url, juliahub_package_url,
+        other_source, date, downloads.
     """
     raw = pd.read_csv(filepath)
 
@@ -36,7 +37,15 @@ def load_downloads(filepath: Path) -> pd.DataFrame:
 
     # Melt to long format and drop rows with no download count
     long = raw.melt(
-        id_vars=["id", "display_name", "html_url", "pypi_package_url"],
+        id_vars=[
+            "id",
+            "display_name",
+            "html_url",
+            "pypi_package_url",
+            "anaconda_package_url",
+            "juliahub_package_url",
+            "other_source",
+        ],
         value_vars=date_cols,
         var_name="date",
         value_name="downloads",
@@ -122,56 +131,70 @@ def show_metrics(metrics: dict) -> None:
     )
 
 
-def plot_download_trends(df: pd.DataFrame, selected_tool: str) -> None:
-    """Line chart of monthly download trends for a single selected tool, preceded by three month-over-month metric widgets.
+def plot_download_trends(df: pd.DataFrame, selected_tools: list) -> None:
+    """Line chart of monthly download trends for selected tools.
 
     Parameters
     ------------
         df: DataFrame
-            Long-format downloads DataFrame. s
-       selected_tool: str
-            display_name of the tool to plot.
+            Long-format downloads DataFrame.
+       selected_tools: list
+            List of display_names to plot (max 5). Empty list = all tools.
     """
     st.subheader("📈 Download Trends Over Time")
 
-    if not selected_tool:
-        st.info("Select a tool in the sidebar to see its download trend.")
-        return
+    # Colorblind-friendly palette (Okabe-Ito palette)
+    colors = [
+        "#0173B2",  # Blue
+        "#DE8F05",  # Orange
+        "#029E73",  # Green
+        "#CC78BC",  # Purple
+        "#CA9161",  # Brown
+        "#949494",  # Grey (for average)
+    ]
 
-    tool_df = df[df["display_name"] == selected_tool].sort_values("date")
+    if not selected_tools:
+        # Show aggregated trend for all tools (normalized)
+        tool_df = df.copy()
+        plot_title = "All Tools (Average Downloads per Tool)"
+    else:
+        tool_df = df[df["display_name"].isin(selected_tools)].copy()
+        if len(selected_tools) == 1:
+            plot_title = selected_tools[0]
+        else:
+            plot_title = f"{len(selected_tools)} Selected Tools"
 
     # ── Last-3-full-months metrics ────────────────────────────────────────────
-    # All months sorted; skip the latest (may be partial) → last 3 full months
     all_months = sorted(df["date"].unique())
 
     if len(all_months) >= 3:
-        recent = all_months[-3:]  # [month-3, month-2, month-1]
+        recent = all_months[-3:]
         m_cols = st.columns(3)
         for col, month in zip(m_cols, recent):
             label = month.strftime("%B %Y")
             row = tool_df[tool_df["date"] == month]
-            value = int(row["downloads"].sum()) if not row.empty else None
 
-            # Delta vs the month before this one
+            if not selected_tools:
+                # Average downloads per tool
+                value = int(row["downloads"].sum() / df["display_name"].nunique()) if not row.empty else None
+            else:
+                # Total for selected tools
+                value = int(row["downloads"].sum()) if not row.empty else None
+
             prev_idx = all_months.index(month) - 1
             if prev_idx >= 0:
                 prev_row = tool_df[tool_df["date"] == all_months[prev_idx]]
-                prev_value = (
-                    int(prev_row["downloads"].sum()) if not prev_row.empty else None
-                )
+                if not selected_tools:
+                    prev_value = int(prev_row["downloads"].sum() / df["display_name"].nunique()) if not prev_row.empty else None
+                else:
+                    prev_value = int(prev_row["downloads"].sum()) if not prev_row.empty else None
                 prev_label_str = all_months[prev_idx].strftime("%B %Y")
             else:
                 prev_value = None
                 prev_label_str = None
 
-            delta = (
-                f"{value - prev_value:+,}"
-                if (value is not None and prev_value is not None)
-                else None
-            )
-            help_text = (
-                f"Change compared to {prev_label_str}" if prev_label_str else None
-            )
+            delta = f"{value - prev_value:+,}" if (value is not None and prev_value is not None) else None
+            help_text = f"Change compared to {prev_label_str}" if prev_label_str else None
             col.metric(
                 label=label,
                 value=f"{value:,}" if value is not None else "—",
@@ -179,28 +202,78 @@ def plot_download_trends(df: pd.DataFrame, selected_tool: str) -> None:
                 help=help_text,
             )
 
-    st.markdown("")  # spacing
+    st.markdown("")
 
     # ── Chart with light background ───────────────────────────────────────────
-    trend_df = tool_df.copy()
-
     fig = go.Figure()
-    fig.add_trace(
-        go.Scatter(
-            x=trend_df["date"],
-            y=trend_df["downloads"],
-            mode="lines+markers",
-            name=selected_tool,
-            line=dict(color="#4361EE", width=2.5),
-            marker=dict(size=7, symbol="circle", color="#4361EE"),
-            fill="tozeroy",
-            fillcolor="rgba(67, 97, 238, 0.10)",
-            hovertemplate=f"<b>{selected_tool}</b><br>%{{x|%b %Y}}: %{{y:,}}<extra></extra>",
+
+    if not selected_tools:
+        # Aggregate all tools - show average per tool
+        agg_df = tool_df.groupby("date")["downloads"].sum().reset_index()
+        agg_df["downloads"] = agg_df["downloads"] / df["display_name"].nunique()
+
+        fig.add_trace(
+            go.Scatter(
+                x=agg_df["date"],
+                y=agg_df["downloads"],
+                mode="lines+markers",
+                name="Average per Tool",
+                line=dict(color=colors[0], width=2.5),
+                marker=dict(size=7, symbol="circle", color=colors[0]),
+                fill="tozeroy",
+                fillcolor=f"rgba({int(colors[0][1:3], 16)}, {int(colors[0][3:5], 16)}, {int(colors[0][5:7], 16)}, 0.10)",
+                hovertemplate="<b>Average per Tool</b><br>%{x|%b %Y}: %{y:,.0f}<extra></extra>",
+            )
         )
-    )
+    elif len(selected_tools) == 1:
+        # Single tool - show with fill
+        trend_df = tool_df[tool_df["display_name"] == selected_tools[0]].sort_values("date")
+        fig.add_trace(
+            go.Scatter(
+                x=trend_df["date"],
+                y=trend_df["downloads"],
+                mode="lines+markers",
+                name=selected_tools[0],
+                line=dict(color=colors[0], width=2.5),
+                marker=dict(size=7, symbol="circle", color=colors[0]),
+                fill="tozeroy",
+                fillcolor=f"rgba({int(colors[0][1:3], 16)}, {int(colors[0][3:5], 16)}, {int(colors[0][5:7], 16)}, 0.10)",
+                hovertemplate=f"<b>{selected_tools[0]}</b><br>%{{x|%b %Y}}: %{{y:,}}<extra></extra>",
+            )
+        )
+    else:
+        # Multiple tools - show individual lines + average
+        for idx, tool in enumerate(selected_tools):
+            trend_df = tool_df[tool_df["display_name"] == tool].sort_values("date")
+            fig.add_trace(
+                go.Scatter(
+                    x=trend_df["date"],
+                    y=trend_df["downloads"],
+                    mode="lines+markers",
+                    name=tool,
+                    line=dict(color=colors[idx % len(colors)], width=2),
+                    marker=dict(size=6, symbol="circle", color=colors[idx % len(colors)]),
+                    hovertemplate=f"<b>{tool}</b><br>%{{x|%b %Y}}: %{{y:,}}<extra></extra>",
+                )
+            )
+
+        # Add average line
+        agg_df = tool_df.groupby("date")["downloads"].sum().reset_index()
+        agg_df["downloads"] = agg_df["downloads"] / len(selected_tools)
+
+        fig.add_trace(
+            go.Scatter(
+                x=agg_df["date"],
+                y=agg_df["downloads"],
+                mode="lines",
+                name="Average",
+                line=dict(color=colors[5], width=2.5, dash="dash"),
+                hovertemplate="<b>Average</b><br>%{x|%b %Y}: %{y:,.0f}<extra></extra>",
+            )
+        )
 
     fig.update_layout(
-        title=dict(text=selected_tool, font=dict(size=16), x=0.01, xanchor="left"),
+        title=dict(text=plot_title, font=dict(size=16), x=0.01, xanchor="left"),
         template="plotly_white",
         paper_bgcolor="white",
         plot_bgcolor="white",
@@ -220,18 +293,31 @@ def plot_download_trends(df: pd.DataFrame, selected_tool: str) -> None:
             tickformat=",",
         ),
         hovermode="x unified",
-        showlegend=False,
+        showlegend=len(selected_tools) > 1,
+        legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=1.02,
+            xanchor="right",
+            x=1
+        ),
     )
     st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
 
 
-def show_all_packages_list(df: pd.DataFrame) -> None:
+def show_all_packages_list(df: pd.DataFrame, filepath: Path, selected_tools: list, tools_with_data_count: int) -> None:
     """Scrollable list of all packages with 6-month download totals and trend.
 
     Parameters
     ------------
         df: DataFrame
             Long-format downloads DataFrame.
+        filepath: Path
+            Path to the original CSV file to load all packages.
+        selected_tools: list
+            List of selected tools to filter display.
+        tools_with_data_count: int
+            Total count of tools with download data (from compute_metrics).
     """
     st.subheader("📋 All Packages")
 
@@ -240,9 +326,11 @@ def show_all_packages_list(df: pd.DataFrame) -> None:
     last_6 = all_months[-6:] if len(all_months) >= 6 else all_months
     prev_months = all_months[:-6] if len(all_months) > 6 else []
 
-    # Per-tool aggregation
-    url_map = df.groupby("display_name")["html_url"].first()
-    pypi_url_map = df.groupby("display_name")["pypi_package_url"].first()
+    # Load all packages from original CSV (including those without downloads)
+    all_packages = pd.read_csv(filepath)
+    all_packages["display_name"] = all_packages["pypi_package_name"].fillna(
+        all_packages["id"]
+    )
 
     last_6_totals = (
         df[df["date"].isin(last_6)]
@@ -259,12 +347,38 @@ def show_all_packages_list(df: pd.DataFrame) -> None:
         else pd.Series(dtype=int, name="prev_months_total")
     )
 
-    summary = (
-        pd.concat([last_6_totals, prev_months_totals, url_map, pypi_url_map], axis=1)
-        .reset_index()
-        .sort_values("last_6_total", ascending=False)
-        .reset_index(drop=True)
+    # Create summary from all packages
+    summary = all_packages[
+        [
+            "display_name",
+            "html_url",
+            "pypi_package_url",
+            "anaconda_package_url",
+            "juliahub_package_url",
+            "other_source",
+        ]
+    ].copy()
+
+    # Join with download data
+    summary = summary.merge(
+        last_6_totals, left_on="display_name", right_index=True, how="left"
     )
+    if not prev_months_totals.empty:
+        summary = summary.merge(
+            prev_months_totals, left_on="display_name", right_index=True, how="left"
+        )
+
+    # Filter by selected tools if applicable
+    if selected_tools:
+        summary = summary[summary["display_name"].isin(selected_tools)].copy()
+
+    # Sort: packages with data first (by download count), then packages without data (alphabetically)
+    summary["has_data"] = summary["last_6_total"].notna()
+    summary = summary.sort_values(
+        ["has_data", "last_6_total", "display_name"],
+        ascending=[False, False, True],
+        na_position="last",
+    ).reset_index(drop=True)
 
     last_6_label = f"{last_6[0].strftime('%b %Y')} – {last_6[-1].strftime('%b %Y')}"
     prev_months_label = (
@@ -273,8 +387,9 @@ def show_all_packages_list(df: pd.DataFrame) -> None:
         else None
     )
 
+    filter_text = f" (filtered to {len(selected_tools)} selected)" if selected_tools else ""
     st.caption(
-        f"Showing {len(summary)} packages with PyPI data · "
+        f"Showing {len(summary)} packages{filter_text} ({tools_with_data_count} with download data) · "
         f"Latest period: **{last_6_label}**"
         + (f" · Compared to: {prev_months_label}" if prev_months_label else "")
     )
@@ -313,36 +428,84 @@ def show_all_packages_list(df: pd.DataFrame) -> None:
                 pypi_url = row.get("pypi_package_url")
                 if pd.notna(pypi_url):
                     links_html += (
-                        f'<a href="{pypi_url}" target="_blank" style="text-decoration:none; color:inherit;">'
+                        f'<a href="{pypi_url}" target="_blank" style="text-decoration:none; color:inherit; margin-right:12px;">'
                         f'<img src="https://pypi.org/static/images/logo-small.8998e9d1.svg" width="13" '
                         f'style="vertical-align:middle; margin-right:4px;">'
                         f"PyPI</a>"
                     )
 
+                anaconda_url = row.get("anaconda_package_url")
+                if pd.notna(anaconda_url):
+                    links_html += (
+                        f'<a href="{anaconda_url}" target="_blank" style="text-decoration:none; color:inherit; margin-right:12px;">'
+                        f'<img src="https://www.anaconda.com/favicon.ico" width="13" '
+                        f'style="vertical-align:middle; margin-right:4px;">'
+                        f"Anaconda</a>"
+                    )
+
+                juliahub_url = row.get("juliahub_package_url")
+                if pd.notna(juliahub_url):
+                    links_html += (
+                        f'<a href="{juliahub_url}" target="_blank" style="text-decoration:none; color:inherit; margin-right:12px;">'
+                        f'<img src="https://juliahub.com/favicon.ico" width="13" '
+                        f'style="vertical-align:middle; margin-right:4px;">'
+                        f"JuliaHub</a>"
+                    )
+
+                other_source = row.get("other_source")
+                if pd.notna(other_source):
+                    other_source_str = str(other_source)
+                    if "central.sonatype.com" in other_source_str:
+                        links_html += (
+                            f'<a href="{other_source_str}" target="_blank" style="text-decoration:none; color:inherit; margin-right:12px;">'
+                            f'<img src="https://central.sonatype.com/favicon.ico" width="13" '
+                            f'style="vertical-align:middle; margin-right:4px;">'
+                            f"Maven</a>"
+                        )
+                    elif "crates.io" in other_source_str:
+                        links_html += (
+                            f'<a href="{other_source_str}" target="_blank" style="text-decoration:none; color:inherit; margin-right:12px;">'
+                            f'<img src="https://crates.io/favicon.ico" width="13" '
+                            f'style="vertical-align:middle; margin-right:4px;">'
+                            f"Cargo</a>"
+                        )
+
                 if links_html:
                     st.markdown(links_html, unsafe_allow_html=True)
 
             with col_metric:
-                last_total = (
-                    int(row["last_6_total"]) if pd.notna(row["last_6_total"]) else 0
-                )
-                prev_total = (
-                    int(row["prev_months_total"])
-                    if "prev_months_total" in row.index
-                    and pd.notna(row["prev_months_total"])
-                    else None
-                )
-                delta = (
-                    f"{last_total - prev_total:+,}" if prev_total is not None else None
-                )
-                st.metric(
-                    label="Downloads (6 mo.)",
-                    value=f"{last_total:,}",
-                    delta=delta,
-                    help=f"Δ vs previous period ({prev_months_label})"
-                    if prev_months_label
-                    else None,
-                )
+                # Check if package has download data
+                if row.get("has_data", False):
+                    last_total = (
+                        int(row["last_6_total"]) if pd.notna(row["last_6_total"]) else 0
+                    )
+                    prev_total = (
+                        int(row["prev_months_total"])
+                        if "prev_months_total" in row.index
+                        and pd.notna(row["prev_months_total"])
+                        else None
+                    )
+                    delta = (
+                        f"{last_total - prev_total:+,}"
+                        if prev_total is not None
+                        else None
+                    )
+                    st.metric(
+                        label="Downloads (6 mo.)",
+                        value=f"{last_total:,}",
+                        delta=delta,
+                        help=f"Δ vs previous period ({prev_months_label})"
+                        if prev_months_label
+                        else None,
+                    )
+                else:
+                    # Show grey indicator for packages without download data
+                    st.markdown(
+                        '<div style="background: #f0f0f0; color: #888; padding: 8px; border-radius: 4px; text-align: center; font-size: 0.85rem;">'
+                        "⊘ Download data not available"
+                        "</div>",
+                        unsafe_allow_html=True,
+                    )
 
             st.divider()
 
@@ -369,11 +532,12 @@ def preamble() -> None:
     )
 
 
-def main(df: pd.DataFrame) -> None:
+def main(df: pd.DataFrame, filepath: Path) -> None:
     """Orchestrate the page layout and visualisations.
 
     Args:
         df: Long-format downloads DataFrame from load_downloads().
+        filepath: Path to the original CSV file.
     """
     metrics = compute_metrics(df)
     latest_month = metrics["latest_month"]
@@ -381,19 +545,12 @@ def main(df: pd.DataFrame) -> None:
     # ── Sidebar controls ─────────────────────────────────────────────────────
     all_tools = sorted(df["display_name"].unique())
 
-    # Default: top tool in latest month
-    top1_default = (
-        df[df["date"] == latest_month]
-        .groupby("display_name")["downloads"]
-        .sum()
-        .idxmax()
-    )
-
-    selected_tool = st.sidebar.selectbox(
-        "Select tool for trend chart",
+    selected_tools = st.sidebar.multiselect(
+        "Select tools for trend chart (max 5)",
         options=all_tools,
-        index=all_tools.index(top1_default) if top1_default in all_tools else 0,
-        help="Choose a tool to display in the Download Trends chart.",
+        default=[],
+        max_selections=5,
+        help="Choose up to 5 tools. Leave empty to see the average across all tools.",
     )
 
     # ── Metric widgets ───────────────────────────────────────────────────────
@@ -402,12 +559,12 @@ def main(df: pd.DataFrame) -> None:
     st.markdown("---")
 
     # ── Download trend line ──────────────────────────────────────────────────
-    plot_download_trends(df, selected_tool)
+    plot_download_trends(df, selected_tools)
 
     st.markdown("---")
 
     # ── Scrollable package list ──────────────────────────────────────────────
-    show_all_packages_list(df)
+    show_all_packages_list(df, filepath, selected_tools, metrics["tools_count"])
 
 
 if __name__ == "__main__":
@@ -426,4 +583,4 @@ if __name__ == "__main__":
     df_downloads = load_downloads(data_path)
 
     preamble()
-    main(df_downloads)
+    main(df_downloads, data_path)

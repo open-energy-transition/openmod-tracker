@@ -61,9 +61,8 @@ def compute_metrics(df: pd.DataFrame) -> dict:
         all_time_total, and tool count.
     """
     months = sorted(df["date"].unique())
-    # Skip the most recent (potentially partial) month — use the last *full* month
-    last_full = months[-2] if len(months) >= 2 else months[-1]
-    prev_full = months[-3] if len(months) >= 3 else None
+    last_full = months[-1]
+    prev_full = months[-2] if len(months) >= 2 else None
 
     month_totals = df.groupby("date")["downloads"].sum()
     latest_total = int(month_totals[last_full])
@@ -144,10 +143,9 @@ def plot_download_trends(df: pd.DataFrame, selected_tool: str) -> None:
     # ── Last-3-full-months metrics ────────────────────────────────────────────
     # All months sorted; skip the latest (may be partial) → last 3 full months
     all_months = sorted(df["date"].unique())
-    full_months = all_months[:-1]  # drop current partial month
 
-    if len(full_months) >= 3:
-        recent = full_months[-3:]  # [month-3, month-2, month-1]
+    if len(all_months) >= 3:
+        recent = all_months[-3:]  # [month-3, month-2, month-1]
         m_cols = st.columns(3)
         for col, month in zip(m_cols, recent):
             label = month.strftime("%B %Y")
@@ -155,13 +153,13 @@ def plot_download_trends(df: pd.DataFrame, selected_tool: str) -> None:
             value = int(row["downloads"].sum()) if not row.empty else None
 
             # Delta vs the month before this one
-            prev_idx = full_months.index(month) - 1
+            prev_idx = all_months.index(month) - 1
             if prev_idx >= 0:
-                prev_row = tool_df[tool_df["date"] == full_months[prev_idx]]
+                prev_row = tool_df[tool_df["date"] == all_months[prev_idx]]
                 prev_value = (
                     int(prev_row["downloads"].sum()) if not prev_row.empty else None
                 )
-                prev_label_str = full_months[prev_idx].strftime("%B %Y")
+                prev_label_str = all_months[prev_idx].strftime("%B %Y")
             else:
                 prev_value = None
                 prev_label_str = None
@@ -238,14 +236,9 @@ def show_all_packages_list(df: pd.DataFrame) -> None:
     st.subheader("📋 All Packages")
 
     all_months = sorted(df["date"].unique())
-    full_months = all_months[:-1]  # drop current partial month
 
-    last_6 = full_months[-6:] if len(full_months) >= 6 else full_months
-    prev_6 = (
-        full_months[-12:-6]
-        if len(full_months) >= 12
-        else (full_months[: max(0, len(full_months) - 6)])
-    )
+    last_6 = all_months[-6:] if len(all_months) >= 6 else all_months
+    prev_months = all_months[:-6] if len(all_months) > 6 else []
 
     # Per-tool aggregation
     url_map = df.groupby("display_name")["html_url"].first()
@@ -257,33 +250,33 @@ def show_all_packages_list(df: pd.DataFrame) -> None:
         .sum()
         .rename("last_6_total")
     )
-    prev_6_totals = (
-        df[df["date"].isin(prev_6)]
+    prev_months_totals = (
+        df[df["date"].isin(prev_months)]
         .groupby("display_name")["downloads"]
         .sum()
         .rename("prev_6_total")
-        if prev_6
-        else pd.Series(dtype=int, name="prev_6_total")
+        if prev_months
+        else pd.Series(dtype=int, name="prev_months_total")
     )
 
     summary = (
-        pd.concat([last_6_totals, prev_6_totals, url_map, pypi_url_map], axis=1)
+        pd.concat([last_6_totals, prev_months_totals, url_map, pypi_url_map], axis=1)
         .reset_index()
         .sort_values("last_6_total", ascending=False)
         .reset_index(drop=True)
     )
 
     last_6_label = f"{last_6[0].strftime('%b %Y')} – {last_6[-1].strftime('%b %Y')}"
-    prev_6_label = (
-        f"{prev_6[0].strftime('%b %Y')} – {prev_6[-1].strftime('%b %Y')}"
-        if prev_6
+    prev_months_label = (
+        f"{prev_months[0].strftime('%b %Y')} – {prev_months[-1].strftime('%b %Y')}"
+        if prev_months
         else None
     )
 
     st.caption(
         f"Showing {len(summary)} packages with PyPI data · "
         f"Latest period: **{last_6_label}**"
-        + (f" · Compared to: {prev_6_label}" if prev_6_label else "")
+        + (f" · Compared to: {prev_months_label}" if prev_months_label else "")
     )
 
     container = st.container(height=620, border=True)
@@ -334,8 +327,8 @@ def show_all_packages_list(df: pd.DataFrame) -> None:
                     int(row["last_6_total"]) if pd.notna(row["last_6_total"]) else 0
                 )
                 prev_total = (
-                    int(row["prev_6_total"])
-                    if "prev_6_total" in row.index and pd.notna(row["prev_6_total"])
+                    int(row["prev_months_total"])
+                    if "prev_months_total" in row.index and pd.notna(row["prev_months_total"])
                     else None
                 )
                 delta = (
@@ -345,8 +338,8 @@ def show_all_packages_list(df: pd.DataFrame) -> None:
                     label="Downloads (6 mo.)",
                     value=f"{last_total:,}",
                     delta=delta,
-                    help=f"Δ vs previous period ({prev_6_label})"
-                    if prev_6_label
+                    help=f"Δ vs previous period ({prev_months_label})"
+                    if prev_months_label
                     else None,
                 )
 
@@ -359,19 +352,17 @@ def preamble() -> None:
         """
         Package downloads are a strong proxy for **real-world tool usage** as they capture users who actually install and run a tool.
 
-       Here we track **monthly PyPI downloads** for energy modelling tools that publish
+       Here we track **monthly PyPI and Conda downloads** for energy modelling tools that publish
         Python packages, spanning the past year.
         """
     )
     st.info(
         """
         **Notes on the data**
-        - **PyPI only.** Tools distributed exclusively via conda-forge, Julia's General
+        - **PyPI and Conda only.** Tools distributed exclusively via Julia's General
           registry, Maven Central, or other ecosystems are not reflected here.
         - **Bot & CI traffic.** Automated downloads by CI pipelines are not considered in this infographic.
-        - **Partial current month.** The most recently started month may show lower counts
-          simply because it is not yet complete; look to the previous full month for a
-          stable baseline.
+        - **No current month.** The current month is not shown as the complete data is not yet available.
         """,
         icon="ℹ️",
     )

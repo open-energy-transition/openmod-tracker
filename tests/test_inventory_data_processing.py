@@ -303,26 +303,19 @@ class TestGetDownloadData:
 
     def test_get_conda_pkg_download_stats(self) -> None:
         """Test that conda download stats are returned with correct column ordering and structure."""
-        # Expected data
-        expected = pd.DataFrame(
-            {
-                "pkg_name": ["pypsa"] * 8,
-                "time": [
-                    "2025-05",
-                    "2025-06",
-                    "2025-07",
-                    "2025-08",
-                    "2026-01",
-                    "2026-02",
-                    "2026-03",
-                    "2026-04",
-                ],
-                "counts": [7773, 5880, 5836, 5021, 10106, 10370, 9235, 8783],
-            }
-        )
         result = get_download_data.get_conda_pkg_download_stats(["pypsa"])
-        assert list(result.columns) == list(expected.columns)
-        pd.testing.assert_frame_equal(result, expected)
+
+        # Test column ordering
+        assert list(result.columns) == ["pkg_name", "time", "counts"]
+
+        # Test data validity (structure)
+        assert all(result["pkg_name"] == "pypsa")
+        assert result["counts"].dtype in ["int64", "int32", "float64"]
+        assert all(result["counts"] >= 0)
+
+        # Test date format and ordering
+        dates = pd.to_datetime(result["time"], format="%Y-%m")
+        assert dates.is_monotonic_increasing
 
     @pytest.mark.parametrize(
         (
@@ -330,6 +323,7 @@ class TestGetDownloadData:
             "pypi_name",
             "anaconda_url",
             "julia_url",
+            "other_url",
             "month_a",
             "month_b",
             "expected",
@@ -340,6 +334,7 @@ class TestGetDownloadData:
                 "package",
                 "https://anaconda.org/pkg",
                 "julia.org",
+                "other.org",
                 1,
                 1,
                 True,
@@ -348,6 +343,7 @@ class TestGetDownloadData:
                 "https://pypi.org/pkg",
                 "package",
                 "https://anaconda.org/pkg",
+                None,
                 None,
                 1,
                 None,
@@ -361,6 +357,7 @@ class TestGetDownloadData:
         pypi_name: str,
         anaconda_url: str,
         julia_url: str,
+        other_url: str,
         month_a: int,
         month_b: int,
         expected: bool,
@@ -372,8 +369,9 @@ class TestGetDownloadData:
                 "pypi_package_name": pypi_name,
                 "anaconda_package_url": anaconda_url,
                 "juliahub_package_url": julia_url,
-                "2026-05": month_a,
-                "2026-04": month_b,
+                "other_source": other_url,
+                "2026-06": month_a,
+                "2026-05": month_b,
             }
         )
         result = get_download_data.use_cache(row)

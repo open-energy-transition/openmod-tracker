@@ -9,13 +9,12 @@ aristopy,https://git.tu-berlin.de/etus/public/aristopy,aristopy,pre-compiled,
 asam,https://github.com/ancillaryservicesacquisitionmodel/asam,ASAM,openmod,
 asset_level_transition_risk_in_the_global_coal__oil__and_gas_supply_chains,https://github.com/lkruitwagen/global-fossil-fuel-supply-chain,"Asset-level Transition Risk in the Global Coal, Oil, and Gas Supply Chains",lf-energy-landscape,
 assume,https://github.com/assume-framework/assume,ASSUME,openmod,
-backbone,https://gitlab.vtt.fi/backbone/backbone,Backbone,"g-pst,lf-energy-landscape,openmod,opensustain-tech,pre-compiled","capacity-expansion,production-cost"
 balmorel,https://github.com/balmorelcommunity/balmorel,Balmorel,"lf-energy-landscape,openmod,opensustain-tech,pre-compiled",
 bewhere_model,https://github.com/caaficus/bewhere-model,BeWhere-model,pre-compiled,
 bluesky,https://github.com/eiagov/bluesky,BlueSky,"opensustain-tech,pre-compiled",
 breakthrough_energy_model,https://github.com/breakthrough-energy,Breakthrough Energy Model,openmod,
 bridges,https://github.com/stanford-eao/bridges,BRIDGES,pre-compiled,
-cairnopen,https://github.com/cea-liten/cairnopen,CairnOpen,"opensustain-tech,pre-compiled",
+cairnopen,https://github.com/cea-liten/cairnopen,CairnOpen,"opensustain-tech,pre-compiled","capacity-expansion,production-cost"
 calliope,https://github.com/calliope-project/calliope,Calliope,"g-pst,lf-energy-landscape,openmod,opensustain-tech,pre-compiled","capacity-expansion,production-cost"
 capacityexpansion_jl,https://github.com/youngfaithful/capacityexpansion.jl,"CapacityExpansion.jl,CapacityExpansion","lf-energy-landscape,openmod,opensustain-tech,pre-compiled",
 capow,https://github.com/romulus97/capow_py36,CAPOW,openmod,
@@ -55,11 +54,11 @@ energyrt,https://github.com/optimal2050/energyrt,"energyRt,EnergyRt","lf-energy-
 energyscope,https://github.com/energyscope/energyscope,EnergyScope,openmod,
 energyscope_library,https://gitlab.com/energyscope/energyscope,EnergyScope Library,opensustain-tech,
 energysim,https://github.com/dgusain1/energysim,energysim,pre-compiled,
-enflow,https://github.com/rebase-energy/emflow,enflow,"opensustain-tech,pre-compiled",
+enflow,https://github.com/rebase-energy/emflow,enflow,pre-compiled,
 eoles_elecres,https://github.com/behrangshirizadeh/eoles_elecres,EOLES elecRES,openmod,
 eoles_mv,https://github.com/behrangshirizadeh/eoles_mv,EOLES_mv,pre-compiled,
 epm,https://github.com/esmap-world-bank-group/epm,Electricity Planning Model,"opensustain-tech,pre-compiled","capacity-expansion,production-cost"
-erad,https://github.com/nlr-distribution-suite/erad,ERAD,"opensustain-tech,pre-compiled",
+erad,https://github.com/nlr-distribution-suite/erad,erad,pre-compiled,
 erf,https://github.com/erf-model/erf,ERF,lf-energy-landscape,
 essim,https://github.com/esdlmapeditoressim/essim,essim,pre-compiled,
 etengine,https://github.com/quintel/etengine,Energy Transition Engine,"opensustain-tech,pre-compiled",
@@ -86,7 +85,6 @@ gridlab_d,https://github.com/arras-energy/gridlabd,GridLAB-D,"opensustain-tech,p
 gridpack,https://github.com/gridoptics/gridpack,GridPACK,opensustain-tech,power-flow
 gridpath,https://github.com/blue-marble/gridpath,GridPath,"lf-energy-landscape,opensustain-tech,pre-compiled","capacity-expansion,production-cost"
 grimsel_flex,https://github.com/arthurrinaldi/grimsel,GRIMSEL-FLEX,openmod,
-h2integrate,https://github.com/natlabrockies/h2integrate,H2Integrate,opensustain-tech,
 hamlet,https://github.com/tum-ens/hamlet,HAMLET,pre-compiled,
 heat4future,https://gitlab.com/c4dht/strategic-heat-planning-project,Heat4Future,openmod,
 heron,https://github.com/idaholab/heron,HERON,pre-compiled,
@@ -95,6 +93,7 @@ hope,https://github.com/hope-model-project/hope,HOPE,pre-compiled,
 hopp,https://github.com/natlabrockies/hopp,HOPP,pre-compiled,"capacity-expansion,production-cost"
 hybrid,https://github.com/idaholab/hybrid,HYBRID,"opensustain-tech,pre-compiled",
 hybridbosse,https://github.com/natlabrockies/hybridbosse,HybridBOSSE,lf-energy-landscape,
+hydesign_git,https://gitlab.windenergy.dtu.dk/topfarm/hydesign,hydesign.git,pre-compiled,
 hydrogenmod_jl,https://github.com/lukasbarner/hydrogenmod.jl,HydrOGEnMod.jl,pre-compiled,
 idea,https://gitlab.com/sesit/idea,idea,pre-compiled,
 iesopt_jl,https://github.com/ait-energy/iesopt.jl,IESopt.jl,"opensustain-tech,pre-compiled",
@@ -155,7 +154,7 @@ powergama,https://github.com/powergama/powergama,powergama,pre-compiled,"capacit
 powermatcher,https://github.com/flexiblepower/powermatcher,PowerMatcher,"lf-energy-landscape,openmod",
 powermodels_jl,https://github.com/lanl-ansi/powermodels.jl,"PowerModels.jl,PowerModels","g-pst,opensustain-tech,pre-compiled",power-flow
 powermodelsannex_jl,https://github.com/lanl-ansi/powermodelsannex.jl,PowerModelsAnnex.jl,opensustain-tech,
-powersimulations_jl,https://github.com/sienna-platform/powersimulations.jl,"PowerSimulations.jl,Sienna\Ops","lf-energy-landscape,openmod,opensustain-tech,pre-compiled",production-cost
+powersimulations_jl,https://github.com/sienna-platform/powersimulations.jl,"PowerSimulations.jl,Sienna\Ops","lf-energy-landscape,openmod,pre-compiled",production-cost
 powersimulationsdynamics_jl,https://github.com/sienna-platform/powersimulationsdynamics.jl,PowerSimulationsDynamics.jl,"openmod,pre-compiled",power-flow
 powersystemdatamodel,https://github.com/ie3-institute/powersystemdatamodel,PowerSystemDataModel,"lf-energy-landscape,opensustain-tech",
 powersystemsinvestments_jl,https://github.com/sienna-platform/powersystemsinvestments.jl,PowerSystemsInvestments.jl,pre-compiled,
@@ -188,6 +187,7 @@ reise_jl,https://github.com/breakthrough-energy/reise.jl,REISE.jl,"lf-energy-lan
 remix,https://gitlab.com/dlr-ve/esy/remix/framework,REMix,"g-pst,pre-compiled,lf-energy-landscape,opensustain-tech","capacity-expansion,production-cost"
 renpass,https://github.com/fraukewiese/renpass,Renpass,"openmod,pre-compiled",
 reopt_jl,https://github.com/natlabrockies/reopt.jl,REopt.jl,pre-compiled,capacity-expansion
+reopt_lite_api,https://github.com/natlabrockies/reopt_api,"REopt_Lite_API,REopt","lf-energy-landscape,openmod",
 resie,https://github.com/quasi-software/resie,ReSiE,"lf-energy-landscape,pre-compiled",
 resolve,https://github.com/e3-/resolve,resolve,"opensustain-tech,pre-compiled",
 revub,https://github.com/vub-hydr/revub,REVUB,lf-energy-landscape,
@@ -197,7 +197,7 @@ rodeo,https://github.com/natlabrockies/rodeo,RODeO,pre-compiled,
 roseau_load_flow,https://github.com/roseautechnologies/roseau_load_flow,Roseau Load Flow,opensustain-tech,power-flow
 rumi,https://github.com/prayas-energy/rumi,Rumi,opensustain-tech,
 rustpower,https://github.com/chengts95/rustpower,rustpower,pre-compiled,
-sam,https://github.com/natlabrockies/sam,"System Advisor Model,System Advisor Model (SAM)","lf-energy-landscape,openmod,opensustain-tech,pre-compiled","capacity-expansion,production-cost"
+sam,https://github.com/natlabrockies/sam,"System Advisor Model,System Advisor Model (SAM)","lf-energy-landscape,openmod,pre-compiled","capacity-expansion,production-cost"
 sddpdso_jl,https://github.com/psrenergy/sddpdso.jl,SDDPDSO.jl,pre-compiled,
 secmod,https://git-ce.rwth-aachen.de/ltt/secmod,secmod,pre-compiled,
 secmod_milp,https://git-ce.rwth-aachen.de/ltt/secmod-milp,secmod-milp,pre-compiled,

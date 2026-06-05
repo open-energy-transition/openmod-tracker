@@ -39,8 +39,8 @@ bluesky,BlueSky,"An EIA initiative to develop an open source, next generation en
 bluesky,BlueSky,,https://github.com/eiagov/bluesky,pre-compiled,
 breakthrough_energy_model,Breakthrough Energy Model,"The Breakthrough Energy Model is a production cost model with capacity expansion algorithms and heuristics, originally designed to explore the generation and transmission expansion needs to meet U.S. states’ clean energy goals. The data management occurs within Python, the DCOPF optimization problem is created via Julia, and the preferred solver currently being used is Gurobi, while it is flexible to choose various free or proprietary solvers.  A fully integrated capacity expansion model is in development.apacity expansion model is in development.",https://github.com/breakthrough-energy,openmod,
 bridges,BRIDGES,,https://github.com/stanford-eao/bridges,pre-compiled,
-cairnopen,CairnOpen,Simulation and optimization software for energy and environmental systems.,https://github.com/cea-liten/cairnopen,opensustain-tech,
-cairnopen,CairnOpen,,https://github.com/cea-liten/cairnopen,pre-compiled,
+cairnopen,CairnOpen,Simulation and optimization software for energy and environmental systems.,https://github.com/cea-liten/cairnopen,opensustain-tech,"capacity-expansion,production-cost"
+cairnopen,CairnOpen,,https://github.com/cea-liten/cairnopen,pre-compiled,"capacity-expansion,production-cost"
 calliope,Calliope,Energy system modelling framework,https://github.com/calliope-project/calliope,g-pst,"capacity-expansion,production-cost"
 calliope,Calliope,"A framework to develop energy system models, with a focus on flexibility, high spatial and temporal resolution, the ability to execute many runs based on the same base model, and a clear separation of framework and model.",https://github.com/calliope-project/calliope,lf-energy-landscape,
 calliope,Calliope,"A framework to develop energy system models, with a focus on flexibility, high spatial and temporal resolution, the ability to execute many runs based on the same base model, and a clear separation of framework and model.",https://github.com/calliope-project/calliope,opensustain-tech,
@@ -160,7 +160,6 @@ EnergyScope (v2.0) optimises both the investment and operating strategy of an en
 energyscope_library,EnergyScope Library,"A library that enables users to set up energy models for specific scenarios, run optimization simulations, and calculate/visualize Key Performance Indicators (KPIs) for energy system analysis.",https://gitlab.com/energyscope/energyscope,opensustain-tech,
 energysim,energysim,,https://github.com/dgusain1/energysim,pre-compiled,
 energysystemmodelling_jl,EnergySystemModelling.jl,,https://github.com/gamma-opt/energysystemmodelling.jl,pre-compiled,
-enflow,enflow,An open-source Python framework that enables energy data scientists and modellers to write modular and reproducible energy models that solves sequential decision problems.,https://github.com/rebase-energy/enflow,opensustain-tech,
 enflow,enflow,,https://github.com/rebase-energy/enflow,pre-compiled,
 eoles_elec,EOLES elec,"The EOLES family of models optimizes the investment and operation of an energy system
 in order to minimize the total cost while satisfying energy demand. EOLES_elec is the
@@ -181,7 +180,6 @@ power generation technologies: offshore and onshore wind power, solar photovolta
 storage (PHS), batteries and methanation combined with open-cycle gas turbines.ion combined with open-cycle gas turbines.",https://github.com/behrangshirizadeh/eoles_elecres,openmod,
 eoles_mv,EOLES_mv,,https://github.com/behrangshirizadeh/eoles_mv,pre-compiled,
 epm,EPM,,https://github.com/esmap-world-bank-group/epm,pre-compiled,"capacity-expansion,production-cost"
-erad,ERAD,Graph based Python library for computing resilience metrics for power distribution systems.,https://github.com/nlr-distribution-suite/erad,opensustain-tech,
 erad,erad,,https://github.com/nrel-distribution-suites/erad,pre-compiled,
 erf,ERF,,https://github.com/erf-model/erf,lf-energy-landscape,
 esdl,ESDL,A modelling language created for the components in an energy system and their relations towards each other.,https://github.com/energytransition/esdl,lf-energy-landscape,
@@ -260,7 +258,6 @@ gridpath,GridPath,A versatile simulation and optimization platform for power-sys
 gridpath,GridPath,A versatile simulation and optimization platform for power-system planning and operations.,https://github.com/blue-marble/gridpath,opensustain-tech,
 gridpath,gridpath,,https://github.com/blue-marble/gridpath,pre-compiled,
 grimsel_flex,GRIMSEL-FLEX,,https://github.com/arthurrinaldi/grimsel,openmod,
-h2integrate,H2Integrate,"An open-source Python package for modeling and designing hybrid energy systems producing electricity, hydrogen, ammonia, steel, and other products.",https://github.com/nrel/h2integrate,opensustain-tech,
 hamlet,HAMLET,,https://github.com/tum-ens/hamlet,pre-compiled,
 heat4future,Heat4Future,,https://gitlab.com/c4dht/strategic-heat-planning-project,openmod,
 helics,HELICS,"Today the core uses are in the energy domain, where there is extensive and growing support for a wide-range of electric power system, natural gas, communications and control-schemes, transportation, buildings, and related domain tools.",https://github.com/gmlc-tdc/helics,opensustain-tech,
@@ -278,6 +275,7 @@ hvdc_wise_lib,HVDC-Wise lib,"Hosts a library of HVDC equipment models for model 
 hybrid,HYBRID,A modeling toolset to assess the integration and economic viability of Integrated Energy Systems.,https://github.com/idaholab/hybrid,opensustain-tech,
 hybrid,HYBRID,,https://github.com/idaholab/hybrid,pre-compiled,
 hybridbosse,HybridBOSSE,,https://github.com/nrel/hybridbosse,lf-energy-landscape,
+hydesign_git,hydesign.git,,https://gitlab.windenergy.dtu.dk/topfarm/hydesign,pre-compiled,
 hydrogenmod_jl,HydrOGEnMod.jl,,https://github.com/lukasbarner/hydrogenmod.jl,pre-compiled,
 idaes_pse,idaes-pse,,https://github.com/idaes/idaes-pse,pre-compiled,
 idea,idea,,https://gitlab.com/sesit/idea,pre-compiled,
@@ -466,7 +464,6 @@ powermodels_jl,PowerModels.jl,Designed to enable computational evaluation of eme
 powermodels_jl,PowerModels.jl,,https://github.com/lanl-ansi/powermodels.jl,pre-compiled,
 powermodelsannex_jl,PowerModelsAnnex.jl,An extension of PowerModels.jl that provides a home for open source sharing of preliminary and/or exploratory methods in power system optimization.,https://github.com/lanl-ansi/powermodelsannex.jl,opensustain-tech,
 powersimdata,PowerSimData,Is part of a Python software ecosystem developed by Breakthrough Energy Sciences to carry out power flow study in the U.S. electrical grid.,https://github.com/breakthrough-energy/powersimdata,opensustain-tech,
-powersimulations_jl,PowerSimulations.jl,A Julia package for power system modeling and simulation of Power Systems operations.,https://github.com/sienna-platform/powersimulations.jl,opensustain-tech,production-cost
 powersimulations_jl,PowerSimulations.jl,PowerSimulations.jl is a Julia package for power system modeling and simulation of Power Systems operations.,,g-pst,production-cost
 powersimulations_jl,PowerSimulations.jl,"Flexible, modular, and scalable package for power system quasi-static analysis with sequential problem specification capabilities.",https://github.com/nrel-siip/powersimulations.jl,openmod,production-cost
 powersimulations_jl,PowerSimulations.jl,,https://github.com/nrel-sienna/powersimulations.jl,pre-compiled,production-cost
@@ -474,7 +471,6 @@ powersimulationsdynamics_jl,PowerSimulationsDynamics.jl,,https://github.com/nrel
 powersimulationsdynamics_jl,PowerSimulationsDynamics.jl,,https://github.com/nrel-sienna/powersimulationsdynamics.jl,pre-compiled,power-flow
 powersystemdatamodel,PowerSystemDataModel,Provides an extensive data model capable of modeling energy systems with high granularity e.g. for bottom-up simulations.,https://github.com/ie3-institute/powersystemdatamodel,lf-energy-landscape,
 powersystemdatamodel,PowerSystemDataModel,Provides an extensive data model capable of modeling energy systems with high granularity e.g. for bottom-up simulations.,https://github.com/ie3-institute/powersystemdatamodel,opensustain-tech,
-powersystems_jl,PowerSystems.jl,Provides a rigorous data model using Julia structures to enable power systems analysis and modeling.,https://github.com/sienna-platform/powersystems.jl,opensustain-tech,
 powersystems_jl,PowerSystems.jl,"The PowerSystems.jl package provides a rigorous data model using Julia structures to enable power systems analysis and modeling. In addition to stand-alone system analysis tools and data model building, the PowerSystems.jl package is used as the foundational data container for the PowerSimulations.jl and PowerSimulationsDynamics.jl packages. PowerSystems.jl supports a limited number of data file formats for parsing.d number of data file formats for parsing.",https://github.com/nrel-siip/powersystems.jl,openmod,
 powersystems_jl,PowerSystems.jl,,https://github.com/nrel-sienna/powersystems.jl,pre-compiled,
 powersystemsinvestments_jl,PowerSystemsInvestments.jl,,https://github.com/nrel-sienna/powersystemsinvestments.jl,pre-compiled,
@@ -557,7 +553,6 @@ renpass,Renpass,"renpass is an open source simulation energy model which has the
 Currently renpass is being developed further as renpassG!S based on the Open Energy Modelling Framework (oemof).e Open Energy Modelling Framework (oemof).",https://github.com/fraukewiese/renpass,openmod,
 renpass,renpass,,https://github.com/fraukewiese/renpass,pre-compiled,
 reopt,REopt,"The REopt™ model provides concurrent, multiple technology integration and optimization capabilities to help organizations meet their cost savings and energy performance goals. Formulated as a mixed integer linear program, the REopt model recommends an optimally sized mix of renewable energy, conventional generation, and energy storage technologies; estimates the net present value of implementing those technologies; and provides a dispatch strategy for operating the technology mix at maximum economic efficiency.nology mix at maximum economic efficiency.",https://github.com/nrel/reopt_lite_api,openmod,
-reopt_api,REopt_API,"Offers a subset of features from NREL's more comprehensive REopt model. Both models provide concurrent, multiple technology integration and optimization capabilities to help organizations meet their cost savings and energy performance goals.",https://github.com/natlabrockies/reopt_api,opensustain-tech,
 reopt_jl,REopt.jl,,https://github.com/natlabrockies/reopt.jl,pre-compiled,capacity-expansion
 reopt_lite_api,REopt_Lite_API,"Offers a subset of features from NREL's more comprehensive REopt model. Both models provide concurrent, multiple technology integration and optimization capabilities to help organizations meet their cost savings and energy performance goals.",https://github.com/nrel/reopt_api,lf-energy-landscape,
 resie,ReSiE,"Simulation engine for the operational simulation and optimisation of energy systems on the scale of city districts. Using a novel mathematical approach, it focuses on modelling the energy system in early planning stages and allows for the simulation of complex non-linear operational strategies.",https://github.com/quasi-software/resie,lf-energy-landscape,
@@ -654,7 +649,6 @@ switch,Switch,"Switch is a capacity-planning model for power systems with large 
 switch,switch,,https://github.com/switch-model/switch,pre-compiled,
 switch_model,switch-model,Optimal planning model for power systems with large shares of renewable energy.,https://github.com/switch-model/switch,lf-energy-landscape,
 system_advisor_model,System Advisor Model,"A simulation program for electricity generation projects. It has models for different kinds of renewable energy systems and financial models for residential, commercial, and utility-scale projects.",https://github.com/nrel/sam,lf-energy-landscape,
-system_advisor_model,System Advisor Model,"A simulation program for electricity generation projects. It has models for different kinds of renewable energy systems and financial models for residential, commercial, and utility-scale projects.",https://github.com/natlabrockies/sam,opensustain-tech,
 system_advisor_model_(sam),System Advisor Model (SAM),The System Advisor Model (SAM) is a free techno-economic software model that facilitates decision-making for people in the renewable energy industry.,https://github.com/nrel/sam,openmod,
 temoa,Temoa,Tools for Energy Model Optimization and Analysis (Temoa) is an open source modeling framework for conducting energy system analysis.,https://github.com/temoaproject/temoa,lf-energy-landscape,capacity-expansion
 temoa,Temoa,Tools for Energy Model Optimization and Analysis (Temoa) is an open source modeling framework for conducting energy system analysis.,https://github.com/temoaproject/temoa,opensustain-tech,capacity-expansion

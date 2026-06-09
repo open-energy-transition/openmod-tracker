@@ -195,7 +195,7 @@ def pick_cached_or_current(row: pd.Series, current: str | None, col: str) -> str
     return None
 
 
-def use_package_info_cache(
+def enrich_package_info_from_cache(
     url: str,
     pypi_url: str | None,
     conda_url: str | None,
@@ -385,7 +385,7 @@ def get_tool_info(
         enriched_julia_url,
         enriched_other_url,
         enriched_pypi_pkg_name,
-    ) = use_package_info_cache(
+    ) = enrich_package_info_from_cache(
         url, pypi_url, conda_url, julia_url, other_url, pypi_pkg_name, manual_cache
     )
 
@@ -396,6 +396,76 @@ def get_tool_info(
         enriched_other_url,
         enriched_pypi_pkg_name,
     )
+
+
+def _is_populated(row: Series, col: str) -> bool:
+    """Check if a DataFrame cell is non-null and non-empty.
+
+    Parameters
+    ------------
+    row : pandas.Series
+        A row from a DataFrame.
+    col : str
+        The column name to check.
+
+    Returns:
+    --------
+    bool
+        True if the cell is non-null and contains non-whitespace content,
+        False otherwise.
+    """
+    return bool(pd.notna(row[col]) and str(row[col]).strip() != "")
+
+
+def should_skip_fetching(row: pd.Series) -> bool:
+    """Use cached row if all required fields are populated based on package type.
+
+    Determines whether to skip processing a tool row by checking if all
+    required fields contain populated values. The required fields vary based
+    on the package type.
+
+    Parameters
+    ----------
+    row : pd.Series
+        A pandas Series representing a single row of data for a tool.
+
+    Returns:
+    -------
+    bool
+        True if all required fields for the package type are populated in the
+        row, False otherwise.
+
+    Notes:
+    -----
+    Package type determination follows this priority:
+
+    1. Julia packages: If html_url contains ".jl", required fields are
+       id, html_url, juliahub_package_url.
+    2. Other source packages: If other_source is populated, required fields are
+       id, html_url, other_source.
+    3. PyPI packages: If pypi_package_name is populated, required fields are
+       id, html_url, pypi_package_url, pypi_package_name.
+
+    If none of these conditions are met, the row is not considered cacheable.
+    """
+    # Determine required fields based on package type
+    base_fields = ["id", "html_url"]
+
+    # Check if it's a Julia package
+    if _is_populated(row, "html_url") and ".jl" in str(row["html_url"]):
+        required_fields = base_fields + ["juliahub_package_url"]
+    # Check if other_source is populated
+    elif _is_populated(row, "other_source"):
+        required_fields = base_fields + ["other_source"]
+    # Check if pypi_package_name is populated
+    elif _is_populated(row, "pypi_package_name"):
+        required_fields = base_fields + ["pypi_package_url", "pypi_package_name"]
+    else:
+        # None of the package types matched
+        return False
+
+    # Check if all required fields are populated
+    return all(_is_populated(row, field) for field in required_fields)
 
 
 def get_package_info(
@@ -454,8 +524,8 @@ def get_package_info(
         if tool_id in existing_by_id:
             existing_row = existing_by_id[tool_id]
 
-            # If all the relevant columns are already populated, skip the tool to save time
-            if use_cache(existing_row):
+            # If all the relevant columns are already populated, skip the tool to save time and resources
+            if should_skip_fetching(existing_row):
                 rows_out.append(existing_row.to_dict())
                 continue
             # If some of the relevant columns are not populated, store the cached data
@@ -478,68 +548,6 @@ def get_package_info(
         rows_out.append(row_data)
 
     return pd.DataFrame(rows_out, columns=COLS)
-
-
-def _is_populated(row: Series, col: str) -> bool:
-    """Check if a DataFrame cell is non-null and non-empty.
-
-    Parameters
-    ------------
-    row : pandas.Series
-        A row from a DataFrame.
-    col : str
-        The column name to check.
-
-    Returns:
-    --------
-    bool
-        True if the cell is non-null and contains non-whitespace content,
-        False otherwise.
-    """
-    return bool(pd.notna(row[col]) and str(row[col]).strip() != "")
-
-
-def use_cache(
-    row: pd.Series,
-    months_back: int = 2,
-    required_fields: list[str] = [
-        "pypi_package_url",
-        "pypi_package_name",
-        "anaconda_package_url",
-        "juliahub_package_url",
-        "other_source",
-    ],
-) -> bool:
-    """Use cached row if all required fields are populated.
-
-    Determines whether to skip processing a tool row by checking if all
-    required fields contain populated values. The required fields include
-    a set of base fields plus dynamically generated month-based fields
-    for the specified time period.
-
-    Parameters
-    ----------
-    row : pd.Series
-        A pandas Series representing a single row of data for a tool.
-    months_back : int, default=2
-        Number of months to generate in the past from the current date.
-        Each month is formatted as "YYYY-MM" and added to the required fields.
-    required_fields : list[str], default=["pypi_package_url", "pypi_package_name", "anaconda_package_url", "juliahub_package_url"]
-        Base list of required field names that must be populated.
-
-    Returns:
-    -------
-    bool
-        True if all required fields (including month-based fields) are
-        populated in the row, False otherwise.
-    """
-    months = (
-        pd.date_range(end=pd.Timestamp.now(), periods=months_back, freq="MS")
-        .strftime("%Y-%m")
-        .tolist()
-    )
-    required_fields.extend(months)
-    return all(_is_populated(row, field) for field in required_fields)
 
 
 def query_file_downloads(

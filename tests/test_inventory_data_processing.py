@@ -319,62 +319,92 @@ class TestGetDownloadData:
 
     @pytest.mark.parametrize(
         (
+            "id",
+            "html_url",
             "pypi_url",
             "pypi_name",
             "anaconda_url",
             "julia_url",
             "other_url",
-            "month_a",
-            "month_b",
             "expected",
         ),
         [
             (
+                "package",
+                "https://github.com/package/package",
                 "https://pypi.org/pkg",
                 "package",
-                "https://anaconda.org/pkg",
-                "julia.org",
-                "other.org",
-                1,
-                1,
+                None,
+                None,
+                None,
                 True,
             ),
             (
-                "https://pypi.org/pkg",
                 "package",
-                "https://anaconda.org/pkg",
+                "https://github.com/package/package.jl",
                 None,
                 None,
-                1,
+                None,
+                "package",
+                None,
+                True,
+            ),
+            (
+                "package",
+                "https://github.com/package/package.jl",
+                None,
+                None,
+                None,
+                "package",
+                None,
+                True,
+            ),
+            (
+                "package",
+                "https://github.com/package/package.jl",
+                None,
+                None,
+                None,
+                None,
+                None,
+                False,
+            ),
+            (
+                "package",
+                "https://github.com/package/package",
+                None,
+                None,
+                None,
+                None,
                 None,
                 False,
             ),
         ],
     )
-    def test_use_cache_with_default_fields(
+    def test_should_skip_fetching_with_default_fields(
         self,
+        id: str,
+        html_url: str,
         pypi_url: str,
         pypi_name: str,
         anaconda_url: str,
         julia_url: str,
         other_url: str,
-        month_a: int,
-        month_b: int,
         expected: bool,
     ) -> None:
-        """Test use_cache with default required fields."""
+        """Test should_skip_fetching with default required fields."""
         row = pd.Series(
             {
+                "id": id,
+                "html_url": html_url,
                 "pypi_package_url": pypi_url,
                 "pypi_package_name": pypi_name,
                 "anaconda_package_url": anaconda_url,
                 "juliahub_package_url": julia_url,
                 "other_source": other_url,
-                "2026-06": month_a,
-                "2026-05": month_b,
             }
         )
-        result = get_download_data.use_cache(row)
+        result = get_download_data.should_skip_fetching(row)
         assert result == expected
 
     @pytest.mark.parametrize(

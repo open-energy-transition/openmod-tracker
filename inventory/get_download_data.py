@@ -235,7 +235,6 @@ def use_package_info_cache(
         current values taking precedence, falling back to cached values when current is None.
         For specific URLs, cached values always take precedence.
     """
-
     # Special case: URL that should always use cache values.
     # As explained in https://github.com/open-energy-transition/openmod-tracker/issues/125#issuecomment-4610376320,
     # the response from the ecosystem package API contains two pypi packages urls
@@ -398,9 +397,47 @@ def get_tool_info(
         enriched_pypi_pkg_name,
     )
 
-def get_package_info(output_path: Path, manual_cache_path: Path, statistics_df: pd.DataFrame) -> pd.DataFrame:
 
-    #Load existing data into a dict for fast lookup
+def get_package_info(
+    output_path: Path, manual_cache_path: Path, statistics_df: pd.DataFrame
+) -> pd.DataFrame:
+    """Collect package information for tools from various package managers.
+
+    This function retrieves package URLs and names from PyPI, Conda, Julia, and other
+    package sources for tools listed in the input DataFrame. It implements a caching
+    mechanism to avoid re-fetching data that has already been collected. Existing
+    cached data is preserved and only missing fields are populated.
+
+    Parameters
+    ----------
+    output_path : Path
+        Path to the CSV file containing existing package information. Used to load
+        cached results and write the output. If the file doesn't exist, it will be
+        created from the results.
+    manual_cache_path : Path
+        Path to the directory containing manual cache data used by get_tool_info()
+        to speed up package lookups.
+    statistics_df : pd.DataFrame
+        DataFrame containing tool statistics with at least the following columns:
+        - id : unique tool identifier
+        - html_url : URL to the tool's repository or homepage
+
+    Returns
+    -------
+    pd.DataFrame
+        DataFrame with package information for all tools, containing columns
+        specified in COLS. Includes:
+
+        - id : tool identifier
+        - html_url : original tool URL
+        - pypi_package_url : URL to PyPI package page (if available)
+        - pypi_package_name : name of PyPI package (if available)
+        - anaconda_package_url : URL to Conda package page (if available)
+        - juliahub_package_url : URL to Julia package page (if available)
+        - other_source : URL to alternative package sources (if available)
+    """
+
+    # Load existing data into a dict for fast lookup
     existing_by_id = {}
     if output_path.exists():
         existing = pd.read_csv(output_path).drop_duplicates(subset=["id"], keep="last")
@@ -408,7 +445,9 @@ def get_package_info(output_path: Path, manual_cache_path: Path, statistics_df: 
 
     rows_out = []
     for _, row in tqdm(
-        statistics_df.iterrows(), total=len(statistics_df), desc="Collecting package downloads"
+        statistics_df.iterrows(),
+        total=len(statistics_df),
+        desc="Collecting package downloads",
     ):
         tool_id = row["id"]
 

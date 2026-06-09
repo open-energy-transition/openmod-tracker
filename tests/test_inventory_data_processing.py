@@ -453,7 +453,7 @@ class TestGetDownloadData:
             ),
         ],
     )
-    def test_get_package_info(
+    def test_get_tool_info(
         self,
         url: str,
         expected_pypi_url: str,
@@ -462,9 +462,9 @@ class TestGetDownloadData:
         expected_other_url: str,
         expected_package_name: str,
     ) -> None:
-        """Test get_package_info function."""
+        """Test get_tool_info function."""
         pypi_url, conda_url, julia_url, other_url, package_name = (
-            get_download_data.get_package_info(url, manual_cache=CACHE_DATA_PATH)
+            get_download_data.get_tool_info(url, manual_cache=CACHE_DATA_PATH)
         )
         assert pypi_url == expected_pypi_url
         assert conda_url == expected_conda_url

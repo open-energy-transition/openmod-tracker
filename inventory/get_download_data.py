@@ -235,14 +235,20 @@ def use_package_info_cache(
         current values taking precedence, falling back to cached values when current is None.
         For specific URLs, cached values always take precedence.
     """
-    # Special case: URLs that should always use cache values
+
+    # Special case: URL that should always use cache values.
+    # As explained in https://github.com/open-energy-transition/openmod-tracker/issues/125#issuecomment-4610376320,
+    # the response from the ecosystem package API contains two pypi packages urls
+    # https://pypi.org/project/roseau-load-flow-engine/ and https://pypi.org/project/roseau-load-flow/.
+    # The first package redirects to the second.
+    # Hence, we force the tool to use the cached value https://pypi.org/project/roseau-load-flow,roseau-load-flow.
     FORCE_CACHE_URLS = {
         "https://github.com/RoseauTechnologies/Roseau_Load_Flow".casefold()
     }
 
     force_cache = url.casefold() in FORCE_CACHE_URLS
 
-    # If all current values are already populated and we're not forcing cache, no need to check cache
+    # If all current values are already populated, and we are not forcing cache, no need to check cache
     all_populated = all(
         val is not None
         for val in [pypi_url, conda_url, julia_url, other_url, pypi_pkg_name]
@@ -304,10 +310,10 @@ def use_package_info_cache(
     )
 
 
-def get_package_info(
+def get_tool_info(
     url: str, manual_cache: Path, known_ecosystems: set[str] | None = None
 ) -> tuple[str | None, str | None, str | None, str | None, str | None]:
-    """Get the package URL and name for PyPI, Anaconda, JuliaHub, and others from repository URL.
+    """Get the package URL and name for PyPI, Anaconda, JuliaHub, and others from the repository URL.
 
     This function queries the ecosyste.ms API for package information and falls back
     to a manual cache for missing values. It extracts package URLs and names for
@@ -336,7 +342,7 @@ def get_package_info(
     other_url = None
     pypi_pkg_name = None
 
-    # Try to fetch package data from ecosyste.ms API
+    # Try to fetch package data from ecosyste.ms package API
     try:
         packages = util.get_ecosystems_package_data(url)
     except Exception as e:
@@ -391,6 +397,49 @@ def get_package_info(
         enriched_other_url,
         enriched_pypi_pkg_name,
     )
+
+def get_package_info(output_path: Path, manual_cache_path: Path, statistics_df: pd.DataFrame) -> pd.DataFrame:
+
+    #Load existing data into a dict for fast lookup
+    existing_by_id = {}
+    if output_path.exists():
+        existing = pd.read_csv(output_path).drop_duplicates(subset=["id"], keep="last")
+        existing_by_id = {row["id"]: row for _, row in existing.iterrows()}
+
+    rows_out = []
+    for _, row in tqdm(
+        statistics_df.iterrows(), total=len(statistics_df), desc="Collecting package downloads"
+    ):
+        tool_id = row["id"]
+
+        # Start from cached row if present, otherwise create a new one
+        if tool_id in existing_by_id:
+            existing_row = existing_by_id[tool_id]
+
+            # If all the relevant columns are already populated, skip the tool to save time
+            if use_cache(existing_row):
+                rows_out.append(existing_row.to_dict())
+                continue
+            # If some of the relevant columns are not populated, store the cached data
+            # It could be in fact that one of the relevant columns becomes available on the ecosystem package API
+            # in the future. Hence, we should retain the possibility of fetching this piece of information in the future
+            row_data = existing_row.to_dict()
+        else:
+            row_data = {"id": tool_id, "html_url": row["html_url"]}
+
+        # Preserve existing values. Only fill missing fields. Use .setdefault https://docs.python.org/3/library/stdtypes.html#dict.setdefault
+        pypi_pkg_url, conda_pkg_url, julia_pkg_url, other_pkg_url, pypi_pkg_name = (
+            get_tool_info(row["html_url"], manual_cache_path)
+        )
+        row_data.setdefault("pypi_package_url", pypi_pkg_url)
+        row_data.setdefault("pypi_package_name", pypi_pkg_name)
+        row_data.setdefault("anaconda_package_url", conda_pkg_url)
+        row_data.setdefault("juliahub_package_url", julia_pkg_url)
+        row_data.setdefault("other_source", other_pkg_url)
+
+        rows_out.append(row_data)
+
+    return pd.DataFrame(rows_out, columns=COLS)
 
 
 def _is_populated(row: Series, col: str) -> bool:
@@ -676,53 +725,26 @@ def cli(
     """CLI entry point to collect all users who interact with repositories listed in a stats file."""
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
-    # Load existing data into a dict for fast lookup
-    # existing_by_id = {}
-    # if out_path.exists():
-    #    #existing = pd.read_csv(out_path).drop_duplicates(subset=["id"], keep="last")
-    #    # existing_by_id = {row["id"]: row for _, row in existing.iterrows()}
-
-    # Load stats
+    # Step 1 - load the statistics data from inventory/output/stats.csv
     stats_df = pd.read_csv(stats_file, usecols=["id", "html_url"])
 
-    rows_out = []
-    for _, row in tqdm(
-        stats_df.iterrows(), total=len(stats_df), desc="Collecting package downloads"
-    ):
-        tool_id = row["id"]
+    # Step 2 - populate the package information columns:
+    # - id
+    #  - html_url
+    #  - pypi_package_url
+    #  - pypi_package_name
+    #  - anaconda_package_url
+    #  - juliahub_package_url
+    #  - other_source
+    package_info_df = get_package_info(out_path, package_cache_path, stats_df)
 
-        # # Start from cached row if present, otherwise create a new one
-        # if tool_id in existing_by_id:
-        #     existing_row = existing_by_id[tool_id]
-        #
-        #     # If all the relevant columns are already populated, skip the tool to save time
-        #     if use_cache(existing_row):
-        #         rows_out.append(existing_row.to_dict())
-        #         continue
-        #     # If some of the relevant columns are not populated, store the cached data
-        #     row_data = existing_row.to_dict()
-        # else:
-        #     row_data = {"id": tool_id, "html_url": row["html_url"]}
-
-        row_data = {"id": tool_id, "html_url": row["html_url"]}
-
-        # Preserve existing values. Only fill missing fields. Use .setdefault https://docs.python.org/3/library/stdtypes.html#dict.setdefault
-        pypi_pkg_url, conda_pkg_url, julia_pkg_url, other_pkg_url, pypi_pkg_name = (
-            get_package_info(row["html_url"], package_cache_path)
-        )
-        row_data.setdefault("pypi_package_url", pypi_pkg_url)
-        row_data.setdefault("pypi_package_name", pypi_pkg_name)
-        row_data.setdefault("anaconda_package_url", conda_pkg_url)
-        row_data.setdefault("juliahub_package_url", julia_pkg_url)
-        row_data.setdefault("other_source", other_pkg_url)
-
-        rows_out.append(row_data)
-
-    package_info_df = pd.DataFrame(rows_out, columns=COLS)
     package_name_list = list(
         package_info_df["pypi_package_name"].dropna().str.casefold().unique()
     )
 
+    # Step 3 - populate the monthly downloads columns.
+
+    # --> Get the PyPI download stats for each package from BigQuery (or from a csv file if use_bigquery is False)
     if use_bigquery:
         # BigQuery is currently not enable for the GCP project compute-app
         pypi_download_stats_df = query_file_downloads(
@@ -732,9 +754,12 @@ def cli(
         # Process a csv file with the queried data from the BigQuery Web UI
         pypi_download_stats_df = pd.read_csv(pypi_path)
 
+    # --> Get the Anaconda download stats
     anaconda_download_stats_df = get_conda_pkg_download_stats(
         package_name_list, months_back=months_back
     )
+
+    # --> Enrich the package information dataframe with the monthly download stats, and save the result to a csv file
     updated_df = enrich_with_monthly_downloads(
         package_info_df, pypi_download_stats_df, anaconda_download_stats_df
     )

@@ -530,7 +530,9 @@ def show_all_packages_list(
                         else None
                     )
                     delta_mom = (
-                        f"{latest_total - prev_total:+,}" if prev_total is not None else None
+                        f"{latest_total - prev_total:+,}"
+                        if prev_total is not None
+                        else None
                     )
                     st.metric(
                         label=f"{latest_label}",
@@ -543,7 +545,8 @@ def show_all_packages_list(
                 with col_metric2:
                     year_ago_total = (
                         int(row["year_ago_total"])
-                        if "year_ago_total" in row.index and pd.notna(row["year_ago_total"])
+                        if "year_ago_total" in row.index
+                        and pd.notna(row["year_ago_total"])
                         else None
                     )
                     if year_ago_total is not None:
@@ -557,7 +560,9 @@ def show_all_packages_list(
                             label="YoY Change",
                             value=f"{pct_change:+.1f}%",
                             delta=delta_yoy,
-                            help=f"YoY: Δ vs {year_ago_label}" if year_ago_label else None,
+                            help=f"YoY: Δ vs {year_ago_label}"
+                            if year_ago_label
+                            else None,
                         )
                     else:
                         st.markdown(

@@ -864,5 +864,6 @@ def cli(
     )
     updated_df.to_csv(out_path, index=False)
 
+
 if __name__ == "__main__":
     cli()

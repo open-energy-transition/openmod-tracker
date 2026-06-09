@@ -549,7 +549,7 @@ def get_package_info(
     for _, row in tqdm(
         statistics_df.iterrows(),
         total=len(statistics_df),
-        desc="Collecting package downloads",
+        desc="Collecting package information",
     ):
         tool_id = row["id"]
 
@@ -811,7 +811,7 @@ def enrich_with_monthly_downloads(
     "--months-back",
     type=int,
     help="Number of months back to query for download trends.",
-    default=12,
+    default=24,
 )
 def cli(
     stats_file: Path,
@@ -863,7 +863,6 @@ def cli(
         package_info_df, pypi_download_stats_df, anaconda_download_stats_df
     )
     updated_df.to_csv(out_path, index=False)
-
 
 if __name__ == "__main__":
     cli()

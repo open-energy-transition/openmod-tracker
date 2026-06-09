@@ -322,7 +322,7 @@ def plot_download_trends(df: pd.DataFrame, selected_tools: list) -> None:
 def show_all_packages_list(
     df: pd.DataFrame, filepath: Path, selected_tools: list, tools_with_data_count: int
 ) -> None:
-    """Scrollable list of all packages with 6-month download totals and trend.
+    """Scrollable list of all packages with latest month downloads and year-to-year comparison.
 
     Parameters
     ------------
@@ -339,8 +339,14 @@ def show_all_packages_list(
 
     all_months = sorted(df["date"].unique())
 
-    last_6 = all_months[-6:] if len(all_months) >= 6 else all_months
-    prev_months = all_months[:-6] if len(all_months) > 6 else []
+    # Get latest month, previous month, and same month last year
+    latest_month = all_months[-1]
+    prev_month = all_months[-2] if len(all_months) >= 2 else None
+
+    # Find same month last year (12 months ago)
+    latest_month_pd = pd.Timestamp(latest_month)
+    year_ago_month = latest_month_pd - pd.DateOffset(months=12)
+    year_ago_available = year_ago_month in all_months
 
     # Load all packages from original CSV (including those without downloads)
     all_packages = pd.read_csv(filepath)
@@ -348,19 +354,30 @@ def show_all_packages_list(
         all_packages["id"]
     )
 
-    last_6_totals = (
-        df[df["date"].isin(last_6)]
+    # Get download totals for different periods
+    latest_totals = (
+        df[df["date"] == latest_month]
         .groupby("display_name")["downloads"]
         .sum()
-        .rename("last_6_total")
+        .rename("latest_total")
     )
-    prev_months_totals = (
-        df[df["date"].isin(prev_months)]
+
+    prev_totals = (
+        df[df["date"] == prev_month]
         .groupby("display_name")["downloads"]
         .sum()
-        .rename("prev_months_total")
-        if prev_months
-        else pd.Series(dtype=int, name="prev_months_total")
+        .rename("prev_total")
+        if prev_month is not None
+        else pd.Series(dtype=int, name="prev_total")
+    )
+
+    year_ago_totals = (
+        df[df["date"] == year_ago_month]
+        .groupby("display_name")["downloads"]
+        .sum()
+        .rename("year_ago_total")
+        if year_ago_available
+        else pd.Series(dtype=int, name="year_ago_total")
     )
 
     # Create summary from all packages
@@ -377,11 +394,15 @@ def show_all_packages_list(
 
     # Join with download data
     summary = summary.merge(
-        last_6_totals, left_on="display_name", right_index=True, how="left"
+        latest_totals, left_on="display_name", right_index=True, how="left"
     )
-    if not prev_months_totals.empty:
+    if not prev_totals.empty:
         summary = summary.merge(
-            prev_months_totals, left_on="display_name", right_index=True, how="left"
+            prev_totals, left_on="display_name", right_index=True, how="left"
+        )
+    if not year_ago_totals.empty:
+        summary = summary.merge(
+            year_ago_totals, left_on="display_name", right_index=True, how="left"
         )
 
     # Filter by selected tools if applicable
@@ -389,33 +410,37 @@ def show_all_packages_list(
         summary = summary[summary["display_name"].isin(selected_tools)].copy()
 
     # Sort: packages with data first (by download count), then packages without data (alphabetically)
-    summary["has_data"] = summary["last_6_total"].notna()
+    summary["has_data"] = summary["latest_total"].notna()
     summary = summary.sort_values(
-        ["has_data", "last_6_total", "display_name"],
+        ["has_data", "latest_total", "display_name"],
         ascending=[False, False, True],
         na_position="last",
     ).reset_index(drop=True)
 
-    last_6_label = f"{last_6[0].strftime('%b %Y')} – {last_6[-1].strftime('%b %Y')}"
-    prev_months_label = (
-        f"{prev_months[0].strftime('%b %Y')} – {prev_months[-1].strftime('%b %Y')}"
-        if prev_months
-        else None
-    )
+    latest_label = latest_month.strftime("%b %Y")
+    prev_label = prev_month.strftime("%b %Y") if prev_month is not None else None
+    year_ago_label = year_ago_month.strftime("%b %Y") if year_ago_available else None
 
     filter_text = (
         f" (filtered to {len(selected_tools)} selected)" if selected_tools else ""
     )
-    st.caption(
+    caption_text = (
         f"Showing {len(summary)} packages{filter_text} ({tools_with_data_count} with download data) · "
-        f"Latest period: **{last_6_label}**"
-        + (f" · Compared to: {prev_months_label}" if prev_months_label else "")
+        f"Latest month: **{latest_label}**"
     )
+    if prev_label:
+        caption_text += f" · MoM comparison: {prev_label}"
+    if year_ago_label:
+        caption_text += f" · YoY comparison: {year_ago_label}"
+
+    st.caption(caption_text)
 
     container = st.container(height=620, border=True)
     with container:
         for _, row in summary.iterrows():
-            col_info, col_metric = st.columns([2, 1], vertical_alignment="center")
+            col_info, col_metric1, col_metric2 = st.columns(
+                [2, 1, 1], vertical_alignment="center"
+            )
 
             with col_info:
                 st.markdown(f"**{row['display_name']}**")
@@ -491,36 +516,69 @@ def show_all_packages_list(
                 if links_html:
                     st.markdown(links_html, unsafe_allow_html=True)
 
-            with col_metric:
-                # Check if package has download data
-                if row.get("has_data", False):
-                    last_total = (
-                        int(row["last_6_total"]) if pd.notna(row["last_6_total"]) else 0
-                    )
+            # Check if package has download data
+            if row.get("has_data", False):
+                latest_total = (
+                    int(row["latest_total"]) if pd.notna(row["latest_total"]) else 0
+                )
+
+                # Month-over-month comparison
+                with col_metric1:
                     prev_total = (
-                        int(row["prev_months_total"])
-                        if "prev_months_total" in row.index
-                        and pd.notna(row["prev_months_total"])
+                        int(row["prev_total"])
+                        if "prev_total" in row.index and pd.notna(row["prev_total"])
                         else None
                     )
-                    delta = (
-                        f"{last_total - prev_total:+,}"
-                        if prev_total is not None
-                        else None
+                    delta_mom = (
+                        f"{latest_total - prev_total:+,}" if prev_total is not None else None
                     )
                     st.metric(
-                        label="Downloads (6 mo.)",
-                        value=f"{last_total:,}",
-                        delta=delta,
-                        help=f"Δ vs previous period ({prev_months_label})"
-                        if prev_months_label
-                        else None,
+                        label=f"{latest_label}",
+                        value=f"{latest_total:,}",
+                        delta=delta_mom,
+                        help=f"MoM: Δ vs {prev_label}" if prev_label else None,
                     )
-                else:
-                    # Show grey indicator for packages without download data
+
+                # Year-over-year comparison
+                with col_metric2:
+                    year_ago_total = (
+                        int(row["year_ago_total"])
+                        if "year_ago_total" in row.index and pd.notna(row["year_ago_total"])
+                        else None
+                    )
+                    if year_ago_total is not None:
+                        delta_yoy = f"{latest_total - year_ago_total:+,}"
+                        pct_change = (
+                            ((latest_total - year_ago_total) / year_ago_total * 100)
+                            if year_ago_total > 0
+                            else 0
+                        )
+                        st.metric(
+                            label="YoY Change",
+                            value=f"{pct_change:+.1f}%",
+                            delta=delta_yoy,
+                            help=f"YoY: Δ vs {year_ago_label}" if year_ago_label else None,
+                        )
+                    else:
+                        st.markdown(
+                            '<div style="background: #f8f8f8; color: #999; padding: 8px; border-radius: 4px; text-align: center; font-size: 0.75rem;">'
+                            "No YoY data"
+                            "</div>",
+                            unsafe_allow_html=True,
+                        )
+            else:
+                # Show grey indicator for packages without download data
+                with col_metric1:
                     st.markdown(
                         '<div style="background: #f0f0f0; color: #888; padding: 8px; border-radius: 4px; text-align: center; font-size: 0.85rem;">'
-                        "⊘ Download data not available"
+                        "⊘ No data"
+                        "</div>",
+                        unsafe_allow_html=True,
+                    )
+                with col_metric2:
+                    st.markdown(
+                        '<div style="background: #f0f0f0; color: #888; padding: 8px; border-radius: 4px; text-align: center; font-size: 0.85rem;">'
+                        "⊘ No data"
                         "</div>",
                         unsafe_allow_html=True,
                     )

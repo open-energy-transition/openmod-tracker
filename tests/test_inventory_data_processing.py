@@ -355,16 +355,6 @@ class TestGetDownloadData:
                 None,
                 None,
                 None,
-                "package",
-                None,
-                True,
-            ),
-            (
-                "package",
-                "https://github.com/package/package.jl",
-                None,
-                None,
-                None,
                 None,
                 None,
                 False,
@@ -493,9 +483,17 @@ class TestGetDownloadData:
         expected_package_name: str,
     ) -> None:
         """Test get_tool_info function."""
-        package_info = get_download_data.get_tool_info(url, manual_cache=CACHE_DATA_PATH)
+        package_info = get_download_data.get_tool_info(
+            url, manual_cache=CACHE_DATA_PATH
+        )
         assert package_info.pypi_package_url == expected_pypi_url
         assert package_info.anaconda_package_url == expected_conda_url
         assert package_info.juliahub_package_url == expected_julia_url
         assert package_info.other_source == expected_other_url
         assert package_info.pypi_package_name == expected_package_name
+
+    def test_get_expected_month_columns(self) -> None:
+        """Test that get_expected_month_columns returns correct month columns."""
+        expected_months = ["2026-05", "2026-04", "2026-03"]
+        result = get_download_data.get_expected_month_columns(3)
+        assert result == expected_months

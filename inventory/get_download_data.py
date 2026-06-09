@@ -23,9 +23,7 @@ ECOSYSTEM_URL_PATTERNS = {
     "conda": "https://anaconda.org/",
     "julia": "https://juliahub.com/",
 }
-FORCE_CACHE_URLS = {
-    "https://github.com/RoseauTechnologies/Roseau_Load_Flow".casefold()
-}
+FORCE_CACHE_URLS = {"https://github.com/RoseauTechnologies/Roseau_Load_Flow".casefold()}
 LOGGER = logging.getLogger(__name__)
 PACKAGE_INFO_COLUMNS = [
     "id",
@@ -37,13 +35,40 @@ PACKAGE_INFO_COLUMNS = [
     "other_source",
 ]
 
+
 @dataclass
 class PackageInfo:
+    """Package information from various package managers and registries.
+
+    Stores URLs and names for a package across different ecosystems.
+    Each field is optional (None) if the package is not available in
+    that particular package manager or registry.
+
+    Attributes:
+    ----------
+    pypi_package_url : str | None
+        URL to the package on PyPI (Python Package Index).
+        Example: "https://pypi.org/project/requests/"
+    pypi_package_name : str | None
+        Name of the package as registered on PyPI.
+        Example: "requests"
+    anaconda_package_url : str | None
+        URL to the package on Anaconda/Conda repository.
+        Example: "https://anaconda.org/conda-forge/numpy"
+    juliahub_package_url : str | None
+        URL to the package on JuliaHub (Julia package registry).
+        Example: "https://juliahub.com/ui/Packages/Plots/..."
+    other_source : str | None
+        URL to alternative package source or registry.
+        Used for packages hosted outside major registries.
+    """
+
     pypi_package_url: str | None
     pypi_package_name: str | None
     anaconda_package_url: str | None
     juliahub_package_url: str | None
     other_source: str | None
+
 
 def get_conda_download_trends(previous_months: int) -> pd.DataFrame:
     """Retrieve conda package download statistics for the specified period.
@@ -207,9 +232,7 @@ def pick_cached_or_current(row: pd.Series, current: str | None, col: str) -> str
 
 
 def enrich_package_info_from_cache(
-    url: str,
-    package_info: PackageInfo,
-    manual_cache_path: Path,
+    url: str, package_info: PackageInfo, manual_cache_path: Path
 ) -> PackageInfo:
     """Enrich package info with values from a manual cache CSV, filling only None fields.
 
@@ -233,7 +256,6 @@ def enrich_package_info_from_cache(
         Object with current values taking precedence, falling back to
         cached values when current is None. For specific URLs, cached values always take precedence.
     """
-
     # Special case: URL that should always use cache values.
     # As explained in https://github.com/open-energy-transition/openmod-tracker/issues/125#issuecomment-4610376320,
     # the response from the ecosystem package API contains two pypi packages urls
@@ -305,18 +327,29 @@ def enrich_package_info_from_cache(
             ),
             other_source=(
                 row["other_source"]
-                if pd.notna(row["other_source"]) and str(row["other_source"]).strip() != ""
+                if pd.notna(row["other_source"])
+                and str(row["other_source"]).strip() != ""
                 else package_info.other_source
             ),
         )
 
     # Normal case: current values take precedence, cache fills in gaps
     return PackageInfo(
-        pypi_package_url=pick_cached_or_current(row, package_info.pypi_package_url, "pypi_package_url"),
-        pypi_package_name=pick_cached_or_current(row, package_info.pypi_package_name, "pypi_package_name"),
-        anaconda_package_url=pick_cached_or_current(row, package_info.anaconda_package_url, "anaconda_package_url"),
-        juliahub_package_url=pick_cached_or_current(row, package_info.juliahub_package_url, "juliahub_package_url"),
-        other_source=pick_cached_or_current(row, package_info.other_source, "other_source"),
+        pypi_package_url=pick_cached_or_current(
+            row, package_info.pypi_package_url, "pypi_package_url"
+        ),
+        pypi_package_name=pick_cached_or_current(
+            row, package_info.pypi_package_name, "pypi_package_name"
+        ),
+        anaconda_package_url=pick_cached_or_current(
+            row, package_info.anaconda_package_url, "anaconda_package_url"
+        ),
+        juliahub_package_url=pick_cached_or_current(
+            row, package_info.juliahub_package_url, "juliahub_package_url"
+        ),
+        other_source=pick_cached_or_current(
+            row, package_info.other_source, "other_source"
+        ),
     )
 
 
@@ -507,7 +540,9 @@ def get_package_info(
     # Load existing data into a dict for fast lookup
     existing_by_id = {}
     if output_path.exists():
-        existing = pd.read_csv(output_path).drop_duplicates(subset=["id"], keep="last")
+        existing = pd.read_csv(
+            output_path, usecols=PACKAGE_INFO_COLUMNS
+        ).drop_duplicates(subset=["id"], keep="last")
         existing_by_id = {row["id"]: row for _, row in existing.iterrows()}
 
     rows_out = []
@@ -546,10 +581,32 @@ def get_package_info(
     return pd.DataFrame(rows_out, columns=PACKAGE_INFO_COLUMNS)
 
 
+def get_expected_month_columns(months_back: int) -> list[str]:
+    """Get list of expected month column names for the last months_back months.
+
+    Parameters
+    ----------
+    months_back : int
+        Number of months to look back from current date.
+
+    Returns:
+    -------
+    list[str]
+        List of month column names in YYYY-MM format, sorted descending.
+    """
+    end_date = pd.Timestamp.now() - pd.DateOffset(months=1)
+    months = (
+        pd.date_range(end=end_date, periods=months_back, freq="MS")
+        .strftime("%Y-%m")
+        .tolist()
+    )
+    return sorted(months, reverse=True)
+
+
 def query_file_downloads(
     package_name_list: list[str],
+    months_back: int,
     bigquery_project_name: str = "openmod-tracker",
-    months_back: int = 12,
 ) -> pd.DataFrame:
     """Perform the BigQuery query to get the number of downloads for each package over a specified period, grouped by month and project.
 
@@ -557,10 +614,10 @@ def query_file_downloads(
     ------------
     package_name_list : list[str]
         List of package names to query.
+    months_back : int
+        Number of months to look back, by default 12 (one year).
     bigquery_project_name : str, optional
         The BigQuery project name, by default "openmod-tracker".
-    months_back : int, optional
-        Number of months to look back, by default 12 (one year).
 
     Returns:
     --------
@@ -754,7 +811,7 @@ def enrich_with_monthly_downloads(
     "--months-back",
     type=int,
     help="Number of months back to query for download trends.",
-    default=24,
+    default=12,
 )
 def cli(
     stats_file: Path,

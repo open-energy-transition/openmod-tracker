@@ -581,6 +581,7 @@ def get_package_info(
     return pd.DataFrame(rows_out, columns=PACKAGE_INFO_COLUMNS)
 
 
+# TODO: remove if not needed
 def get_expected_month_columns(months_back: int) -> list[str]:
     """Get list of expected month column names for the last months_back months.
 
@@ -615,7 +616,7 @@ def query_file_downloads(
     package_name_list : list[str]
         List of package names to query.
     months_back : int
-        Number of months to look back, by default 12 (one year).
+        Number of months to look back.
     bigquery_project_name : str, optional
         The BigQuery project name, by default "openmod-tracker".
 
@@ -645,7 +646,7 @@ def query_file_downloads(
       details.ci is NULL
       AND DATE(timestamp)
         BETWEEN DATE_TRUNC(DATE_SUB(CURRENT_DATE(), INTERVAL {months_back + 1} MONTH), MONTH)
-        AND DATE_TRUNC(DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH), MONTH) + INTERVAL 1 MONTH - INTERVAL 1 DAY
+        AND LAST_DAY(DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH))
       AND file.project IN UNNEST(@projects)
     GROUP BY `month`, `project`
     ORDER BY `month` DESC
@@ -661,7 +662,7 @@ def query_file_downloads(
 
 
 def get_conda_pkg_download_stats(
-    list_of_packages: list[str], months_back: int = 12
+    list_of_packages: list[str], months_back: int
 ) -> pd.DataFrame:
     """Get conda download stats for a list of packages.
 
@@ -669,7 +670,7 @@ def get_conda_pkg_download_stats(
     ------------
     list_of_packages : list[str]
         List of package names to query.
-    months_back : int, default=12
+    months_back : int
         Number of months to generate in the past from the current date.
 
     Returns:

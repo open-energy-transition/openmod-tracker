@@ -303,7 +303,9 @@ class TestGetDownloadData:
 
     def test_get_conda_pkg_download_stats(self) -> None:
         """Test that conda download stats are returned with correct column ordering and structure."""
-        result = get_download_data.get_conda_pkg_download_stats(["pypsa"])
+        result = get_download_data.get_conda_pkg_download_stats(
+            ["pypsa"], months_back=12
+        )
 
         # Test column ordering
         assert list(result.columns) == ["pkg_name", "time", "counts"]

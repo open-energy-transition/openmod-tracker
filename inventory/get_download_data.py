@@ -422,7 +422,7 @@ def get_package_info(
         - id : unique tool identifier
         - html_url : URL to the tool's repository or homepage
 
-    Returns
+    Returns:
     -------
     pd.DataFrame
         DataFrame with package information for all tools, containing columns
@@ -436,7 +436,6 @@ def get_package_info(
         - juliahub_package_url : URL to Julia package page (if available)
         - other_source : URL to alternative package sources (if available)
     """
-
     # Load existing data into a dict for fast lookup
     existing_by_id = {}
     if output_path.exists():

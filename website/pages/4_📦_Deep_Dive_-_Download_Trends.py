@@ -320,7 +320,7 @@ def plot_download_trends(df: pd.DataFrame, selected_tools: list) -> None:
 
 
 def show_all_packages_list(
-    df: pd.DataFrame, filepath: Path, selected_tools: list, tools_with_data_count: int
+    df: pd.DataFrame, filepath: Path, selected_tools: list, tools_with_data_count: int, delta_display_mode: str
 ) -> None:
     """Scrollable list of all packages with latest month downloads and year-to-year comparison.
 
@@ -334,6 +334,8 @@ def show_all_packages_list(
             List of selected tools to filter display.
         tools_with_data_count: int
             Total count of tools with download data (from compute_metrics).
+        delta_display_mode: str
+            "absolute" or "percentage" to control how deltas are shown in the metrics.
     """
     st.subheader("📋 All Packages")
 
@@ -564,11 +566,17 @@ def show_all_packages_list(
                         if "prev_total" in row.index and pd.notna(row["prev_total"])
                         else None
                     )
-                    delta_mom = (
-                        f"{latest_total - prev_total:+,}"
-                        if prev_total is not None
-                        else None
-                    )
+                    if prev_total is not None:
+                        diff_mom = latest_total - prev_total
+                        if delta_display_mode == "Percentage":
+                            if prev_total > 0:
+                                delta_mom = f"{(diff_mom / prev_total) * 100:+.1f}%"
+                            else:
+                                delta_mom = None
+                        else:
+                            delta_mom = f"{diff_mom:+,}"
+                    else:
+                        delta_mom = None
                     st.metric(
                         label=f"{latest_label}",
                         value=f"{latest_total:,}",
@@ -663,6 +671,13 @@ def main(df: pd.DataFrame, filepath: Path) -> None:
     # ── Sidebar controls ─────────────────────────────────────────────────────
     all_tools = sorted(df["display_name"].unique())
 
+    delta_display_mode = st.sidebar.radio(
+        "Delta display",
+        options=["Absolute", "Percentage"],
+        index=0,
+        help="Choose whether MoM/YoY deltas are shown as absolute numbers or percentages.",
+    )
+
     selected_tools = st.sidebar.multiselect(
         "Select tools for trend chart (max 5)",
         options=all_tools,
@@ -682,7 +697,7 @@ def main(df: pd.DataFrame, filepath: Path) -> None:
     st.markdown("---")
 
     # ── Scrollable package list ──────────────────────────────────────────────
-    show_all_packages_list(df, filepath, selected_tools, metrics["tools_count"])
+    show_all_packages_list(df, filepath, selected_tools, metrics["tools_count"], delta_display_mode)
 
 
 if __name__ == "__main__":

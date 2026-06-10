@@ -705,4 +705,3 @@ class TestGetDownloadData:
         assert sorted(new_tools) == ["pkg-a", "pkg-b", "pkg-c"]
         assert sorted(existing_tools) == list()
         assert missing_months == ["2026-05", "2026-04"]
-

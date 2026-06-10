@@ -579,6 +579,7 @@ def get_package_info(
 
     return pd.DataFrame(rows_out, columns=PACKAGE_INFO_COLUMNS)
 
+
 def get_expected_month_columns(months_back: int) -> list[str]:
     """Get list of expected month column names for the last months_back months.
 

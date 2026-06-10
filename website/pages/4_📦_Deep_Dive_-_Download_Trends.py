@@ -93,12 +93,14 @@ def compute_metrics(df: pd.DataFrame) -> dict:
     }
 
 
-def show_metrics(metrics: dict) -> None:
+def show_metrics(metrics: dict, delta_display_mode: str = "Absolute") -> None:
     """Render st.metric widgets in a four-column row.
 
     Parameters
     ------------
         metrics: Dict produced by compute_metrics().
+        delta_display_mode: str
+            "Absolute" or "Percentage" to control how deltas are shown.
     """
     st.subheader("💡Quick stats")
 
@@ -108,9 +110,12 @@ def show_metrics(metrics: dict) -> None:
     )
 
     delta_str = None
-    if metrics["prev_total"] is not None:
+    if metrics["prev_total"] is not None and metrics["prev_total"] > 0:
         diff = metrics["latest_total"] - metrics["prev_total"]
-        delta_str = f"{diff:+,}  vs {prev_label}"
+        if delta_display_mode == "Percentage":
+            delta_str = f"{(diff / metrics['prev_total']) * 100:+.1f}%  vs {prev_label}"
+        else:
+            delta_str = f"{diff:+,}  vs {prev_label}"
 
     col1, col2, col3, col4 = st.columns(4)
     col1.metric(
@@ -131,7 +136,7 @@ def show_metrics(metrics: dict) -> None:
     )
 
 
-def plot_download_trends(df: pd.DataFrame, selected_tools: list) -> None:
+def plot_download_trends(df: pd.DataFrame, selected_tools: list, delta_display_mode: str = "Absolute") -> None:
     """Line chart of monthly download trends for selected tools.
 
     Parameters
@@ -140,6 +145,8 @@ def plot_download_trends(df: pd.DataFrame, selected_tools: list) -> None:
             Long-format downloads DataFrame.
        selected_tools: list
             List of display_names to plot (max 5). Empty list = all tools.
+        delta_display_mode: str
+            "Absolute" or "Percentage" to control how deltas are shown in the metrics.
     """
     st.subheader("📈 Download Trends Over Time")
 
@@ -203,11 +210,12 @@ def plot_download_trends(df: pd.DataFrame, selected_tools: list) -> None:
                 prev_value = None
                 prev_label_str = None
 
-            delta = (
-                f"{value - prev_value:+,}"
-                if (value is not None and prev_value is not None)
-                else None
-            )
+            delta = None
+            if value is not None and prev_value is not None and prev_value > 0:
+                if delta_display_mode == "Percentage":
+                    delta = f"{((value - prev_value) / prev_value) * 100:+.1f}%"
+                else:
+                    delta = f"{value - prev_value:+,}"
             help_text = (
                 f"Change compared to {prev_label_str}" if prev_label_str else None
             )
@@ -570,21 +578,21 @@ def show_all_packages_list(
                         if "prev_total" in row.index and pd.notna(row["prev_total"])
                         else None
                     )
-                    if prev_total is not None:
+                    if prev_total is not None and prev_total > 0:
                         diff_mom = latest_total - prev_total
                         if delta_display_mode == "Percentage":
-                            if prev_total > 0:
-                                delta_mom = f"{(diff_mom / prev_total) * 100:+.1f}%"
-                            else:
-                                delta_mom = None
+                            delta_mom = f"{(diff_mom / prev_total) * 100:+.1f}%"
                         else:
                             delta_mom = f"{diff_mom:+,}"
+                    elif prev_total == 0:
+                        delta_mom = None
                     else:
                         delta_mom = None
                     st.metric(
                         label=f"{latest_label}",
                         value=f"{latest_total:,}",
                         delta=delta_mom,
+                        delta_color="off" if delta_mom is None and prev_total is not None else "normal",
                         help=f"MoM: Δ vs {prev_label}" if prev_label else None,
                     )
 
@@ -602,8 +610,12 @@ def show_all_packages_list(
                         and pd.notna(row["prev_year_total"])
                         else None
                     )
-                    if recent_year_total is not None and prev_year_total is not None:
-                        delta_yoy = f"{recent_year_total - prev_year_total:+,}"
+                    if recent_year_total is not None and prev_year_total is not None and prev_year_total > 0:
+                        diff_yoy = recent_year_total - prev_year_total
+                        if delta_display_mode == "Percentage":
+                            delta_yoy = f"{(diff_yoy / prev_year_total) * 100:+.1f}%"
+                        else:
+                            delta_yoy = f"{diff_yoy:+,}"
                         st.metric(
                             label="Last year",
                             value=recent_year_total,
@@ -612,6 +624,18 @@ def show_all_packages_list(
                                 f"YoY: {recent_window_label} vs {prev_window_label}"
                                 if recent_window_label and prev_window_label
                                 else None
+                            ),
+                        )
+                    elif recent_year_total is not None and prev_year_total == 0:
+                        st.metric(
+                            label="Last year",
+                            value=recent_year_total,
+                            delta=None,
+                            delta_color="off",
+                            help=(
+                                f"YoY: {recent_window_label} vs {prev_window_label} (no previous data)"
+                                if recent_window_label and prev_window_label
+                                else "No previous year data for comparison"
                             ),
                         )
                     else:
@@ -675,12 +699,12 @@ def main(df: pd.DataFrame, filepath: Path) -> None:
     # ── Sidebar controls ─────────────────────────────────────────────────────
     all_tools = sorted(df["display_name"].unique())
 
-    delta_display_mode = st.sidebar.radio(
-        "Delta display",
-        options=["Absolute", "Percentage"],
-        index=0,
-        help="Choose whether MoM/YoY deltas are shown as absolute numbers or percentages.",
+    show_percentage = st.sidebar.toggle(
+        "Show delta as percentage",
+        value=False,
+        help="Toggle to show MoM/YoY deltas as percentages instead of absolute numbers.",
     )
+    delta_display_mode = "Percentage" if show_percentage else "Absolute"
 
     selected_tools = st.sidebar.multiselect(
         "Select tools for trend chart (max 5)",
@@ -692,11 +716,11 @@ def main(df: pd.DataFrame, filepath: Path) -> None:
 
     # ── Metric widgets ───────────────────────────────────────────────────────
     st.markdown("---")
-    show_metrics(metrics)
+    show_metrics(metrics, delta_display_mode)
     st.markdown("---")
 
     # ── Download trend line ──────────────────────────────────────────────────
-    plot_download_trends(df, selected_tools)
+    plot_download_trends(df, selected_tools, delta_display_mode)
 
     st.markdown("---")
 

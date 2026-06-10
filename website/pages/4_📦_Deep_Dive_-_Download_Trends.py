@@ -320,7 +320,11 @@ def plot_download_trends(df: pd.DataFrame, selected_tools: list) -> None:
 
 
 def show_all_packages_list(
-    df: pd.DataFrame, filepath: Path, selected_tools: list, tools_with_data_count: int, delta_display_mode: str
+    df: pd.DataFrame,
+    filepath: Path,
+    selected_tools: list,
+    tools_with_data_count: int,
+    delta_display_mode: str,
 ) -> None:
     """Scrollable list of all packages with latest month downloads and year-to-year comparison.
 
@@ -697,7 +701,9 @@ def main(df: pd.DataFrame, filepath: Path) -> None:
     st.markdown("---")
 
     # ── Scrollable package list ──────────────────────────────────────────────
-    show_all_packages_list(df, filepath, selected_tools, metrics["tools_count"], delta_display_mode)
+    show_all_packages_list(
+        df, filepath, selected_tools, metrics["tools_count"], delta_display_mode
+    )
 
 
 if __name__ == "__main__":

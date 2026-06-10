@@ -500,7 +500,9 @@ def should_skip_fetching(row: pd.Series) -> bool:
 
 
 def get_package_info(
-    output_path: Path, manual_cache_path: Path, statistics_df: pd.DataFrame
+    statistics_df: pd.DataFrame,
+    manual_cache_path: Path,
+    cached_package_info_df: pd.DataFrame | None = None,
 ) -> pd.DataFrame:
     """Collect package information for tools from various package managers.
 
@@ -511,17 +513,16 @@ def get_package_info(
 
     Parameters
     ----------
-    output_path : Path
-        Path to the CSV file containing existing package information. Used to load
-        cached results and write the output. If the file doesn't exist, it will be
-        created from the results.
-    manual_cache_path : Path
-        Path to the directory containing manual cache data used by get_tool_info()
-        to speed up package lookups.
     statistics_df : pd.DataFrame
         DataFrame containing tool statistics with at least the following columns:
         - id : unique tool identifier
         - html_url : URL to the tool's repository or homepage
+    manual_cache_path : Path
+        Path to the directory containing manual cache data used by get_tool_info()
+        to speed up package lookups.
+    cached_package_info_df : pd.DataFrame | None, optional
+        Previously cached package information (only PACKAGE_INFO_COLUMNS).
+        If None, all package info will be fetched fresh.
 
     Returns:
     -------
@@ -539,10 +540,8 @@ def get_package_info(
     """
     # Load existing data into a dict for fast lookup
     existing_by_id = {}
-    if output_path.exists():
-        existing = pd.read_csv(
-            output_path, usecols=PACKAGE_INFO_COLUMNS
-        ).drop_duplicates(subset=["id"], keep="last")
+    if cached_package_info_df is not None and not cached_package_info_df.empty:
+        existing = cached_package_info_df.drop_duplicates(subset=["id"], keep="last")
         existing_by_id = {row["id"]: row for _, row in existing.iterrows()}
 
     rows_out = []
@@ -580,8 +579,6 @@ def get_package_info(
 
     return pd.DataFrame(rows_out, columns=PACKAGE_INFO_COLUMNS)
 
-
-# TODO: remove if not needed
 def get_expected_month_columns(months_back: int) -> list[str]:
     """Get list of expected month column names for the last months_back months.
 
@@ -695,6 +692,91 @@ def get_conda_pkg_download_stats(
     ]
     grouped = filtered.groupby(["pkg_name", "time"])["counts"].sum().reset_index()
     return grouped
+
+
+def identify_missing_data(
+    package_df: pd.DataFrame, cached_df: pd.DataFrame | None, months_back: int
+) -> tuple[list[str], list[str], list[str]]:
+    """Identify which tools are new and which months need to be queried.
+
+    Parameters
+    ----------
+    package_df : pd.DataFrame
+        Current package information with pypi_package_name column.
+    cached_df : pd.DataFrame | None
+        Previously cached data with package names and month columns, or None if no cache exists.
+    months_back : int
+        Total number of months that should be present.
+
+    Returns:
+    -------
+    tuple[list[str], list[str], list[str]]
+        - new_tools: List of package names not in cache (need all months)
+        - existing_tools: List of package names already in cache
+        - missing_months: List of month columns (YYYY-MM) not in cache
+    """
+    current_packages = set(
+        package_df["pypi_package_name"].dropna().str.casefold().unique()
+    )
+
+    # Generate expected month columns
+    expected_months = set(get_expected_month_columns(months_back))
+
+    if cached_df is None or cached_df.empty:
+        return list(current_packages), [], sorted(list(expected_months), reverse=True)
+
+    cached_packages = set(
+        cached_df["pypi_package_name"].dropna().str.casefold().unique()
+    )
+    cached_months = set(
+        col for col in cached_df.columns if col not in PACKAGE_INFO_COLUMNS
+    )
+
+    new_tools = list(current_packages - cached_packages)  # difference
+    existing_tools = list(current_packages & cached_packages)  # intersection
+    missing_months = sorted(list(expected_months - cached_months), reverse=True)
+
+    return new_tools, existing_tools, missing_months
+
+
+def merge_with_cached_downloads(
+    new_data_df: pd.DataFrame, cached_df: pd.DataFrame | None
+) -> pd.DataFrame:
+    """Merge newly queried download data with cached data.
+
+    Parameters
+    ----------
+    new_data_df : pd.DataFrame
+        Newly enriched data with package info and new month columns.
+    cached_df : pd.DataFrame | None
+        Previously cached complete data, or None if no cache exists.
+
+    Returns:
+    -------
+    pd.DataFrame
+        Combined DataFrame with all package info and all month columns.
+    """
+    if cached_df is None or cached_df.empty:
+        return new_data_df
+
+    # Identify month columns
+    new_months = set(new_data_df.columns) - set(PACKAGE_INFO_COLUMNS)
+    cached_months = set(cached_df.columns) - set(PACKAGE_INFO_COLUMNS)
+
+    # Columns from cache that aren't in new data
+    cache_only_months = cached_months - new_months
+
+    if not cache_only_months:
+        return new_data_df
+
+    # Single merge instead of loop
+    result = new_data_df.merge(
+        cached_df[["id"] + list(cache_only_months)], on="id", how="left"
+    )
+
+    # Sort month columns descending
+    month_cols = sorted(set(result.columns) - set(PACKAGE_INFO_COLUMNS), reverse=True)
+    return result[PACKAGE_INFO_COLUMNS + month_cols]
 
 
 def enrich_with_monthly_downloads(
@@ -825,45 +907,110 @@ def cli(
     """CLI entry point to collect all users who interact with repositories listed in a stats file."""
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
-    # Step 1 - load the statistics data from inventory/output/stats.csv
+    # Step 0 - Load cached data once if exists
+    cached_df = None
+    if out_path.exists():
+        cached_df = pd.read_csv(out_path)
+        LOGGER.info(f"Loaded cached data from {out_path} with {len(cached_df)} rows")
+
+    # Step 1 - Load the statistics data from inventory/output/stats.csv
     stats_df = pd.read_csv(stats_file, usecols=["id", "html_url"])
 
-    # Step 2 - populate the package information columns:
-    # - id
-    #  - html_url
-    #  - pypi_package_url
-    #  - pypi_package_name
-    #  - anaconda_package_url
-    #  - juliahub_package_url
-    #  - other_source
-    package_info_df = get_package_info(out_path, package_cache_path, stats_df)
-
-    package_name_list = list(
-        package_info_df["pypi_package_name"].dropna().str.casefold().unique()
+    # Step 2 - Populate the package information columns using cached package info
+    cached_package_info_df = (
+        cached_df[PACKAGE_INFO_COLUMNS] if cached_df is not None else None
+    )
+    package_info_df = get_package_info(
+        stats_df, package_cache_path, cached_package_info_df
     )
 
-    # Step 3 - populate the monthly downloads columns.
+    # Step 3 - Populate the monthly downloads columns using smart caching
 
-    # --> Get the PyPI download stats for each package from BigQuery (or from a csv file if use_bigquery is False)
-    if use_bigquery:
-        # BigQuery is currently not enable for the GCP project compute-app
-        pypi_download_stats_df = query_file_downloads(
-            package_name_list, months_back=months_back
+    # Identify what needs to be queried
+    new_tools, existing_tools, missing_months = identify_missing_data(
+        package_info_df, cached_df, months_back
+    )
+
+    LOGGER.info(f"New tools: {len(new_tools)}, Missing months: {len(missing_months)}")
+
+    # Check if no new download data needs to be queried
+    if len(new_tools) == 0 and len(missing_months) == 0:
+        if cached_df is not None:
+            # Cache exists and is up to date - merge with current package info
+            LOGGER.info("No new download data needed - cache is up to date")
+            final_df = merge_with_cached_downloads(package_info_df, cached_df)
+            final_df.to_csv(out_path, index=False)
+            LOGGER.info(f"Updated package info saved to {out_path}")
+        else:
+            # No cache and no PyPI packages - just write package info without download columns
+            LOGGER.info("No PyPI packages found - writing package info only")
+            package_info_df.to_csv(out_path, index=False)
+        return
+
+    # Initialize empty DataFrames
+    pypi_download_stats_df = pd.DataFrame()
+    anaconda_download_stats_df = pd.DataFrame()
+
+    # Query all months for new tools
+    if new_tools:
+        LOGGER.info(f"Querying all {months_back} months for {len(new_tools)} new tools")
+        if use_bigquery:
+            pypi_new = query_file_downloads(new_tools, months_back=months_back)
+        else:
+            pypi_all = pd.read_csv(pypi_path)
+            pypi_new = pypi_all[
+                pypi_all["project"]
+                .str.casefold()
+                .isin([t.casefold() for t in new_tools])
+            ]
+        anaconda_new = get_conda_pkg_download_stats(new_tools, months_back=months_back)
+        pypi_download_stats_df = pd.concat(
+            [pypi_download_stats_df, pypi_new], ignore_index=True
         )
+        anaconda_download_stats_df = pd.concat(
+            [anaconda_download_stats_df, anaconda_new], ignore_index=True
+        )
+
+    # Query only missing months for existing tools
+    if existing_tools and missing_months:
+        LOGGER.info(
+            f"Querying {len(missing_months)} new months for {len(existing_tools)} existing tools"
+        )
+        if use_bigquery:
+            pypi_updates = query_file_downloads(
+                existing_tools, months_back=len(missing_months)
+            )
+        else:
+            pypi_all = pd.read_csv(pypi_path)
+            pypi_updates = pypi_all[
+                (
+                    pypi_all["project"]
+                    .str.casefold()
+                    .isin([t.casefold() for t in existing_tools])
+                )
+                & (pypi_all["month"].astype(str).str[:7].isin(missing_months))
+            ]
+        anaconda_updates = get_conda_pkg_download_stats(
+            existing_tools, months_back=len(missing_months)
+        )
+        pypi_download_stats_df = pd.concat(
+            [pypi_download_stats_df, pypi_updates], ignore_index=True
+        )
+        anaconda_download_stats_df = pd.concat(
+            [anaconda_download_stats_df, anaconda_updates], ignore_index=True
+        )
+
+    # Enrich with the queried data
+    if not pypi_download_stats_df.empty or not anaconda_download_stats_df.empty:
+        new_data_df = enrich_with_monthly_downloads(
+            package_info_df, pypi_download_stats_df, anaconda_download_stats_df
+        )
+        # Merge with cached data
+        final_df = merge_with_cached_downloads(new_data_df, cached_df)
+        final_df.to_csv(out_path, index=False)
+        LOGGER.info(f"Saved updated data to {out_path}")
     else:
-        # Process a csv file with the queried data from the BigQuery Web UI
-        pypi_download_stats_df = pd.read_csv(pypi_path)
-
-    # --> Get the Anaconda download stats
-    anaconda_download_stats_df = get_conda_pkg_download_stats(
-        package_name_list, months_back=months_back
-    )
-
-    # --> Enrich the package information dataframe with the monthly download stats, and save the result to a csv file
-    updated_df = enrich_with_monthly_downloads(
-        package_info_df, pypi_download_stats_df, anaconda_download_stats_df
-    )
-    updated_df.to_csv(out_path, index=False)
+        LOGGER.info("No new download data to add")
 
 
 if __name__ == "__main__":

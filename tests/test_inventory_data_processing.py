@@ -125,6 +125,93 @@ def conda_download_stats_df() -> pd.DataFrame:
     )
 
 
+@pytest.fixture
+def sample_data() -> dict[str, pd.DataFrame]:
+    """Create sample dataframes for testing."""
+    return {
+        "just_package_data_new_tool": pd.DataFrame(
+            {
+                "id": ["a", "b", "c", "d"],
+                "html_url": ["a-url", "b-url", "c-url", "d-url"],
+                "pypi_package_url": [
+                    "pypi-a-url",
+                    "pypi-b-url",
+                    "pypi-c-url",
+                    "pypi-d-url",
+                ],
+                "pypi_package_name": ["pkg-a", "pkg-b", "pkg-c", "pkg-d"],
+                "anaconda_package_url": [
+                    "conda-a-url",
+                    "conda-b-url",
+                    "conda-c-url",
+                    "conda-d-url",
+                ],
+                "juliahub_package_url": [
+                    "juliahub-a-url",
+                    "juliahub-b-url",
+                    "juliahub-c-url",
+                    "juliahub-d-url",
+                ],
+                "other_source": [
+                    "other-a-url",
+                    "other-b-url",
+                    "other-c-url",
+                    "other-d-url",
+                ],
+            }
+        ),
+        "just_package_data": pd.DataFrame(
+            {
+                "id": ["a", "b", "c"],
+                "html_url": ["a-url", "b-url", "c-url"],
+                "pypi_package_url": ["pypi-a-url", "pypi-b-url", "pypi-c-url"],
+                "pypi_package_name": ["pkg-a", "pkg-b", "pkg-c"],
+                "anaconda_package_url": ["conda-a-url", "conda-b-url", "conda-c-url"],
+                "juliahub_package_url": [
+                    "juliahub-a-url",
+                    "juliahub-b-url",
+                    "juliahub-c-url",
+                ],
+                "other_source": ["other-a-url", "other-b-url", "other-c-url"],
+            }
+        ),
+        "new_data": pd.DataFrame(
+            {
+                "id": ["a", "b", "c"],
+                "html_url": ["a-url", "b-url", "c-url"],
+                "pypi_package_url": ["pypi-a-url", "pypi-b-url", "pypi-c-url"],
+                "pypi_package_name": ["pkg-a", "pkg-b", "pkg-c"],
+                "anaconda_package_url": ["conda-a-url", "conda-b-url", "conda-c-url"],
+                "juliahub_package_url": [
+                    "juliahub-a-url",
+                    "juliahub-b-url",
+                    "juliahub-c-url",
+                ],
+                "other_source": ["other-a-url", "other-b-url", "other-c-url"],
+                "2026-05": [100, 200, 300],
+                "2026-04": [90, 190, 290],
+            }
+        ),
+        "cached_data": pd.DataFrame(
+            {
+                "id": ["a", "b", "c"],
+                "html_url": ["a-url", "b-url", "c-url"],
+                "pypi_package_url": ["pypi-a-url", "pypi-b-url", "pypi-c-url"],
+                "pypi_package_name": ["pkg-a", "pkg-b", "pkg-c"],
+                "anaconda_package_url": ["conda-a-url", "conda-b-url", "conda-c-url"],
+                "juliahub_package_url": [
+                    "juliahub-a-url",
+                    "juliahub-b-url",
+                    "juliahub-c-url",
+                ],
+                "other_source": ["other-a-url", "other-b-url", "other-c-url"],
+                "2026-03": [80, 180, 280],
+                "2026-02": [70, 170, 270],
+            }
+        ),
+    }
+
+
 class TestInventoryUtil:
     """Test suite for inventory util functions."""
 
@@ -499,3 +586,123 @@ class TestGetDownloadData:
         expected_months = ["2026-05", "2026-04", "2026-03"]
         result = get_download_data.get_expected_month_columns(3)
         assert result == expected_months
+
+    def test_merge_with_cached_downloads(
+        self, sample_data: dict[str, pd.DataFrame]
+    ) -> None:
+        """Test merge_with_cached_downloads function."""
+        result = get_download_data.merge_with_cached_downloads(
+            sample_data["new_data"], sample_data["cached_data"]
+        )
+        expected = pd.DataFrame(
+            {
+                "id": ["a", "b", "c"],
+                "html_url": ["a-url", "b-url", "c-url"],
+                "pypi_package_url": ["pypi-a-url", "pypi-b-url", "pypi-c-url"],
+                "pypi_package_name": ["pkg-a", "pkg-b", "pkg-c"],
+                "anaconda_package_url": ["conda-a-url", "conda-b-url", "conda-c-url"],
+                "juliahub_package_url": [
+                    "juliahub-a-url",
+                    "juliahub-b-url",
+                    "juliahub-c-url",
+                ],
+                "other_source": ["other-a-url", "other-b-url", "other-c-url"],
+                "2026-05": [100, 200, 300],
+                "2026-04": [90, 190, 290],
+                "2026-03": [80, 180, 280],
+                "2026-02": [70, 170, 270],
+            }
+        )
+        pd.testing.assert_frame_equal(expected, result)
+
+    def test_merge_no_cached_with_downloads(
+        self, sample_data: dict[str, pd.DataFrame]
+    ) -> None:
+        """Test merge_with_cached_downloads function."""
+        result = get_download_data.merge_with_cached_downloads(
+            sample_data["new_data"], None
+        )
+        expected = pd.DataFrame(
+            {
+                "id": ["a", "b", "c"],
+                "html_url": ["a-url", "b-url", "c-url"],
+                "pypi_package_url": ["pypi-a-url", "pypi-b-url", "pypi-c-url"],
+                "pypi_package_name": ["pkg-a", "pkg-b", "pkg-c"],
+                "anaconda_package_url": ["conda-a-url", "conda-b-url", "conda-c-url"],
+                "juliahub_package_url": [
+                    "juliahub-a-url",
+                    "juliahub-b-url",
+                    "juliahub-c-url",
+                ],
+                "other_source": ["other-a-url", "other-b-url", "other-c-url"],
+                "2026-05": [100, 200, 300],
+                "2026-04": [90, 190, 290],
+            }
+        )
+        pd.testing.assert_frame_equal(expected, result)
+
+    def test_merge_package_info_with_downloads(
+        self, sample_data: dict[str, pd.DataFrame]
+    ) -> None:
+        """Test merge_with_cached_downloads function."""
+        result = get_download_data.merge_with_cached_downloads(
+            sample_data["just_package_data"], sample_data["new_data"]
+        )
+        expected = pd.DataFrame(
+            {
+                "id": ["a", "b", "c"],
+                "html_url": ["a-url", "b-url", "c-url"],
+                "pypi_package_url": ["pypi-a-url", "pypi-b-url", "pypi-c-url"],
+                "pypi_package_name": ["pkg-a", "pkg-b", "pkg-c"],
+                "anaconda_package_url": ["conda-a-url", "conda-b-url", "conda-c-url"],
+                "juliahub_package_url": [
+                    "juliahub-a-url",
+                    "juliahub-b-url",
+                    "juliahub-c-url",
+                ],
+                "other_source": ["other-a-url", "other-b-url", "other-c-url"],
+                "2026-05": [100, 200, 300],
+                "2026-04": [90, 190, 290],
+            }
+        )
+        pd.testing.assert_frame_equal(expected, result)
+
+    def test_identify_missing_data(self, sample_data: dict[str, pd.DataFrame]) -> None:
+        """Test identify_missing_data function."""
+        new_tools, existing_tools, missing_months = (
+            get_download_data.identify_missing_data(
+                sample_data["just_package_data_new_tool"],
+                sample_data["cached_data"],
+                months_back=4,
+            )
+        )
+        assert new_tools == ["pkg-d"]
+        assert sorted(existing_tools) == ["pkg-a", "pkg-b", "pkg-c"]
+        assert missing_months == ["2026-05", "2026-04"]
+
+    def test_identify_missing_data_no_new_tools_and_months(
+        self, sample_data: dict[str, pd.DataFrame]
+    ) -> None:
+        """Test identify_missing_data function."""
+        new_tools, existing_tools, missing_months = (
+            get_download_data.identify_missing_data(
+                sample_data["just_package_data"], sample_data["new_data"], months_back=2
+            )
+        )
+        assert new_tools == list()
+        assert sorted(existing_tools) == ["pkg-a", "pkg-b", "pkg-c"]
+        assert missing_months == list()
+
+    def test_identify_missing_data_no_cache_and_months(
+        self, sample_data: dict[str, pd.DataFrame]
+    ) -> None:
+        """Test identify_missing_data function."""
+        new_tools, existing_tools, missing_months = (
+            get_download_data.identify_missing_data(
+                sample_data["just_package_data"], None, months_back=2
+            )
+        )
+        assert sorted(new_tools) == ["pkg-a", "pkg-b", "pkg-c"]
+        assert sorted(existing_tools) == list()
+        assert missing_months == ["2026-05", "2026-04"]
+

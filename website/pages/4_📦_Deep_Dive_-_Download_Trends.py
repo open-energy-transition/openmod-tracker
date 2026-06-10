@@ -136,7 +136,9 @@ def show_metrics(metrics: dict, delta_display_mode: str = "Absolute") -> None:
     )
 
 
-def plot_download_trends(df: pd.DataFrame, selected_tools: list, delta_display_mode: str = "Absolute") -> None:
+def plot_download_trends(
+    df: pd.DataFrame, selected_tools: list, delta_display_mode: str = "Absolute"
+) -> None:
     """Line chart of monthly download trends for selected tools.
 
     Parameters
@@ -592,7 +594,9 @@ def show_all_packages_list(
                         label=f"{latest_label}",
                         value=f"{latest_total:,}",
                         delta=delta_mom,
-                        delta_color="off" if delta_mom is None and prev_total is not None else "normal",
+                        delta_color="off"
+                        if delta_mom is None and prev_total is not None
+                        else "normal",
                         help=f"MoM: Δ vs {prev_label}" if prev_label else None,
                     )
 
@@ -610,7 +614,11 @@ def show_all_packages_list(
                         and pd.notna(row["prev_year_total"])
                         else None
                     )
-                    if recent_year_total is not None and prev_year_total is not None and prev_year_total > 0:
+                    if (
+                        recent_year_total is not None
+                        and prev_year_total is not None
+                        and prev_year_total > 0
+                    ):
                         diff_yoy = recent_year_total - prev_year_total
                         if delta_display_mode == "Percentage":
                             delta_yoy = f"{(diff_yoy / prev_year_total) * 100:+.1f}%"

@@ -23,7 +23,7 @@ ECOSYSTEM_URL_PATTERNS = {
     "conda": "https://anaconda.org/",
     "julia": "https://juliahub.com/",
 }
-FORCE_CACHE_URLS = {"https://github.com/RoseauTechnologies/Roseau_Load_Flow".casefold()}
+FORCE_CACHE_URLS = {"https://github.com/RoseauTechnologies/Roseau_Load_Flow".casefold(), "https://github.com/rheia-framework/RHEIA".casefold()}
 LOGGER = logging.getLogger(__name__)
 PACKAGE_INFO_COLUMNS = [
     "id",
@@ -261,7 +261,10 @@ def enrich_package_info_from_cache(
     # the response from the ecosystem package API contains two pypi packages urls
     # https://pypi.org/project/roseau-load-flow-engine/ and https://pypi.org/project/roseau-load-flow/.
     # The first package redirects to the second.
-    # Hence, we force the tool to use the cached value https://pypi.org/project/roseau-load-flow,roseau-load-flow
+    # Hence, we force the tool to use the cached value https://pypi.org/project/roseau-load-flow,roseau-load-flow.
+    # For RHEIA, the ecosystem package API response contains two pypi packages urls
+    # https://pypi.org/project/rheia-meca2675 and https://pypi.org/project/rheia. Given the fact that the latter has no download data,
+    # we keep the former.
     force_cache = url.casefold() in FORCE_CACHE_URLS
 
     # If all current values are already populated, and we are not forcing cache, no need to check cache

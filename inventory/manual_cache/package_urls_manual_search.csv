@@ -27,6 +27,7 @@ pycity_scheduling,https://git.rwth-aachen.de/acs/public/simulation/pycity_schedu
 pyetm,https://github.com/quintel/pyetm,https://pypi.org/project/pyetm,pyetm,,,
 pymarket,https://github.com/kiedanski/pymarket,https://pypi.org/project/pymarket,pymarket,,,
 remix,https://gitlab.com/dlr-ve/esy/remix/framework,https://pypi.org/project/remix.framework,remix.framework,,,
+rheia,https://github.com/rheia-framework/RHEIA,https://pypi.org/project/rheia-meca2675,rheia-meca2675
 roseau_load_flow,https://github.com/RoseauTechnologies/Roseau_Load_Flow,https://pypi.org/project/roseau-load-flow,roseau-load-flow,,,
 sam,https://github.com/NatLabRockies/SAM,https://pypi.org/project/NREL-PySAM,NREL-PySAM,,,
 steps,https://github.com/changgang/steps,https://pypi.org/project/stepspy,stepspy,,,

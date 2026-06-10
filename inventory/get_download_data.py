@@ -23,7 +23,10 @@ ECOSYSTEM_URL_PATTERNS = {
     "conda": "https://anaconda.org/",
     "julia": "https://juliahub.com/",
 }
-FORCE_CACHE_URLS = {"https://github.com/RoseauTechnologies/Roseau_Load_Flow".casefold(), "https://github.com/rheia-framework/RHEIA".casefold()}
+FORCE_CACHE_URLS = {
+    "https://github.com/RoseauTechnologies/Roseau_Load_Flow".casefold(),
+    "https://github.com/rheia-framework/RHEIA".casefold(),
+}
 LOGGER = logging.getLogger(__name__)
 PACKAGE_INFO_COLUMNS = [
     "id",

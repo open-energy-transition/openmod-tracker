@@ -339,14 +339,26 @@ def show_all_packages_list(
 
     all_months = sorted(df["date"].unique())
 
-    # Get latest month, previous month, and same month last year
+    # Get latest month and previous month (for MoM)
     latest_month = all_months[-1]
     prev_month = all_months[-2] if len(all_months) >= 2 else None
 
-    # Find same month last year (12 months ago)
-    latest_month_pd = pd.Timestamp(latest_month)
-    year_ago_month = latest_month_pd - pd.DateOffset(months=12)
-    year_ago_available = year_ago_month in all_months
+    # ── YoY windows ──────────────────────────────────────────────────────────
+    # Recent 12 months: latest_month-11 → latest_month  (e.g. Jun 2025 – May 2026)
+    recent_window_end = pd.Timestamp(latest_month)
+    recent_window_start = recent_window_end - pd.DateOffset(months=11)
+    # Previous 12 months: latest_month-23 → latest_month-12 (e.g. Jun 2024 – May 2025)
+    prev_window_end = recent_window_start - pd.DateOffset(months=1)
+    prev_window_start = prev_window_end - pd.DateOffset(months=11)
+
+    recent_months = [
+        m
+        for m in all_months
+        if recent_window_start <= pd.Timestamp(m) <= recent_window_end
+    ]
+    prev_year_months = [
+        m for m in all_months if prev_window_start <= pd.Timestamp(m) <= prev_window_end
+    ]
 
     # Load all packages from original CSV (including those without downloads)
     all_packages = pd.read_csv(filepath)
@@ -371,13 +383,23 @@ def show_all_packages_list(
         else pd.Series(dtype=int, name="prev_total")
     )
 
-    year_ago_totals = (
-        df[df["date"] == year_ago_month]
+    # Sum downloads over the two 12-month windows per package
+    recent_year_totals = (
+        df[df["date"].isin(recent_months)]
         .groupby("display_name")["downloads"]
         .sum()
-        .rename("year_ago_total")
-        if year_ago_available
-        else pd.Series(dtype=int, name="year_ago_total")
+        .rename("recent_year_total")
+        if recent_months
+        else pd.Series(dtype=int, name="recent_year_total")
+    )
+
+    prev_year_totals = (
+        df[df["date"].isin(prev_year_months)]
+        .groupby("display_name")["downloads"]
+        .sum()
+        .rename("prev_year_total")
+        if prev_year_months
+        else pd.Series(dtype=int, name="prev_year_total")
     )
 
     # Create summary from all packages
@@ -400,9 +422,13 @@ def show_all_packages_list(
         summary = summary.merge(
             prev_totals, left_on="display_name", right_index=True, how="left"
         )
-    if not year_ago_totals.empty:
+    if not recent_year_totals.empty:
         summary = summary.merge(
-            year_ago_totals, left_on="display_name", right_index=True, how="left"
+            recent_year_totals, left_on="display_name", right_index=True, how="left"
+        )
+    if not prev_year_totals.empty:
+        summary = summary.merge(
+            prev_year_totals, left_on="display_name", right_index=True, how="left"
         )
 
     # Filter by selected tools if applicable
@@ -419,7 +445,16 @@ def show_all_packages_list(
 
     latest_label = latest_month.strftime("%b %Y")
     prev_label = prev_month.strftime("%b %Y") if prev_month is not None else None
-    year_ago_label = year_ago_month.strftime("%b %Y") if year_ago_available else None
+    recent_window_label = (
+        f"{recent_window_start.strftime('%b %Y')} – {recent_window_end.strftime('%b %Y')}"
+        if recent_months
+        else None
+    )
+    prev_window_label = (
+        f"{prev_window_start.strftime('%b %Y')} – {prev_window_end.strftime('%b %Y')}"
+        if prev_year_months
+        else None
+    )
 
     filter_text = (
         f" (filtered to {len(selected_tools)} selected)" if selected_tools else ""
@@ -430,8 +465,8 @@ def show_all_packages_list(
     )
     if prev_label:
         caption_text += f" · MoM comparison: {prev_label}"
-    if year_ago_label:
-        caption_text += f" · YoY comparison: {year_ago_label}"
+    if recent_window_label and prev_window_label:
+        caption_text += f" · YoY: {recent_window_label} vs {prev_window_label}"
 
     st.caption(caption_text)
 
@@ -541,28 +576,31 @@ def show_all_packages_list(
                         help=f"MoM: Δ vs {prev_label}" if prev_label else None,
                     )
 
-                # Year-over-year comparison
+                # Year-over-year comparison (12-month window vs previous 12-month window)
                 with col_metric2:
-                    year_ago_total = (
-                        int(row["year_ago_total"])
-                        if "year_ago_total" in row.index
-                        and pd.notna(row["year_ago_total"])
+                    recent_year_total = (
+                        int(row["recent_year_total"])
+                        if "recent_year_total" in row.index
+                        and pd.notna(row["recent_year_total"])
                         else None
                     )
-                    if year_ago_total is not None:
-                        delta_yoy = f"{latest_total - year_ago_total:+,}"
-                        pct_change = (
-                            ((latest_total - year_ago_total) / year_ago_total * 100)
-                            if year_ago_total > 0
-                            else 0
-                        )
+                    prev_year_total = (
+                        int(row["prev_year_total"])
+                        if "prev_year_total" in row.index
+                        and pd.notna(row["prev_year_total"])
+                        else None
+                    )
+                    if recent_year_total is not None and prev_year_total is not None:
+                        delta_yoy = f"{recent_year_total - prev_year_total:+,}"
                         st.metric(
-                            label="YoY Change",
-                            value=f"{pct_change:+.1f}%",
+                            label="Last year",
+                            value=recent_year_total,
                             delta=delta_yoy,
-                            help=f"YoY: Δ vs {year_ago_label}"
-                            if year_ago_label
-                            else None,
+                            help=(
+                                f"YoY: {recent_window_label} vs {prev_window_label}"
+                                if recent_window_label and prev_window_label
+                                else None
+                            ),
                         )
                     else:
                         st.markdown(

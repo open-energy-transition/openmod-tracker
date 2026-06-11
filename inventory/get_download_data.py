@@ -697,7 +697,11 @@ def get_conda_pkg_download_stats(
         .str.casefold()
         .isin([pkg.casefold() for pkg in list_of_packages])
     ]
-    grouped = filtered.groupby(["pkg_name", "time"])["counts"].sum().reset_index()
+    grouped = (
+        filtered.groupby(["pkg_name", "time"], observed=True)["counts"]
+        .sum()
+        .reset_index()
+    )
     return grouped
 
 
@@ -917,7 +921,7 @@ def cli(
     # Step 0 - Load cached data once if exists
     cached_df = None
     if out_path.exists():
-        cached_df = pd.read_csv(out_path)
+        cached_df = pd.read_csv(out_path, index_col=False)
         LOGGER.info(f"Loaded cached data from {out_path} with {len(cached_df)} rows")
 
     # Step 1 - Load the statistics data from inventory/output/stats.csv

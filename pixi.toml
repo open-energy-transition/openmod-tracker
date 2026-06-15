@@ -48,6 +48,7 @@ depends-on = ["get-stats", "get-docs", "get-scores"]
 cmd = "python $PIXI_PROJECT_ROOT/inventory/get_download_data.py --stats-file inventory/output/stats.csv --out-path user_analysis/output/package_downloads.csv"
 inputs = ["inventory/output/stats.csv"]
 outputs = ["user_analysis/output/package_downloads.csv"]
+depends-on = ["get-stats"]
 
 [tasks.get-user-details]
 cmd = "python $PIXI_PROJECT_ROOT/user_analysis/get_user_details.py --repo-interactions user_analysis/output/repo_interactions.csv --outdir user_analysis/output"

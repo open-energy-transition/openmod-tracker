@@ -271,9 +271,7 @@ def enrich_package_info_from_cache(
         return PackageInfo(
             **{
                 attr: (
-                    row[attr]
-                    if pd.notna(row[attr]) and str(row[attr]).strip() != ""
-                    else getattr(package_info, attr)
+                    row[attr] if _is_populated(row, attr) else getattr(package_info, attr)
                 )
                 for attr in PACKAGE_INFO_ATTRS
             }
@@ -424,10 +422,9 @@ def get_package_info(
 ) -> pd.DataFrame:
     """Collect package information for tools from various package managers.
 
-    This function retrieves package URLs and names from PyPI, Conda, Julia, and other
-    package sources for tools listed in the input DataFrame. It implements a caching
-    mechanism to avoid re-fetching data that has already been collected. Existing
-    cached data is preserved and only missing fields are populated.
+        This function retrieves package URLs and names from PyPI, Conda, Julia, and other package sources for tools listed in the input DataFrame.
+        It implements a caching mechanism to avoid re-fetching data that has already been collected.
+        Existing cached data is preserved and only missing fields are populated.
 
     Args:
         statistics_df (pd.DataFrame): DataFrame containing tool statistics with at least the following columns:

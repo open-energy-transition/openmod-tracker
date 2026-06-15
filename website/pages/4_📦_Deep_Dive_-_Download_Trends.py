@@ -81,6 +81,8 @@ def compute_metrics(df: pd.DataFrame) -> dict:
     top_tool = str(top_series.idxmax())
     top_tool_dl = int(top_series.max())
 
+    first_month = months[0]
+
     return {
         "latest_month": last_full,
         "prev_month": prev_full,
@@ -90,6 +92,7 @@ def compute_metrics(df: pd.DataFrame) -> dict:
         "top_tool_downloads": top_tool_dl,
         "all_time_total": int(df["downloads"].sum()),
         "tools_count": int(df["display_name"].nunique()),
+        "first_month": first_month,
     }
 
 
@@ -131,8 +134,12 @@ def show_metrics(metrics: dict, delta_display_mode: str = "Absolute") -> None:
         unsafe_allow_html=True,
     )
     col3.metric(label="📦 Tools with Download Data", value=str(metrics["tools_count"]))
+
+    date_range = f"from {metrics['first_month'].strftime('%b %Y')} to {metrics['latest_month'].strftime('%b %Y')}"
     col4.metric(
-        label="🌐 All-Time Tracked Downloads", value=f"{metrics['all_time_total']:,}"
+        label="🌐 All-Time Tracked Downloads",
+        value=f"{metrics['all_time_total']:,}",
+        help=f"Sum of all downloads {date_range}",
     )
 
 
@@ -626,7 +633,7 @@ def show_all_packages_list(
                             delta_yoy = f"{diff_yoy:+,}"
                         st.metric(
                             label="Last year",
-                            value=recent_year_total,
+                            value=f"{recent_year_total:,}",
                             delta=delta_yoy,
                             help=(
                                 f"YoY: {recent_window_label} vs {prev_window_label}"
@@ -637,7 +644,7 @@ def show_all_packages_list(
                     elif recent_year_total is not None and prev_year_total == 0:
                         st.metric(
                             label="Last year",
-                            value=recent_year_total,
+                            value=f"{recent_year_total:,}",
                             delta=None,
                             delta_color="off",
                             help=(
@@ -683,16 +690,15 @@ def preamble() -> None:
         Python packages, spanning the past year.
         """
     )
-    st.info(
-        """
-        **Notes on the data**
-        - **PyPI and Conda only.** Tools distributed exclusively via Julia's General
-          registry, Maven Central, or other ecosystems are not reflected here.
-        - **Bot & CI traffic.** Automated downloads by CI pipelines are not considered in this infographic.
-        - **No current month.** The current month is not shown as the complete data is not yet available.
-        """,
-        icon="ℹ️",
-    )
+    with st.expander("ℹ️ Notes on the data"):
+        st.markdown(
+            """
+            - **PyPI and Conda only.** Tools distributed exclusively via Julia's General
+              registry, Maven Central, or other ecosystems are not reflected here.
+            - **Bot & CI traffic.** Automated downloads by CI pipelines are not considered in this infographic for PyPI.
+            - **No current month.** The current month is not shown as the complete data is not yet available.
+            """
+        )
 
 
 def main(df: pd.DataFrame, filepath: Path) -> None:

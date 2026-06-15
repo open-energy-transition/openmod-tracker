@@ -171,7 +171,7 @@ pypower_dynamics,https://github.com/susantoj/PYPOWER-Dynamics,https://pypi.org/p
 pypownet,https://github.com/MarvinLer/pypownet,https://pypi.org/project/pypownet,pypownet,,,,99.0,74.0,60.0,107.0,54.0,55.0,69.0,178.0,172.0,53.0,56.0,44.0,51.0,111.0,105.0,87.0,91.0,75.0,94.0,100.0,67.0,53.0,65.0,34.0,33.0
 pypowsybl,https://github.com/powsybl/pypowsybl,https://pypi.org/project/pypowsybl,pypowsybl,,,https://central.sonatype.com/artifact/com.powsybl/pypowsybl,8469.0,12467.0,5922.0,12312.0,10572.0,5787.0,6971.0,7029.0,11784.0,7668.0,9053.0,8151.0,7227.0,12768.0,10443.0,9682.0,12269.0,7179.0,11750.0,11922.0,7546.0,4125.0,10231.0,3117.0,8116.0
 pypsa,https://github.com/PyPSA/PyPSA,https://pypi.org/project/pypsa,pypsa,https://anaconda.org/conda-forge/pypsa,,,49167.0,37654.0,36528.0,32241.0,27907.0,49949.0,74858.0,35757.0,48407.0,14575.0,15737.0,14654.0,17406.0,16664.0,16873.0,12533.0,11666.0,7560.0,138427.0,60591.0,34735.0,8443.0,9381.0,5341.0,8046.0
-pysam,https://github.com/NatLabRockies/pysam,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+pysam,https://github.com/NatLabRockies/pysam,https://pypi.org/project/NREL-PySAM,NREL-PySAM,,,,55617.0,72773.0,75740.0,56101.0,69699.0,101780.0,124860.0,78566.0,105893.0,62570.0,57958.0,51869.0,52661.0,49643.0,39475.0,34386.0,42610.0,62590.0,47690.0,82113.0,48097.0,64097.0,62502.0,43601.0,19679.0
 python_ehub,https://gitlab.com/energyincities/python-ehub,https://pypi.org/project/pyehub,pyehub,,,,542.0,1048.0,302.0,391.0,356.0,554.0,628.0,580.0,1151.0,526.0,462.0,458.0,411.0,921.0,1015.0,509.0,906.0,723.0,991.0,1334.0,719.0,558.0,595.0,353.0,387.0
 python_microgrid,https://github.com/ahalev/python-microgrid,https://pypi.org/project/python-microgrid,python-microgrid,,,,103.0,116.0,102.0,98.0,55.0,97.0,99.0,78.0,99.0,67.0,64.0,170.0,169.0,189.0,380.0,208.0,217.0,100.0,302.0,288.0,324.0,89.0,115.0,68.0,89.0
 reeds_2_0,https://github.com/NatLabRockies/ReEDS-2.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
@@ -189,7 +189,7 @@ rodeo,https://github.com/NatLabRockies/RODeO,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 roseau_load_flow,https://github.com/RoseauTechnologies/Roseau_Load_Flow,https://pypi.org/project/roseau-load-flow,roseau-load-flow,,,,575.0,1184.0,446.0,842.0,944.0,500.0,576.0,455.0,1578.0,588.0,609.0,471.0,559.0,910.0,1219.0,624.0,1387.0,962.0,672.0,1128.0,891.0,403.0,977.0,506.0,341.0
 rumi,https://github.com/prayas-energy/Rumi,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 rustpower,https://github.com/chengts95/rustpower,,,,,https://crates.io/crates/rustpower-sol-klu,,,,,,,,,,,,,,,,,,,,,,,,,
-sam,https://github.com/NatLabRockies/SAM,https://pypi.org/project/NREL-PySAM,NREL-PySAM,,,,55617.0,72773.0,75740.0,56101.0,69699.0,101780.0,124860.0,78566.0,105893.0,62570.0,57958.0,51869.0,52661.0,49643.0,39475.0,34386.0,42610.0,62590.0,47690.0,82113.0,48097.0,64097.0,62502.0,43601.0,19679.0
+sam,https://github.com/NatLabRockies/SAM,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 sddpdso_jl,https://github.com/psrenergy/SDDPDSO.jl,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 silver,https://gitlab.com/sesit/silver,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 simona,https://github.com/ie3-institute/simona,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

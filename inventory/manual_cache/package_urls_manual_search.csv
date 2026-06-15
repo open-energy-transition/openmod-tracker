@@ -29,6 +29,6 @@ pymarket,https://github.com/kiedanski/pymarket,https://pypi.org/project/pymarket
 remix,https://gitlab.com/dlr-ve/esy/remix/framework,https://pypi.org/project/remix.framework,remix.framework,,,
 rheia,https://github.com/rheia-framework/RHEIA,https://pypi.org/project/rheia-meca2675,rheia-meca2675
 roseau_load_flow,https://github.com/RoseauTechnologies/Roseau_Load_Flow,https://pypi.org/project/roseau-load-flow,roseau-load-flow,,,
-sam,https://github.com/NatLabRockies/SAM,https://pypi.org/project/NREL-PySAM,NREL-PySAM,,,
+pysam,https://github.com/NatLabRockies/pysam,https://pypi.org/project/NREL-PySAM,NREL-PySAM,,,
 steps,https://github.com/changgang/steps,https://pypi.org/project/stepspy,stepspy,,,
 switch,https://github.com/switch-model/switch,https://pypi.org/project/switch-model,switch-model,,,

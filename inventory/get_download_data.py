@@ -24,15 +24,14 @@ ECOSYSTEM_URL_PATTERNS = {
     "julia": "https://juliahub.com/",
 }
 LOGGER = logging.getLogger(__name__)
-PACKAGE_INFO_COLUMNS = [
-    "id",
-    "html_url",
+PACKAGE_INFO_ATTRS = [
     "pypi_package_url",
     "pypi_package_name",
     "anaconda_package_url",
     "juliahub_package_url",
     "other_source",
 ]
+PACKAGE_INFO_COLUMNS = ["id", "html_url"] + PACKAGE_INFO_ATTRS
 
 
 @dataclass
@@ -270,33 +269,22 @@ def enrich_package_info_from_cache(
     if row["force_overwrite"]:
         LOGGER.info(f"Forcing cache values for {url}")
         return PackageInfo(
-            **{attr: (
-                row[attr]
-                if pd.notna(row[attr])
-                and str(row[attr]).strip() != ""
-                else getattr(package_info, attr)
-            )
-            for attr in ["pypi_package_url", "pypi_package_name", "anaconda_package_url", "juliahub_package_url", "other_source"]
+            **{
+                attr: (
+                    row[attr]
+                    if pd.notna(row[attr]) and str(row[attr]).strip() != ""
+                    else getattr(package_info, attr)
+                )
+                for attr in PACKAGE_INFO_ATTRS
             }
         )
 
     # Normal case: current values take precedence, cache fills in gaps
     return PackageInfo(
-        pypi_package_url=pick_cached_or_current(
-            row, package_info.pypi_package_url, "pypi_package_url"
-        ),
-        pypi_package_name=pick_cached_or_current(
-            row, package_info.pypi_package_name, "pypi_package_name"
-        ),
-        anaconda_package_url=pick_cached_or_current(
-            row, package_info.anaconda_package_url, "anaconda_package_url"
-        ),
-        juliahub_package_url=pick_cached_or_current(
-            row, package_info.juliahub_package_url, "juliahub_package_url"
-        ),
-        other_source=pick_cached_or_current(
-            row, package_info.other_source, "other_source"
-        ),
+        **{
+            attr: pick_cached_or_current(row, getattr(package_info, attr), attr)
+            for attr in PACKAGE_INFO_ATTRS
+        }
     )
 
 

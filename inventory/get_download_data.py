@@ -306,7 +306,7 @@ def get_tool_info(
         PackageInfo: PackageInfo object containing package URLs and PyPI package name.
     """
     if known_ecosystems is None:
-        known_ecosystems = {"julia", "conda", "pypi"}
+        known_ecosystems = set(ECOSYSTEM_URL_PATTERNS.keys())
 
     pypi_url = None
     conda_url = None

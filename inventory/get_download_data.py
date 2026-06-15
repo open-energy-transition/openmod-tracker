@@ -271,7 +271,9 @@ def enrich_package_info_from_cache(
         return PackageInfo(
             **{
                 attr: (
-                    row[attr] if _is_populated(row, attr) else getattr(package_info, attr)
+                    row[attr]
+                    if _is_populated(row, attr)
+                    else getattr(package_info, attr)
                 )
                 for attr in PACKAGE_INFO_ATTRS
             }

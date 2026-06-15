@@ -828,8 +828,8 @@ def cli(
             final_df.to_csv(out_path, index=False)
             LOGGER.info(f"Updated package info saved to {out_path}")
         else:
-            # No cache and no PyPI packages - just write package info without download columns
-            LOGGER.info("No PyPI packages found - writing package info only")
+            # No cache and no new package downloads - just write package info without download columns
+            LOGGER.info("No new package download data found - writing package info only")
             package_info_df.to_csv(out_path, index=False)
         return
 

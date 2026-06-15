@@ -23,10 +23,6 @@ ECOSYSTEM_URL_PATTERNS = {
     "conda": "https://anaconda.org/",
     "julia": "https://juliahub.com/",
 }
-FORCE_CACHE_URLS = {
-    "https://github.com/RoseauTechnologies/Roseau_Load_Flow".casefold(),
-    "https://github.com/rheia-framework/RHEIA".casefold(),
-}
 LOGGER = logging.getLogger(__name__)
 PACKAGE_INFO_COLUMNS = [
     "id",
@@ -48,22 +44,16 @@ class PackageInfo:
     that particular package manager or registry.
 
     Attributes:
-    ----------
-    pypi_package_url : str | None
-        URL to the package on PyPI (Python Package Index).
-        Example: "https://pypi.org/project/requests/"
-    pypi_package_name : str | None
-        Name of the package as registered on PyPI.
-        Example: "requests"
-    anaconda_package_url : str | None
-        URL to the package on Anaconda/Conda repository.
-        Example: "https://anaconda.org/conda-forge/numpy"
-    juliahub_package_url : str | None
-        URL to the package on JuliaHub (Julia package registry).
-        Example: "https://juliahub.com/ui/Packages/Plots/..."
-    other_source : str | None
-        URL to alternative package source or registry.
-        Used for packages hosted outside major registries.
+        pypi_package_url (str | None): URL to the package on PyPI (Python Package Index).
+            Example: "https://pypi.org/project/requests/"
+        pypi_package_name (str | None): Name of the package as registered on PyPI.
+            Example: "requests"
+        anaconda_package_url (str | None): URL to the package on Anaconda/Conda repository.
+            Example: "https://anaconda.org/conda-forge/numpy"
+        juliahub_package_url (str | None): URL to the package on JuliaHub (Julia package registry).
+            Example: "https://juliahub.com/ui/Packages/Plots/..."
+        other_source (str | None): URL to alternative package source or registry.
+            Used for packages hosted outside major registries.
     """
 
     pypi_package_url: str | None
@@ -80,29 +70,22 @@ def get_conda_download_trends(previous_months: int) -> pd.DataFrame:
     for a specified number of months. It validates that each month's data is
     within the expected date range and gracefully skips missing months.
 
-    Parameters
-    ----------
-    previous_months : int
-        Number of months to retrieve download data for, going back from the
-        current month.
+    Args:
+        previous_months (int): Number of months to retrieve download data for, going back from the
+            current month.
 
     Returns:
-    -------
-    pd.DataFrame
-        A concatenated DataFrame containing conda download statistics for all
-        successfully retrieved months. The DataFrame includes a "time" column
-        (in YYYY-MM format) and other download-related metrics.
+        pd.DataFrame: A concatenated DataFrame containing conda download statistics for all
+            successfully retrieved months. The DataFrame includes a "time" column
+            (in YYYY-MM format) and other download-related metrics.
 
     Raises:
-    ------
-    ValueError
-        If the "time" column in the data for a given month contains more than
-        one unique value (expected exactly one).
+        ValueError: If the "time" column in the data for a given month contains more than
+            one unique value (expected exactly one).
 
     Warnings:
-    --------
-    Logs a warning if a month's data falls outside the valid date range
-    [min_month, max_month] or if data for a particular month cannot be found.
+        Logs a warning if a month's data falls outside the valid date range
+        [min_month, max_month] or if data for a particular month cannot be found.
     """
     dfs = []
 
@@ -140,15 +123,11 @@ def get_conda_download_trends(previous_months: int) -> pd.DataFrame:
 def clean_url(url_str: str) -> str:
     """Remove whitespace and trailing slashes from a URL string.
 
-    Parameters
-    ----------
-    url_str : str
-        The URL string to clean.
+    Args:
+        url_str (str): The URL string to clean.
 
     Returns:
-    -------
-    str
-        The cleaned URL string with leading/trailing whitespace and trailing slashes removed.
+        str: The cleaned URL string with leading/trailing whitespace and trailing slashes removed.
     """
     return url_str.strip().rstrip("/")
 
@@ -162,17 +141,12 @@ def select_package_info(packages: list[dict], ecosystem: str) -> dict | None:
     https://packages.ecosyste.ms/api/v1/packages/lookup?repository_url=https%3A%2F%2Fgithub.com%2FCURENT%2Fandes, which contains two
     packages for the "pypi" ecosystem, but only one of them has a valid registry_url starting with "https://pypi.org/project/".
 
-    Parameters
-    ------------
-    packages : list[dict]
-        List of package dictionaries, each containing at least an "ecosystem" key and optionally a "registry_url".
-    ecosystem : str
-        The ecosystem to filter packages by (e.g., "pypi", "conda", "julia").
+    Args:
+        packages (list[dict]): List of package dictionaries, each containing at least an "ecosystem" key and optionally a "registry_url".
+        ecosystem (str): The ecosystem to filter packages by (e.g., "pypi", "conda", "julia").
 
     Returns:
-    --------
-    dict | None:
-        The selected package dictionary for the specified ecosystem, or None if no matching package is found.
+        dict | None: The selected package dictionary for the specified ecosystem, or None if no matching package is found.
     """
     matching_packages = [pkg for pkg in packages if pkg["ecosystem"] == ecosystem]
 
@@ -208,19 +182,13 @@ def select_package_info(packages: list[dict], ecosystem: str) -> dict | None:
 def pick_cached_or_current(row: pd.Series, current: str | None, col: str) -> str | None:
     """Return current value if populated, otherwise fall back to cache.
 
-    Parameters
-    ----------
-    row : pd.Series
-        Row from the cache DataFrame.
-    current : str | None
-        Currently fetched value (may be None).
-    col : str
-        Column name in the cache row to check.
+    Args:
+        row (pd.Series): Row from the cache DataFrame.
+        current (str | None): Currently fetched value (may be None).
+        col (str): Column name in the cache row to check.
 
     Returns:
-    -------
-    str | None
-        The current value if not None, otherwise the cached value if populated, otherwise None.
+        str | None: The current value if not None, otherwise the cached value if populated, otherwise None.
     """
     # If we have a current value, use it
     if current is not None:
@@ -244,20 +212,14 @@ def enrich_package_info_from_cache(
     normally take precedence over cached values, except for specific URLs that require
     cache override.
 
-    Parameters
-    ----------
-    url : str
-        Repository URL to look up in the cache.
-    package_info : PackageInfo
-        Currently fetched package information.
-    manual_cache_path : Path
-        Path to the CSV file containing cached package information.
+    Args:
+        url (str): Repository URL to look up in the cache.
+        package_info (PackageInfo): Currently fetched package information.
+        manual_cache_path (Path): Path to the CSV file containing cached package information.
 
     Returns:
-    -------
-    PackageInfo
-        Object with current values taking precedence, falling back to
-        cached values when current is None. For specific URLs, cached values always take precedence.
+        PackageInfo: Object with current values taking precedence, falling back to
+            cached values when current is None. For specific URLs, cached values always take precedence.
     """
     # Special case: URL that should always use cache values.
     # As explained in https://github.com/open-energy-transition/openmod-tracker/issues/125#issuecomment-4610376320,
@@ -268,25 +230,12 @@ def enrich_package_info_from_cache(
     # For RHEIA, the ecosystem package API response contains two pypi packages urls
     # https://pypi.org/project/rheia-meca2675 and https://pypi.org/project/rheia. Given the fact that the latter has no download data,
     # we keep the former.
-    force_cache = url.casefold() in FORCE_CACHE_URLS
-
-    # If all current values are already populated, and we are not forcing cache, no need to check cache
-    all_populated = all(
-        val is not None
-        for val in [
-            package_info.pypi_package_url,
-            package_info.anaconda_package_url,
-            package_info.juliahub_package_url,
-            package_info.other_source,
-            package_info.pypi_package_name,
-        ]
-    )
-    if all_populated and not force_cache:
-        return package_info
 
     # Try to load the cache file
     try:
-        manual_cache_df = pd.read_csv(manual_cache_path)
+        manual_cache_df = pd.read_csv(
+            manual_cache_path, dtype={"force_overwrite": bool}
+        )
     except FileNotFoundError:
         LOGGER.warning(f"Manual cache not found: {manual_cache_path}")
         return package_info
@@ -303,8 +252,22 @@ def enrich_package_info_from_cache(
     # Use the first matching row to fill in missing values
     row = match.iloc[0]
 
+    # If all current values are already populated, and we are not forcing cache, no need to check cache
+    all_populated = all(
+        val is not None
+        for val in [
+            package_info.pypi_package_url,
+            package_info.anaconda_package_url,
+            package_info.juliahub_package_url,
+            package_info.other_source,
+            package_info.pypi_package_name,
+        ]
+    )
+    if all_populated and not row["force_overwrite"]:
+        return package_info
+
     # If forcing cache, return cache values directly (ignoring current values)
-    if force_cache:
+    if row["force_overwrite"]:
         LOGGER.info(f"Forcing cache values for {url}")
         return PackageInfo(
             pypi_package_url=(
@@ -368,19 +331,13 @@ def get_tool_info(
     to a manual cache for missing values. It extracts package URLs and names for
     known ecosystems (PyPI, Conda, Julia) and identifies any other ecosystems.
 
-    Parameters
-    ----------
-    url : str
-        Repository URL to look up.
-    manual_cache : Path
-        Path to the CSV file containing cached package information.
-    known_ecosystems : set[str] | None
-        Set of ecosystem names to exclude from "other_url". Defaults to {"julia", "conda", "pypi"}.
+    Args:
+        url (str): Repository URL to look up.
+        manual_cache (Path): Path to the CSV file containing cached package information.
+        known_ecosystems (set[str] | None): Set of ecosystem names to exclude from "other_url". Defaults to {"julia", "conda", "pypi"}.
 
     Returns:
-    -------
-    PackageInfo
-        PackageInfo object containing package URLs and PyPI package name.
+        PackageInfo: PackageInfo object containing package URLs and PyPI package name.
     """
     if known_ecosystems is None:
         known_ecosystems = {"julia", "conda", "pypi"}
@@ -438,18 +395,13 @@ def get_tool_info(
 def _is_populated(row: Series, col: str) -> bool:
     """Check if a DataFrame cell is non-null and non-empty.
 
-    Parameters
-    ------------
-    row : pandas.Series
-        A row from a DataFrame.
-    col : str
-        The column name to check.
+    Args:
+        row (pandas.Series): A row from a DataFrame.
+        col (str): The column name to check.
 
     Returns:
-    --------
-    bool
-        True if the cell is non-null and contains non-whitespace content,
-        False otherwise.
+        bool: True if the cell is non-null and contains non-whitespace content,
+            False otherwise.
     """
     return bool(pd.notna(row[col]) and str(row[col]).strip() != "")
 
@@ -461,19 +413,6 @@ def should_skip_fetching(row: pd.Series) -> bool:
     required fields contain populated values. The required fields vary based
     on the package type.
 
-    Parameters
-    ----------
-    row : pd.Series
-        A pandas Series representing a single row of data for a tool.
-
-    Returns:
-    -------
-    bool
-        True if all required fields for the package type are populated in the
-        row, False otherwise.
-
-    Notes:
-    -----
     Package type determination follows this priority:
 
     1. Julia packages: If html_url contains ".jl", required fields are
@@ -484,6 +423,13 @@ def should_skip_fetching(row: pd.Series) -> bool:
        id, html_url, pypi_package_url, pypi_package_name.
 
     If none of these conditions are met, the row is not considered cacheable.
+
+    Args:
+        row (pd.Series): A pandas Series representing a single row of data for a tool.
+
+    Returns:
+        bool: True if all required fields for the package type are populated in the
+            row, False otherwise.
     """
     # Determine required fields based on package type
     base_fields = ["id", "html_url"]
@@ -517,32 +463,26 @@ def get_package_info(
     mechanism to avoid re-fetching data that has already been collected. Existing
     cached data is preserved and only missing fields are populated.
 
-    Parameters
-    ----------
-    statistics_df : pd.DataFrame
-        DataFrame containing tool statistics with at least the following columns:
-        - id : unique tool identifier
-        - html_url : URL to the tool's repository or homepage
-    manual_cache_path : Path
-        Path to the directory containing manual cache data used by get_tool_info()
-        to speed up package lookups.
-    cached_package_info_df : pd.DataFrame | None, optional
-        Previously cached package information (only PACKAGE_INFO_COLUMNS).
-        If None, all package info will be fetched fresh.
+    Args:
+        statistics_df (pd.DataFrame): DataFrame containing tool statistics with at least the following columns:
+            - id : unique tool identifier
+            - html_url : URL to the tool's repository or homepage
+        manual_cache_path (Path): Path to the directory containing manual cache data used by get_tool_info()
+            to speed up package lookups.
+        cached_package_info_df (pd.DataFrame | None): Previously cached package information (only PACKAGE_INFO_COLUMNS).
+            If None, all package info will be fetched fresh.
 
     Returns:
-    -------
-    pd.DataFrame
-        DataFrame with package information for all tools, containing columns
-        specified in PACKAGE_INFO_COLUMNS. Includes:
+        pd.DataFrame: DataFrame with package information for all tools, containing columns
+            specified in PACKAGE_INFO_COLUMNS. Includes:
 
-        - id : tool identifier
-        - html_url : original tool URL
-        - pypi_package_url : URL to PyPI package page (if available)
-        - pypi_package_name : name of PyPI package (if available)
-        - anaconda_package_url : URL to Conda package page (if available)
-        - juliahub_package_url : URL to Julia package page (if available)
-        - other_source : URL to alternative package sources (if available)
+            - id : tool identifier
+            - html_url : original tool URL
+            - pypi_package_url : URL to PyPI package page (if available)
+            - pypi_package_name : name of PyPI package (if available)
+            - anaconda_package_url : URL to Conda package page (if available)
+            - juliahub_package_url : URL to Julia package page (if available)
+            - other_source : URL to alternative package sources (if available)
     """
     # Load existing data into a dict for fast lookup
     existing_by_id = {}
@@ -589,15 +529,11 @@ def get_package_info(
 def get_expected_month_columns(months_back: int) -> list[str]:
     """Get list of expected month column names for the last months_back months.
 
-    Parameters
-    ----------
-    months_back : int
-        Number of months to look back from current date.
+    Args:
+        months_back (int): Number of months to look back from current date.
 
     Returns:
-    -------
-    list[str]
-        List of month column names in YYYY-MM format, sorted descending.
+        list[str]: List of month column names in YYYY-MM format, sorted descending.
     """
     end_date = pd.Timestamp.now() - pd.DateOffset(months=1)
     months = (
@@ -615,19 +551,13 @@ def query_file_downloads(
 ) -> pd.DataFrame:
     """Perform the BigQuery query to get the number of downloads for each package over a specified period, grouped by month and project.
 
-    Parameters
-    ------------
-    package_name_list : list[str]
-        List of package names to query.
-    months_back : int
-        Number of months to look back.
-    bigquery_project_name : str, optional
-        The BigQuery project name, by default "openmod-tracker".
+    Args:
+        package_name_list (list[str]): List of package names to query.
+        months_back (int): Number of months to look back.
+        bigquery_project_name (str): The BigQuery project name, by default "openmod-tracker".
 
     Returns:
-    --------
-    pd.DataFrame
-        DataFrame containing the number of downloads for each package, grouped by month and project.
+        pd.DataFrame: DataFrame containing the number of downloads for each package, grouped by month and project.
     """
     # Validate and sanitize months_back
     try:
@@ -670,17 +600,12 @@ def get_conda_pkg_download_stats(
 ) -> pd.DataFrame:
     """Get conda download stats for a list of packages.
 
-    Parameters
-    ------------
-    list_of_packages : list[str]
-        List of package names to query.
-    months_back : int
-        Number of months to generate in the past from the current date.
+    Args:
+        list_of_packages (list[str]): List of package names to query.
+        months_back (int): Number of months to generate in the past from the current date.
 
     Returns:
-    --------
-    pd.DataFrame
-        DataFrame containing the number of downloads for each package, grouped by month and project.
+        pd.DataFrame: DataFrame containing the number of downloads for each package, grouped by month and project.
     """
     # Validate and sanitize months_back
     try:
@@ -710,21 +635,16 @@ def identify_missing_data(
 ) -> tuple[list[str], list[str], list[str]]:
     """Identify which tools are new and which months need to be queried.
 
-    Parameters
-    ----------
-    package_df : pd.DataFrame
-        Current package information with pypi_package_name column.
-    cached_df : pd.DataFrame | None
-        Previously cached data with package names and month columns, or None if no cache exists.
-    months_back : int
-        Total number of months that should be present.
+    Args:
+        package_df (pd.DataFrame): Current package information with pypi_package_name column.
+        cached_df (pd.DataFrame | None): Previously cached data with package names and month columns, or None if no cache exists.
+        months_back (int): Total number of months that should be present.
 
     Returns:
-    -------
-    tuple[list[str], list[str], list[str]]
-        - new_tools: List of package names not in cache (need all months)
-        - existing_tools: List of package names already in cache
-        - missing_months: List of month columns (YYYY-MM) not in cache
+        tuple[list[str], list[str], list[str]]: A tuple containing:
+            - new_tools: List of package names not in cache (need all months)
+            - existing_tools: List of package names already in cache
+            - missing_months: List of month columns (YYYY-MM) not in cache
     """
     current_packages = set(
         package_df["pypi_package_name"].dropna().str.casefold().unique()
@@ -755,17 +675,12 @@ def merge_with_cached_downloads(
 ) -> pd.DataFrame:
     """Merge newly queried download data with cached data.
 
-    Parameters
-    ----------
-    new_data_df : pd.DataFrame
-        Newly enriched data with package info and new month columns.
-    cached_df : pd.DataFrame | None
-        Previously cached complete data, or None if no cache exists.
+    Args:
+        new_data_df (pd.DataFrame): Newly enriched data with package info and new month columns.
+        cached_df (pd.DataFrame | None): Previously cached complete data, or None if no cache exists.
 
     Returns:
-    -------
-    pd.DataFrame
-        Combined DataFrame with all package info and all month columns.
+        pd.DataFrame: Combined DataFrame with all package info and all month columns.
     """
     if cached_df is None or cached_df.empty:
         return new_data_df
@@ -797,19 +712,13 @@ def enrich_with_monthly_downloads(
 ) -> pd.DataFrame:
     """Add monthly download columns (wide format) to each tool row.
 
-    Parameters
-    ------------
-    package_df : pd.DataFrame
-        DataFrame containing the base package information.
-    pypi_download_stats_df : pd.DataFrame
-        DataFrame containing the monthly download statistics for pypi.
-    conda_download_stats_df : pd.DataFrame
-        DataFrame containing the monthly download statistics for anaconda.
+    Args:
+        package_df (pd.DataFrame): DataFrame containing the base package information.
+        pypi_download_stats_df (pd.DataFrame): DataFrame containing the monthly download statistics for pypi.
+        conda_download_stats_df (pd.DataFrame): DataFrame containing the monthly download statistics for anaconda.
 
     Returns:
-    ---------
-    pd.DataFrame
-        DataFrame containing the monthly download statistics.
+        pd.DataFrame: DataFrame containing the monthly download statistics.
     """
     base = package_df.copy()
     pypi_stats = pypi_download_stats_df.copy()

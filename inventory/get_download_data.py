@@ -270,36 +270,14 @@ def enrich_package_info_from_cache(
     if row["force_overwrite"]:
         LOGGER.info(f"Forcing cache values for {url}")
         return PackageInfo(
-            pypi_package_url=(
-                row["pypi_package_url"]
-                if pd.notna(row["pypi_package_url"])
-                and str(row["pypi_package_url"]).strip() != ""
-                else package_info.pypi_package_url
-            ),
-            pypi_package_name=(
-                row["pypi_package_name"]
-                if pd.notna(row["pypi_package_name"])
-                and str(row["pypi_package_name"]).strip() != ""
-                else package_info.pypi_package_name
-            ),
-            anaconda_package_url=(
-                row["anaconda_package_url"]
-                if pd.notna(row["anaconda_package_url"])
-                and str(row["anaconda_package_url"]).strip() != ""
-                else package_info.anaconda_package_url
-            ),
-            juliahub_package_url=(
-                row["juliahub_package_url"]
-                if pd.notna(row["juliahub_package_url"])
-                and str(row["juliahub_package_url"]).strip() != ""
-                else package_info.juliahub_package_url
-            ),
-            other_source=(
-                row["other_source"]
-                if pd.notna(row["other_source"])
-                and str(row["other_source"]).strip() != ""
-                else package_info.other_source
-            ),
+            **{attr: (
+                row[attr]
+                if pd.notna(row[attr])
+                and str(row[attr]).strip() != ""
+                else getattr(package_info, attr)
+            )
+            for attr in ["pypi_package_url", "pypi_package_name", "anaconda_package_url", "juliahub_package_url", "other_source"]
+            }
         )
 
     # Normal case: current values take precedence, cache fills in gaps

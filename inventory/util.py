@@ -54,7 +54,7 @@ def get_ecosystems_data(url: str) -> list[dict] | dict | str | None:
 
     if response.ok:
         return yaml.safe_load(response.content.decode("utf-8"))
-    elif response.status_code != 500:
+    elif response.status_code == 404:
         LOGGER.warning(f"Static URL {url} returned {response.status_code} status code.")
         return "not-found"
     else:

@@ -283,7 +283,9 @@ def cli(outfile: Path):
     entries = add_categories(entries)
     if outfile.exists():
         existing = pd.read_csv(outfile)
-        entries = pd.concat([existing, entries], ignore_index=True).drop_duplicates()
+        entries = pd.concat([existing, entries], ignore_index=True).drop_duplicates(
+            ["source", "name", "url"], keep="last"
+        )
 
     entries.sort_values(["id", "category"]).to_csv(outfile, index=False)
 

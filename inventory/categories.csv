@@ -1,6 +1,7 @@
 id,category,comment
 antares_simulator,"production-cost,power-flow","resource-adequacy"
 andes,"power-flow",
+cairnopen,"capacity-expansion,p,roduction-cost",
 dispa_set,"production-cost",
 dynawo,"power-flow",
 egret,"production-cost,power-flow",
@@ -40,4 +41,3 @@ unitcommitment_jl,"production-cost",
 urbs,"capacity-expansion",
 veragrid,"power-flow",
 zen_garden,"capacity-expansion",
-cairnopen,"capacity-expansion,production-cost"

@@ -34,6 +34,7 @@ sam,"capacity-expansion,production-cost","fixed technology options; focussed on 
 spineopt_jl,"capacity-expansion,production-cost",
 temoa,"capacity-expansion","possibly also production-cost"
 tulipaenergymodel_jl,"capacity-expansion","possibly also production-cost"
+toop,"power-flow",
 tz_osemosys,"capacity-expansion",
 unitcommitment_jl,"production-cost",
 urbs,"capacity-expansion",

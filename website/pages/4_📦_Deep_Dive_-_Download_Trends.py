@@ -172,7 +172,7 @@ def plot_download_trends(
     if not selected_tools:
         # Show aggregated trend for all tools (normalized)
         tool_df = df.copy()
-        plot_title = "All Tools (Average Downloads per Tool)"
+        plot_title = "All Tools"
     else:
         tool_df = df[df["display_name"].isin(selected_tools)].copy()
         if len(selected_tools) == 1:
@@ -190,30 +190,14 @@ def plot_download_trends(
             label = month.strftime("%B %Y")
             row = tool_df[tool_df["date"] == month]
 
-            if not selected_tools:
-                # Average downloads per tool
-                value = (
-                    int(row["downloads"].sum() / df["display_name"].nunique())
-                    if not row.empty
-                    else None
-                )
-            else:
-                # Total for selected tools
-                value = int(row["downloads"].sum()) if not row.empty else None
+            value = int(row["downloads"].sum()) if not row.empty else None
 
             prev_idx = all_months.index(month) - 1
             if prev_idx >= 0:
                 prev_row = tool_df[tool_df["date"] == all_months[prev_idx]]
-                if not selected_tools:
-                    prev_value = (
-                        int(prev_row["downloads"].sum() / df["display_name"].nunique())
-                        if not prev_row.empty
-                        else None
-                    )
-                else:
-                    prev_value = (
-                        int(prev_row["downloads"].sum()) if not prev_row.empty else None
-                    )
+                prev_value = (
+                    int(prev_row["downloads"].sum()) if not prev_row.empty else None
+                )
                 prev_label_str = all_months[prev_idx].strftime("%B %Y")
             else:
                 prev_value = None
@@ -243,7 +227,7 @@ def plot_download_trends(
     if not selected_tools:
         # Aggregate all tools - show average per tool
         agg_df = tool_df.groupby("date")["downloads"].sum().reset_index()
-        agg_df["downloads"] = agg_df["downloads"] / df["display_name"].nunique()
+        agg_df["downloads"] = agg_df["downloads"]
 
         fig.add_trace(
             go.Scatter(
@@ -256,24 +240,6 @@ def plot_download_trends(
                 fill="tozeroy",
                 fillcolor=f"rgba({int(colors[0][1:3], 16)}, {int(colors[0][3:5], 16)}, {int(colors[0][5:7], 16)}, 0.10)",
                 hovertemplate="<b>Average per Tool</b><br>%{x|%b %Y}: %{y:,.0f}<extra></extra>",
-            )
-        )
-    elif len(selected_tools) == 1:
-        # Single tool - show with fill
-        trend_df = tool_df[tool_df["display_name"] == selected_tools[0]].sort_values(
-            "date"
-        )
-        fig.add_trace(
-            go.Scatter(
-                x=trend_df["date"],
-                y=trend_df["downloads"],
-                mode="lines+markers",
-                name=selected_tools[0],
-                line=dict(color=colors[0], width=2.5),
-                marker=dict(size=7, symbol="circle", color=colors[0]),
-                fill="tozeroy",
-                fillcolor=f"rgba({int(colors[0][1:3], 16)}, {int(colors[0][3:5], 16)}, {int(colors[0][5:7], 16)}, 0.10)",
-                hovertemplate=f"<b>{selected_tools[0]}</b><br>%{{x|%b %Y}}: %{{y:,}}<extra></extra>",
             )
         )
     else:
@@ -295,17 +261,20 @@ def plot_download_trends(
             )
 
         # Add average line
-        agg_df = tool_df.groupby("date")["downloads"].sum().reset_index()
-        agg_df["downloads"] = agg_df["downloads"] / len(selected_tools)
+        agg_df = (
+            df.groupby("date")
+            .apply(lambda x: x.sort_values("downloads").tail(10).downloads.mean())
+            .reset_index(name="downloads")
+        )
 
         fig.add_trace(
             go.Scatter(
                 x=agg_df["date"],
                 y=agg_df["downloads"],
                 mode="lines",
-                name="Average",
+                name="Top10 tools average",
                 line=dict(color=colors[5], width=2.5, dash="dash"),
-                hovertemplate="<b>Average</b><br>%{x|%b %Y}: %{y:,.0f}<extra></extra>",
+                hovertemplate="<b>Top10 tools average</b><br>%{x|%b %Y}: %{y:,.0f}<extra></extra>",
             )
         )
 
@@ -330,7 +299,7 @@ def plot_download_trends(
             tickformat=",",
         ),
         hovermode="x unified",
-        showlegend=len(selected_tools) > 1,
+        showlegend=len(selected_tools) > 0,
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
     )
     st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
@@ -483,7 +452,7 @@ def show_all_packages_list(
         f" (filtered to {len(selected_tools)} selected)" if selected_tools else ""
     )
     caption_text = (
-        f"Showing {len(summary)} packages{filter_text} ({tools_with_data_count} with download data) · "
+        f"Showing {len(summary)} packages{filter_text} (total {tools_with_data_count} with download data) · "
         f"Latest month: **{latest_label}**"
     )
     if prev_label:

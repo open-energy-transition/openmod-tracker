@@ -37,6 +37,7 @@ and this project adheres to [Calendar Versioning](https://calver.org/).
 ### Added
 
 - Test docker image in CI
+- Add the `get_download_data.py` script to process package downloads and a dedicated visualisation page in the dashboard (#125).
 
 ### Fixed
 
@@ -59,7 +60,6 @@ and this project adheres to [Calendar Versioning](https://calver.org/).
 - Automated release process following monthly inventory auto-update.
 - Add the `get_scores.py` script to process the OpenSSF scores and a dedicated visualisation page in the dashboard (#217).
 - Return the ISO3 country code in `user_classifications.csv` instead of the country name (#96).
-- Add the `get_download_data.py` script to process package downloads and a dedicated visualisation page in the dashboard (#125).
 
 ### Fixed
 

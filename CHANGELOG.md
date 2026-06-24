@@ -29,8 +29,8 @@ and this project adheres to [Calendar Versioning](https://calver.org/).
 
 ### Fixed
 
-* Rely on existing tool CSV as a fallback of all tools, in case one of the upstream inventories becomes unavailable.
-* Extend use of existing tools stats as fallback on all non-404 response codes when querying ecosyste-ms API (previously only 500 status code).
+- Rely on existing tool CSV as a fallback of all tools, in case one of the upstream inventories becomes unavailable.
+- Extend use of existing tools stats as fallback on all non-404 response codes when querying ecosyste-ms API (previously only 500 status code).
 
 ## 2026-05-28
 

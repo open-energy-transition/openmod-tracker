@@ -15,7 +15,7 @@ bewhere_model,https://github.com/caaficus/bewhere-model,BeWhere-model,pre-compil
 bluesky,https://github.com/eiagov/bluesky,BlueSky,"opensustain-tech,pre-compiled",
 breakthrough_energy_model,https://github.com/breakthrough-energy,Breakthrough Energy Model,openmod,
 bridges,https://github.com/stanford-eao/bridges,BRIDGES,pre-compiled,
-cairnopen,https://github.com/cea-liten/cairnopen,CairnOpen,"opensustain-tech,pre-compiled",
+cairnopen,https://github.com/cea-liten/cairnopen,CairnOpen,"opensustain-tech,pre-compiled","capacity-expansion,production-cost"
 calliope,https://github.com/calliope-project/calliope,Calliope,"g-pst,lf-energy-landscape,openmod,opensustain-tech,pre-compiled","capacity-expansion,production-cost"
 capacityexpansion_jl,https://github.com/youngfaithful/capacityexpansion.jl,"CapacityExpansion.jl,CapacityExpansion","lf-energy-landscape,openmod,opensustain-tech,pre-compiled",
 capow,https://github.com/romulus97/capow_py36,CAPOW,openmod,
@@ -71,7 +71,7 @@ fine,https://github.com/fzj-iek3-vsa/fine,FINE,"lf-energy-landscape,opensustain-
 flexigis,https://github.com/flexigis/flexigis,FlexiGIS,"lf-energy-landscape,openmod,opensustain-tech",
 flexplan_jl,https://github.com/electa-git/flexplan.jl,FlexPlan.jl,"opensustain-tech,pre-compiled",
 flixopt,https://github.com/flixopt/flixopt,flixOpt,"opensustain-tech,pre-compiled",capacity-expansion
-fluxopt,https://github.com/fbumann/fluxopt,fluxopt,opensustain-tech,
+fluxopt,https://github.com/fluxopt/fluxopt,fluxopt,opensustain-tech,
 friendlysam,https://github.com/sp-etx/friendlysam,friendlysam,pre-compiled,
 gboml,https://gitlab.uliege.be/smart_grids/public/gboml,gboml,pre-compiled,
 gear_scoup,https://github.com/natlabrockies/gear-scoup,Gear-SCouP,lf-energy-landscape,
@@ -95,6 +95,7 @@ hope,https://github.com/hope-model-project/hope,HOPE,pre-compiled,
 hopp,https://github.com/natlabrockies/hopp,HOPP,pre-compiled,"capacity-expansion,production-cost"
 hybrid,https://github.com/idaholab/hybrid,HYBRID,"opensustain-tech,pre-compiled",
 hybridbosse,https://github.com/natlabrockies/hybridbosse,HybridBOSSE,lf-energy-landscape,
+hydesign_git,https://gitlab.windenergy.dtu.dk/topfarm/hydesign,hydesign.git,pre-compiled,
 hydrogenmod_jl,https://github.com/lukasbarner/hydrogenmod.jl,HydrOGEnMod.jl,pre-compiled,
 idea,https://gitlab.com/sesit/idea,idea,pre-compiled,
 iesopt_jl,https://github.com/ait-energy/iesopt.jl,IESopt.jl,"opensustain-tech,pre-compiled",
@@ -221,7 +222,7 @@ switch,https://github.com/switch-model/switch,"Switch,switch-model","g-pst,lf-en
 temoa,https://github.com/temoaproject/temoa,Temoa,"lf-energy-landscape,openmod,opensustain-tech,pre-compiled",capacity-expansion
 tesp,https://github.com/pnnl/tesp,tesp,pre-compiled,
 times_model,https://github.com/etsap-times/times_model,"TIMES_model,TIMES","openmod,opensustain-tech",
-toop,https://github.com/eliagroup/toop,ToOp,lf-energy-landscape,
+toop,https://github.com/eliagroup/toop,ToOp,lf-energy-landscape,power-flow
 transactive_energy_service_system,https://github.com/slacgismo/tess,Transactive Energy Service System,"lf-energy-landscape,opensustain-tech",
 transient_lib,https://github.com/transient-official/transient-lib,transient-lib,pre-compiled,
 tulipaenergymodel_jl,https://github.com/tulipaenergy/tulipaenergymodel.jl,Tulipa Energy Model,"opensustain-tech,pre-compiled",capacity-expansion

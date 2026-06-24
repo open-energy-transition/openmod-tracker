@@ -83,6 +83,7 @@ https://github.com/fbumann/fluxopt: https://repos.ecosyste.ms/api/v1/hosts/GitHu
 https://github.com/flexiblepower/powermatcher: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/flexiblepower%2Fpowermatcher
 https://github.com/flexigis/flexigis: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/FlexiGIS%2FFlexiGIS
 https://github.com/flixopt/flixopt: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/flixOpt%2Fflixopt
+https://github.com/fluxopt/fluxopt: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/fluxopt%2Ffluxopt
 https://github.com/fraukewiese/renpass: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/fraukewiese%2Frenpass
 https://github.com/frkunz/stelmod: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/frkunz%2FstELMOD
 https://github.com/future-power-networks/simplus-grid-tool: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/Future-Power-Networks%2FSimplus-Grid-Tool
@@ -283,5 +284,6 @@ https://gitlab.pnnl.gov/exasgd/frameworks/exago: not-found
 https://gitlab.tubit.tu-berlin.de/wip/dynelmod_public: not-found
 https://gitlab.uliege.be/smart_grids/public/gboml: not-found
 https://gitlab.vtt.fi/backbone/backbone: not-found
+https://gitlab.windenergy.dtu.dk/topfarm/hydesign: not-found
 https://gricad-gitlab.univ-grenoble-alpes.fr/omegalpes/omegalpes: https://repos.ecosyste.ms/api/v1/hosts/gricad-gitlab.univ-grenoble-alpes.fr/repositories/omegalpes%2Fomegalpes
 https://jugit.fz-juelich.de/iek-10/public/optimization/comando: not-found

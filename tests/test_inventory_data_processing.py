@@ -8,6 +8,8 @@ import os
 from pathlib import Path
 from unittest.mock import patch
 
+import numpy as np
+import pandas as pd
 import pytest
 import requests
 from conftest import load_module_from_file
@@ -21,6 +23,12 @@ TEST_URL_GITLAB = "https://gitlab.com/mosaik/mosaik"
 util = load_module_from_file(INVENTORY_DIR / "util.py", "util")
 get_stats = load_module_from_file(INVENTORY_DIR / "get_stats.py", "get_stats")
 get_scores = load_module_from_file(INVENTORY_DIR / "get_scores.py", "get_scores")
+get_download_data = load_module_from_file(
+    INVENTORY_DIR / "get_download_data.py", "get_download_data"
+)
+
+# Path to cache data (CSV file, not a module)
+CACHE_DATA_PATH = INVENTORY_DIR / "manual_cache" / "package_urls_manual_search.csv"
 
 
 @pytest.fixture
@@ -33,6 +41,175 @@ def ecosystems_issue_api():
         pytest.skip(
             f"Ecosystems issues API unavailable (status {response.status_code})"
         )
+
+
+@pytest.fixture
+def download_df() -> pd.DataFrame:
+    """Fixture to generate a DataFrame with PyPI package url and name."""
+    return pd.DataFrame(
+        {
+            "id": ["pack_one", "pack_two", "pack_three"],
+            "html_url": [
+                "https://github.com/pack_one/pack_one",
+                "https://github.com/pack_two/pack_two",
+                "https://github.com/pack_three/pack_three",
+            ],
+            "pypi_package_url": [
+                "https://pypi.org/project/pack_ONE",
+                "https://pypi.org/project/pack_two",
+                "https://pypi.org/project/PACK_three",
+            ],
+            "pypi_package_name": ["pack_ONE", "pack_two", "PACK_three"],
+            "other_source": ["source_one", "source_two", "source_three"],
+        }
+    )
+
+
+@pytest.fixture
+def pypi_download_stats_df() -> pd.DataFrame:
+    """Fixture to generate a DataFrame with PyPI package download stats."""
+    return pd.DataFrame(
+        {
+            "num_downloads": ["1", "2", "3", "4", "5", "6", "7", "8", "9"],
+            "month": [
+                "2026-05-01",
+                "2026-04-01",
+                "2026-03-01",
+                "2026-05-01",
+                "2026-04-01",
+                "2026-03-01",
+                "2026-05-01",
+                "2026-04-01",
+                "2026-03-01",
+            ],
+            "project": [
+                "pack_one",
+                "pack_one",
+                "pack_one",
+                "pack_two",
+                "pack_two",
+                "pack_two",
+                "pack_four",
+                "pack_four",
+                "pack_four",
+            ],
+        }
+    )
+
+
+@pytest.fixture
+def conda_download_stats_df() -> pd.DataFrame:
+    """Fixture to generate a DataFrame with Anaconda package download stats."""
+    return pd.DataFrame(
+        {
+            "counts": ["1", "2", "3", "4", "6", "7", "8"],
+            "time": [
+                "2026-05-01",
+                "2026-04-01",
+                "2026-03-01",
+                "2026-05-01",
+                "2026-03-01",
+                "2026-05-01",
+                "2026-04-01",
+            ],
+            "pkg_name": [
+                "pack_one",
+                "pack_one",
+                "pack_one",
+                "pack_two",
+                "pack_two",
+                "pack_four",
+                "pack_four",
+            ],
+        }
+    )
+
+
+@pytest.fixture
+def sample_data() -> dict[str, pd.DataFrame]:
+    """Create sample dataframes for testing."""
+    return {
+        "just_package_data_new_tool": pd.DataFrame(
+            {
+                "id": ["a", "b", "c", "d"],
+                "html_url": ["a-url", "b-url", "c-url", "d-url"],
+                "pypi_package_url": [
+                    "pypi-a-url",
+                    "pypi-b-url",
+                    "pypi-c-url",
+                    "pypi-d-url",
+                ],
+                "pypi_package_name": ["pkg-a", "pkg-b", "pkg-c", "pkg-d"],
+                "anaconda_package_url": [
+                    "conda-a-url",
+                    "conda-b-url",
+                    "conda-c-url",
+                    "conda-d-url",
+                ],
+                "juliahub_package_url": [
+                    "juliahub-a-url",
+                    "juliahub-b-url",
+                    "juliahub-c-url",
+                    "juliahub-d-url",
+                ],
+                "other_source": [
+                    "other-a-url",
+                    "other-b-url",
+                    "other-c-url",
+                    "other-d-url",
+                ],
+            }
+        ),
+        "just_package_data": pd.DataFrame(
+            {
+                "id": ["a", "b", "c"],
+                "html_url": ["a-url", "b-url", "c-url"],
+                "pypi_package_url": ["pypi-a-url", "pypi-b-url", "pypi-c-url"],
+                "pypi_package_name": ["pkg-a", "pkg-b", "pkg-c"],
+                "anaconda_package_url": ["conda-a-url", "conda-b-url", "conda-c-url"],
+                "juliahub_package_url": [
+                    "juliahub-a-url",
+                    "juliahub-b-url",
+                    "juliahub-c-url",
+                ],
+                "other_source": ["other-a-url", "other-b-url", "other-c-url"],
+            }
+        ),
+        "new_data": pd.DataFrame(
+            {
+                "id": ["a", "b", "c"],
+                "html_url": ["a-url", "b-url", "c-url"],
+                "pypi_package_url": ["pypi-a-url", "pypi-b-url", "pypi-c-url"],
+                "pypi_package_name": ["pkg-a", "pkg-b", "pkg-c"],
+                "anaconda_package_url": ["conda-a-url", "conda-b-url", "conda-c-url"],
+                "juliahub_package_url": [
+                    "juliahub-a-url",
+                    "juliahub-b-url",
+                    "juliahub-c-url",
+                ],
+                "other_source": ["other-a-url", "other-b-url", "other-c-url"],
+                "2026-05": [100, 200, 300],
+                "2026-04": [90, 190, 290],
+            }
+        ),
+        "cached_data": pd.DataFrame(
+            {
+                "id": ["a", "b", "c"],
+                "html_url": ["a-url", "b-url", "c-url"],
+                "pypi_package_url": ["pypi-a-url", "pypi-b-url", "pypi-c-url"],
+                "pypi_package_name": ["pkg-a", "pkg-b", "pkg-c"],
+                "anaconda_package_url": ["conda-a-url", "conda-b-url", "conda-c-url"],
+                "juliahub_package_url": [
+                    "juliahub-a-url",
+                    "juliahub-b-url",
+                    "juliahub-c-url",
+                ],
+                "other_source": ["other-a-url", "other-b-url", "other-c-url"],
+                "2026-03": [80, 180, 280],
+                "2026-02": [70, 170, 270],
+            }
+        ),
+    }
 
 
 class TestInventoryUtil:
@@ -153,3 +330,378 @@ class TestGetScores:
         """Should return True for GitLab URLs when the GitLab token env var is set."""
         with patch.dict(os.environ, {token_name: token_value}, clear=True):
             assert get_scores.check_auth_token(TEST_URL_GITLAB) is expected_result
+
+
+class TestGetDownloadData:
+    """Test suite for get_download_data functions."""
+
+    @pytest.mark.parametrize(
+        ("value", "expected"),
+        [
+            # Valid cases
+            ("valid_package", True),
+            ("https://pypi.org/project/package", True),
+            # Invalid cases
+            ("", False),
+            ("   ", False),
+            ("\t\n  ", False),
+            (" ", False),
+            (None, False),
+            (np.nan, False),
+            (pd.NA, False),
+        ],
+    )
+    def test_is_populated(self, value, expected):
+        """Test _is_populated with various value types and edge cases."""
+        row = pd.Series({"col": value})
+        assert get_download_data._is_populated(row, "col") is expected
+
+    def test_enrich_with_monthly_downloads(
+        self,
+        download_df: pd.DataFrame,
+        pypi_download_stats_df: pd.DataFrame,
+        conda_download_stats_df: pd.DataFrame,
+    ) -> None:
+        """Test enrich_with_monthly_downloads function."""
+        output_df = get_download_data.enrich_with_monthly_downloads(
+            download_df, pypi_download_stats_df, conda_download_stats_df
+        )
+        expected_df = pd.DataFrame(
+            {
+                "id": ["pack_one", "pack_two", "pack_three"],
+                "html_url": [
+                    "https://github.com/pack_one/pack_one",
+                    "https://github.com/pack_two/pack_two",
+                    "https://github.com/pack_three/pack_three",
+                ],
+                "pypi_package_url": [
+                    "https://pypi.org/project/pack_ONE",
+                    "https://pypi.org/project/pack_two",
+                    "https://pypi.org/project/PACK_three",
+                ],
+                "pypi_package_name": ["pack_ONE", "pack_two", "PACK_three"],
+                "other_source": ["source_one", "source_two", "source_three"],
+                "2026-05": [2.0, 8.0, None],
+                "2026-04": [4.0, 5.0, None],
+                "2026-03": [6.0, 12.0, None],
+            }
+        )
+        pd.testing.assert_frame_equal(output_df, expected_df)
+
+    def test_get_conda_pkg_download_stats(self) -> None:
+        """Test that conda download stats are returned with correct column ordering and structure."""
+        result = get_download_data.get_conda_pkg_download_stats(
+            ["pypsa"], months_back=12
+        )
+
+        # Test column ordering
+        assert list(result.columns) == ["pkg_name", "time", "counts"]
+
+        # Test data validity (structure)
+        assert all(result["pkg_name"] == "pypsa")
+        assert result["counts"].dtype in ["int64", "int32", "float64"]
+        assert all(result["counts"] >= 0)
+
+        # Test date format and ordering
+        dates = pd.to_datetime(result["time"], format="%Y-%m")
+        assert dates.is_monotonic_increasing
+
+    @pytest.mark.parametrize(
+        (
+            "id",
+            "html_url",
+            "pypi_url",
+            "pypi_name",
+            "anaconda_url",
+            "julia_url",
+            "other_url",
+            "expected",
+        ),
+        [
+            (
+                "package",
+                "https://github.com/package/package",
+                "https://pypi.org/pkg",
+                "package",
+                None,
+                None,
+                None,
+                True,
+            ),
+            (
+                "package",
+                "https://github.com/package/package.jl",
+                None,
+                None,
+                None,
+                "package",
+                None,
+                True,
+            ),
+            (
+                "package",
+                "https://github.com/package/package.jl",
+                None,
+                None,
+                None,
+                None,
+                None,
+                False,
+            ),
+            (
+                "package",
+                "https://github.com/package/package",
+                None,
+                None,
+                None,
+                None,
+                None,
+                False,
+            ),
+        ],
+    )
+    def test_should_skip_fetching_with_default_fields(
+        self,
+        id: str,
+        html_url: str,
+        pypi_url: str,
+        pypi_name: str,
+        anaconda_url: str,
+        julia_url: str,
+        other_url: str,
+        expected: bool,
+    ) -> None:
+        """Test should_skip_fetching with default required fields."""
+        row = pd.Series(
+            {
+                "id": id,
+                "html_url": html_url,
+                "pypi_package_url": pypi_url,
+                "pypi_package_name": pypi_name,
+                "anaconda_package_url": anaconda_url,
+                "juliahub_package_url": julia_url,
+                "other_source": other_url,
+            }
+        )
+        result = get_download_data.should_skip_fetching(row)
+        assert result == expected
+
+    @pytest.mark.parametrize(
+        (
+            "url",
+            "expected_pypi_url",
+            "expected_conda_url",
+            "expected_julia_url",
+            "expected_other_url",
+            "expected_package_name",
+        ),
+        [
+            (
+                TEST_URL_GITHUB,
+                "https://pypi.org/project/pypsa",
+                "https://anaconda.org/conda-forge/pypsa",
+                None,
+                None,
+                "pypsa",
+            ),
+            (
+                "https://gitlab.com/fame-framework/fame-core",
+                None,
+                None,
+                None,
+                "https://central.sonatype.com/artifact/de.dlr.gitlab.fame/core",
+                None,
+            ),
+            (
+                "https://github.com/YoungFaithful/CapacityExpansion.jl",
+                None,
+                None,
+                "https://juliahub.com/ui/Packages/General/CapacityExpansion",
+                None,
+                None,
+            ),
+            (
+                "https://github.com/leonardgoeke/AnyMOD.jl",
+                None,
+                None,
+                "https://juliahub.com/ui/Packages/General/AnyMOD",
+                None,
+                None,
+            ),
+            (
+                "https://github.com/rebase-energy/enflow",
+                "https://pypi.org/project/enflow",
+                None,
+                None,
+                None,
+                "enflow",
+            ),
+            (
+                "https://github.com/ait-energy/IESopt.jl",
+                "https://pypi.org/project/iesopt",
+                None,
+                "https://juliahub.com/ui/Packages/General/IESopt",
+                None,
+                "iesopt",
+            ),
+            (
+                "https://github.com/Sienna-Platform/PowerSimulationsDynamics.jl",
+                None,
+                None,
+                "https://juliahub.com/ui/Packages/General/PowerSimulationsDynamics",
+                None,
+                None,
+            ),
+            (
+                "https://github.com/RoseauTechnologies/Roseau_Load_Flow",
+                "https://pypi.org/project/roseau-load-flow",
+                None,
+                None,
+                None,
+                "roseau-load-flow",
+            ),
+        ],
+    )
+    def test_get_tool_info(
+        self,
+        url: str,
+        expected_pypi_url: str,
+        expected_conda_url: str,
+        expected_julia_url: str,
+        expected_other_url: str,
+        expected_package_name: str,
+    ) -> None:
+        """Test get_tool_info function."""
+        package_info = get_download_data.get_tool_info(
+            url, manual_cache=CACHE_DATA_PATH
+        )
+        assert package_info.pypi_package_url == expected_pypi_url
+        assert package_info.anaconda_package_url == expected_conda_url
+        assert package_info.juliahub_package_url == expected_julia_url
+        assert package_info.other_source == expected_other_url
+        assert package_info.pypi_package_name == expected_package_name
+
+    def test_get_expected_month_columns(self) -> None:
+        """Test that get_expected_month_columns returns correct month columns."""
+        expected_months = ["2026-05", "2026-04", "2026-03"]
+        result = get_download_data.get_expected_month_columns(3)
+        assert result == expected_months
+
+    def test_merge_with_cached_downloads(
+        self, sample_data: dict[str, pd.DataFrame]
+    ) -> None:
+        """Test merge_with_cached_downloads function."""
+        result = get_download_data.merge_with_cached_downloads(
+            sample_data["new_data"], sample_data["cached_data"]
+        )
+        expected = pd.DataFrame(
+            {
+                "id": ["a", "b", "c"],
+                "html_url": ["a-url", "b-url", "c-url"],
+                "pypi_package_url": ["pypi-a-url", "pypi-b-url", "pypi-c-url"],
+                "pypi_package_name": ["pkg-a", "pkg-b", "pkg-c"],
+                "anaconda_package_url": ["conda-a-url", "conda-b-url", "conda-c-url"],
+                "juliahub_package_url": [
+                    "juliahub-a-url",
+                    "juliahub-b-url",
+                    "juliahub-c-url",
+                ],
+                "other_source": ["other-a-url", "other-b-url", "other-c-url"],
+                "2026-05": [100, 200, 300],
+                "2026-04": [90, 190, 290],
+                "2026-03": [80, 180, 280],
+                "2026-02": [70, 170, 270],
+            }
+        )
+        pd.testing.assert_frame_equal(expected, result)
+
+    def test_merge_no_cached_with_downloads(
+        self, sample_data: dict[str, pd.DataFrame]
+    ) -> None:
+        """Test merge_with_cached_downloads function."""
+        result = get_download_data.merge_with_cached_downloads(
+            sample_data["new_data"], None
+        )
+        expected = pd.DataFrame(
+            {
+                "id": ["a", "b", "c"],
+                "html_url": ["a-url", "b-url", "c-url"],
+                "pypi_package_url": ["pypi-a-url", "pypi-b-url", "pypi-c-url"],
+                "pypi_package_name": ["pkg-a", "pkg-b", "pkg-c"],
+                "anaconda_package_url": ["conda-a-url", "conda-b-url", "conda-c-url"],
+                "juliahub_package_url": [
+                    "juliahub-a-url",
+                    "juliahub-b-url",
+                    "juliahub-c-url",
+                ],
+                "other_source": ["other-a-url", "other-b-url", "other-c-url"],
+                "2026-05": [100, 200, 300],
+                "2026-04": [90, 190, 290],
+            }
+        )
+        pd.testing.assert_frame_equal(expected, result)
+
+    def test_merge_package_info_with_downloads(
+        self, sample_data: dict[str, pd.DataFrame]
+    ) -> None:
+        """Test merge_with_cached_downloads function."""
+        result = get_download_data.merge_with_cached_downloads(
+            sample_data["just_package_data"], sample_data["new_data"]
+        )
+        expected = pd.DataFrame(
+            {
+                "id": ["a", "b", "c"],
+                "html_url": ["a-url", "b-url", "c-url"],
+                "pypi_package_url": ["pypi-a-url", "pypi-b-url", "pypi-c-url"],
+                "pypi_package_name": ["pkg-a", "pkg-b", "pkg-c"],
+                "anaconda_package_url": ["conda-a-url", "conda-b-url", "conda-c-url"],
+                "juliahub_package_url": [
+                    "juliahub-a-url",
+                    "juliahub-b-url",
+                    "juliahub-c-url",
+                ],
+                "other_source": ["other-a-url", "other-b-url", "other-c-url"],
+                "2026-05": [100, 200, 300],
+                "2026-04": [90, 190, 290],
+            }
+        )
+        pd.testing.assert_frame_equal(expected, result)
+
+    def test_identify_missing_data(self, sample_data: dict[str, pd.DataFrame]) -> None:
+        """Test identify_missing_data function."""
+        new_tools, existing_tools, missing_months = (
+            get_download_data.identify_missing_data(
+                sample_data["just_package_data_new_tool"],
+                sample_data["cached_data"],
+                months_back=4,
+            )
+        )
+        assert new_tools == ["pkg-d"]
+        assert sorted(existing_tools) == ["pkg-a", "pkg-b", "pkg-c"]
+        assert missing_months == ["2026-05", "2026-04"]
+
+    def test_identify_missing_data_no_new_tools_and_months(
+        self, sample_data: dict[str, pd.DataFrame]
+    ) -> None:
+        """Test identify_missing_data function."""
+        new_tools, existing_tools, missing_months = (
+            get_download_data.identify_missing_data(
+                sample_data["just_package_data"], sample_data["new_data"], months_back=2
+            )
+        )
+        assert new_tools == list()
+        assert sorted(existing_tools) == ["pkg-a", "pkg-b", "pkg-c"]
+        assert missing_months == list()
+
+    def test_identify_missing_data_no_cache_and_months(
+        self, sample_data: dict[str, pd.DataFrame]
+    ) -> None:
+        """Test identify_missing_data function."""
+        new_tools, existing_tools, missing_months = (
+            get_download_data.identify_missing_data(
+                sample_data["just_package_data"], None, months_back=2
+            )
+        )
+        assert sorted(new_tools) == ["pkg-a", "pkg-b", "pkg-c"]
+        assert sorted(existing_tools) == list()
+        assert missing_months == ["2026-05", "2026-04"]

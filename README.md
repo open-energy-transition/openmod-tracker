@@ -77,7 +77,7 @@ Further to data from <https://ecosyste.ms>, we rely on other sources to (1) link
    If we get a positive match, we link that to the repository.
    This is not perfect; sometimes a project uses an unexpected site URL for their documentation.
 1. Most packages are indexed on PyPI, conda-forge or on public Julia package servers.
-   For each of these, since <https://ecosyste.ms> data is often missing here, we use direct or third party APIs to query the downloads for the previous month.
+   For each of these, since <https://ecosyste.ms> data is often missing here, we use direct or third party APIs to query the downloads for the previous month. PyPI download statistics can be fetched programmatically via BigQuery when GCP credentials are available, or loaded from a pre-built CSV fallback file. The file `inventory/output/pypi_downloads.csv` is built manually from the [BigQuery Web UI](https://console.cloud.google.com/bigquery) using the query defined in `inventory/get_download_data.py::query_file_downloads()`. This CSV is used by default when BigQuery credentials are unavailable or when `--use_bigquery=False`. To update this file manually: go to the [BigQuery Web UI](https://console.cloud.google.com/bigquery), copy the SQL query from the `query_file_downloads()` function (around lines 550-600), execute it with your desired package list and time range, then export the results as CSV and save to `inventory/output/pypi_downloads.csv`. This approach avoids authentication issues and is often simpler for periodic manual updates.
 1. User interaction data utilises the direct GitHub API.
    This is the API with which much of the <https://ecosyste.ms> database is generated.
    However, they don't store user data unless a user is also a repository owner.

@@ -12,6 +12,7 @@ SPDX-License-Identifier = "CC0-1.0"
 
 [[annotations]]
 path = [
+    "inventory/manual_cache/**",
     "inventory/output/**",
     "user_analysis/output/**",
     "code_quality/output/**"

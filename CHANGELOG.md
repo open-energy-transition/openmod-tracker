@@ -25,6 +25,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Calendar Versioning](https://calver.org/).
 
+## Unreleased
+
+### Fixed
+
+* Rely on existing tool CSV as a fallback of all tools, in case one of the upstream inventories becomes unavailable.
+* Extend use of existing tools stats as fallback on all non-404 response codes when querying ecosyste-ms API (previously only 500 status code).
+
 ## 2026-05-28
 
 ### Added

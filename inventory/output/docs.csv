@@ -8,6 +8,7 @@ anymod_jl,,http://leonardgoeke.github.io/AnyMOD.jl/stable,
 aristopy,http://aristopy.readthedocs.io,,https://git.tu-berlin.de/etus/public/aristopy.wiki.git
 asam,,http://AncillaryServicesAcquisitionModel.github.io/ASAM,
 asset_level_transition_risk_in_the_global_coal__oil__and_gas_supply_chains,,,
+assetra,http://assetra.readthedocs.io,,
 assume,http://assume.readthedocs.io,,
 balmorel,,http://balmorelcommunity.github.io/Balmorel,
 bewhere_model,,,
@@ -105,7 +106,6 @@ mafrit,,,
 match_model,,,
 matpower,,,
 medea,,,
-mescal,http://mescal.readthedocs.io,,
 mesmo,,http://mesmo-dev.github.io/mesmo,
 message_ix,,,
 messpy,,,
@@ -195,7 +195,6 @@ silver,http://sesit-silver.readthedocs.io,,https://gitlab.com/sesit/silver.wiki.
 simona,http://simona.readthedocs.io,,
 simplus_grid_tool,,,
 smartgridtoolbox,,http://SmartGridToolbox.gitlab.io/SmartGridToolbox,https://gitlab.com/SmartGridToolbox/SmartGridToolbox.wiki.git
-sms++,,http://smspp.gitlab.io/smspp-project,https://gitlab.com/smspp/smspp-project.wiki.git
 softx_2020_61,,,
 spineopt_jl,,http://spine-tools.github.io/SpineOpt.jl,
 ssmd,,,https://git.rwth-aachen.de/acs/public/simulation/ssmd.wiki.git

@@ -31,13 +31,22 @@ and this project adheres to [Calendar Versioning](https://calver.org/).
 
 - Rely on existing tool CSV as a fallback of all tools, in case one of the upstream inventories becomes unavailable.
 - Extend use of existing tools stats as fallback on all non-404 response codes when querying ecosyste-ms API (previously only 500 status code).
+- Circumvent new readthedocs SSL error on certain domain name getters.
+
+### Added
+
+- `assetra` to pre-compiled list (#250).
+- Add the `get_download_data.py` script to process package downloads and a dedicated visualisation page in the dashboard (#125).
+
+### Changed
+
+- Remove mescal & sms++ with active exclusions (reasons given in `inventory/exclusions.csv`).
 
 ## 2026-05-28
 
 ### Added
 
 - Test docker image in CI
-- Add the `get_download_data.py` script to process package downloads and a dedicated visualisation page in the dashboard (#125).
 
 ### Fixed
 

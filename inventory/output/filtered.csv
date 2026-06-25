@@ -3,11 +3,12 @@ adopt_net0,https://github.com/uu-er/adopt-net0,AdOpT-NET0,"openmod,pre-compiled"
 akkudoktoreos,https://github.com/akkudoktor-eos/eos,AkkudoktorEOS,opensustain-tech,
 amiris,https://gitlab.com/dlr-ve/esy/amiris/amiris,AMIRIS,"lf-energy-landscape,openmod",
 andes,https://github.com/curent/andes,ANDES,"lf-energy-landscape,opensustain-tech",power-flow
-antares_simulator,https://github.com/antaressimulatorteam/antares_simulator,Antares Simulator,"lf-energy-landscape,opensustain-tech,pre-compiled","production-cost,power-flow"
+antares_simulator,https://github.com/antaressimulatorteam/antares_simulator,Antares Simulator,"lf-energy-landscape,opensustain-tech,pre-compiled","production-cost,resource-adequacy"
 anymod_jl,https://github.com/leonardgoeke/anymod.jl,AnyMOD.jl,"lf-energy-landscape,opensustain-tech,pre-compiled",
 aristopy,https://git.tu-berlin.de/etus/public/aristopy,aristopy,pre-compiled,
 asam,https://github.com/ancillaryservicesacquisitionmodel/asam,ASAM,openmod,
 asset_level_transition_risk_in_the_global_coal__oil__and_gas_supply_chains,https://github.com/lkruitwagen/global-fossil-fuel-supply-chain,"Asset-level Transition Risk in the Global Coal, Oil, and Gas Supply Chains",lf-energy-landscape,
+assetra,https://github.com/ijbd/assetra,assetra,pre-compiled,resource-adequacy
 assume,https://github.com/assume-framework/assume,ASSUME,openmod,
 backbone,https://gitlab.vtt.fi/backbone/backbone,Backbone,"g-pst,lf-energy-landscape,openmod,opensustain-tech,pre-compiled","capacity-expansion,production-cost"
 balmorel,https://github.com/balmorelcommunity/balmorel,Balmorel,"lf-energy-landscape,openmod,opensustain-tech,pre-compiled",
@@ -113,7 +114,6 @@ mafrit,https://github.com/natlabrockies/mafrit,MAFRIT,lf-energy-landscape,
 match_model,https://github.com/pencleanenergy/match-model,MATCH-model,pre-compiled,
 matpower,https://github.com/matpower/matpower,matpower,"lf-energy-landscape,opensustain-tech,pre-compiled","power-flow,production-cost"
 medea,https://github.com/inwe-boku/medea,Medea,openmod,
-mescal,https://github.com/matthieu-str/mescal,mescal,opensustain-tech,
 mesmo,https://github.com/mesmo-dev/mesmo,MESMO,"opensustain-tech,pre-compiled",
 message_ix,https://github.com/iiasa/message_ix,message_ix,pre-compiled,
 messpy,https://github.com/pielube/messpy,MESSpy,pre-compiled,
@@ -200,15 +200,14 @@ rumi,https://github.com/prayas-energy/rumi,Rumi,opensustain-tech,
 rustpower,https://github.com/chengts95/rustpower,rustpower,pre-compiled,
 sam,https://github.com/natlabrockies/sam,"System Advisor Model,System Advisor Model (SAM)","lf-energy-landscape,openmod,opensustain-tech,pre-compiled","capacity-expansion,production-cost"
 sddpdso_jl,https://github.com/psrenergy/sddpdso.jl,SDDPDSO.jl,pre-compiled,
-secmod,https://git-ce.rwth-aachen.de/ltt/secmod,secmod,pre-compiled,
-secmod_milp,https://git-ce.rwth-aachen.de/ltt/secmod-milp,secmod-milp,pre-compiled,
+secmod,https://git-ce.rwth-aachen.de/ltt/secmod,secmod,pre-compiled,capacity-expansion
+secmod_milp,https://git-ce.rwth-aachen.de/ltt/secmod-milp,secmod-milp,pre-compiled,capacity-expansion
 sienna,https://github.com/nrel-sienna,Sienna,openmod,
 silver,https://gitlab.com/sesit/silver,SILVER,"g-pst,pre-compiled",production-cost
 simona,https://github.com/ie3-institute/simona,SIMONA,opensustain-tech,
 simplus_grid_tool,https://github.com/future-power-networks/simplus-grid-tool,Simplus-Grid-Tool,pre-compiled,
 simses,https://gitlab.lrz.de/open-ees-ses/simses,SimSES,openmod,
 smartgridtoolbox,https://gitlab.com/smartgridtoolbox/smartgridtoolbox,SmartGridToolbox,opensustain-tech,
-sms++,https://gitlab.com/smspp/smspp-project,SMS++,openmod,
 softx_2020_61,https://github.com/elseviersoftwarex/softx_2020_61,SOFTX_2020_61,pre-compiled,
 spineopt_jl,https://github.com/spine-tools/spineopt.jl,SpineOpt.jl,"lf-energy-landscape,openmod,opensustain-tech,pre-compiled","capacity-expansion,production-cost"
 ssmd,https://git.rwth-aachen.de/acs/public/simulation/ssmd,ssmd,pre-compiled,

@@ -1,6 +1,7 @@
 id,category,comment
-antares_simulator,"production-cost,power-flow","resource-adequacy"
+antares_simulator,"production-cost,resource-adequacy"
 andes,"power-flow",
+assetra,"resource-adequacy"
 cairnopen,"capacity-expansion,production-cost",
 dispa_set,"production-cost",
 dynawo,"power-flow",
@@ -32,6 +33,8 @@ reeds_2_0,"capacity-expansion","possibly also production-cost"
 reopt_jl,"capacity-expansion","possibly also production-cost"
 roseau_load_flow,"power-flow",
 sam,"capacity-expansion,production-cost","fixed technology options; focussed on specific assets."
+secmod,"capacity-expansion",
+secmod_milp,"capacity-expansion",
 spineopt_jl,"capacity-expansion,production-cost",
 temoa,"capacity-expansion","possibly also production-cost"
 tulipaenergymodel_jl,"capacity-expansion","possibly also production-cost"

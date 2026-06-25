@@ -122,8 +122,14 @@ def _verify_rtd(slug: str, url: str) -> bool:
         kwargs = {"headers": {"Authorization": f"Token {token}"}}
     else:
         kwargs = {}
+    try:
+        url_status = requests.get(RTD_URL.format(slug=slug)).status_code
+    except requests.exceptions.SSLError:
+        LOGGER.warning(
+            f"SSL error when checking {slug}.readthedocs.io. Skipping RTD check for this slug."
+        )
+        return False
 
-    url_status = requests.get(RTD_URL.format(slug=slug)).status_code
     if url_status == 404:
         return False
     elif url_status == 429:

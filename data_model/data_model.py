@@ -1,11 +1,18 @@
+# SPDX-FileCopyrightText: openmod-tracker contributors
+#
+# SPDX-License-Identifier: MIT
+
+"""Data model for energy system modeling tools."""
+
 from datetime import datetime
 from typing import Annotated
+
 from pydantic import BaseModel, Field, HttpUrl
 
 
 class Tool(BaseModel):
-    """
-    Master data model for energy system modeling tools.
+    """Master data model for energy system modeling tools.
+
     Source of truth for generating all CSV output files.
     """
 
@@ -22,9 +29,9 @@ class Tool(BaseModel):
     ] = None
 
     # ==================== Repository Metadata ====================
-    owner: Annotated[
-        str | None, Field(description="Repository owner/organization")
-    ] = None
+    owner: Annotated[str | None, Field(description="Repository owner/organization")] = (
+        None
+    )
     archived: Annotated[
         bool | None, Field(description="Whether repository is archived")
     ] = None
@@ -43,12 +50,8 @@ class Tool(BaseModel):
     created_at: Annotated[
         datetime | None, Field(description="Repository creation date")
     ] = None
-    pushed_at: Annotated[
-        datetime | None, Field(description="Last push date")
-    ] = None
-    updated_at: Annotated[
-        datetime | None, Field(description="Last update date")
-    ] = None
+    pushed_at: Annotated[datetime | None, Field(description="Last push date")] = None
+    updated_at: Annotated[datetime | None, Field(description="Last update date")] = None
     commit_stats_dds: Annotated[
         float | None, Field(description="Commit diversity score")
     ] = None
@@ -112,9 +115,9 @@ class Tool(BaseModel):
     score_pinned_dependencies: Annotated[
         int | None, Field(ge=0, le=10, description="Pinned dependencies score")
     ] = None
-    score_sast: Annotated[
-        int | None, Field(ge=0, le=10, description="SAST score")
-    ] = None
+    score_sast: Annotated[int | None, Field(ge=0, le=10, description="SAST score")] = (
+        None
+    )
     score_security_policy: Annotated[
         int | None, Field(ge=0, le=10, description="Security policy score")
     ] = None
@@ -186,18 +189,16 @@ class Tool(BaseModel):
 
     # ==================== Documentation ====================
     rtd: Annotated[str | None, Field(description="Read the Docs URL")] = None
-    pages: Annotated[
-        str | None, Field(description="GitHub/GitLab Pages URL")
-    ] = None
+    pages: Annotated[str | None, Field(description="GitHub/GitLab Pages URL")] = None
     wiki: Annotated[str | None, Field(description="Wiki URL")] = None
 
     # ==================== Package Distribution ====================
-    pypi_package_url: Annotated[
-        str | None, Field(description="PyPI package URL")
-    ] = None
-    pypi_package_name: Annotated[
-        str | None, Field(description="PyPI package name")
-    ] = None
+    pypi_package_url: Annotated[str | None, Field(description="PyPI package URL")] = (
+        None
+    )
+    pypi_package_name: Annotated[str | None, Field(description="PyPI package name")] = (
+        None
+    )
     anaconda_package_url: Annotated[
         str | None, Field(description="Anaconda package URL")
     ] = None
@@ -216,7 +217,7 @@ class Tool(BaseModel):
 
     # ==================== Export Methods ====================
     def to_tools_csv_row(self) -> dict:
-        """Export format for tools.csv"""
+        """Export format for tools.csv."""
         return {
             "id": self.id,
             "name": self.name,
@@ -227,7 +228,7 @@ class Tool(BaseModel):
         }
 
     def to_filtered_csv_row(self) -> dict:
-        """Export format for filtered.csv"""
+        """Export format for filtered.csv."""
         return {
             "id": self.id,
             "url": str(self.url),
@@ -237,7 +238,7 @@ class Tool(BaseModel):
         }
 
     def to_stats_csv_row(self) -> dict:
-        """Export format for stats.csv"""
+        """Export format for stats.csv."""
         return {
             "id": self.id,
             "html_url": str(self.url),
@@ -260,7 +261,7 @@ class Tool(BaseModel):
         }
 
     def to_scores_csv_row(self) -> dict:
-        """Export format for scores.csv"""
+        """Export format for scores.csv."""
         return {
             "id": self.id,
             "html_url": str(self.url),
@@ -286,7 +287,7 @@ class Tool(BaseModel):
         }
 
     def to_reasons_csv_row(self) -> dict:
-        """Export format for reasons.csv"""
+        """Export format for reasons.csv."""
         return {
             "id": self.id,
             "html_url": str(self.url),
@@ -311,11 +312,11 @@ class Tool(BaseModel):
         }
 
     def to_docs_csv_row(self) -> dict:
-        """Export format for docs.csv"""
+        """Export format for docs.csv."""
         return {"id": self.id, "rtd": self.rtd, "pages": self.pages, "wiki": self.wiki}
 
     def to_package_downloads_csv_row(self) -> dict:
-        """Export format for package_downloads.csv"""
+        """Export format for package_downloads.csv."""
         row = {
             "id": self.id,
             "html_url": str(self.url),
@@ -333,20 +334,3 @@ class Tool(BaseModel):
                 row[month] = count
 
         return row
-
-    class Config:
-        json_schema_extra = {
-            "example": {
-                "id": "pypsa",
-                "name": "PyPSA",
-                "description": "Python for Power System Analysis",
-                "url": "https://github.com/PyPSA/PyPSA",
-                "source": "openmod",
-                "category": "capacity-expansion,production-cost",
-                "owner": "PyPSA",
-                "archived": False,
-                "stargazers_count": 2029,
-                "aggregated_score": 6.4,
-                "monthly_downloads": {"2026-05": 49167.0},
-            }
-        }

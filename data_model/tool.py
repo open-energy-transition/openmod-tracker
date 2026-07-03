@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: MIT
 
-"""Data model for energy system modeling tools."""
+"""Data model for energy system modeling tool."""
 
 from datetime import datetime
 from typing import Annotated
@@ -11,7 +11,7 @@ from pydantic import BaseModel, Field, HttpUrl
 
 
 class Tool(BaseModel):
-    """Master data model for energy system modeling tools.
+    """Master data model for energy system modeling tool.
 
     Source of truth for generating all CSV output files.
     """

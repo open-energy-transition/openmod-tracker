@@ -95,8 +95,8 @@ jobs:
           BRANCH_NAME="inventory-update-${{ github.sha }}"
           git checkout -b $BRANCH_NAME
 
-          # Add and commit changes
-          git add .
+          # Add and commit changes, excluding workflow files (GITHUB_TOKEN lacks `workflows` permission)
+          git add -- . ':!.github/'
           git commit -m "chore: monthly inventory update
 
           - **Added tools**: ${{ steps.compare-ids.outputs.added_ids }}

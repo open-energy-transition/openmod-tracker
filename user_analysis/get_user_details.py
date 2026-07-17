@@ -75,6 +75,9 @@ def cli(repo_interactions: Path, outdir: Path, refresh_cache: bool):
     # Filter out any users for which we're removed the repo they are interacting with + any orgs that now disappear.
     # This ensures we don't have user/org details for users who no longer interact with any repos in our dataset.
     existing_users_start = existing_users[existing_users.index.isin(users_df.username)]
+    existing_users_start = existing_users_start[
+        existing_users_start.repos.notna() & (existing_users_start.repos != "")
+    ]
     existing_users_start.to_csv(user_details_path)
     avail_orgs = set(",".join(existing_users_start.orgs.dropna()).split(","))
     existing_orgs_start = existing_orgs[existing_orgs.index.isin(avail_orgs)]
@@ -111,6 +114,9 @@ def cli(repo_interactions: Path, outdir: Path, refresh_cache: bool):
             for col in USER_COLS:
                 if col not in user_df:
                     user_df[col] = None
+            # Drop users with no associated repos, since these can't be filtered by repo/tool downstream.
+            user_df = user_df[user_df.repos.notna() & (user_df.repos != "")]
+        if not user_df.empty:
             user_df[USER_COLS].to_csv(user_details_path, mode="a", header=False)
         if not org_df.empty:
             org_df[ORG_COLS].to_csv(org_details_path, mode="a", header=False)

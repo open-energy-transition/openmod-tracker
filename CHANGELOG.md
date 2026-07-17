@@ -29,6 +29,7 @@ and this project adheres to [Calendar Versioning](https://calver.org/).
 
 ### Fixed
 
+- Failing dashboard user interaction page due to NaNs in user details (#252).
 - Rely on existing tool CSV as a fallback of all tools, in case one of the upstream inventories becomes unavailable.
 - Extend use of existing tools stats as fallback on all non-404 response codes when querying ecosyste-ms API (previously only 500 status code).
 - Circumvent new readthedocs SSL error on certain domain name getters.

@@ -74,7 +74,6 @@ flexplan_jl,https://github.com/electa-git/flexplan.jl,FlexPlan.jl,"opensustain-t
 flixopt,https://github.com/flixopt/flixopt,flixOpt,"opensustain-tech,pre-compiled",capacity-expansion
 fluxopt,https://github.com/fluxopt/fluxopt,fluxopt,opensustain-tech,
 friendlysam,https://github.com/sp-etx/friendlysam,friendlysam,pre-compiled,
-gboml,https://gitlab.uliege.be/smart_grids/public/gboml,gboml,pre-compiled,
 gear_scoup,https://github.com/natlabrockies/gear-scoup,Gear-SCouP,lf-energy-landscape,
 gelectrical,https://github.com/manuvarkey/gelectrical,GElectrical,opensustain-tech,
 genesys_mod,https://github.com/genesys-mod,GENeSYS-MOD,openmod,
@@ -85,7 +84,7 @@ grid2op,https://github.com/grid2op/grid2op,Grid2Op,"opensustain-tech,pre-compile
 gridfm,https://github.com/gridfm/gridfm-graphkit,GridFM,opensustain-tech,power-flow
 gridlab_d,https://github.com/arras-energy/gridlabd,GridLAB-D,"opensustain-tech,pre-compiled",
 gridpack,https://github.com/gridoptics/gridpack,GridPACK,opensustain-tech,power-flow
-gridpath,https://github.com/blue-marble/gridpath,GridPath,"lf-energy-landscape,opensustain-tech,pre-compiled","capacity-expansion,production-cost"
+gridpath,https://github.com/sylvan-energy/gridpath,GridPath,"lf-energy-landscape,opensustain-tech,pre-compiled","capacity-expansion,production-cost"
 grimsel_flex,https://github.com/arthurrinaldi/grimsel,GRIMSEL-FLEX,openmod,
 h2integrate,https://github.com/natlabrockies/h2integrate,H2Integrate,opensustain-tech,
 hamlet,https://github.com/tum-ens/hamlet,HAMLET,pre-compiled,

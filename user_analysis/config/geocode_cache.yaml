@@ -14,6 +14,7 @@
 ' World Wide Web': null
 $PYTHONPATH: null
 '''s-Gravenhage': Netherlands
+'''s-Hertogenbosch': Netherlands
 '''s-Hertogenbosch (Den Bosch), The Netherlands': Netherlands
 ( VVV)tsu: null
 (ex-telecel zimbabwe): null
@@ -429,6 +430,7 @@ Cambridge, MA: United States
 'Cambridge, MA ': United States
 Cambridge, Massachusetts: United States
 Cambridge, UK: United Kingdom
+Cameroon: Cameroon
 "Campinas - S\xE3o Paulo": Brazil
 Campinas, Brasil: Brazil
 Campinas, Brazil: Brazil
@@ -586,6 +588,7 @@ Dallas, TX, USA: United States
 Dar Es Salaam, Tanzania Republic of: Tanzania, United Republic of
 Dar es salaam, Tanzania: Tanzania, United Republic of
 Darmstadt, Germany: Germany
+Dayton: United States
 Dayton, OH: United States
 De Coninckplein 20, 2060 Antwerpen: Belgium
 Debre Berhan: Ethiopia
@@ -922,6 +925,7 @@ Haarlem, The Netherlands: Netherlands
 Hagen: Germany
 "Haidian, Beijing, China 40.00\xB0N 116.32\xB0E": China
 Halifax, NS: Canada
+Halifax, Nova Scotia: Canada
 Halmstad, Sweden: Sweden
 Hamar, NO: Norway
 Hamburg: Germany
@@ -993,6 +997,7 @@ HongKong, China: China
 Hongkong: China
 Hongkong, China: China
 Honolulu, HI: United States
+Honolulu, Hawaii, USA: United States
 Houghton, MI: United States
 Houghton,MI: United States
 Houston: United States
@@ -1071,6 +1076,7 @@ Ithaca, New York.: United States
 Izmir, Turkey: Turkey
 "I\xE7ara - Santa Catarina - Brasil": Brazil
 Jacksonville, Florida: United States
+Jaipur, India: India
 Jakarta: Indonesia
 Jakarta, Indonesia: Indonesia
 Jamaica: Jamaica
@@ -1203,6 +1209,7 @@ Leipzig (Germany): Germany
 Leipzig, Germany: Germany
 Lemont, IL: United States
 Lemont, IL, USA: United States
+Lemont, United States: United States
 Leoben, Austria: Austria
 Lethbridge, AB: Canada
 Leusden: Netherlands
@@ -1243,6 +1250,7 @@ London: United Kingdom
 London, England: United Kingdom
 London, England, United Kingdom: United Kingdom
 London, Ontario: Canada
+London, U.K.: United Kingdom
 London, UK: United Kingdom
 'London, UK ': United Kingdom
 London, United KIngdom: United Kingdom
@@ -1879,6 +1887,7 @@ San Jose: United States
 San Jose CA, Boston MA: null
 San Jose, CA: United States
 San Jose, CA, USA: United States
+San Jose, California: United States
 San Jose, Costa Rica: Costa Rica
 "San Jos\xE9": United States
 "San Jos\xE9, California": United States
@@ -1893,6 +1902,7 @@ Santa Barbara, CA: United States
 Santa Barbara, CA, USA.: United States
 Santa Barbara, California, USA: United States
 Santa Clara: United States
+Santa Clara, California: United States
 Santa Cruz, CA, USA: United States
 Santa Fe, Argentina: Argentina
 Santa Maria, Rio Grande do Sul, Brazil: Brazil
@@ -1911,6 +1921,7 @@ Schenectady, NY: United States
 Schleswig-Holstein: Germany
 Schweinfurt: Germany
 Schweinfurt, Germany: Germany
+"Schw\xE4bisch Gut": Germany
 Scotland: United Kingdom
 Scotland, UK: United Kingdom
 Seattle: United States
@@ -2323,6 +2334,7 @@ Washington, DC / Norfolk, VA / everywhere: null
 Washington, DC, USA: United States
 Washington, USA: United States
 Waterford, Ireland: Ireland
+Waterloo, ON, Canada: Canada
 Waterloo, Ontario, Canada: Canada
 Waterloo/Bangalore: null
 Wellington: New Zealand
@@ -2629,11 +2641,13 @@ beike: Spain
 bergische universitat wuppertal: Germany
 berliner hochschule fur technik: Germany
 berryit: null
+bet consulting gmbh: null
 betha sistemas ltda.: Brazil
 bfh: Switzerland
 bge: Germany
 bielefeld university: Germany
 big ladder software: null
+bikinibottom.capital: null
 binary consulting: null
 binghamton university: United States
 bioinformatics and system biology, university of giessen, germany: null
@@ -2676,6 +2690,7 @@ bravos-power: null
 brazilian national institute for space research (inpe): null
 breakpoint ai: null
 brendle group: United States
+brightcubes: null
 brightnight energy: null
 brisbane Australia: Australia
 brm: Myanmar
@@ -2739,6 +2754,7 @@ cefet-mg: Brazil
 cegid: France
 ceitec: Germany
 celebrate company gmbh: null
+cellbauhaus: null
 cemig: Brazil
 cemig distribuicao s.a.: null
 cemse - kaust | mines paristech | armines: null
@@ -2767,6 +2783,7 @@ chimera sys gmbh: Germany
 china: China
 china guiyang: China
 china southern power grid company limited: null
+china three geroges university: null
 china university of mining and technology: China
 china university of mining and technology,beijing: China
 china, beijing: China
@@ -2963,6 +2980,7 @@ dipartimento di informatica, universita di pisa: Italy
 disco: United States
 discord: United States
 dispatch analytics: null
+ditowatt energy: null
 divecha centre for climate change, indian institute of science: null
 diw berlin: Germany
 dkb service gmbh: Germany
@@ -3294,6 +3312,7 @@ genai research engineer: null
 genbrugge: null
 general electric: United States
 general services adminstration: United States
+generation of participation in democracy: null
 generative bionics gbionics: null
 genieframework: null
 genose.org: null
@@ -3394,6 +3413,7 @@ harvard university: United States
 haut conseil pour le climat: null
 havo: Finland
 haw hamburg: Germany
+hawaii state energy office: null
 heatbeat: null
 heatly: United States
 hecke-rs: null
@@ -3584,6 +3604,7 @@ intercom: Mexico
 international energy agency: Austria
 international energy research centre: null
 international institute for applied systems analysis: Austria
+international institute of information technology, pune: India
 inti-conicet: null
 inti-conicet-unr: null
 intuisoft ug (haftungsbeschrankt): null
@@ -3711,6 +3732,7 @@ landaumedia: null
 langchain-ai: null
 langdock: null
 laranea: Spain
+lasr labs arcadia impact: null
 lawrence berkeley national laboratory: United States
 lawrence livermore national laboratory: United States
 lcra: Cyprus
@@ -3864,6 +3886,7 @@ morgan stanley: United States
 morgansolar: null
 mosek: Kazakhstan
 mosek aps: null
+mott macdonald (australia) pty ltd: null
 moxa inc.: null
 mpei: Russia
 mpi-molgen, fu-berlin: null
@@ -3945,6 +3968,7 @@ need a job :(: null
 nef: Italy
 nellcorp: null
 neon genesis: United States
+net zero atlantic: null
 netapp: India
 netease games messiah engine: null
 netherlands: Netherlands
@@ -4361,6 +4385,7 @@ sauder school of business: null
 saxecap: null
 scaleway: France
 scallant tasmota: null
+scanifly: null
 schneider electric: Latvia
 scholar: Poland
 school of electrical & electronic engineering, university college dublin: null
@@ -4385,6 +4410,7 @@ seforall: null
 segal industries: null
 seitabv: null
 self: United States
+self employed: null
 self employee: null
 self-employment, inc.: null
 selfemployed, just ask.: null
@@ -4932,6 +4958,7 @@ university of michigan - ann arbor: United States
 university of minnesota, twin city: null
 university of missouri: United States
 university of missouri & linux foundation chaoss project: null
+university of montreal: Canada
 university of moratuwa: Sri Lanka
 university of new brunswick: Canada
 university of new south wales: Australia
@@ -4984,6 +5011,7 @@ university of virginia, charlottesville: United States
 university of warsaw: Poland
 university of warwick: United Kingdom
 university of washington: United States
+university of waterloo: Canada
 university of west bohemia: null
 university of western macedonia: Greece
 university of wisconsin-madison: United States
@@ -5051,6 +5079,7 @@ vito: Bosnia and Herzegovina
 vnodesign: null
 volkswagen-ag-sdc-hannover: null
 voltaware europe: null
+volter labs: France
 voltwise power: null
 volue: France
 volueinsight: null

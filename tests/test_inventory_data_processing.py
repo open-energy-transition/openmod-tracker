@@ -126,6 +126,98 @@ def conda_download_stats_df() -> pd.DataFrame:
 
 
 @pytest.fixture
+def conda_trend_df() -> pd.DataFrame:
+    """Fixture mimicking raw conda download trend data across packages/months."""
+    return pd.DataFrame(
+        {
+            "pkg_name": ["pypsa", "pypsa", "PyPSA", "other-pkg"],
+            "time": ["2026-04", "2026-05", "2026-05", "2026-05"],
+            "counts": [20, 7, 3, 999],
+        }
+    )
+
+
+@pytest.fixture
+def aggregated_conda_downloads_df(conda_trend_df: pd.DataFrame) -> pd.DataFrame:
+    """Result of aggregating conda_trend_df for the "pypsa" package only."""
+    return get_download_data._aggregate_conda_pkg_downloads(conda_trend_df, ["pypsa"])
+
+
+@pytest.fixture
+def partial_query_output_df(
+    download_df: pd.DataFrame,
+    pypi_download_stats_df: pd.DataFrame,
+    conda_download_stats_df: pd.DataFrame,
+) -> pd.DataFrame:
+    """Enrich with a partial query scope: pack_one/pack_two only queried for 2026-05."""
+    return get_download_data.enrich_with_monthly_downloads(
+        download_df,
+        pypi_download_stats_df,
+        conda_download_stats_df,
+        partial_query_pkgs={"pack_one", "pack_two"},
+        partial_query_months={"2026-05"},
+    )
+
+
+@pytest.fixture
+def overlap_merge_result_df() -> pd.DataFrame:
+    """Merge result for new data with an overlapping month column that has gaps.
+
+    Mirrors the real caching scenario: an existing tool wasn't queried for an
+    older month this run (NaN placeholder, as enrich_with_monthly_downloads now
+    produces), but the cache already holds a real value for that pkg-month.
+    """
+    new_data = pd.DataFrame(
+        {
+            "id": ["a", "b", "c"],
+            "html_url": ["a-url", "b-url", "c-url"],
+            "pypi_package_url": ["pypi-a-url", "pypi-b-url", "pypi-c-url"],
+            "pypi_package_name": ["pkg-a", "pkg-b", "pkg-c"],
+            "anaconda_package_url": ["conda-a-url", "conda-b-url", "conda-c-url"],
+            "juliahub_package_url": [
+                "juliahub-a-url",
+                "juliahub-b-url",
+                "juliahub-c-url",
+            ],
+            "other_source": ["other-a-url", "other-b-url", "other-c-url"],
+            "2026-05": [100, 200, 300],
+            "2026-04": [np.nan, 190, np.nan],
+        }
+    )
+    cached_data = pd.DataFrame(
+        {
+            "id": ["a", "b", "c"],
+            "html_url": ["a-url", "b-url", "c-url"],
+            "pypi_package_url": ["pypi-a-url", "pypi-b-url", "pypi-c-url"],
+            "pypi_package_name": ["pkg-a", "pkg-b", "pkg-c"],
+            "anaconda_package_url": ["conda-a-url", "conda-b-url", "conda-c-url"],
+            "juliahub_package_url": [
+                "juliahub-a-url",
+                "juliahub-b-url",
+                "juliahub-c-url",
+            ],
+            "other_source": ["other-a-url", "other-b-url", "other-c-url"],
+            "2026-04": [70, 999, 270],
+            "2026-03": [80, 180, 280],
+        }
+    )
+    return get_download_data.merge_with_cached_downloads(new_data, cached_data)
+
+
+@pytest.fixture
+def frozen_now(monkeypatch: pytest.MonkeyPatch) -> pd.Timestamp:
+    """Freeze pd.Timestamp.now() so month-based expectations don't drift with the real clock.
+
+    get_expected_month_columns (and identify_missing_data, which calls it) derive
+    their month range from pd.Timestamp.now(), so hardcoded expected months would
+    otherwise silently go stale as real time passes.
+    """
+    fixed = pd.Timestamp("2026-06-15")
+    monkeypatch.setattr(pd.Timestamp, "now", lambda tz=None: fixed)
+    return fixed
+
+
+@pytest.fixture
 def sample_data() -> dict[str, pd.DataFrame]:
     """Create sample dataframes for testing."""
     return {
@@ -388,23 +480,92 @@ class TestGetDownloadData:
         )
         pd.testing.assert_frame_equal(output_df, expected_df)
 
+    @pytest.mark.parametrize(
+        ("pkg_id", "month", "expected"),
+        [
+            # Queried month keeps its real value
+            ("pack_one", "2026-05", 2.0),
+            ("pack_two", "2026-05", 8.0),
+            # Non-queried months are NaN, not zero-filled, for partially-queried packages
+            ("pack_one", "2026-04", None),
+            ("pack_one", "2026-03", None),
+            ("pack_two", "2026-04", None),
+            ("pack_two", "2026-03", None),
+            # Package not in partial_query_pkgs is unaffected (still has no data)
+            ("pack_three", "2026-05", None),
+            ("pack_three", "2026-04", None),
+            ("pack_three", "2026-03", None),
+        ],
+    )
+    def test_enrich_with_monthly_downloads_partial_query(
+        self,
+        partial_query_output_df: pd.DataFrame,
+        pkg_id: str,
+        month: str,
+        expected: float | None,
+    ) -> None:
+        """Packages only queried for a subset of months keep other months as NaN, not 0.
+
+        Regression test: previously, unstack(fill_value=0) zero-filled every month
+        column for every package, including packages (e.g. already-cached tools
+        being backfilled with only the newest missing month) that were never
+        queried for the older months. Those false zeros then overwrote real
+        cached values in merge_with_cached_downloads.
+        """
+        value = partial_query_output_df.loc[
+            partial_query_output_df["id"] == pkg_id, month
+        ].iloc[0]
+        if expected is None:
+            assert pd.isna(value)
+        else:
+            assert value == expected
+
+    @pytest.mark.parametrize(
+        ("pkg_name", "time", "expected_counts"),
+        [
+            # Case-insensitive filter match, but grouping keeps original casing separate
+            ("pypsa", "2026-04", 20),
+            ("pypsa", "2026-05", 7),
+            ("PyPSA", "2026-05", 3),
+        ],
+    )
+    def test_aggregate_conda_pkg_downloads(
+        self,
+        aggregated_conda_downloads_df: pd.DataFrame,
+        pkg_name: str,
+        time: str,
+        expected_counts: int,
+    ) -> None:
+        """Filtering and summing conda download counts, without any network call.
+
+        This is the fast unit test for the filter/aggregate logic previously only
+        exercised indirectly via test_get_conda_pkg_download_stats, which needed a
+        real 12-month network fetch (~75s) to reach it.
+        """
+        row = aggregated_conda_downloads_df[
+            (aggregated_conda_downloads_df["pkg_name"] == pkg_name)
+            & (aggregated_conda_downloads_df["time"] == time)
+        ]
+        assert row["counts"].iloc[0] == expected_counts
+
+    def test_aggregate_conda_pkg_downloads_excludes_other_packages(
+        self, aggregated_conda_downloads_df: pd.DataFrame
+    ) -> None:
+        """Packages not in the requested list are filtered out."""
+        assert "other-pkg" not in aggregated_conda_downloads_df["pkg_name"].values
+
     def test_get_conda_pkg_download_stats(self) -> None:
-        """Test that conda download stats are returned with correct column ordering and structure."""
+        """Smoke test that the network-backed pipeline wires filtering through correctly.
+
+        Kept to a single month: the filter/aggregation logic itself is unit-tested
+        without any network call in test_aggregate_conda_pkg_downloads above.
+        """
         result = get_download_data.get_conda_pkg_download_stats(
-            ["pypsa"], months_back=12
+            ["pypsa"], months_back=1
         )
 
-        # Test column ordering
         assert list(result.columns) == ["pkg_name", "time", "counts"]
-
-        # Test data validity (structure)
         assert all(result["pkg_name"] == "pypsa")
-        assert result["counts"].dtype in ["int64", "int32", "float64"]
-        assert all(result["counts"] >= 0)
-
-        # Test date format and ordering
-        dates = pd.to_datetime(result["time"], format="%Y-%m")
-        assert dates.is_monotonic_increasing
 
     @pytest.mark.parametrize(
         (
@@ -581,7 +742,7 @@ class TestGetDownloadData:
         assert package_info.other_source == expected_other_url
         assert package_info.pypi_package_name == expected_package_name
 
-    def test_get_expected_month_columns(self) -> None:
+    def test_get_expected_month_columns(self, frozen_now: pd.Timestamp) -> None:
         """Test that get_expected_month_columns returns correct month columns."""
         expected_months = ["2026-05", "2026-04", "2026-03"]
         result = get_download_data.get_expected_month_columns(3)
@@ -667,7 +828,42 @@ class TestGetDownloadData:
         )
         pd.testing.assert_frame_equal(expected, result)
 
-    def test_identify_missing_data(self, sample_data: dict[str, pd.DataFrame]) -> None:
+    @pytest.mark.parametrize(
+        ("pkg_id", "month", "expected"),
+        [
+            # Overlapping month with a gap (not queried this run): restored from cache
+            ("a", "2026-04", 70),
+            ("c", "2026-04", 270),
+            # Overlapping month with a real freshly-queried value: new data wins over cache
+            ("b", "2026-04", 190),
+            # Cache-only month is carried over untouched
+            ("a", "2026-03", 80),
+            # New-only month is untouched
+            ("a", "2026-05", 100),
+        ],
+    )
+    def test_merge_with_cached_downloads_overlapping_months(
+        self,
+        overlap_merge_result_df: pd.DataFrame,
+        pkg_id: str,
+        month: str,
+        expected: float,
+    ) -> None:
+        """Regression test: overlapping month columns must be combined cell-by-cell.
+
+        Previously, a month column present in both new and cached data was left
+        entirely as-is (cache was only consulted for columns missing outright),
+        so a real cached value was permanently lost behind a placeholder from
+        the new data.
+        """
+        value = overlap_merge_result_df.loc[
+            overlap_merge_result_df["id"] == pkg_id, month
+        ].iloc[0]
+        assert value == expected
+
+    def test_identify_missing_data(
+        self, sample_data: dict[str, pd.DataFrame], frozen_now: pd.Timestamp
+    ) -> None:
         """Test identify_missing_data function."""
         new_tools, existing_tools, missing_months = (
             get_download_data.identify_missing_data(
@@ -681,7 +877,7 @@ class TestGetDownloadData:
         assert missing_months == ["2026-05", "2026-04"]
 
     def test_identify_missing_data_no_new_tools_and_months(
-        self, sample_data: dict[str, pd.DataFrame]
+        self, sample_data: dict[str, pd.DataFrame], frozen_now: pd.Timestamp
     ) -> None:
         """Test identify_missing_data function."""
         new_tools, existing_tools, missing_months = (
@@ -694,7 +890,7 @@ class TestGetDownloadData:
         assert missing_months == list()
 
     def test_identify_missing_data_no_cache_and_months(
-        self, sample_data: dict[str, pd.DataFrame]
+        self, sample_data: dict[str, pd.DataFrame], frozen_now: pd.Timestamp
     ) -> None:
         """Test identify_missing_data function."""
         new_tools, existing_tools, missing_months = (

@@ -62,11 +62,9 @@ def _get_conda_download_df(months_ago: int = 1, retry: bool = False) -> pd.DataF
     if months_ago < 1:
         raise ValueError("months_ago must be 1 or greater")
     now = datetime.now()
-    month = now.month - months_ago
-    year = now.year
-    if month < 1:
-        year -= 1
-        month = 12 - (months_ago - 1)
+    previous = pd.Timestamp(now) - pd.Timedelta(weeks=months_ago * 4.34524)
+    month = previous.month
+    year = previous.year
 
     # The previous month's Anaconda data doesn't get compiled and uploaded to S3 until sometime into the following month.
     # If the file isn't found, we take the month before that

@@ -560,6 +560,30 @@ def query_file_downloads(
     return df
 
 
+def _aggregate_conda_pkg_downloads(
+    previous_months_df: pd.DataFrame, list_of_packages: list[str]
+) -> pd.DataFrame:
+    """Filter conda download trend data to a list of packages and sum counts per month.
+
+    Args:
+        previous_months_df (pd.DataFrame): Conda download trend data with pkg_name, time, and counts columns.
+        list_of_packages (list[str]): List of package names to filter by (case-insensitive).
+
+    Returns:
+        pd.DataFrame: DataFrame with pkg_name, time, and counts columns, summed per package/month.
+    """
+    filtered = previous_months_df[
+        previous_months_df["pkg_name"]
+        .str.casefold()
+        .isin([pkg.casefold() for pkg in list_of_packages])
+    ]
+    return (
+        filtered.groupby(["pkg_name", "time"], observed=True)["counts"]
+        .sum()
+        .reset_index()
+    )
+
+
 def get_conda_pkg_download_stats(
     list_of_packages: list[str], months_back: int
 ) -> pd.DataFrame:
@@ -582,17 +606,7 @@ def get_conda_pkg_download_stats(
         raise ValueError("months_back must be a positive integer")
 
     previous_months_df = get_conda_download_trends(previous_months=months_back)
-    filtered = previous_months_df[
-        previous_months_df["pkg_name"]
-        .str.casefold()
-        .isin([pkg.casefold() for pkg in list_of_packages])
-    ]
-    grouped = (
-        filtered.groupby(["pkg_name", "time"], observed=True)["counts"]
-        .sum()
-        .reset_index()
-    )
-    return grouped
+    return _aggregate_conda_pkg_downloads(previous_months_df, list_of_packages)
 
 
 def identify_missing_data(
@@ -640,6 +654,11 @@ def merge_with_cached_downloads(
 ) -> pd.DataFrame:
     """Merge newly queried download data with cached data.
 
+    Month columns that exist in both DataFrames are combined cell-by-cell,
+    preferring the new value but falling back to the cached value wherever the
+    new value is missing (e.g. a month that wasn't actually queried this run
+    for a given package, see `enrich_with_monthly_downloads`).
+
     Args:
         new_data_df (pd.DataFrame): Newly enriched data with package info and new month columns.
         cached_df (pd.DataFrame | None): Previously cached complete data, or None if no cache exists.
@@ -654,16 +673,24 @@ def merge_with_cached_downloads(
     new_months = set(new_data_df.columns) - set(PACKAGE_INFO_COLUMNS)
     cached_months = set(cached_df.columns) - set(PACKAGE_INFO_COLUMNS)
 
-    # Columns from cache that aren't in new data
+    # Columns from cache that aren't in new data at all
     cache_only_months = cached_months - new_months
+    # Columns present in both: new data may have gaps (NaN) that need filling from cache
+    overlapping_months = cached_months & new_months
 
-    if not cache_only_months:
+    if not cache_only_months and not overlapping_months:
         return new_data_df
 
-    # Single merge instead of loop
     result = new_data_df.merge(
-        cached_df[["id"] + list(cache_only_months)], on="id", how="left"
+        cached_df[["id", *cache_only_months]], on="id", how="left"
     )
+
+    if overlapping_months:
+        cached_by_id = cached_df.set_index("id")
+        for month in overlapping_months:
+            result[month] = result[month].combine_first(
+                result["id"].map(cached_by_id[month])
+            )
 
     # Sort month columns descending
     month_cols = sorted(set(result.columns) - set(PACKAGE_INFO_COLUMNS), reverse=True)
@@ -674,6 +701,8 @@ def enrich_with_monthly_downloads(
     package_df: pd.DataFrame,
     pypi_download_stats_df: pd.DataFrame,
     conda_download_stats_df: pd.DataFrame,
+    partial_query_pkgs: set[str] | None = None,
+    partial_query_months: set[str] | None = None,
 ) -> pd.DataFrame:
     """Add monthly download columns (wide format) to each tool row.
 
@@ -681,6 +710,14 @@ def enrich_with_monthly_downloads(
         package_df (pd.DataFrame): DataFrame containing the base package information.
         pypi_download_stats_df (pd.DataFrame): DataFrame containing the monthly download statistics for pypi.
         conda_download_stats_df (pd.DataFrame): DataFrame containing the monthly download statistics for anaconda.
+        partial_query_pkgs (set[str] | None): Casefolded pypi_package_name values for packages that were
+            only queried for `partial_query_months` this run (e.g. existing/cached tools being backfilled
+            with missing months), as opposed to the full month range. Month columns outside
+            `partial_query_months` are left as NaN for these packages instead of being zero-filled, so that
+            `merge_with_cached_downloads` can restore their real cached values instead of overwriting them
+            with false zeros.
+        partial_query_months (set[str] | None): Month columns (YYYY-MM) that were actually queried for
+            `partial_query_pkgs`.
 
     Returns:
         pd.DataFrame: DataFrame containing the monthly download statistics.
@@ -738,6 +775,15 @@ def enrich_with_monthly_downloads(
     )
     month_cols = sorted([c for c in monthly.columns if c != "_join_pkg"], reverse=True)
     monthly = monthly[["_join_pkg", *month_cols]]
+
+    # Undo the zero-fill for packages that were only queried for a subset of
+    # month_cols this run: those months weren't actually queried, so the zeros
+    # unstack() inserted would otherwise overwrite real cached values downstream.
+    if partial_query_pkgs and partial_query_months:
+        stale_cols = [c for c in month_cols if c not in partial_query_months]
+        if stale_cols:
+            mask = monthly["_join_pkg"].isin(partial_query_pkgs)
+            monthly.loc[mask, stale_cols] = float("nan")
 
     # Merge back to base
     return base.merge(monthly, how="left", on="_join_pkg").drop(columns=["_join_pkg"])
@@ -890,7 +936,11 @@ def cli(
     # Enrich with the queried data
     if not pypi_download_stats_df.empty or not anaconda_download_stats_df.empty:
         new_data_df = enrich_with_monthly_downloads(
-            package_info_df, pypi_download_stats_df, anaconda_download_stats_df
+            package_info_df,
+            pypi_download_stats_df,
+            anaconda_download_stats_df,
+            partial_query_pkgs=set(existing_tools),
+            partial_query_months=set(missing_months),
         )
         # Merge with cached data
         final_df = merge_with_cached_downloads(new_data_df, cached_df)

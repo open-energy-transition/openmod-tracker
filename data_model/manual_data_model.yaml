@@ -1,0 +1,27 @@
+# SPDX-FileCopyrightText: openmod-tracker contributors
+#
+# SPDX-License-Identifier: MIT
+
+# list entries need to be additive, which is not standard practice in yaml / dict merging
+# this can be achieved with the python-benedict package, using the `merge` kwarg `concat=True`.
+# Need to merge per list item based on ID match / per file
+
+
+- id: <amiris-persistent-hash>
+  package:
+    pypi: [amirispy]
+
+- id: <roseau-persistent-hash>
+  package:
+    pypi: [~roseau-load-flow-engine] # force exclusion of entry from ecosystems api
+
+- id: <rheia-persistent-hash> # not strictly necessary as the one we exclude is actually giving zero data
+  package:
+    pypi: [~rheia] # force exclusion of entry from ecosystems api, it will use rheia-meca2675
+
+# Q: do we move `pre-compiled-esm-list` entries into their own manual data model entry?
+- id: <who-adds-this-manual-entry-hash?>
+  url:
+  - github.com/ijbd/assetra
+  source:
+  - pre-defined

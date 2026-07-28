@@ -1,0 +1,65 @@
+# SPDX-FileCopyrightText: openmod-tracker contributors
+#
+# SPDX-License-Identifier: MIT
+
+# This could be one file per entry
+- id: <persistent-hash> # this should be something readable, e.g. a clean version of the first name the tool has
+  name: # use the final name in the list
+  - GridCal
+  - VeraGrid
+  owner:
+  - sanpen
+  description: [...]
+  url: # use the earlier URLs as fallback in ecosystems if the final one in the list doesn't work
+  - https://github.com/sanpen/gridcal
+  - https://github.com/sanpen/veragrid
+  ecosystems_api:
+    repo: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/SanPen%2FVeraGrid
+    package:
+    issues:
+  package: # these are additive, if the package still exists
+    pypi: [gridcal, veragrid]
+    conda: [...]
+    julia: [...]
+    other: [...]
+  category:
+  - power-flow
+  source:
+  - openmod
+  - pre-compiled
+  archived: false # should this be per git URL?
+  docs: # we use the last in the list
+    homepage: [eroots.tech/veragrid-gslv]
+    wiki: []
+    rtd: [http://VeraGrid.readthedocs.io]
+    pages: []
+  exclude: false # all these will be false in this file, so could be ignored in this file since their default would be false
+
+
+
+- id: ...
+  name:
+  - enflow
+  - emflow
+  description: [...]
+  url:
+  - https://github.com/rebase-energy/enflow
+  - https://github.com/rebase-energy/emflow
+  ecosystems_api:
+    repo: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/rebase-energy%2Femflow
+  package:
+    pypi: [enflow, emflow]
+
+- id: ...
+  name:
+  - emerge
+  org:
+  - NREL
+  - natlabrockies
+  url:
+  - https://github.com/NREL/emerge
+  - https://github.com/natlabrockies/emerge
+  ecosystems_api:
+    repo: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/natlabrockies%2FEMeRGE
+  package:
+    pypi: [nrel-emerge]

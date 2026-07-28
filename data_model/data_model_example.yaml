@@ -26,7 +26,7 @@
   - power-flow
   source:
   - openmod
-  - pre-defined
+  - pre-compiled
   archived: false # should this be per git URL?
   docs: # we use the last in the list
     homepage: [eroots.tech/veragrid-gslv]

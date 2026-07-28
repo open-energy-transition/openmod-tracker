@@ -6,12 +6,13 @@
 """Get ecosyste.ms stats for defined projects."""
 
 import logging
-from datetime import datetime
+from datetime import date
 from pathlib import Path
 
 import click
 import pandas as pd
 import util
+from dateutil.relativedelta import relativedelta
 from tqdm import tqdm
 
 LOGGER = logging.getLogger(__name__)
@@ -61,8 +62,8 @@ def _get_conda_download_df(months_ago: int = 1, retry: bool = False) -> pd.DataF
     """
     if months_ago < 1:
         raise ValueError("months_ago must be 1 or greater")
-    now = datetime.now()
-    previous = pd.Timestamp(now) - pd.Timedelta(weeks=months_ago * 4.34524)
+    today = date.today()
+    previous = today - relativedelta(months=+months_ago)
     month = previous.month
     year = previous.year
 

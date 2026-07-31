@@ -211,7 +211,8 @@ class TestUserAnalysisPageSessionState:
 
         tool_multiselect = at.sidebar.multiselect[0]
         # Select just one tool
-        tool_multiselect.set_value([tool_multiselect.options[0]]).run()
+        at = tool_multiselect.set_value([tool_multiselect.options[0]]).run()
+        assert not at.exception
 
 
 class TestDevMetricsPageSessionState:

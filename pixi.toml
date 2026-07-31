@@ -85,6 +85,7 @@ geopy = ">=2.4.1"
 pycountry = ">=24.6.1"
 country_converter = ">=1.3.2,<2"
 google-cloud-bigquery = ">=3.41.0,<4"
+python-dateutil = ">=2.9.0.post0"
 
 
 [feature.test.target.linux-aarch64.dependencies]

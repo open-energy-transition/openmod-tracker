@@ -66,21 +66,27 @@ def download_df() -> pd.DataFrame:
 
 
 @pytest.fixture
-def pypi_download_stats_df() -> pd.DataFrame:
+def this_month() -> int:
+    """Return the current month as an integer (1-12)."""
+    return pd.Timestamp.now().to_period("M").month
+
+
+@pytest.fixture
+def pypi_download_stats_df(this_month) -> pd.DataFrame:
     """Fixture to generate a DataFrame with PyPI package download stats."""
     return pd.DataFrame(
         {
             "num_downloads": ["1", "2", "3", "4", "5", "6", "7", "8", "9"],
             "month": [
-                "2026-05-01",
-                "2026-04-01",
-                "2026-03-01",
-                "2026-05-01",
-                "2026-04-01",
-                "2026-03-01",
-                "2026-05-01",
-                "2026-04-01",
-                "2026-03-01",
+                f"2026-{this_month - 1:02d}-01",
+                f"2026-{this_month - 2:02d}-01",
+                f"2026-{this_month - 3:02d}-01",
+                f"2026-{this_month - 1:02d}-01",
+                f"2026-{this_month - 2:02d}-01",
+                f"2026-{this_month - 3:02d}-01",
+                f"2026-{this_month - 1:02d}-01",
+                f"2026-{this_month - 2:02d}-01",
+                f"2026-{this_month - 3:02d}-01",
             ],
             "project": [
                 "pack_one",
@@ -98,19 +104,19 @@ def pypi_download_stats_df() -> pd.DataFrame:
 
 
 @pytest.fixture
-def conda_download_stats_df() -> pd.DataFrame:
+def conda_download_stats_df(this_month) -> pd.DataFrame:
     """Fixture to generate a DataFrame with Anaconda package download stats."""
     return pd.DataFrame(
         {
             "counts": ["1", "2", "3", "4", "6", "7", "8"],
             "time": [
-                "2026-05-01",
-                "2026-04-01",
-                "2026-03-01",
-                "2026-05-01",
-                "2026-03-01",
-                "2026-05-01",
-                "2026-04-01",
+                f"2026-{this_month - 1:02d}-01",
+                f"2026-{this_month - 2:02d}-01",
+                f"2026-{this_month - 3:02d}-01",
+                f"2026-{this_month - 1:02d}-01",
+                f"2026-{this_month - 3:02d}-01",
+                f"2026-{this_month - 1:02d}-01",
+                f"2026-{this_month - 2:02d}-01",
             ],
             "pkg_name": [
                 "pack_one",
@@ -126,7 +132,7 @@ def conda_download_stats_df() -> pd.DataFrame:
 
 
 @pytest.fixture
-def sample_data() -> dict[str, pd.DataFrame]:
+def sample_data(this_month) -> dict[str, pd.DataFrame]:
     """Create sample dataframes for testing."""
     return {
         "just_package_data_new_tool": pd.DataFrame(
@@ -188,8 +194,8 @@ def sample_data() -> dict[str, pd.DataFrame]:
                     "juliahub-c-url",
                 ],
                 "other_source": ["other-a-url", "other-b-url", "other-c-url"],
-                "2026-05": [100, 200, 300],
-                "2026-04": [90, 190, 290],
+                f"2026-{this_month - 1:02d}": [100, 200, 300],
+                f"2026-{this_month - 2:02d}": [90, 190, 290],
             }
         ),
         "cached_data": pd.DataFrame(
@@ -205,8 +211,8 @@ def sample_data() -> dict[str, pd.DataFrame]:
                     "juliahub-c-url",
                 ],
                 "other_source": ["other-a-url", "other-b-url", "other-c-url"],
-                "2026-03": [80, 180, 280],
-                "2026-02": [70, 170, 270],
+                f"2026-{this_month - 3:02d}": [80, 180, 280],
+                f"2026-{this_month - 4:02d}": [70, 170, 270],
             }
         ),
     }
@@ -361,6 +367,7 @@ class TestGetDownloadData:
         download_df: pd.DataFrame,
         pypi_download_stats_df: pd.DataFrame,
         conda_download_stats_df: pd.DataFrame,
+        this_month: int,
     ) -> None:
         """Test enrich_with_monthly_downloads function."""
         output_df = get_download_data.enrich_with_monthly_downloads(
@@ -381,9 +388,9 @@ class TestGetDownloadData:
                 ],
                 "pypi_package_name": ["pack_ONE", "pack_two", "PACK_three"],
                 "other_source": ["source_one", "source_two", "source_three"],
-                "2026-05": [2.0, 8.0, None],
-                "2026-04": [4.0, 5.0, None],
-                "2026-03": [6.0, 12.0, None],
+                f"2026-{this_month - 1:02d}": [2.0, 8.0, None],
+                f"2026-{this_month - 2:02d}": [4.0, 5.0, None],
+                f"2026-{this_month - 3:02d}": [6.0, 12.0, None],
             }
         )
         pd.testing.assert_frame_equal(output_df, expected_df)
@@ -581,14 +588,14 @@ class TestGetDownloadData:
         assert package_info.other_source == expected_other_url
         assert package_info.pypi_package_name == expected_package_name
 
-    def test_get_expected_month_columns(self) -> None:
+    def test_get_expected_month_columns(self, this_month: int) -> None:
         """Test that get_expected_month_columns returns correct month columns."""
-        expected_months = ["2026-05", "2026-04", "2026-03"]
-        result = get_download_data.get_expected_month_columns(3)
+        expected_months = [f"2026-{this_month - 1:02d}", f"2026-{this_month - 2:02d}"]
+        result = get_download_data.get_expected_month_columns(2)
         assert result == expected_months
 
     def test_merge_with_cached_downloads(
-        self, sample_data: dict[str, pd.DataFrame]
+        self, sample_data: dict[str, pd.DataFrame], this_month: int
     ) -> None:
         """Test merge_with_cached_downloads function."""
         result = get_download_data.merge_with_cached_downloads(
@@ -607,16 +614,16 @@ class TestGetDownloadData:
                     "juliahub-c-url",
                 ],
                 "other_source": ["other-a-url", "other-b-url", "other-c-url"],
-                "2026-05": [100, 200, 300],
-                "2026-04": [90, 190, 290],
-                "2026-03": [80, 180, 280],
-                "2026-02": [70, 170, 270],
+                f"2026-{this_month - 1:02d}": [100, 200, 300],
+                f"2026-{this_month - 2:02d}": [90, 190, 290],
+                f"2026-{this_month - 3:02d}": [80, 180, 280],
+                f"2026-{this_month - 4:02d}": [70, 170, 270],
             }
         )
         pd.testing.assert_frame_equal(expected, result)
 
     def test_merge_no_cached_with_downloads(
-        self, sample_data: dict[str, pd.DataFrame]
+        self, sample_data: dict[str, pd.DataFrame], this_month
     ) -> None:
         """Test merge_with_cached_downloads function."""
         result = get_download_data.merge_with_cached_downloads(
@@ -635,14 +642,14 @@ class TestGetDownloadData:
                     "juliahub-c-url",
                 ],
                 "other_source": ["other-a-url", "other-b-url", "other-c-url"],
-                "2026-05": [100, 200, 300],
-                "2026-04": [90, 190, 290],
+                f"2026-{this_month - 1:02d}": [100, 200, 300],
+                f"2026-{this_month - 2:02d}": [90, 190, 290],
             }
         )
         pd.testing.assert_frame_equal(expected, result)
 
     def test_merge_package_info_with_downloads(
-        self, sample_data: dict[str, pd.DataFrame]
+        self, sample_data: dict[str, pd.DataFrame], this_month: int
     ) -> None:
         """Test merge_with_cached_downloads function."""
         result = get_download_data.merge_with_cached_downloads(
@@ -661,13 +668,15 @@ class TestGetDownloadData:
                     "juliahub-c-url",
                 ],
                 "other_source": ["other-a-url", "other-b-url", "other-c-url"],
-                "2026-05": [100, 200, 300],
-                "2026-04": [90, 190, 290],
+                f"2026-{this_month - 1:02d}": [100, 200, 300],
+                f"2026-{this_month - 2:02d}": [90, 190, 290],
             }
         )
         pd.testing.assert_frame_equal(expected, result)
 
-    def test_identify_missing_data(self, sample_data: dict[str, pd.DataFrame]) -> None:
+    def test_identify_missing_data(
+        self, sample_data: dict[str, pd.DataFrame], this_month: int
+    ) -> None:
         """Test identify_missing_data function."""
         new_tools, existing_tools, missing_months = (
             get_download_data.identify_missing_data(
@@ -678,7 +687,10 @@ class TestGetDownloadData:
         )
         assert new_tools == ["pkg-d"]
         assert sorted(existing_tools) == ["pkg-a", "pkg-b", "pkg-c"]
-        assert missing_months == ["2026-05", "2026-04"]
+        assert missing_months == [
+            f"2026-{this_month - 1:02d}",
+            f"2026-{this_month - 2:02d}",
+        ]
 
     def test_identify_missing_data_no_new_tools_and_months(
         self, sample_data: dict[str, pd.DataFrame]
@@ -694,7 +706,7 @@ class TestGetDownloadData:
         assert missing_months == list()
 
     def test_identify_missing_data_no_cache_and_months(
-        self, sample_data: dict[str, pd.DataFrame]
+        self, sample_data: dict[str, pd.DataFrame], this_month
     ) -> None:
         """Test identify_missing_data function."""
         new_tools, existing_tools, missing_months = (
@@ -704,4 +716,7 @@ class TestGetDownloadData:
         )
         assert sorted(new_tools) == ["pkg-a", "pkg-b", "pkg-c"]
         assert sorted(existing_tools) == list()
-        assert missing_months == ["2026-05", "2026-04"]
+        assert missing_months == [
+            f"2026-{this_month - 1:02d}",
+            f"2026-{this_month - 2:02d}",
+        ]

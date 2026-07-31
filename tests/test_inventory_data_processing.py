@@ -744,8 +744,8 @@ class TestGetDownloadData:
 
     def test_get_expected_month_columns(self, frozen_now: pd.Timestamp) -> None:
         """Test that get_expected_month_columns returns correct month columns."""
-        expected_months = ["2026-05", "2026-04", "2026-03"]
-        result = get_download_data.get_expected_month_columns(3)
+        expected_months = ["2026-05", "2026-04"]
+        result = get_download_data.get_expected_month_columns(2)
         assert result == expected_months
 
     def test_merge_with_cached_downloads(

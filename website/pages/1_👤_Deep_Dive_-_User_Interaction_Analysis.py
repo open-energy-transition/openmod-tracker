@@ -248,16 +248,14 @@ def main(user_stats_df: pd.DataFrame):
     )
     if not all_tools_toggle:
         if selected_tools:
-            user_stats_df = user_stats_df[
-                user_stats_df.repos.str.contains(
-                    "|".join(
-                        i["repo"]
-                        for i in repo_to_tool_map
-                        if i["name"] in selected_tools
-                    ),
-                    case=False,
-                )
-            ]
+            repos = "|".join(
+                i["repo"] for i in repo_to_tool_map if i["name"] in selected_tools
+            )
+            user_in_repos = user_stats_df.repos.str.contains(
+                repos, case=False, na=False
+            )
+            user_stats_df = user_stats_df[user_in_repos]
+
         else:
             st.warning("No data to show")
             user_stats_df = pd.DataFrame()

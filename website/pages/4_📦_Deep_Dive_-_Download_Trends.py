@@ -263,7 +263,10 @@ def plot_download_trends(
         # Add average line
         agg_df = (
             df.groupby("date")
-            .apply(lambda x: x.sort_values("downloads").tail(10).downloads.mean())
+            .apply(
+                lambda x: x.sort_values("downloads").tail(10).downloads.mean(),
+                include_groups=False,
+            )
             .reset_index(name="downloads")
         )
 

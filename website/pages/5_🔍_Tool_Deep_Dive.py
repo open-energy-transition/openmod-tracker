@@ -100,6 +100,15 @@ def load_downloads() -> pd.DataFrame:
     return long
 
 
+def _reindex_to_daterange(df: pd.DataFrame, resample: str, tool_name: str) -> pd.DataFrame:
+    """Reindex dataframe to match the date range from the slider."""
+    date_range_key = f"date_range_slider_{tool_name}"
+    if date_range_key in st.session_state:
+        start_date, end_date = st.session_state[date_range_key]
+        return df.reindex(pd.date_range(start_date, end_date, freq=resample))
+    return df
+
+
 def get_tool_id_from_url(url: str) -> str | None:
     """Get tool ID from URL."""
     tools_df = load_tools_mapping()
@@ -375,7 +384,7 @@ def _plot_timeseries(
 
 
 def plot_totals_metrics(
-    df: pd.DataFrame, resolution: str, color_map: dict, cumulative: bool = True
+    df: pd.DataFrame, resolution: str, color_map: dict, cumulative: bool = True, tool_name: str = ""
 ) -> go.Figure:
     """Create cumulative metrics timeline chart.
 
@@ -384,6 +393,7 @@ def plot_totals_metrics(
         resolution: Time resolution for resampling ('Daily', 'Weekly', or 'Monthly').
         color_map: Dictionary mapping metric names to colors.
         cumulative: Whether to show cumulative counts. Defaults to True.
+        tool_name: Tool name for accessing session state. Defaults to "".
 
     Returns:
         Plotly Figure showing cumulative repository metrics over time.
@@ -405,6 +415,9 @@ def plot_totals_metrics(
     else:
         totals_df_filled = totals_df.fillna(0)
 
+    # Apply date range filter to display
+    totals_df_filled = _reindex_to_daterange(totals_df_filled, resample, tool_name)
+
     plot_df = (
         totals_df_filled.stack()
         .rename_axis(index=["Date", "Interaction"])
@@ -421,13 +434,14 @@ def plot_totals_metrics(
     return fig
 
 
-def plot_open_metrics(df: pd.DataFrame, resolution: str, color_map: dict) -> go.Figure:
+def plot_open_metrics(df: pd.DataFrame, resolution: str, color_map: dict, tool_name: str = "") -> go.Figure:
     """Create open issues and PRs timeline chart.
 
     Args:
         df: DataFrame containing interaction data.
         resolution: Time resolution for resampling ('Daily', 'Weekly', or 'Monthly').
         color_map: Dictionary mapping metric names to colors.
+        tool_name: Tool name for accessing session state. Defaults to "".
 
     Returns:
         Plotly Figure showing open issues and PRs over time.
@@ -444,8 +458,6 @@ def plot_open_metrics(df: pd.DataFrame, resolution: str, color_map: dict) -> go.
         .rename(columns=lambda x: x.replace("Total ", "Open "))
         .fillna(0)
     )
-
-    assert (open_df >= 0).all().all(), "Open counts contain negative values!"
 
     extra_dfs = []
     for subtype in ["comment", "review"]:
@@ -467,13 +479,17 @@ def plot_open_metrics(df: pd.DataFrame, resolution: str, color_map: dict) -> go.
     )
     all_df = all_df.fillna(
         {
-            "Open Issues": all_df["Open Issues"].ffill(),
-            "Open PRs": all_df["Open PRs"].ffill(),
+            "Open Issues": all_df.get("Open Issues", pd.Series()).ffill(),
+            "Open PRs": all_df.get("Open PRs", pd.Series()).ffill(),
             "New Issue Comments": 0,
             "New PR Comments": 0,
             "New PR Reviews": 0,
         }
     )
+
+    # Apply date range filter to display
+    all_df = _reindex_to_daterange(all_df, resample, tool_name)
+
     plot_df = (
         all_df.stack()
         .rename_axis(index=["Date", "Interaction"])
@@ -567,16 +583,7 @@ def render_project_development_section(tool_url: str, tool_name: str, container)
         key=f"cumulative_toggle_{tool_name}",
     )
 
-    # Save full data for open metrics calculation
-    full_filtered_df = filtered_df.copy()
-
-    # Filter data by date range for cumulative metrics display only
-    filtered_df_display = filtered_df[
-        (filtered_df.created >= pd.Timestamp(start_date)) &
-        (filtered_df.created <= pd.Timestamp(end_date) + pd.Timedelta(hours=23, minutes=59))
-    ]
-
-    if filtered_df_display.empty:
+    if filtered_df.empty:
         container.info("No data available for the selected date range.")
         return
 
@@ -586,9 +593,9 @@ def render_project_development_section(tool_url: str, tool_name: str, container)
         metric: colors[idx % len(colors)] for idx, metric in enumerate(TOTALS_METRICS)
     }
 
-    # Create cumulative metrics chart (using date-filtered data)
+    # Create cumulative metrics chart (pass FULL data, plotting function handles date range display)
     fig_cumulative = plot_totals_metrics(
-        filtered_df_display, resolution=resolution, color_map=color_map, cumulative=cumulative
+        filtered_df, resolution=resolution, color_map=color_map, cumulative=cumulative, tool_name=tool_name
     )
     container.plotly_chart(
         fig_cumulative,
@@ -596,11 +603,11 @@ def render_project_development_section(tool_url: str, tool_name: str, container)
         key=f"cumulative_metrics_{tool_name}",
     )
 
-    # Create open metrics chart (using FULL data for correct open counts)
+    # Create open metrics chart (pass FULL data, plotting function handles date range display)
     color_map_open = {
         metric: colors[idx % len(colors)] for idx, metric in enumerate(OPEN_METRICS)
     }
-    fig_open = plot_open_metrics(full_filtered_df, resolution=resolution, color_map=color_map_open)
+    fig_open = plot_open_metrics(filtered_df, resolution=resolution, color_map=color_map_open, tool_name=tool_name)
     container.plotly_chart(
         fig_open,
         use_container_width=True,

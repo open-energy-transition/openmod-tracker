@@ -7,10 +7,12 @@
 import re
 from pathlib import Path
 
+import jinja2
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
+import streamlit.components.v1 as components
 import util
 
 # Configuration
@@ -38,6 +40,12 @@ path_cwd = Path.cwd()
 user_stats_dir = path_cwd / "user_analysis" / "output"
 inventory_dir = path_cwd / "inventory" / "output"
 
+# ── Jinja2 environment ────────────────────────────────────────────────────────
+_templates_dir = path_cwd / "website" / "templates"
+_jinja_env = jinja2.Environment(
+    loader=jinja2.FileSystemLoader(str(_templates_dir)),
+    autoescape=jinja2.select_autoescape(["html"]),
+)
 
 # ============================================================================
 # Data Loading Functions
@@ -1071,17 +1079,86 @@ def score_to_gradient(score_str: str) -> str:
         return "background: linear-gradient(135deg, #fde8e8, #f5b7b7); color: #a93226;"
 
 
+def build_tool_detail_table(
+    tool_id: str, scores: pd.DataFrame, reasons: pd.DataFrame
+) -> str:
+    """Builds an HTML table showing detailed scores and reasons for a specific tool."""
+    check_cols = [
+        c for c in scores.columns if c not in ("html_url", "aggregated_score")
+    ]
+
+    reason_col_map = {
+        col.removeprefix("Reason "): col
+        for col in reasons.columns
+        if col.startswith("Reason ")
+    }
+
+    score_row = scores.loc[tool_id]
+    reason_row = reasons.loc[tool_id] if tool_id in reasons.index else None
+
+    if isinstance(score_row, pd.DataFrame) or isinstance(reason_row, pd.DataFrame):
+        raise ValueError(
+            f"Duplicate rows found for tool_id '{tool_id}' in scores or reasons DataFrame. "
+            "Each tool must appear only once."
+        )
+    SCORECARD_DOCS_BASE = "https://github.com/ossf/scorecard/blob/main/docs/checks.md#"
+
+    rows = []
+    for check in check_cols:
+        raw_score = score_row.get(check, "?")
+        try:
+            val = float(raw_score)
+            if val < 0 or pd.isna(val):
+                display_val = "None"
+            else:
+                display_val = str(int(val)).strip()
+        except (ValueError, TypeError):
+            display_val = "None"
+
+        cell_style = score_to_gradient(display_val)
+
+        reason_col = reason_col_map.get(check)
+        if reason_col and reason_row is not None:
+            reason_text = reason_row.get(reason_col, "No reason available")
+            # Also skip if reason is NaN
+            try:
+                if pd.isna(reason_text):
+                    continue
+            except (TypeError, ValueError):
+                pass
+        else:
+            reason_text = "No reason available"
+        if not reason_text.endswith("."):
+            reason_text = reason_text + "."
+
+        # Build docs anchor: lowercase, spaces → hyphens
+        doc_url = f"{SCORECARD_DOCS_BASE}{check.casefold()}"
+
+        rows.append(
+            {
+                "cell_style": cell_style,
+                "display_val": display_val,
+                "doc_url": doc_url,
+                "check": check,
+                "reason_text": reason_text,
+            }
+        )
+
+    template = _jinja_env.get_template("ossf_detail_table.html.jinja")
+    return template.render(rows=rows)
+
+
 def render_ossf_section(tool_url: str, tool_name: str, container):
     """Render OSSF security scores."""
     # Add explanatory text
     container.markdown(
         """
-        The [OpenSSF Scorecard](https://github.com/ossf/scorecard?tab=readme-ov-file#what-is-scorecard) provides a detailed view of security practices for this tool.
-        The scores are colour-coded to help you quickly identify areas of strength and weakness in the security posture of the tool.
-        The scores shown below are on a scale from **0 to 10**, where **10** represents the highest level of security compliance.
-
-        Select individual checks to see detailed reasons for any failed or low-scoring checks.
-        """
+        The dashboard provides a detailed view of the [OpenSSF Scorecard](https://github.com/ossf/scorecard?tab=readme-ov-file#what-is-scorecard) results for each tool in our inventory.
+        Select a tool from the dropdown to see its overall score and a breakdown of individual checks along with
+        the reasons for any failed or low-scoring checks. The scores are colour-coded to help you quickly identify
+        areas of strength and weakness in the security posture of each tool. The scores shown below are
+        on a scale from **0 to 10**, where **10** represents the highest level of security compliance.
+         """
     )
 
     scores, reasons = load_ossf_scores()
@@ -1094,41 +1171,16 @@ def render_ossf_section(tool_url: str, tool_name: str, container):
     score_row = scores.loc[tool_id]
     agg = score_row.get("aggregated_score", "?")
     agg_style = score_to_gradient(agg)
+    html_url = score_row.get("html_url", "#")
 
-    # Display aggregated score
-    header_html = f"""
-    <div style="padding: 20px; border-radius: 8px; {agg_style} text-align: center; margin-bottom: 20px;">
-        <h3 style="margin: 0;">Aggregated Security Score</h3>
-        <h1 style="margin: 10px 0;">{agg}/10</h1>
-    </div>
-    """
+    header_template = _jinja_env.get_template("ossf_tool_header.html.jinja")
+    header_html = header_template.render(
+        html_url=html_url, selected_tool=tool_name, agg_style=agg_style, agg=agg
+    )
     container.markdown(header_html, unsafe_allow_html=True)
 
-    # Display individual checks
-    check_cols = [
-        c for c in scores.columns if c not in ("html_url", "aggregated_score")
-    ]
-    check_data = []
-    for check in check_cols:
-        try:
-            val = float(score_row.get(check, -1))
-            if val >= 0:
-                check_data.append({"Check": check, "Score": val})
-        except (ValueError, TypeError):
-            pass
-
-    if check_data:
-        check_df = pd.DataFrame(check_data).sort_values("Score")
-        container.markdown("### Security Check Scores")
-        for _, row in check_df.iterrows():
-            score_val = row["Score"]
-            if score_val >= 8:
-                color = "🟢"
-            elif score_val >= 5:
-                color = "🟡"
-            else:
-                color = "🔴"
-            container.text(f"{color} {row['Check']}: {score_val:.1f}/10")
+    html_content = build_tool_detail_table(tool_id, scores, reasons)
+    components.html(html_content, height=800, scrolling=True)
 
 
 # ============================================================================

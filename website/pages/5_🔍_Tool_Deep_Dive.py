@@ -4,41 +4,34 @@
 
 """Unified deep dive page combining all tool analyses."""
 
-import textwrap
 from pathlib import Path
 
-import jinja2
 import numpy as np
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
-import streamlit.components.v1 as components
 import util
 
 # Configuration
 FIG_CONFIG = {"displayModeBar": False, "doubleClick": False, "scrollZoom": False}
 RESOLUTION_CONVERTER = {"Daily": "D", "Weekly": "W", "Monthly": "ME"}
-KEEP_TOP = 15
 
 # Paths
 path_cwd = Path.cwd()
 user_stats_dir = path_cwd / "user_analysis" / "output"
-scores_path = path_cwd / "inventory" / "output" / "scores.csv"
-reasons_path = path_cwd / "inventory" / "output" / "reasons.csv"
-downloads_path = path_cwd / "user_analysis" / "output" / "package_downloads.csv"
-
-# Jinja2 for OSSF
-_templates_dir = path_cwd / "website" / "templates"
-_jinja_env = jinja2.Environment(
-    loader=jinja2.FileSystemLoader(str(_templates_dir)),
-    autoescape=jinja2.select_autoescape(["html"]),
-)
+inventory_dir = path_cwd / "inventory" / "output"
 
 
 # ============================================================================
 # Data Loading Functions
 # ============================================================================
+
+
+@st.cache_data
+def load_tools_mapping() -> pd.DataFrame:
+    """Load tools mapping data."""
+    return pd.read_csv(inventory_dir / "filtered.csv", index_col="id")
 
 
 @st.cache_data
@@ -60,8 +53,8 @@ def load_repo_interactions() -> pd.DataFrame:
 @st.cache_data
 def load_ossf_scores() -> tuple[pd.DataFrame, pd.DataFrame]:
     """Load OSSF Scorecard data."""
-    scores = pd.read_csv(scores_path, index_col="id")
-    reasons = pd.read_csv(reasons_path, index_col="id")
+    scores = pd.read_csv(inventory_dir / "scores.csv", index_col="id")
+    reasons = pd.read_csv(inventory_dir / "reasons.csv", index_col="id")
     return scores, reasons
 
 
@@ -70,7 +63,7 @@ def load_downloads() -> pd.DataFrame:
     """Load package downloads data."""
     import re
 
-    raw = pd.read_csv(downloads_path)
+    raw = pd.read_csv(user_stats_dir / "package_downloads.csv")
     date_cols = [c for c in raw.columns if re.match(r"^\d{4}-\d{2}$", c)]
     raw["display_name"] = raw["pypi_package_name"].fillna(raw["id"])
     long = raw.melt(
@@ -93,118 +86,202 @@ def load_downloads() -> pd.DataFrame:
     return long
 
 
-@st.cache_data
-def map_repo_to_tool(repos: list[str]) -> dict:
-    """Map repository URLs to tool names."""
-    tools_df = pd.read_csv(path_cwd / "inventory" / "output" / "filtered.csv")
-    mapping = {}
-    for repo in repos:
-        url = (
-            repo.lower()
-            .replace("gh:", "https://github.com/")
-            .replace("gl:", "https://gitlab.com/")
-        )
-        match = tools_df.loc[tools_df.url == url]
-        if not match.empty:
-            tool_name = match.iloc[0]["name"].split(",")[0]
-            mapping[url] = {"repo": repo, "name": tool_name}
-    return mapping
+def get_tool_id_from_url(url: str) -> str | None:
+    """Get tool ID from URL."""
+    tools_df = load_tools_mapping()
+    match = tools_df[tools_df.url == url]
+    if not match.empty:
+        return match.index[0]
+    return None
 
 
 # ============================================================================
-# User Interaction Analysis Functions
+# User Interaction Analysis
 # ============================================================================
 
 
-def render_user_interaction_analysis(tool_url: str, tool_name: str, container):
-    """Render user interaction analysis for a single tool."""
+def render_user_interaction_section(tool_url: str, tool_name: str, container):
+    """Render complete user interaction analysis."""
     user_stats_df = load_user_classifications()
+
+    # Convert URL to repo format
     repo = tool_url.replace("https://github.com/", "gh:").replace("https://gitlab.com/", "gl:")
 
+    # Filter users who interacted with this repo
     user_in_repos = user_stats_df.repos.str.contains(repo, case=False, na=False)
     filtered_df = user_stats_df[user_in_repos]
 
     if filtered_df.empty:
-        container.info("No user interaction data available.")
+        container.info("No user interaction data available for this tool.")
         return
 
-    # User pie chart
+    # User classification pie chart
     class_counts = filtered_df.classification.value_counts()
     fig = px.pie(
         values=class_counts.values,
         names=class_counts.index,
-        title=f"{len(filtered_df)} Users by Type",
+        title=f"Distribution of {len(filtered_df)} Users by Type",
         color_discrete_sequence=px.colors.qualitative.Plotly,
     )
-    fig.update_layout(height=250, margin=dict(t=40, b=0, l=0, r=0))
+    fig.update_layout(height=300)
     container.plotly_chart(fig, use_container_width=True, config=FIG_CONFIG)
 
     # Top organizations
-    if filtered_df.company.notna().any():
-        org_counts = filtered_df.company.value_counts().head(5)
-        if not org_counts.empty:
-            container.markdown("**Top Organizations**")
-            for org, count in org_counts.items():
-                container.text(f"• {org}: {count}")
+    container.markdown("### Top Organizations Engaging with Repository")
+    org_counts = filtered_df.company.value_counts().head(10)
+    if not org_counts.empty:
+        fig = px.bar(
+            org_counts.to_frame("Number of Users").reset_index(),
+            x="company",
+            y="Number of Users",
+            title=f"Top 10 Organizations",
+            color="Number of Users",
+            color_continuous_scale=px.colors.sequential.Viridis,
+        )
+        fig.update_layout(xaxis_tickangle=-45, xaxis={"title": "Organization"}, height=350)
+        container.plotly_chart(fig, use_container_width=True, config=FIG_CONFIG)
+    else:
+        container.info("No organization data available.")
 
     # Top locations
     if filtered_df.location.notna().any():
-        locations_count = filtered_df.location.value_counts().head(5)
-        if not locations_count.empty:
-            container.markdown("**Top Locations**")
-            for loc, count in locations_count.items():
-                container.text(f"• {loc}: {count}")
+        container.markdown("### Top User Origin Countries")
+        locations_count = filtered_df.location.value_counts().head(10)
+        fig = px.bar(
+            locations_count.to_frame("Number of Users").reset_index(),
+            x="location",
+            y="Number of Users",
+            title=f"Top 10 Locations",
+            color="Number of Users",
+            color_continuous_scale=px.colors.sequential.Viridis,
+        )
+        fig.update_layout(xaxis_tickangle=-45, xaxis={"title": "Location"}, height=350)
+        container.plotly_chart(fig, use_container_width=True, config=FIG_CONFIG)
+
+        # Geographic map
+        container.markdown("### Geographic Map")
+        fig = px.choropleth(
+            locations_count.rename_axis(index="country")
+            .to_frame("Number of Users")
+            .reset_index(),
+            locations="country",
+            locationmode="ISO-3",
+            color="Number of Users",
+            hover_name="country",
+            color_continuous_scale=px.colors.sequential.Viridis,
+            title="Users by location",
+        )
+        fig.update_layout(
+            geo=dict(
+                showframe=True,
+                showcoastlines=True,
+                projection_type="equirectangular",
+            ),
+            height=400,
+        )
+        container.plotly_chart(fig, use_container_width=True, config=FIG_CONFIG)
 
 
 # ============================================================================
-# Project Development Metrics Functions
+# Project Development Metrics
 # ============================================================================
 
 
-def render_project_development_metrics(tool_url: str, tool_name: str, container):
-    """Render project development metrics for a single tool."""
+def get_totals(df: pd.DataFrame, date_col: str, resample: str) -> pd.DataFrame:
+    """Calculate counts of interactions over time."""
+    totals_df = (
+        df.groupby(["interaction", date_col])
+        .size()
+        .unstack("interaction")
+        .resample(resample)
+        .sum()
+        .rename(
+            columns={
+                "fork": "Total Forks",
+                "stargazer": "Total Stars",
+                "issue": "Total Issues",
+                "pr": "Total PRs",
+                "commit": "Total Commits",
+            }
+        )
+    )
+    return totals_df
+
+
+def render_project_development_section(tool_url: str, tool_name: str, container):
+    """Render complete project development metrics."""
     df = load_repo_interactions()
+    user_class_df = load_user_classifications()
 
-    # Filter for selected tool
+    # Convert URL to repo format
     repo = tool_url.replace("https://github.com/", "gh:").replace("https://gitlab.com/", "gl:")
     filtered_df = df[df.repo.str.contains(repo, case=False)]
 
     # Hide bots
-    bot_patterns = [
-        "-bot",
-        r"\[bot\]",
-        "actions",
-        "dependabot",
-        "pre-commit-ci",
-    ]
+    bot_patterns = ["-bot", r"\[bot\]", "actions", "dependabot", "pre-commit-ci"]
     mask = ~filtered_df["username"].str.contains("|".join(bot_patterns), case=False, na=False)
     filtered_df = filtered_df[mask]
 
     if filtered_df.empty:
-        container.info("No development metrics available.")
+        container.info("No development metrics available for this tool.")
         return
 
+    # Repository metrics over time
+    container.markdown("### Repository Metrics Over Time")
+    resolution = "Weekly"
+    resample = f"1{RESOLUTION_CONVERTER[resolution]}"
+
+    # Cumulative metrics
+    totals_df = get_totals(
+        filtered_df[
+            filtered_df.interaction.isin(["fork", "commit", "stargazer"])
+            | (filtered_df.interaction.isin(["issue", "pr"]) & (filtered_df.subtype == "author"))
+        ],
+        "created",
+        resample,
+    )
+
+    plot_df = totals_df.cumsum().ffill().stack().rename_axis(index=["Date", "Interaction"]).to_frame("Count").reset_index()
+
+    colors = px.colors.sequential.Peach
+    fig = px.bar(
+        plot_df,
+        x="Date",
+        y="Count",
+        color="Interaction",
+        title=f"Cumulative Repository Metrics ({resolution})",
+        color_discrete_map={
+            metric: colors[idx % len(colors)]
+            for idx, metric in enumerate(["Total Commits", "Total Stars", "Total Forks", "Total Issues", "Total PRs"])
+        },
+    )
+    fig.update_layout(hovermode="x", height=350)
+    container.plotly_chart(fig, use_container_width=True, config=FIG_CONFIG)
+
     # Top contributors
-    container.markdown("**Top 5 Contributors**")
+    container.markdown("### Top 10 Contributors")
     top_users = (
         filtered_df.loc[filtered_df["interaction"].isin(["pr", "issue", "commit"]), "username"]
         .value_counts()
-        .head(5)
+        .head(10)
         .reset_index()
     )
     top_users.columns = ["username", "count"]
 
+    cols = container.columns(5)
     for idx, row in top_users.iterrows():
-        avatar_url = f"https://github.com/{row['username']}.png?size=80"
-        profile_url = f"https://github.com/{row['username']}"
-        container.markdown(
-            f"[![{row['username']}]({avatar_url})]({profile_url}) "
-            f"**[{row['username']}]({profile_url})** - {row['count']} interactions"
-        )
+        with cols[idx % 5]:
+            avatar_url = f"https://github.com/{row['username']}.png?size=160"
+            profile_url = f"https://github.com/{row['username']}"
+            st.image(
+                avatar_url,
+                width=100,
+                caption=f"[{row['username']}]({profile_url})\n\n{row['count']} interactions",
+            )
 
 
 # ============================================================================
-# OSSF Scores Functions
+# OSSF Security Scores
 # ============================================================================
 
 
@@ -224,88 +301,89 @@ def score_to_gradient(score_str: str) -> str:
         return "background: linear-gradient(135deg, #fde8e8, #f5b7b7); color: #a93226;"
 
 
-def render_ossf_scores(tool_url: str, tool_name: str, container):
-    """Render OSSF security scores for a single tool."""
+def render_ossf_section(tool_url: str, tool_name: str, container):
+    """Render OSSF security scores."""
     scores, reasons = load_ossf_scores()
+    tool_id = get_tool_id_from_url(tool_url)
 
-    # Map URL to tool ID
-    tools_df = pd.read_csv(path_cwd / "inventory" / "output" / "filtered.csv")
-    match = tools_df.loc[tools_df.url == tool_url]
-
-    if match.empty:
-        container.info("No OSSF score data available.")
-        return
-
-    tool_id = match.index[0]
-    if tool_id not in scores.index:
-        container.info("No OSSF score data available.")
+    if not tool_id or tool_id not in scores.index:
+        container.info("No OSSF score data available for this tool.")
         return
 
     score_row = scores.loc[tool_id]
     agg = score_row.get("aggregated_score", "?")
     agg_style = score_to_gradient(agg)
-    html_url = score_row.get("html_url", "#")
 
     # Display aggregated score
     header_html = f"""
-    <div style="padding: 15px; border-radius: 5px; {agg_style} text-align: center; margin-bottom: 15px;">
-        <strong>Aggregated Score: {agg}/10</strong>
+    <div style="padding: 20px; border-radius: 8px; {agg_style} text-align: center; margin-bottom: 20px;">
+        <h3 style="margin: 0;">Aggregated Security Score</h3>
+        <h1 style="margin: 10px 0;">{agg}/10</h1>
     </div>
     """
     container.markdown(header_html, unsafe_allow_html=True)
 
-    # Display top 5 checks
+    # Display individual checks
     check_cols = [c for c in scores.columns if c not in ("html_url", "aggregated_score")]
-    check_scores = []
+    check_data = []
     for check in check_cols:
         try:
             val = float(score_row.get(check, -1))
             if val >= 0:
-                check_scores.append((check, val))
+                check_data.append({"Check": check, "Score": val})
         except (ValueError, TypeError):
             pass
 
-    if check_scores:
-        check_scores.sort(key=lambda x: x[1])
-        container.markdown("**Lowest Scoring Checks:**")
-        for check, score in check_scores[:5]:
-            color = "🔴" if score < 5 else "🟡" if score < 8 else "🟢"
-            container.text(f"{color} {check}: {score:.1f}/10")
+    if check_data:
+        check_df = pd.DataFrame(check_data).sort_values("Score")
+        container.markdown("### Security Check Scores")
+        for _, row in check_df.iterrows():
+            score_val = row["Score"]
+            if score_val >= 8:
+                color = "🟢"
+            elif score_val >= 5:
+                color = "🟡"
+            else:
+                color = "🔴"
+            container.text(f"{color} {row['Check']}: {score_val:.1f}/10")
 
 
 # ============================================================================
-# Download Trends Functions
+# Download Trends
 # ============================================================================
 
 
-def render_download_trends(tool_url: str, tool_name: str, container):
-    """Render download trends for a single tool."""
+def render_downloads_section(tool_url: str, tool_name: str, container):
+    """Render download trends."""
     df = load_downloads()
-    tools_df = pd.read_csv(path_cwd / "inventory" / "output" / "filtered.csv")
+    tool_id = get_tool_id_from_url(tool_url)
 
-    # Map URL to tool ID
-    match = tools_df.loc[tools_df.url == tool_url]
-    if match.empty:
-        container.info("No download data available.")
+    if not tool_id:
+        container.info("No download data available for this tool.")
         return
 
-    tool_id = match.index[0]
     tool_df = df[df["id"] == tool_id]
 
     if tool_df.empty:
-        container.info("No download data available.")
+        container.info("No download data available for this tool.")
         return
 
     trend_df = tool_df.sort_values("date")
 
     # Show recent stats
-    if len(trend_df) >= 3:
-        recent = trend_df.tail(3)
-        container.markdown("**Recent Downloads (last 3 months):**")
-        for _, row in recent.iterrows():
-            container.text(f"• {row['date'].strftime('%b %Y')}: {int(row['downloads']):,}")
+    container.markdown("### Recent Monthly Downloads")
+    if len(trend_df) >= 6:
+        recent = trend_df.tail(6)
+        cols = container.columns(3)
+        for idx, (_, row) in enumerate(recent.iterrows()):
+            with cols[idx % 3]:
+                st.metric(
+                    label=row["date"].strftime("%b %Y"),
+                    value=f"{int(row['downloads']):,}",
+                )
 
     # Plot trends
+    container.markdown("### Download Trend")
     fig = go.Figure()
     fig.add_trace(
         go.Scatter(
@@ -320,9 +398,8 @@ def render_download_trends(tool_url: str, tool_name: str, container):
 
     fig.update_layout(
         template="plotly_white",
-        height=250,
-        margin=dict(t=20, b=40, l=10, r=10),
-        xaxis=dict(title="Month", showgrid=False),
+        height=350,
+        xaxis=dict(title="Month"),
         yaxis=dict(title="Downloads", tickformat=","),
         hovermode="x",
         showlegend=False,
@@ -330,13 +407,7 @@ def render_download_trends(tool_url: str, tool_name: str, container):
     container.plotly_chart(fig, use_container_width=True, config=FIG_CONFIG)
 
 
-# ============================================================================
-# Main App
-# ============================================================================
-
-
-def main():
-    """Main function."""
+if __name__ == "__main__":
     st.set_page_config(page_title="Tool Deep Dive", page_icon="🔍", layout="wide")
     st.title("🔍 Tool Deep Dive")
 
@@ -357,13 +428,12 @@ def main():
             4. Return to this page to see the detailed analysis
             """
         )
-        return
+        st.stop()
 
-    # Display selected tools
     st.markdown(f"**Analyzing {len(selected_names)} tool(s):** {', '.join(selected_names)}")
     st.markdown("---")
 
-    # Create columns for each tool
+    # Create columns based on number of tools
     if len(selected_names) == 1:
         cols = [st.container()]
     elif len(selected_names) == 2:
@@ -371,23 +441,23 @@ def main():
     else:
         cols = st.columns(3)
 
-    # Render each analysis section for each tool side by side
+    # Render each tool's analysis
     for idx, (name, url) in enumerate(zip(selected_names, selected_urls)):
         with cols[idx]:
-            st.markdown(f"### {name}")
+            st.markdown(f"## {name}")
 
-            with st.expander("👤 User Interactions", expanded=True):
-                render_user_interaction_analysis(url, name, st.container())
+            # User Interactions
+            with st.expander("👤 User Interaction Analysis", expanded=True):
+                render_user_interaction_section(url, name, st.container())
 
-            with st.expander("📊 Development Metrics", expanded=True):
-                render_project_development_metrics(url, name, st.container())
+            # Development Metrics
+            with st.expander("📊 Project Development Metrics", expanded=True):
+                render_project_development_section(url, name, st.container())
 
-            with st.expander("🔐 Security Score", expanded=True):
-                render_ossf_scores(url, name, st.container())
+            # OSSF Scores
+            with st.expander("🔐 OpenSSF Security Scores", expanded=True):
+                render_ossf_section(url, name, st.container())
 
-            with st.expander("📦 Downloads", expanded=True):
-                render_download_trends(url, name, st.container())
-
-
-if __name__ == "__main__":
-    main()
+            # Downloads
+            with st.expander("📦 Download Trends", expanded=True):
+                render_downloads_section(url, name, st.container())

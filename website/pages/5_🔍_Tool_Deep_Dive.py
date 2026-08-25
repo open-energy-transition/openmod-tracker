@@ -6,7 +6,6 @@
 
 from pathlib import Path
 
-import numpy as np
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
@@ -158,7 +157,9 @@ def render_user_interaction_section(tool_url: str, tool_name: str, container):
     user_stats_df = load_user_classifications()
 
     # Convert URL to repo format
-    repo = tool_url.replace("https://github.com/", "gh:").replace("https://gitlab.com/", "gl:")
+    repo = tool_url.replace("https://github.com/", "gh:").replace(
+        "https://gitlab.com/", "gl:"
+    )
 
     # Filter users who interacted with this repo
     user_in_repos = user_stats_df.repos.str.contains(repo, case=False, na=False)
@@ -188,11 +189,13 @@ def render_user_interaction_section(tool_url: str, tool_name: str, container):
             org_counts.to_frame("Number of Users").reset_index(),
             x="company",
             y="Number of Users",
-            title=f"Top 10 Organizations",
+            title="Top 10 Organizations",
             color="Number of Users",
             color_continuous_scale=px.colors.sequential.Viridis,
         )
-        fig.update_layout(xaxis_tickangle=-45, xaxis={"title": "Organization"}, height=350)
+        fig.update_layout(
+            xaxis_tickangle=-45, xaxis={"title": "Organization"}, height=350
+        )
         container.plotly_chart(fig, use_container_width=True, config=FIG_CONFIG)
     else:
         container.info("No organization data available.")
@@ -205,7 +208,7 @@ def render_user_interaction_section(tool_url: str, tool_name: str, container):
             locations_count.to_frame("Number of Users").reset_index(),
             x="location",
             y="Number of Users",
-            title=f"Top 10 Locations",
+            title="Top 10 Locations",
             color="Number of Users",
             color_continuous_scale=px.colors.sequential.Viridis,
         )
@@ -227,9 +230,7 @@ def render_user_interaction_section(tool_url: str, tool_name: str, container):
         )
         fig.update_layout(
             geo=dict(
-                showframe=True,
-                showcoastlines=True,
-                projection_type="equirectangular",
+                showframe=True, showcoastlines=True, projection_type="equirectangular"
             ),
             height=400,
         )
@@ -280,15 +281,18 @@ def render_project_development_section(tool_url: str, tool_name: str, container)
     )
 
     df = load_repo_interactions()
-    user_class_df = load_user_classifications()
 
     # Convert URL to repo format
-    repo = tool_url.replace("https://github.com/", "gh:").replace("https://gitlab.com/", "gl:")
+    repo = tool_url.replace("https://github.com/", "gh:").replace(
+        "https://gitlab.com/", "gl:"
+    )
     filtered_df = df[df.repo.str.contains(repo, case=False)]
 
     # Hide bots
     bot_patterns = ["-bot", r"\[bot\]", "actions", "dependabot", "pre-commit-ci"]
-    mask = ~filtered_df["username"].str.contains("|".join(bot_patterns), case=False, na=False)
+    mask = ~filtered_df["username"].str.contains(
+        "|".join(bot_patterns), case=False, na=False
+    )
     filtered_df = filtered_df[mask]
 
     if filtered_df.empty:
@@ -304,13 +308,23 @@ def render_project_development_section(tool_url: str, tool_name: str, container)
     totals_df = get_totals(
         filtered_df[
             filtered_df.interaction.isin(["fork", "commit", "stargazer"])
-            | (filtered_df.interaction.isin(["issue", "pr"]) & (filtered_df.subtype == "author"))
+            | (
+                filtered_df.interaction.isin(["issue", "pr"])
+                & (filtered_df.subtype == "author")
+            )
         ],
         "created",
         resample,
     )
 
-    plot_df = totals_df.cumsum().ffill().stack().rename_axis(index=["Date", "Interaction"]).to_frame("Count").reset_index()
+    plot_df = (
+        totals_df.cumsum()
+        .ffill()
+        .stack()
+        .rename_axis(index=["Date", "Interaction"])
+        .to_frame("Count")
+        .reset_index()
+    )
 
     colors = px.colors.sequential.Peach
     fig = px.bar(
@@ -321,7 +335,15 @@ def render_project_development_section(tool_url: str, tool_name: str, container)
         title=f"Cumulative Repository Metrics ({resolution})",
         color_discrete_map={
             metric: colors[idx % len(colors)]
-            for idx, metric in enumerate(["Total Commits", "Total Stars", "Total Forks", "Total Issues", "Total PRs"])
+            for idx, metric in enumerate(
+                [
+                    "Total Commits",
+                    "Total Stars",
+                    "Total Forks",
+                    "Total Issues",
+                    "Total PRs",
+                ]
+            )
         },
     )
     fig.update_layout(hovermode="x", height=350)
@@ -330,7 +352,9 @@ def render_project_development_section(tool_url: str, tool_name: str, container)
     # Top contributors
     container.markdown("### Top 10 Contributors")
     top_users = (
-        filtered_df.loc[filtered_df["interaction"].isin(["pr", "issue", "commit"]), "username"]
+        filtered_df.loc[
+            filtered_df["interaction"].isin(["pr", "issue", "commit"]), "username"
+        ]
         .value_counts()
         .head(10)
         .reset_index()
@@ -404,7 +428,9 @@ def render_ossf_section(tool_url: str, tool_name: str, container):
     container.markdown(header_html, unsafe_allow_html=True)
 
     # Display individual checks
-    check_cols = [c for c in scores.columns if c not in ("html_url", "aggregated_score")]
+    check_cols = [
+        c for c in scores.columns if c not in ("html_url", "aggregated_score")
+    ]
     check_data = []
     for check in check_cols:
         try:

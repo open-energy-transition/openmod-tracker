@@ -814,12 +814,10 @@ def key_takeaways():
         """
     )
     st.markdown(
-        f"""
+        """
         ## Open Energy Modelling Tools - Key Metrics
         """
     )
-
-
 
 
 def footer():
@@ -1011,7 +1009,7 @@ def main(df: pd.DataFrame):
                 st.error("❌ Too many tools selected! Please select only one tool.")
                 selected_indices = selected_indices[:1]
             elif len(selected_indices) == 1:
-                st.success(f"✅ 1 tool selected for deep dive analysis.")
+                st.success("✅ 1 tool selected for deep dive analysis.")
 
             selected_tools = df_filtered.iloc[selected_indices]
             # Extract tool names and URLs from the name_with_url column

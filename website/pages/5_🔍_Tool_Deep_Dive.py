@@ -102,6 +102,59 @@ def get_tool_id_from_url(url: str) -> str | None:
 
 def render_user_interaction_section(tool_url: str, tool_name: str, container):
     """Render complete user interaction analysis."""
+    # Add explanatory text
+    container.markdown(
+        """
+        A wide variety of users interact with the hosted repositories of each of our tracked energy modelling tools. On this page, you can explore these interactions for all GitHub-hosted tools.
+
+        Interactions generally come in the form of
+        [stars](https://docs.github.com/en/get-started/exploring-projects-on-github/saving-repositories-with-stars),
+        [forks](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/about-forks),
+        [watches](https://dl.acm.org/doi/10.1145/2597073.2597114),
+        [issues](https://docs.github.com/en/issues/tracking-your-work-with-issues/about-issues), and
+        [contributions](https://docs.github.com/en/repositories/viewing-activity-and-data-for-your-repository/viewing-a-projects-contributors#about-contributors).
+        We have gathered data on the GitHub users linked to those interactions to find their origin country and attempted to classify them as being from one of 7 main groups:
+
+        🎓 **academic** - an academic institution (e.g., university).
+
+        🏦 **financial** - a financial institution (e.g., bank).
+
+        🏬 **government** - a government department.
+
+        🏭 **industry** - an energy industry actor (e.g., wind turbine manufacturer).
+
+        👩‍💻 **professional** - a consultancy / professional interest group (incl. self-employed).
+
+        🔎 **research** - a non-academic research institution (e.g., a US national lab).
+
+        💡 **utility** - an energy industry public/private utility company or system operator (e.g., a transmission system operator)
+
+        Here, you can explore the result of our user interaction analysis for this tool. In doing so, you may find out more about:
+
+        - how much interaction a tool is getting within and outside academia.
+        - which organisations are most involved with a tool.
+        - the geographic diversity of tool interaction, especially how far the reach of the tool is beyond its "home" country.
+
+        Whether you're a tool maintainer looking to understand your reach, a potential tool user exploring the size of the community in your country, or a financier quantifying the value of investing in tool development, we hope you find this analysis interesting!
+        """
+    )
+
+    with container.expander("Caveats", icon="⚠️"):
+        st.markdown(
+            """
+            1. Tool repository interactions do not tell the whole story.
+            There is usually an order of magnitude more downloads of a tool per month than the total number of unique user interactions on a tool repository over its lifetime.
+            These interactions therefore only tell us about individuals who have a GitHub account and have navigated directly to the tool source code - they may not even use the tool!
+            Understanding more about tool users for open source projects is generally not possible; there is no obligation on users to identify themselves when downloading a tool, nor should there be.
+
+            2. We rely on a heuristic approach to classify users based on the data they choose to share on GitHub.
+            This means that we are unable to classify more than 50% of users and will inevitably misclassify some of them with our relatively simple string matching approach.
+
+            This analysis may raise more questions than it answers.
+            Still, by raising these questions we hope to foster further discussions on tools and their use.
+            """
+        )
+
     user_stats_df = load_user_classifications()
 
     # Convert URL to repo format
@@ -116,6 +169,7 @@ def render_user_interaction_section(tool_url: str, tool_name: str, container):
         return
 
     # User classification pie chart
+    container.markdown("### User Types Across All Repositories")
     class_counts = filtered_df.classification.value_counts()
     fig = px.pie(
         values=class_counts.values,
@@ -210,6 +264,21 @@ def get_totals(df: pd.DataFrame, date_col: str, resample: str) -> pd.DataFrame:
 
 def render_project_development_section(tool_url: str, tool_name: str, container):
     """Render complete project development metrics."""
+    # Add explanatory text
+    container.markdown(
+        """
+        Activity on source code repositories can tell us about how tools are being developed and maintained.
+        Here we analyse interactions on GitHub repositories for energy modelling tools, including
+        [stars](https://docs.github.com/en/get-started/exploring-projects-on-github/saving-repositories-with-stars),
+        [forks](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/about-forks),
+        [issues](https://docs.github.com/en/issues/tracking-your-work-with-issues/about-issues),
+        [pull requests (PRs)](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests),
+        and [commits](https://docs.github.com/en/pull-requests/committing-changes-to-your-project/creating-and-editing-commits/about-commits).
+        We also look at key contributors to these repositories.
+        Together, this information can help us understand how actively a tool is being developed, how responsive maintainers are to feedback, and how engaged the community is around a tool's development.
+        """
+    )
+
     df = load_repo_interactions()
     user_class_df = load_user_classifications()
 
@@ -303,6 +372,17 @@ def score_to_gradient(score_str: str) -> str:
 
 def render_ossf_section(tool_url: str, tool_name: str, container):
     """Render OSSF security scores."""
+    # Add explanatory text
+    container.markdown(
+        """
+        The [OpenSSF Scorecard](https://github.com/ossf/scorecard?tab=readme-ov-file#what-is-scorecard) provides a detailed view of security practices for this tool.
+        The scores are colour-coded to help you quickly identify areas of strength and weakness in the security posture of the tool.
+        The scores shown below are on a scale from **0 to 10**, where **10** represents the highest level of security compliance.
+
+        Select individual checks to see detailed reasons for any failed or low-scoring checks.
+        """
+    )
+
     scores, reasons = load_ossf_scores()
     tool_id = get_tool_id_from_url(tool_url)
 
@@ -355,6 +435,25 @@ def render_ossf_section(tool_url: str, tool_name: str, container):
 
 def render_downloads_section(tool_url: str, tool_name: str, container):
     """Render download trends."""
+    # Add explanatory text
+    container.markdown(
+        """
+        Package downloads are a strong proxy for **real-world tool usage** as they capture users who actually install and run a tool.
+
+        Here we track **monthly PyPI and Conda downloads** for energy modelling tools that publish Python packages, spanning the past year.
+        """
+    )
+
+    with container.expander("ℹ️ Notes on the data"):
+        st.markdown(
+            """
+            - **PyPI and Conda only.** Tools distributed exclusively via Julia's General
+              registry, Maven Central, or other ecosystems are not reflected here.
+            - **Bot & CI traffic.** Automated downloads by CI pipelines are not considered in this infographic for PyPI.
+            - **No current month.** The current month is not shown as the complete data is not yet available.
+            """
+        )
+
     df = load_downloads()
     tool_id = get_tool_id_from_url(tool_url)
 
@@ -424,40 +523,37 @@ if __name__ == "__main__":
             ### How to use this page:
             1. Go to the main **Tool Repository Metrics** page
             2. Use the filters to find tools of interest
-            3. Select up to 3 tools by clicking on the rows in the table
+            3. Select one tool by clicking on a row in the table
             4. Return to this page to see the detailed analysis
             """
         )
         st.stop()
 
-    st.markdown(f"**Analyzing {len(selected_names)} tool(s):** {', '.join(selected_names)}")
+    # Display single tool analysis
+    tool_name = selected_names[0]
+    tool_url = selected_urls[0]
+
+    st.markdown(f"## Analyzing: **{tool_name}**")
     st.markdown("---")
 
-    # Create columns based on number of tools
-    if len(selected_names) == 1:
-        cols = [st.container()]
-    elif len(selected_names) == 2:
-        cols = st.columns(2)
-    else:
-        cols = st.columns(3)
+    # User Interactions
+    with st.expander("👤 Tool User Interaction Analysis", expanded=True):
+        render_user_interaction_section(tool_url, tool_name, st.container())
 
-    # Render each tool's analysis
-    for idx, (name, url) in enumerate(zip(selected_names, selected_urls)):
-        with cols[idx]:
-            st.markdown(f"## {name}")
+    st.markdown("---")
 
-            # User Interactions
-            with st.expander("👤 User Interaction Analysis", expanded=True):
-                render_user_interaction_section(url, name, st.container())
+    # Development Metrics
+    with st.expander("📊 Project Development Metrics", expanded=True):
+        render_project_development_section(tool_url, tool_name, st.container())
 
-            # Development Metrics
-            with st.expander("📊 Project Development Metrics", expanded=True):
-                render_project_development_section(url, name, st.container())
+    st.markdown("---")
 
-            # OSSF Scores
-            with st.expander("🔐 OpenSSF Security Scores", expanded=True):
-                render_ossf_section(url, name, st.container())
+    # OSSF Scores
+    with st.expander("🔐 OpenSSF Security Scores", expanded=True):
+        render_ossf_section(tool_url, tool_name, st.container())
 
-            # Downloads
-            with st.expander("📦 Download Trends", expanded=True):
-                render_downloads_section(url, name, st.container())
+    st.markdown("---")
+
+    # Downloads
+    with st.expander("📦 Download Trends", expanded=True):
+        render_downloads_section(tool_url, tool_name, st.container())

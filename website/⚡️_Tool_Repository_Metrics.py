@@ -959,7 +959,39 @@ def main(df: pd.DataFrame):
     )
     # Display the table with row selection
     if len(df_filtered) > 0:
-        st.info("💡 Please select (up to three) tool(s) to analyse in the Tool Deep Dive page")
+        # Hide the "select all" checkbox using JavaScript
+        st.html(
+            """
+            <script>
+                // Remove select-all checkbox from dataframe
+                setTimeout(function() {
+                    const iframe = parent.document.querySelector('iframe[title="streamlit_agraph.st_agraph"]') || parent.document;
+                    const checkboxes = iframe.querySelectorAll('thead input[type="checkbox"]');
+                    checkboxes.forEach(cb => {
+                        if (cb.parentElement && cb.parentElement.tagName === 'TH') {
+                            cb.style.display = 'none';
+                            cb.style.visibility = 'hidden';
+                        }
+                    });
+                }, 100);
+
+                // Also try on parent document
+                setTimeout(function() {
+                    const checkboxes = parent.document.querySelectorAll('[data-testid="stDataFrame"] thead input[type="checkbox"]');
+                    checkboxes.forEach(cb => cb.remove());
+                }, 100);
+            </script>
+            <style>
+                /* Fallback CSS approach */
+                div[data-testid="stDataFrame"] thead input[type="checkbox"],
+                thead th:first-of-type input[type="checkbox"] {
+                    display: none !important;
+                    visibility: hidden !important;
+                }
+            </style>
+            """
+        )
+        st.info("💡 Please select one tool to analyse in the Tool Deep Dive page")
         selected_event = st.dataframe(
             df_filtered,
             width="stretch",
@@ -967,17 +999,19 @@ def main(df: pd.DataFrame):
             column_config=col_config,
             column_order=col_config.keys(),
             on_select="rerun",
-            selection_mode="multi-row",
+            selection_mode="single-row",
             key="tool_selection_table",
         )
 
         # Get selected rows and store in session state
         if selected_event and selected_event.selection.rows:
             selected_indices = selected_event.selection.rows
-            # Limit to 3 selections
-            if len(selected_indices) > 3:
-                st.warning("⚠️ Please select at most 3 tools. Only the first 3 will be used.")
-                selected_indices = selected_indices[:3]
+            # Only allow 1 selection
+            if len(selected_indices) > 1:
+                st.error("❌ Too many tools selected! Please select only one tool.")
+                selected_indices = selected_indices[:1]
+            elif len(selected_indices) == 1:
+                st.success(f"✅ 1 tool selected for deep dive analysis.")
 
             selected_tools = df_filtered.iloc[selected_indices]
             # Extract tool names and URLs from the name_with_url column

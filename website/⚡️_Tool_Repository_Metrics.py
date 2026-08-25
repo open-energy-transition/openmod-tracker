@@ -781,17 +781,10 @@ def preamble(latest_changes: str, n_tools: int, data_processing_text: str):
                If that's the case, [raise an issue on our project homepage](https://github.com/open-energy-transition/openmod-tracker/issues/new).
             """
         )
-    st.markdown(
-        f"""
-        ## Open Energy Modelling Tools - Key Metrics
-
-        **Last Update**: {latest_changes}
-        """
-    )
 
 
-def conclusion():
-    """Text to show after the app table."""
+def key_takeaways():
+    """Key takeaways section to show before the table."""
     st.markdown(
         """
         ## Key Takeaways from the Data
@@ -820,6 +813,13 @@ def conclusion():
         **Have you found this platform useful, or want to see it grow in any specific way?** Share your thoughts and suggestions on our [project homepage](https://github.com/open-energy-transition/openmod-tracker/issues)!
         """
     )
+    st.markdown(
+        f"""
+        ## Open Energy Modelling Tools - Key Metrics
+        """
+    )
+
+
 
 
 def footer():
@@ -957,27 +957,49 @@ def main(df: pd.DataFrame):
     assert not cols_missing_config, (
         f"Missing column configuration for {cols_missing_config}"
     )
-    # Display the table
+    # Display the table with row selection
     if len(df_filtered) > 0:
-        st.dataframe(
+        st.info("💡 Please select (up to three) tool(s) to analyse in the Tool Deep Dive page")
+        selected_event = st.dataframe(
             df_filtered,
             width="stretch",
             hide_index=True,
             column_config=col_config,
             column_order=col_config.keys(),
+            on_select="rerun",
+            selection_mode="multi-row",
+            key="tool_selection_table",
         )
+
+        # Get selected rows and store in session state
+        if selected_event and selected_event.selection.rows:
+            selected_indices = selected_event.selection.rows
+            # Limit to 3 selections
+            if len(selected_indices) > 3:
+                st.warning("⚠️ Please select at most 3 tools. Only the first 3 will be used.")
+                selected_indices = selected_indices[:3]
+
+            selected_tools = df_filtered.iloc[selected_indices]
+            # Extract tool names and URLs from the name_with_url column
+            # Format is: url#name
+            names = []
+            urls = []
+            for name_url in selected_tools["name_with_url"]:
+                parts = name_url.split("#")
+                if len(parts) == 2:
+                    urls.append(parts[0])
+                    names.append(parts[1])
+
+            util.set_state("selected_tool_names", names)
+            util.set_state("selected_tool_urls", urls)
+        else:
+            # Clear selection if none selected
+            util.set_state("selected_tool_names", [])
+            util.set_state("selected_tool_urls", [])
     else:
         st.warning(
             "No data matches the current filter criteria. Try adjusting your filters."
         )
-    st.subheader("📊 Score tools your way")
-    st.markdown(
-        """
-        You can create your own tool scores by combining the metrics that matter most to you.
-        First, toggle the scoring column.
-        Then, adjust the weights applied to each numeric metric to fit your preferences."""
-    )
-    add_scoring(numeric_cols)
 
     reset_button = st.sidebar.button("🔄 Reset All Filters")
     reset_mode = reset(reset_button)
@@ -1015,6 +1037,8 @@ if __name__ == "__main__":
         readme_path, "Our data processing approach"
     )
     preamble(latest_changes, len(df_vis), data_processing_approach_string)
+    st.markdown(f"**Last Update**: {latest_changes}")
+    st.markdown("---")
+    key_takeaways()
     main(df_vis.copy())
-    conclusion()
     footer()

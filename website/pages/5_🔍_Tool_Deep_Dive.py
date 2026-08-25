@@ -5,7 +5,7 @@
 """Unified deep dive page combining all tool analyses."""
 
 from pathlib import Path
-
+import re
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
@@ -15,6 +15,22 @@ import util
 # Configuration
 FIG_CONFIG = {"displayModeBar": False, "doubleClick": False, "scrollZoom": False}
 RESOLUTION_CONVERTER = {"Daily": "D", "Weekly": "W", "Monthly": "ME"}
+KEEP_TOP = 15
+
+TOTALS_METRICS = [
+    "Total Commits",
+    "Total Stars",
+    "Total Forks",
+    "Total Issues",
+    "Total PRs",
+]
+OPEN_METRICS = [
+    "Open Issues",
+    "Open PRs",
+    "New Issue Comments",
+    "New PR Comments",
+    "New PR Reviews",
+]
 
 # Paths
 path_cwd = Path.cwd()
@@ -60,7 +76,6 @@ def load_ossf_scores() -> tuple[pd.DataFrame, pd.DataFrame]:
 @st.cache_data
 def load_downloads() -> pd.DataFrame:
     """Load package downloads data."""
-    import re
 
     raw = pd.read_csv(user_stats_dir / "package_downloads.csv")
     date_cols = [c for c in raw.columns if re.match(r"^\d{4}-\d{2}$", c)]
@@ -99,7 +114,7 @@ def get_tool_id_from_url(url: str) -> str | None:
 # ============================================================================
 
 
-def render_user_interaction_section(tool_url: str, tool_name: str, container):
+def render_user_interaction_section(tool_url: str, container):
     """Render complete user interaction analysis."""
     # Add explanatory text
     container.markdown(
@@ -169,32 +184,57 @@ def render_user_interaction_section(tool_url: str, tool_name: str, container):
         container.info("No user interaction data available for this tool.")
         return
 
-    # User classification pie chart
+    # User classification bar chart
     container.markdown("### User Types Across All Repositories")
     class_counts = filtered_df.classification.value_counts()
-    fig = px.pie(
-        values=class_counts.values,
-        names=class_counts.index,
+    fig = px.bar(
+        class_counts.to_frame("Number of Users").reset_index(),
+        y="classification",
+        x="Number of Users",
         title=f"Distribution of {len(filtered_df)} Users by Type",
-        color_discrete_sequence=px.colors.qualitative.Plotly,
+        orientation="h",
+        text="Number of Users",
     )
-    fig.update_layout(height=300)
+    fig.update_traces(
+        texttemplate="%{text}",
+        textposition="outside",
+    )
+    fig.update_layout(
+        height=300,
+        showlegend=False,
+        yaxis={"title": "User Type"},
+        xaxis={"title": "Number of Users", "gridcolor": "rgba(0,0,0,0.07)"},
+        template="plotly_white",
+        paper_bgcolor="white",
+        plot_bgcolor="white",
+        margin=dict(l=10, r=10, t=50, b=40),
+    )
     container.plotly_chart(fig, use_container_width=True, config=FIG_CONFIG)
 
     # Top organizations
     container.markdown("### Top Organizations Engaging with Repository")
-    org_counts = filtered_df.company.value_counts().head(10)
+    org_counts = filtered_df.company.value_counts().head(KEEP_TOP)
     if not org_counts.empty:
         fig = px.bar(
             org_counts.to_frame("Number of Users").reset_index(),
-            x="company",
-            y="Number of Users",
-            title="Top 10 Organizations",
-            color="Number of Users",
-            color_continuous_scale=px.colors.sequential.Viridis,
+            y="company",
+            x="Number of Users",
+            title=f"Top {KEEP_TOP} Organizations",
+            orientation="h",
+            text="Number of Users",
+        )
+        fig.update_traces(
+            texttemplate="%{text}",
+            textposition="outside",
         )
         fig.update_layout(
-            xaxis_tickangle=-45, xaxis={"title": "Organization"}, height=350
+            yaxis={"title": "Organization"},
+            xaxis={"title": "Number of Users", "gridcolor": "rgba(0,0,0,0.07)"},
+            height=350,
+            template="plotly_white",
+            paper_bgcolor="white",
+            plot_bgcolor="white",
+            margin=dict(l=10, r=10, t=50, b=40),
         )
         container.plotly_chart(fig, use_container_width=True, config=FIG_CONFIG)
     else:
@@ -203,20 +243,33 @@ def render_user_interaction_section(tool_url: str, tool_name: str, container):
     # Top locations
     if filtered_df.location.notna().any():
         container.markdown("### Top User Origin Countries")
-        locations_count = filtered_df.location.value_counts().head(10)
+        user_origin_count = filtered_df.location.value_counts().head(KEEP_TOP)
         fig = px.bar(
-            locations_count.to_frame("Number of Users").reset_index(),
-            x="location",
-            y="Number of Users",
-            title="Top 10 Locations",
-            color="Number of Users",
-            color_continuous_scale=px.colors.sequential.Viridis,
+            user_origin_count.to_frame("Number of Users").reset_index(),
+            y="location",
+            x="Number of Users",
+            title=f"Top {KEEP_TOP} Locations",
+            orientation="h",
+            text="Number of Users",
         )
-        fig.update_layout(xaxis_tickangle=-45, xaxis={"title": "Location"}, height=350)
+        fig.update_traces(
+            texttemplate="%{text}",
+            textposition="outside",
+        )
+        fig.update_layout(
+            yaxis={"title": "Location"},
+            xaxis={"title": "Number of Users", "gridcolor": "rgba(0,0,0,0.07)"},
+            height=350,
+            template="plotly_white",
+            paper_bgcolor="white",
+            plot_bgcolor="white",
+            margin=dict(l=10, r=10, t=50, b=40),
+        )
         container.plotly_chart(fig, use_container_width=True, config=FIG_CONFIG)
 
         # Geographic map
         container.markdown("### Geographic Map")
+        locations_count = filtered_df.location.value_counts()
         fig = px.choropleth(
             locations_count.rename_axis(index="country")
             .to_frame("Number of Users")
@@ -230,11 +283,19 @@ def render_user_interaction_section(tool_url: str, tool_name: str, container):
         )
         fig.update_layout(
             geo=dict(
-                showframe=True, showcoastlines=True, projection_type="equirectangular"
+                showframe=True,
+                showcoastlines=True,
+                projection_type="equirectangular",
+                landcolor="rgb(243, 243, 243)",  # Light gray land
+                oceancolor="rgb(220, 240, 255)",  # Light blue ocean
+                coastlinecolor="rgb(80, 80, 80)",  # Darker coast lines
+                countrycolor="rgb(150, 150, 150)",  # Gray country borders
             ),
-            height=400,
+            margin=dict(l=0, r=0, t=50, b=0),  # Tight margins
+            paper_bgcolor="rgba(0,0,0,0)",  # Transparent background
+            plot_bgcolor="rgba(0,0,0,0)",  # Transparent plot area
         )
-        container.plotly_chart(fig, use_container_width=True, config=FIG_CONFIG)
+        container.plotly_chart(fig,  use_container_width=True, config=FIG_CONFIG, key="country_map")
 
 
 # ============================================================================
@@ -243,7 +304,16 @@ def render_user_interaction_section(tool_url: str, tool_name: str, container):
 
 
 def get_totals(df: pd.DataFrame, date_col: str, resample: str) -> pd.DataFrame:
-    """Calculate counts of interactions over time."""
+    """Calculate counts of interactions over time.
+
+    Args:
+        df: DataFrame containing interaction data.
+        date_col: Name of the date column to use for resampling.
+        resample: Resampling frequency string (e.g., '1D', '1W', '1ME').
+
+    Returns:
+        DataFrame with interaction counts over time.
+    """
     totals_df = (
         df.groupby(["interaction", date_col])
         .size()
@@ -261,6 +331,163 @@ def get_totals(df: pd.DataFrame, date_col: str, resample: str) -> pd.DataFrame:
         )
     )
     return totals_df
+
+
+def _plot_timeseries(
+    df: pd.DataFrame,
+    color_map: dict,
+    title: str,
+    category_orders: dict,
+    plot_type: str = "bar",
+) -> go.Figure:
+    """Create a timeseries plot for interaction metrics.
+
+    Args:
+        df: DataFrame containing interaction data with Date, Count, and Interaction columns.
+        color_map: Dictionary mapping interaction types to colors.
+        title: Title for the plot.
+        category_orders: Dictionary defining the order of categories for plotting.
+        plot_type: Type of plot to create ('bar' or 'line'). Defaults to 'bar'.
+
+    Returns:
+        Plotly Figure object.
+    """
+    plotter = getattr(px, plot_type)
+    fig = plotter(
+        df,
+        x="Date",
+        y="Count",
+        color="Interaction",
+        title=title,
+        color_discrete_map=color_map,
+        category_orders=category_orders,
+    )
+    fig.update_traces(hovertemplate=None)
+    fig.update_layout(
+        hovermode="x",
+        xaxis=dict(type="date"),
+        dragmode=False,
+        legend=dict(
+            yanchor="bottom", xanchor="center", orientation="h", x=0.5, y=1, title=None
+        ),
+    )
+    return fig
+
+
+def plot_totals_metrics(
+    df: pd.DataFrame, resolution: str, color_map: dict, cumulative: bool = True
+) -> go.Figure:
+    """Create cumulative metrics timeline chart.
+
+    Args:
+        df: DataFrame containing interaction data.
+        resolution: Time resolution for resampling ('Daily', 'Weekly', or 'Monthly').
+        color_map: Dictionary mapping metric names to colors.
+        cumulative: Whether to show cumulative counts. Defaults to True.
+
+    Returns:
+        Plotly Figure showing cumulative repository metrics over time.
+    """
+    resample = f"1{RESOLUTION_CONVERTER[resolution]}"
+    totals_df = get_totals(
+        df[
+            df.interaction.isin(["fork", "commit", "stargazer"])
+            | (df.interaction.isin(["issue", "pr"]) & (df.subtype == "author"))
+        ],
+        "created",
+        resample,
+    )
+    totals_df = totals_df.assign(
+        **{col: 0 for col in set(TOTALS_METRICS).difference(totals_df.columns)}
+    )
+    if cumulative:
+        totals_df_filled = totals_df.cumsum().ffill().fillna(0)
+    else:
+        totals_df_filled = totals_df.fillna(0)
+
+    plot_df = (
+        totals_df_filled.stack()
+        .rename_axis(index=["Date", "Interaction"])
+        .to_frame("Count")
+        .reset_index()
+    )
+    title_prefix = "Cumulative " if cumulative else ""
+    fig = _plot_timeseries(
+        plot_df,
+        color_map,
+        title=f"{title_prefix}Repository Metrics Over Time ({resolution})",
+        category_orders={"Interaction": TOTALS_METRICS},
+    )
+    return fig
+
+
+def plot_open_metrics(df: pd.DataFrame, resolution: str, color_map: dict) -> go.Figure:
+    """Create open issues and PRs timeline chart.
+
+    Args:
+        df: DataFrame containing interaction data.
+        resolution: Time resolution for resampling ('Daily', 'Weekly', or 'Monthly').
+        color_map: Dictionary mapping metric names to colors.
+
+    Returns:
+        Plotly Figure showing open issues and PRs over time.
+    """
+    resample = f"1{RESOLUTION_CONVERTER[resolution]}"
+    _df = df.loc[df["interaction"].isin(["issue", "pr"]) & (df["subtype"] == "author")].copy()
+    _df["closed"] = _df["closed"].fillna(_df["merged"])
+    _df_unique = _df.drop_duplicates(subset=["number"])
+    created_df = get_totals(_df_unique, "created", resample).cumsum()
+    closed_df = get_totals(_df_unique, "closed", resample).cumsum()
+    closed_df_full = closed_df.reindex(created_df.index).ffill().fillna(0)
+    open_df = (
+        created_df.subtract(closed_df_full)
+        .rename(columns=lambda x: x.replace("Total ", "Open "))
+        .fillna(0)
+    )
+
+    assert (open_df >= 0).all().all(), "Open counts contain negative values!"
+
+    extra_dfs = []
+    for subtype in ["comment", "review"]:
+        _df = get_totals(
+            df.loc[
+                df["interaction"].isin(["issue", "pr"]) & (df["subtype"] == subtype)
+            ],
+            "created",
+            resample,
+        ).rename(
+            columns=lambda x: (
+                x.replace("Total ", "New ").removesuffix("s") + f" {subtype.title()}s"
+            )
+        )
+        extra_dfs.append(_df)
+    all_df = pd.concat([open_df, *extra_dfs], axis=1)
+    all_df = all_df.assign(
+        **{col: 0 for col in set(OPEN_METRICS).difference(all_df.columns)}
+    )
+    all_df = all_df.fillna(
+        {
+            "Open Issues": all_df["Open Issues"].ffill(),
+            "Open PRs": all_df["Open PRs"].ffill(),
+            "New Issue Comments": 0,
+            "New PR Comments": 0,
+            "New PR Reviews": 0,
+        }
+    )
+    plot_df = (
+        all_df.stack()
+        .rename_axis(index=["Date", "Interaction"])
+        .to_frame("Count")
+        .reset_index()
+    )
+
+    fig = _plot_timeseries(
+        plot_df,
+        color_map,
+        title=f"Open Issues and PRs ({resolution})",
+        category_orders={"Interaction": OPEN_METRICS},
+    )
+    return fig
 
 
 def render_project_development_section(tool_url: str, tool_name: str, container):
@@ -301,53 +528,85 @@ def render_project_development_section(tool_url: str, tool_name: str, container)
 
     # Repository metrics over time
     container.markdown("### Repository Metrics Over Time")
-    resolution = "Weekly"
-    resample = f"1{RESOLUTION_CONVERTER[resolution]}"
-
-    # Cumulative metrics
-    totals_df = get_totals(
-        filtered_df[
-            filtered_df.interaction.isin(["fork", "commit", "stargazer"])
-            | (
-                filtered_df.interaction.isin(["issue", "pr"])
-                & (filtered_df.subtype == "author")
-            )
-        ],
-        "created",
-        resample,
+    container.markdown(
+        """
+        These timelines visualise key development metrics for the selected repository over time.
+        You can click on legend items to toggle visibility of specific metrics.
+        """
     )
 
-    plot_df = (
-        totals_df.cumsum()
-        .ffill()
-        .stack()
-        .rename_axis(index=["Date", "Interaction"])
-        .to_frame("Count")
-        .reset_index()
+    # Get date range from data
+    min_date = filtered_df[["merged", "created", "closed"]].min().min().date()
+    max_date = filtered_df[["merged", "created", "closed"]].max().max().date()
+    initial_min = (max_date - pd.DateOffset(years=1)).date()
+
+    # Resolution control
+    resolution = container.radio(
+        "Resolution",
+        options=["Daily", "Weekly", "Monthly"],
+        index=1,
+        key=f"time_resolution_{tool_name}",
+        help="Select the time resolution for the timelines.",
+        horizontal=True,
     )
 
+    # Date range slider
+    start_date, end_date = container.slider(
+        "Select date range",
+        min_value=min_date,
+        max_value=max_date,
+        value=(max(min_date, initial_min), max_date),
+        key=f"date_range_slider_{tool_name}",
+        help="Filter interactions by date range.",
+    )
+
+    # Cumulative toggle
+    cumulative = container.toggle(
+        "Toggle cumulative totals",
+        value=True,
+        key=f"cumulative_toggle_{tool_name}",
+    )
+
+    # Save full data for open metrics calculation
+    full_filtered_df = filtered_df.copy()
+
+    # Filter data by date range for cumulative metrics display only
+    filtered_df_display = filtered_df[
+        (filtered_df.created >= pd.Timestamp(start_date)) &
+        (filtered_df.created <= pd.Timestamp(end_date) + pd.Timedelta(hours=23, minutes=59))
+    ]
+
+    if filtered_df_display.empty:
+        container.info("No data available for the selected date range.")
+        return
+
+    # Define color mapping
     colors = px.colors.sequential.Peach
-    fig = px.bar(
-        plot_df,
-        x="Date",
-        y="Count",
-        color="Interaction",
-        title=f"Cumulative Repository Metrics ({resolution})",
-        color_discrete_map={
-            metric: colors[idx % len(colors)]
-            for idx, metric in enumerate(
-                [
-                    "Total Commits",
-                    "Total Stars",
-                    "Total Forks",
-                    "Total Issues",
-                    "Total PRs",
-                ]
-            )
-        },
+    color_map = {
+        metric: colors[idx % len(colors)] for idx, metric in enumerate(TOTALS_METRICS)
+    }
+
+    # Create cumulative metrics chart (using date-filtered data)
+    fig_cumulative = plot_totals_metrics(
+        filtered_df_display, resolution=resolution, color_map=color_map, cumulative=cumulative
     )
-    fig.update_layout(hovermode="x", height=350)
-    container.plotly_chart(fig, use_container_width=True, config=FIG_CONFIG)
+    container.plotly_chart(
+        fig_cumulative,
+        use_container_width=True,
+        key=f"cumulative_metrics_{tool_name}",
+    )
+
+    # Create open metrics chart (using FULL data for correct open counts)
+    color_map_open = {
+        metric: colors[idx % len(colors)] for idx, metric in enumerate(OPEN_METRICS)
+    }
+    fig_open = plot_open_metrics(full_filtered_df, resolution=resolution, color_map=color_map_open)
+    container.plotly_chart(
+        fig_open,
+        use_container_width=True,
+        key=f"open_metrics_{tool_name}",
+        config=FIG_CONFIG,
+    )
 
     # Top contributors
     container.markdown("### Top 10 Contributors")
@@ -379,7 +638,7 @@ def render_project_development_section(tool_url: str, tool_name: str, container)
 
 
 def score_to_gradient(score_str: str) -> str:
-    """Convert score to CSS gradient."""
+    """Converts a score string (e.g. '7') to a CSS style string with a color gradient."""
     if str(score_str).strip() in ("?", "N/A", ""):
         return "background: #f0f0f0; color: #888;"
     try:
@@ -529,7 +788,7 @@ def render_downloads_section(tool_url: str, tool_name: str, container):
         hovermode="x",
         showlegend=False,
     )
-    container.plotly_chart(fig, use_container_width=True, config=FIG_CONFIG)
+    container.plotly_chart(fig, use_container_width=True)
 
 
 if __name__ == "__main__":
@@ -564,7 +823,7 @@ if __name__ == "__main__":
 
     # User Interactions
     with st.expander("👤 Tool User Interaction Analysis", expanded=True):
-        render_user_interaction_section(tool_url, tool_name, st.container())
+        render_user_interaction_section(tool_url, st.container())
 
     st.markdown("---")
 

@@ -658,6 +658,216 @@ def _render_stat(label: str, value: int, total: int) -> str:
     pct = (value / total * 100) if total > 0 else 0
     return f"**{label}:** {int(value):,} / {int(total):,} ({int(pct)}%)"
 
+def get_complete_time(df: pd.DataFrame, interaction: str, time_col: str) -> pd.Series:
+    """Calculate time to completion for PRs or issues.
+
+    Args:
+        df: DataFrame containing interaction data.
+        interaction: Type of interaction ('pr' or 'issue').
+        time_col: Name of the completion date column ('merged' or 'closed').
+
+    Returns:
+        Series containing completion times in days.
+    """
+    # Calculate time to merge for PRs
+    data = df.loc[(df.interaction == interaction) & (df["subtype"] == "author")].dropna(
+        subset=[time_col]
+    )
+    complete_time = (data[time_col] - data["created"]).dt.total_seconds() / (24 * 3600)
+    return complete_time
+
+def plot_histogram(
+    df: pd.Series, global_median: float | None, title: str, label: str
+) -> go.Figure:
+    """Create a histogram with median lines.
+
+    Args:
+        df: Series containing data to plot.
+        global_median: Median value for all tools, or None.
+        title: Title for the histogram.
+        label: Label for the x-axis.
+
+    Returns:
+        Plotly Figure object configured with histogram and median lines.
+    """
+    fig = px.histogram(
+        df.to_frame("count"),
+        x="count",
+        nbins=50,
+        title=f"{title} (n={len(df)})",
+        labels={"count": label},
+        color_discrete_sequence=[px.colors.sequential.Peach[5]],
+    )
+    fig.add_vline(
+        x=(median := df.median()),
+        line_dash="dash",
+        line_color="black",
+        annotation={
+            "text": f"Median: {median:.1f}",
+            "font_color": "black",
+            "y": 1,
+            # "position": "top",
+        },
+    )
+    if global_median is not None:
+        fig.add_vline(
+            x=global_median,
+            line_dash="dot",
+            line_color="grey",
+            annotation={
+                "text": f"All tools Median: {global_median:.1f}",
+                "font_color": "grey",
+                # "position": "bottom",
+                # "ayref": "paper",
+                "y": 1.05,
+            },
+        )
+    fig.update_layout(
+        xaxis_title=label,
+        yaxis_title="Count",
+        showlegend=False,
+        bargap=0.1,
+        dragmode=False,
+    )
+    fig.update_xaxes(fixedrange=True)
+    fig.update_yaxes(fixedrange=True)
+    return fig
+
+def _get_engagement(df: pd.DataFrame, interaction: str) -> pd.Series:
+    """Calculate engagement metrics for PRs or issues.
+
+    Args:
+        df: DataFrame containing interaction data.
+        interaction: Type of interaction ('pr' or 'issue').
+
+    Returns:
+        Series containing engagement counts (comments, reactions, reviews) per item.
+    """
+    engagement = (
+        df.loc[
+            (df.interaction == interaction)
+            & df.subtype.isin(["comment", "reaction", "review"])
+        ]
+        .groupby(["number", "repo"], group_keys=False)
+        .size()
+    )
+    engagement_inc_zero = engagement.reindex(
+        df.loc[(df.interaction == interaction)]
+        .set_index(["number", "repo"])
+        .index.drop_duplicates()
+    ).fillna(0)
+    return engagement_inc_zero
+
+
+def resolution_histograms(df: pd.DataFrame, global_df: pd.DataFrame | None = None):
+    """Create histograms showing time to merge PRs and time to close issues.
+
+    Args:
+        df: Filtered interactions data for selected tools.
+        global_df: Unfiltered interactions data for all tools. Defaults to None.
+    """
+    resolved_at = {"issue": "closed", "pr": "merged"}
+    titles = {"pr": "Time to Merge Pull Requests", "issue": "Time to Close Issues"}
+    labels = {"pr": "Days to Merge", "issue": "Days to Close"}
+
+    st.subheader("Time to Resolution")
+    st.markdown("""
+    *Time to Resolution* refers to the duration taken to close or merge a PR or issue, measured from the time of creation to resolution.
+    Shorter resolution times can indicate more efficient workflows and quicker feedback loops.
+    They can also indicate a lack of engagement or thorough review, so should be interpreted in context.
+    """)
+    # Create two columns for side-by-side histograms
+    col_resolve_1, col_resolve_2 = st.columns(2)
+    cols = {"pr": col_resolve_1, "issue": col_resolve_2}
+    for interaction, col in resolved_at.items():
+        complete_time = get_complete_time(df, interaction, col)
+        if complete_time.empty:
+            cols[interaction].info("No resolution data available.")
+            continue
+        if global_df is not None:
+            global_complete_time = get_complete_time(
+                global_df, interaction, col
+            ).median()
+        else:
+            global_complete_time = None
+        fig = plot_histogram(
+            complete_time,
+            global_median=global_complete_time,
+            title=titles[interaction],
+            label=labels[interaction],
+        )
+        cols[interaction].plotly_chart(
+            fig,
+            width="stretch",
+            config=FIG_CONFIG,
+            key=f"{interaction}_resolution_histogram",
+        )
+
+
+def engagement_histograms(df: pd.DataFrame, global_df: pd.DataFrame | None = None):
+    """Create histograms showing engagement levels for PRs and issues.
+
+    Displays distribution of comments, reactions, and reviews before resolution.
+
+    Args:
+        df: Filtered interactions data for selected tools.
+        global_df: Unfiltered interactions data for all tools. Defaults to None.
+    """
+    titles = {"pr": "Pull Request Engagement", "issue": "Issue Engagement"}
+    labels = {
+        "pr": "Engagement (Comments/Reactions/Reviews)",
+        "issue": "Engagement (Comments/Reactions)",
+    }
+    st.subheader("Engagement during Resolution")
+    st.markdown("""
+    *Engagement* refers to the number of comments, reactions, and reviews made on a PR or issue before it is closed or merged.
+    Higher engagement can indicate more thorough reviews and feedback in PRs and active problem-solving and collaboration in Issues.
+    """)
+    _prs_with_reviews_caption(df)
+    col_engagement_1, col_engagement_2 = st.columns(2)
+    cols = {"pr": col_engagement_1, "issue": col_engagement_2}
+    for interaction in cols.keys():
+        engagement_time = _get_engagement(df, interaction)
+
+        if engagement_time.empty:
+            cols[interaction].info("No engagement data available.")
+            continue
+
+        if global_df is not None:
+            global_engagement_time = _get_engagement(global_df, interaction).median()
+
+        else:
+            global_engagement_time = None
+        fig = plot_histogram(
+            engagement_time,
+            global_median=global_engagement_time,
+            title=titles[interaction],
+            label=labels[interaction],
+        )
+        cols[interaction].plotly_chart(
+            fig,
+            width="stretch",
+            config=FIG_CONFIG,
+            key=f"{interaction}_engagement_histogram",
+        )
+
+
+def _prs_with_reviews_caption(df: pd.DataFrame) -> None:
+    """Calculate and display percentage of PRs reviewed before merge."""
+    df_pr = df.loc[(df.interaction == "pr")]
+    cols = ["repo", "number"]
+    is_reviewed = df_pr.loc[df_pr.subtype == "review", cols].drop_duplicates()
+    is_closed = df_pr.loc[
+        (df_pr.subtype == "author") & (df_pr.closed.notna() | df_pr.merged.notna()),
+        cols,
+    ].drop_duplicates()
+    merged_and_reviewed = pd.merge(is_reviewed, is_closed, on=cols, how="inner")
+    if not is_closed.empty:
+        perc_prs_reviewed = len(merged_and_reviewed) / len(is_closed) * 100
+        st.caption(
+            f"{perc_prs_reviewed:.1f}% of PRs received at least one review before being merged/closed."
+        )
+
 def render_project_development_section(tool_url: str, tool_name: str, container):
     """Render complete project development metrics."""
     # Add explanatory text
@@ -815,8 +1025,15 @@ def render_project_development_section(tool_url: str, tool_name: str, container)
                 caption=f"[{row['username']}]({profile_url})\n\n{row['interaction_count']} interactions",
             )
 
+    # Prepare global data for histogram comparison
+    # Load all tools data with same filters (bot filtering + date filtering)
+    global_df = exclude_bot_interactions(df, hide_bots=hide_bots)
+    time_filtered_global_df = date_filter(global_df, (str(start_date), str(end_date)))
+
     user_classifications_df = load_user_classifications()
     detailed_org_contributions_breakdown(time_filtered_df, user_classifications_df)
+    resolution_histograms(time_filtered_df, time_filtered_global_df)
+    engagement_histograms(time_filtered_df, time_filtered_global_df)
 
 # ============================================================================
 # OSSF Security Scores

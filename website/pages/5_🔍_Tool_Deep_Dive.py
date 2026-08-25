@@ -4,8 +4,9 @@
 
 """Unified deep dive page combining all tool analyses."""
 
-from pathlib import Path
 import re
+from pathlib import Path
+
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
@@ -76,7 +77,6 @@ def load_ossf_scores() -> tuple[pd.DataFrame, pd.DataFrame]:
 @st.cache_data
 def load_downloads() -> pd.DataFrame:
     """Load package downloads data."""
-
     raw = pd.read_csv(user_stats_dir / "package_downloads.csv")
     date_cols = [c for c in raw.columns if re.match(r"^\d{4}-\d{2}$", c)]
     raw["display_name"] = raw["pypi_package_name"].fillna(raw["id"])
@@ -100,7 +100,9 @@ def load_downloads() -> pd.DataFrame:
     return long
 
 
-def _reindex_to_daterange(df: pd.DataFrame, resample: str, tool_name: str) -> pd.DataFrame:
+def _reindex_to_daterange(
+    df: pd.DataFrame, resample: str, tool_name: str
+) -> pd.DataFrame:
     """Reindex dataframe to match the date range from the slider."""
     date_range_key = f"date_range_slider_{tool_name}"
     if date_range_key in st.session_state:
@@ -204,10 +206,7 @@ def render_user_interaction_section(tool_url: str, container):
         orientation="h",
         text="Number of Users",
     )
-    fig.update_traces(
-        texttemplate="%{text}",
-        textposition="outside",
-    )
+    fig.update_traces(texttemplate="%{text}", textposition="outside")
     fig.update_layout(
         height=300,
         showlegend=False,
@@ -232,10 +231,7 @@ def render_user_interaction_section(tool_url: str, container):
             orientation="h",
             text="Number of Users",
         )
-        fig.update_traces(
-            texttemplate="%{text}",
-            textposition="outside",
-        )
+        fig.update_traces(texttemplate="%{text}", textposition="outside")
         fig.update_layout(
             yaxis={"title": "Organization"},
             xaxis={"title": "Number of Users", "gridcolor": "rgba(0,0,0,0.07)"},
@@ -261,10 +257,7 @@ def render_user_interaction_section(tool_url: str, container):
             orientation="h",
             text="Number of Users",
         )
-        fig.update_traces(
-            texttemplate="%{text}",
-            textposition="outside",
-        )
+        fig.update_traces(texttemplate="%{text}", textposition="outside")
         fig.update_layout(
             yaxis={"title": "Location"},
             xaxis={"title": "Number of Users", "gridcolor": "rgba(0,0,0,0.07)"},
@@ -304,7 +297,9 @@ def render_user_interaction_section(tool_url: str, container):
             paper_bgcolor="rgba(0,0,0,0)",  # Transparent background
             plot_bgcolor="rgba(0,0,0,0)",  # Transparent plot area
         )
-        container.plotly_chart(fig,  use_container_width=True, config=FIG_CONFIG, key="country_map")
+        container.plotly_chart(
+            fig, use_container_width=True, config=FIG_CONFIG, key="country_map"
+        )
 
 
 # ============================================================================
@@ -400,7 +395,11 @@ def _plot_timeseries(
 
 
 def plot_totals_metrics(
-    df: pd.DataFrame, resolution: str, color_map: dict, cumulative: bool = True, tool_name: str = ""
+    df: pd.DataFrame,
+    resolution: str,
+    color_map: dict,
+    cumulative: bool = True,
+    tool_name: str = "",
 ) -> go.Figure:
     """Create cumulative metrics timeline chart.
 
@@ -450,7 +449,9 @@ def plot_totals_metrics(
     return fig
 
 
-def plot_open_metrics(df: pd.DataFrame, resolution: str, color_map: dict, tool_name: str = "") -> go.Figure:
+def plot_open_metrics(
+    df: pd.DataFrame, resolution: str, color_map: dict, tool_name: str = ""
+) -> go.Figure:
     """Create open issues and PRs timeline chart.
 
     Args:
@@ -463,7 +464,9 @@ def plot_open_metrics(df: pd.DataFrame, resolution: str, color_map: dict, tool_n
         Plotly Figure showing open issues and PRs over time.
     """
     resample = f"1{RESOLUTION_CONVERTER[resolution]}"
-    _df = df.loc[df["interaction"].isin(["issue", "pr"]) & (df["subtype"] == "author")].copy()
+    _df = df.loc[
+        df["interaction"].isin(["issue", "pr"]) & (df["subtype"] == "author")
+    ].copy()
     _df["closed"] = _df["closed"].fillna(_df["merged"])
     _df_unique = _df.drop_duplicates(subset=["number"])
     created_df = get_totals(_df_unique, "created", resample).cumsum()
@@ -522,10 +525,7 @@ def plot_open_metrics(df: pd.DataFrame, resolution: str, color_map: dict, tool_n
     return fig
 
 
-def exclude_bot_interactions(
-    df: pd.DataFrame,
-    hide_bots: bool = True,
-) -> pd.DataFrame:
+def exclude_bot_interactions(df: pd.DataFrame, hide_bots: bool = True) -> pd.DataFrame:
     """Filter out interactions by bots.
 
     Args:
@@ -559,6 +559,7 @@ def exclude_bot_interactions(
         )
         df = df[mask]
     return df
+
 
 def detailed_org_contributions_breakdown(
     df: pd.DataFrame, user_classifications_df: pd.DataFrame
@@ -658,6 +659,7 @@ def _render_stat(label: str, value: int, total: int) -> str:
     pct = (value / total * 100) if total > 0 else 0
     return f"**{label}:** {int(value):,} / {int(total):,} ({int(pct)}%)"
 
+
 def get_complete_time(df: pd.DataFrame, interaction: str, time_col: str) -> pd.Series:
     """Calculate time to completion for PRs or issues.
 
@@ -675,6 +677,7 @@ def get_complete_time(df: pd.DataFrame, interaction: str, time_col: str) -> pd.S
     )
     complete_time = (data[time_col] - data["created"]).dt.total_seconds() / (24 * 3600)
     return complete_time
+
 
 def plot_histogram(
     df: pd.Series, global_median: float | None, title: str, label: str
@@ -732,6 +735,7 @@ def plot_histogram(
     fig.update_xaxes(fixedrange=True)
     fig.update_yaxes(fixedrange=True)
     return fig
+
 
 def _get_engagement(df: pd.DataFrame, interaction: str) -> pd.Series:
     """Calculate engagement metrics for PRs or issues.
@@ -868,6 +872,7 @@ def _prs_with_reviews_caption(df: pd.DataFrame) -> None:
             f"{perc_prs_reviewed:.1f}% of PRs received at least one review before being merged/closed."
         )
 
+
 def render_project_development_section(tool_url: str, tool_name: str, container):
     """Render complete project development metrics."""
     # Add explanatory text
@@ -939,7 +944,9 @@ def render_project_development_section(tool_url: str, tool_name: str, container)
         start_date, end_date = date_range
     else:
         # Fallback if only one date selected
-        start_date = end_date = date_range if not isinstance(date_range, tuple) else date_range[0]
+        start_date = end_date = (
+            date_range if not isinstance(date_range, tuple) else date_range[0]
+        )
 
     # Bot filter checkbox
     hide_bots = container.toggle(
@@ -971,19 +978,26 @@ def render_project_development_section(tool_url: str, tool_name: str, container)
 
     # Create cumulative metrics chart (pass FULL data, plotting function handles date range display)
     fig_cumulative = plot_totals_metrics(
-        filtered_df, resolution=resolution, color_map=color_map, cumulative=cumulative, tool_name=tool_name
+        filtered_df,
+        resolution=resolution,
+        color_map=color_map,
+        cumulative=cumulative,
+        tool_name=tool_name,
     )
     container.plotly_chart(
-        fig_cumulative,
-        use_container_width=True,
-        key=f"cumulative_metrics_{tool_name}",
+        fig_cumulative, use_container_width=True, key=f"cumulative_metrics_{tool_name}"
     )
 
     # Create open metrics chart (pass FULL data, plotting function handles date range display)
     color_map_open = {
         metric: colors[idx % len(colors)] for idx, metric in enumerate(OPEN_METRICS)
     }
-    fig_open = plot_open_metrics(filtered_df, resolution=resolution, color_map=color_map_open, tool_name=tool_name)
+    fig_open = plot_open_metrics(
+        filtered_df,
+        resolution=resolution,
+        color_map=color_map_open,
+        tool_name=tool_name,
+    )
     container.plotly_chart(
         fig_open,
         use_container_width=True,
@@ -1034,6 +1048,7 @@ def render_project_development_section(tool_url: str, tool_name: str, container)
     detailed_org_contributions_breakdown(time_filtered_df, user_classifications_df)
     resolution_histograms(time_filtered_df, time_filtered_global_df)
     engagement_histograms(time_filtered_df, time_filtered_global_df)
+
 
 # ============================================================================
 # OSSF Security Scores

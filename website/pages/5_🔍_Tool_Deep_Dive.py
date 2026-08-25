@@ -133,7 +133,7 @@ def get_tool_id_from_url(url: str) -> str | None:
 # ============================================================================
 
 
-def render_user_interaction_section(tool_url: str, container):
+def render_user_interaction_section(tool_url: str, tool_name: str, container):
     """Render complete user interaction analysis."""
     # Add explanatory text
     container.markdown(
@@ -202,6 +202,13 @@ def render_user_interaction_section(tool_url: str, container):
     if filtered_df.empty:
         container.info("No user interaction data available for this tool.")
         return
+
+    # Render glowy header
+    header_template = _jinja_env.get_template("user_interaction_header.html.jinja")
+    header_html = header_template.render(
+        html_url=tool_url, selected_tool=tool_name, total_users=len(filtered_df)
+    )
+    container.markdown(header_html, unsafe_allow_html=True)
 
     # User classification bar chart
     container.markdown("### User Types Across All Repositories")
@@ -910,6 +917,20 @@ def render_project_development_section(tool_url: str, tool_name: str, container)
         container.info("No development metrics available for this tool.")
         return
 
+    # Calculate stats for header
+    total_commits = len(filtered_df[filtered_df.interaction == "commit"])
+    total_stars = len(filtered_df[filtered_df.interaction == "stargazer"])
+
+    # Render glowy header
+    header_template = _jinja_env.get_template("project_dev_header.html.jinja")
+    header_html = header_template.render(
+        html_url=tool_url,
+        selected_tool=tool_name,
+        total_commits=total_commits,
+        total_stars=total_stars,
+    )
+    container.markdown(header_html, unsafe_allow_html=True)
+
     # Repository metrics over time
     container.markdown("### Repository Metrics Over Time")
     container.markdown(
@@ -1288,12 +1309,15 @@ if __name__ == "__main__":
     tool_name = selected_names[0]
     tool_url = selected_urls[0]
 
-    st.markdown(f"## Analyzing: **{tool_name}**")
+    # Render glowy page header
+    header_template = _jinja_env.get_template("tool_deep_dive_header.html.jinja")
+    header_html = header_template.render(html_url=tool_url, selected_tool=tool_name)
+    st.markdown(header_html, unsafe_allow_html=True)
     st.markdown("---")
 
     # User Interactions
     with st.expander("👤 Tool User Interaction Analysis", expanded=True):
-        render_user_interaction_section(tool_url, st.container())
+        render_user_interaction_section(tool_url, tool_name, st.container())
 
     st.markdown("---")
 

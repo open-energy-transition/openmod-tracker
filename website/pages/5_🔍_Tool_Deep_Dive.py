@@ -312,6 +312,22 @@ def render_user_interaction_section(tool_url: str, container):
 # ============================================================================
 
 
+def date_filter(df: pd.DataFrame, date_range: tuple[str, str]) -> pd.DataFrame:
+    """Filter DataFrame by date range.
+
+    Args:
+        df: DataFrame to filter.
+        date_range: Start and end dates (YYYY-MM-DD) for filtering.
+
+    Returns:
+        Filtered DataFrame.
+    """
+    for dt_col in ["created", "closed", "merged"]:
+        df = df[df[dt_col].fillna(df.created).between(*date_range)]
+
+    return df
+
+
 def get_totals(df: pd.DataFrame, date_col: str, resample: str) -> pd.DataFrame:
     """Calculate counts of interactions over time.
 
@@ -506,6 +522,142 @@ def plot_open_metrics(df: pd.DataFrame, resolution: str, color_map: dict, tool_n
     return fig
 
 
+def exclude_bot_interactions(
+    df: pd.DataFrame,
+    hide_bots: bool = True,
+) -> pd.DataFrame:
+    """Filter out interactions by bots.
+
+    Args:
+        df: DataFrame containing user interaction data.
+        hide_bots: Whether to filter out bot interactions. Defaults to True.
+
+    Returns:
+        Filtered DataFrame containing interactions matching the criteria.
+    """
+    bot_patterns = [
+        "-bot",
+        r"\[bot\]",
+        "actions",
+        "dependabot",
+        "JuliaTagBot",
+        "pudlbot",
+        "codebot",
+        "renovate",
+        "sonarqube",
+        "codecov",
+        "coveralls",
+        "pre-commit-ci",
+        "pull-request-size",
+        "copilot",
+        "github-advanced-security",
+        "coderabbitai",
+    ]
+    if hide_bots:
+        mask = ~df["username"].str.contains(
+            "|".join(bot_patterns), case=False, na=False
+        )
+        df = df[mask]
+    return df
+
+def detailed_org_contributions_breakdown(
+    df: pd.DataFrame, user_classifications_df: pd.DataFrame
+):
+    """Display detailed breakdown of organizational contributions by type.
+
+    Shows top 3 organizations with expandable statistics in columns.
+
+    Args:
+        df (pd.DataFrame): DataFrame containing user interaction data (already filtered).
+        user_classifications_df (pd.DataFrame): DataFrame containing username to company mappings.
+    """
+    st.subheader("Top 3 Contributing Organizations")
+
+    contribution_types = {
+        "Issues Opened": "interaction == 'issue' & subtype == 'author'",
+        "PRs Opened": "interaction == 'pr' & subtype == 'author'",
+        "Commits": "interaction == 'commit'",
+        "Feedback Given": (
+            "interaction in ['issue', 'pr'] & subtype in ['comment', 'reaction', 'review']"
+        ),
+    }
+
+    global_totals = {"Total contributions": len(df)}
+    for contrib_name, mask in contribution_types.items():
+        global_totals[contrib_name] = len(df.query(mask))
+
+    org_contributions = (
+        df.merge(user_classifications_df[["username", "company"]], on="username")
+        .groupby(["company", "interaction", "subtype"])
+        .size()
+        .to_frame("count")
+        .reset_index()
+    )
+
+    totals = {
+        "Total contributions": org_contributions.groupby("company")["count"].sum()
+    }
+
+    for contrib_name, mask in contribution_types.items():
+        totals[contrib_name] = (
+            org_contributions.query(mask).groupby("company")["count"].sum()
+        )
+
+    totals_df = (
+        pd.DataFrame(totals)
+        .fillna(0)
+        .sort_values(by="Total contributions", ascending=False)
+        .head(3)
+    )
+
+    st.html(
+        f"""
+        <style>
+            div [data-testid=stExpander] details summary{{
+                background-color: {px.colors.sequential.Peach[0]};
+            }}
+            div [data-testid=stExpander] details summary p{{
+                font-size: 1rem;
+            }}
+        </style>
+        """
+    )
+
+    cols = st.columns(3)
+
+    metric_order = ["Issues Opened", "PRs Opened", "Commits", "Feedback Given"]
+
+    for (company, row), col in zip(totals_df.iterrows(), cols):
+        with col:
+            company_name = str(company).title()
+
+            st.markdown(f"**{company_name}**")
+
+            st.metric(
+                label="Total contributions",
+                value=f"{int(row['Total contributions']):,}",
+            )
+            with st.expander("View breakdown"):
+                for metric in metric_order:
+                    st.markdown(
+                        _render_stat(metric, row[metric], global_totals[metric])
+                    )
+
+
+def _render_stat(label: str, value: int, total: int) -> str:
+    """Render an org contribution as a markdown string with percentage.
+
+    Args:
+        label (str): label for the metric.
+        value (int): value for the metric.
+        total (int): total value for calculating percentage.
+
+    Returns:
+        str: formatted markdown string with value and percentage.
+    """
+    pct = (value / total * 100) if total > 0 else 0
+    return f"**{label}:** {int(value):,} / {int(total):,} ({int(pct)}%)"
+
 def render_project_development_section(tool_url: str, tool_name: str, container):
     """Render complete project development metrics."""
     # Add explanatory text
@@ -531,13 +683,6 @@ def render_project_development_section(tool_url: str, tool_name: str, container)
     )
     filtered_df = df[df.repo.str.contains(repo, case=False)]
 
-    # Hide bots
-    bot_patterns = ["-bot", r"\[bot\]", "actions", "dependabot", "pre-commit-ci"]
-    mask = ~filtered_df["username"].str.contains(
-        "|".join(bot_patterns), case=False, na=False
-    )
-    filtered_df = filtered_df[mask]
-
     if filtered_df.empty:
         container.info("No development metrics available for this tool.")
         return
@@ -556,6 +701,8 @@ def render_project_development_section(tool_url: str, tool_name: str, container)
     max_date = filtered_df[["merged", "created", "closed"]].max().max().date()
     initial_min = (max_date - pd.DateOffset(years=1)).date()
 
+    container.markdown("#### Filters")
+
     # Resolution control
     resolution = container.radio(
         "Resolution",
@@ -566,21 +713,40 @@ def render_project_development_section(tool_url: str, tool_name: str, container)
         horizontal=True,
     )
 
-    # Date range slider
-    start_date, end_date = container.slider(
-        "Select date range",
+    # Date range picker - use column to constrain width
+    col_date = container.columns([1, 2])[0]
+    date_range = col_date.date_input(
+        "Select date range:",
+        value=(max(min_date, initial_min), max_date),
         min_value=min_date,
         max_value=max_date,
-        value=(max(min_date, initial_min), max_date),
-        key=f"date_range_slider_{tool_name}",
-        help="Filter interactions by date range.",
+        key=f"date_range_picker_{tool_name}",
+        help="Filter interactions by date range. Click to open calendar picker.",
     )
+
+    # Handle date range input (returns tuple when both dates selected)
+    if isinstance(date_range, tuple) and len(date_range) == 2:
+        start_date, end_date = date_range
+    else:
+        # Fallback if only one date selected
+        start_date = end_date = date_range if not isinstance(date_range, tuple) else date_range[0]
+
+    # Bot filter checkbox
+    hide_bots = container.toggle(
+        "Hide bot interactions",
+        value=True,
+        key=f"hide_bots_checkbox_{tool_name}",
+        help="Filter out automated bot interactions (e.g., actions, codecov, pre-commit-ci).",
+    )
+
+    filtered_df = exclude_bot_interactions(filtered_df, hide_bots=hide_bots)
 
     # Cumulative toggle
     cumulative = container.toggle(
         "Toggle cumulative totals",
         value=True,
         key=f"cumulative_toggle_{tool_name}",
+        help="When enabled, shows running totals accumulated over time. When disabled, shows counts for each time period.",
     )
 
     if filtered_df.empty:
@@ -615,17 +781,28 @@ def render_project_development_section(tool_url: str, tool_name: str, container)
         config=FIG_CONFIG,
     )
 
-    # Top contributors
+    # Top contributors - apply date filter for this section
     container.markdown("### Top 10 Contributors")
+    container.markdown("""
+    Across all interaction types (issues, PRs, commits), these are the top 10 most active contributors for the selected tool and date range.
+
+    Note that activity depends on contribution conventions and may not reflect overall impact.
+    For instance, some repositories squash all commits made in a Pull Request into a single commit before merging it into the default project branch.
+    This will result in fewer commits being recorded for contributors to those repositories.
+    """)
+
+    # Apply date filter to match original page behavior
+    time_filtered_df = date_filter(filtered_df, (str(start_date), str(end_date)))
+
     top_users = (
-        filtered_df.loc[
-            filtered_df["interaction"].isin(["pr", "issue", "commit"]), "username"
+        time_filtered_df.loc[
+            time_filtered_df["interaction"].isin(["pr", "issue", "commit"]), "username"
         ]
         .value_counts()
         .head(10)
         .reset_index()
     )
-    top_users.columns = ["username", "count"]
+    top_users.columns = ["username", "interaction_count"]
 
     cols = container.columns(5)
     for idx, row in top_users.iterrows():
@@ -635,9 +812,11 @@ def render_project_development_section(tool_url: str, tool_name: str, container)
             st.image(
                 avatar_url,
                 width=100,
-                caption=f"[{row['username']}]({profile_url})\n\n{row['count']} interactions",
+                caption=f"[{row['username']}]({profile_url})\n\n{row['interaction_count']} interactions",
             )
 
+    user_classifications_df = load_user_classifications()
+    detailed_org_contributions_breakdown(time_filtered_df, user_classifications_df)
 
 # ============================================================================
 # OSSF Security Scores

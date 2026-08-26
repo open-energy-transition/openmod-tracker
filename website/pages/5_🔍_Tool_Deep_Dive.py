@@ -1223,6 +1223,8 @@ def render_downloads_section(tool_url: str, tool_name: str, container: Any) -> N
     # Add explanatory text
     container.markdown(
         """
+        Explore how energy modelling tools are downloaded month by month across the open-source community.
+
         Package downloads are a strong proxy for **real-world tool usage** as they capture users who actually install and run a tool.
 
         Here we track **monthly PyPI and Conda downloads** for energy modelling tools that publish Python packages, spanning the past year.
@@ -1343,5 +1345,5 @@ if __name__ == "__main__":
     st.markdown("---")
 
     # Downloads
-    with st.expander("📦 Download Trends", expanded=True):
+    with st.expander("📦 Package Download Trends", expanded=True):
         render_downloads_section(tool_url, tool_name, st.container())

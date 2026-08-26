@@ -1904,6 +1904,36 @@ if __name__ == "__main__":
     st.set_page_config(page_title="Tool Deep Dive", page_icon="🔍", layout="wide")
     st.title("🔍 Tool Deep Dive")
 
+    # Add custom CSS for plot shadows
+    st.markdown(
+        """
+        <style>
+        /* Add shadow effect to all Plotly charts */
+        div[data-testid="stPlotlyChart"] > div {
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            padding: 8px;
+        }
+
+        /* Add shadow effect to maps */
+        .stDeckGlJsonChart, iframe[title*="streamlit_folium"] {
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            border: 1px solid #e5e7eb;
+        }
+
+        /* Add shadow effect to images (avatars) */
+        div[data-testid="stImage"] {
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
     # Get selected tools from session state
     selected_names = util.get_state("selected_tool_names", [])
     selected_urls = util.get_state("selected_tool_urls", [])

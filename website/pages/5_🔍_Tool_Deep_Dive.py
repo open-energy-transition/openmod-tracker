@@ -115,8 +115,14 @@ def load_downloads() -> pd.DataFrame:
             other_source, date, downloads.
     """
     raw = pd.read_csv(user_stats_dir / "package_downloads.csv")
+
+    # Identify date columns (format YYYY-MM)
     date_cols = [c for c in raw.columns if re.match(r"^\d{4}-\d{2}$", c)]
+
+    # Prefer pypi_package_name as display name, fall back to id
     raw["display_name"] = raw["pypi_package_name"].fillna(raw["id"])
+
+    # Melt to long format and drop rows with no download count
     long = raw.melt(
         id_vars=[
             "id",
@@ -156,6 +162,88 @@ def _reindex_to_daterange(
         start_date, end_date = st.session_state[date_range_key]
         return df.reindex(pd.date_range(start_date, end_date, freq=resample))
     return df
+
+
+def compute_metrics(df: pd.DataFrame) -> dict:
+    """Compute summary statistics for the metric widgets.
+
+    Args:
+        df: Long-format downloads DataFrame.
+
+    Returns:
+        Dict with latest_month, prev_month, totals, top tool name/count,
+        all_time_total, and tool count.
+    """
+    months = sorted(df["date"].unique())
+    last_full = months[-1]
+    prev_full = months[-2] if len(months) >= 2 else None
+
+    month_totals = df.groupby("date")["downloads"].sum()
+    latest_total = int(month_totals[last_full])
+    prev_total = int(month_totals[prev_full]) if prev_full is not None else None
+
+    top_series = df[df["date"] == last_full].groupby("display_name")["downloads"].sum()
+    top_tool = str(top_series.idxmax())
+    top_tool_dl = int(top_series.max())
+
+    first_month = months[0]
+
+    return {
+        "latest_month": last_full,
+        "prev_month": prev_full,
+        "latest_total": latest_total,
+        "prev_total": prev_total,
+        "top_tool": top_tool,
+        "top_tool_downloads": top_tool_dl,
+        "all_time_total": int(df["downloads"].sum()),
+        "tools_count": int(df["display_name"].nunique()),
+        "first_month": first_month,
+    }
+
+
+def show_metrics(metrics: dict, delta_display_mode: str = "Absolute") -> None:
+    """Render st.metric widgets in a four-column row.
+
+    Args:
+        metrics: Dict produced by compute_metrics().
+        delta_display_mode: "Absolute" or "Percentage" to control how deltas are shown.
+    """
+    st.subheader("💡Quick stats")
+
+    latest_label = metrics["latest_month"].strftime("%b %Y")
+    prev_label = (
+        metrics["prev_month"].strftime("%b %Y") if metrics["prev_month"] else None
+    )
+
+    delta_str = None
+    if metrics["prev_total"] is not None and metrics["prev_total"] > 0:
+        diff = metrics["latest_total"] - metrics["prev_total"]
+        if delta_display_mode == "Percentage":
+            delta_str = f"{(diff / metrics['prev_total']) * 100:+.1f}%  vs {prev_label}"
+        else:
+            delta_str = f"{diff:+,}  vs {prev_label}"
+
+    col1, col2, col3, col4 = st.columns(4)
+    col1.metric(
+        label=f"📥 Total Downloads — {latest_label}",
+        value=f"{metrics['latest_total']:,}",
+        delta=delta_str,
+    )
+    # Render top-tool with a smaller font so long names always fit
+    col2.markdown(
+        f"<div style='font-size:0.8rem; color:gray; margin-bottom:4px'>🏆 Top Tool — {latest_label}</div>"
+        f"<div style='font-size:1rem; font-weight:700; line-height:1.3; word-break:break-word'>{metrics['top_tool']}</div>"
+        f"<div style='font-size:0.85rem; color:gray; margin-top:4px'>{metrics['top_tool_downloads']:,} downloads</div>",
+        unsafe_allow_html=True,
+    )
+    col3.metric(label="📦 Tools with Download Data", value=str(metrics["tools_count"]))
+
+    date_range = f"from {metrics['first_month'].strftime('%b %Y')} to {metrics['latest_month'].strftime('%b %Y')}"
+    col4.metric(
+        label="🌐 All-Time Tracked Downloads",
+        value=f"{metrics['all_time_total']:,}",
+        help=f"Sum of all downloads {date_range}",
+    )
 
 
 def get_tool_id_from_url(url: str) -> str | None:
@@ -1363,6 +1451,381 @@ def render_ossf_section(tool_url: str, tool_name: str, container: Any) -> None:
 # ============================================================================
 
 
+def plot_download_trends(
+    tool_df: pd.DataFrame,
+    all_downloads_df: pd.DataFrame,
+    tool_name: str,
+    container: Any,
+    delta_display_mode: str = "Absolute",
+) -> None:
+    """Plot download trends for selected tool with top 10 tools average comparison.
+
+    Displays a time series chart showing monthly download trends for the selected tool
+    compared against the average of the top 10 tools. Also shows metrics for the last
+    3 full months with month-over-month comparison.
+
+    Args:
+        tool_df: Long-format downloads DataFrame filtered for the selected tool with
+            columns: date, downloads, display_name.
+        all_downloads_df: Long-format downloads DataFrame for all tools used to
+            calculate the top 10 average comparison line.
+        tool_name: Display name of the selected tool for chart title and labels.
+        container: Streamlit container to render the visualization into.
+        delta_display_mode: Format for displaying month-over-month deltas, either
+            "Absolute" for numeric difference or "Percentage" for percentage change.
+            Defaults to "Absolute".
+    """
+    container.subheader("📈 Download Trends Over Time")
+
+    # Colorblind-friendly palette (Okabe-Ito palette)
+    colors = [
+        "#0173B2",  # Blue
+        "#DE8F05",  # Orange
+        "#029E73",  # Green
+        "#CC78BC",  # Purple
+        "#CA9161",  # Brown
+        "#949494",  # Grey (for average)
+    ]
+
+    # ── Last-3-full-months metrics ────────────────────────────────────────────
+    all_months = sorted(tool_df["date"].unique())
+
+    if len(all_months) >= 3:
+        recent = all_months[-3:]
+        m_cols = container.columns(3)
+        for col, month in zip(m_cols, recent):
+            label = month.strftime("%B %Y")
+            row = tool_df[tool_df["date"] == month]
+
+            value = int(row["downloads"].sum()) if not row.empty else None
+
+            prev_idx = all_months.index(month) - 1
+            if prev_idx >= 0:
+                prev_row = tool_df[tool_df["date"] == all_months[prev_idx]]
+                prev_value = (
+                    int(prev_row["downloads"].sum()) if not prev_row.empty else None
+                )
+                prev_label_str = all_months[prev_idx].strftime("%B %Y")
+            else:
+                prev_value = None
+                prev_label_str = None
+
+            delta = None
+            if value is not None and prev_value is not None and prev_value > 0:
+                if delta_display_mode == "Percentage":
+                    delta = f"{((value - prev_value) / prev_value) * 100:+.1f}%"
+                else:
+                    delta = f"{value - prev_value:+,}"
+            help_text = (
+                f"Change compared to {prev_label_str}" if prev_label_str else None
+            )
+            col.metric(
+                label=label,
+                value=f"{value:,}" if value is not None else "—",
+                delta=delta,
+                help=help_text,
+            )
+
+    container.markdown("")
+
+    # ── Chart with light background ───────────────────────────────────────────
+    fig = go.Figure()
+
+    # Show selected tool line
+    trend_df = tool_df.sort_values("date")
+    fig.add_trace(
+        go.Scatter(
+            x=trend_df["date"],
+            y=trend_df["downloads"],
+            mode="lines+markers",
+            name=tool_name,
+            line=dict(color=colors[0], width=2.5),
+            marker=dict(size=7, symbol="circle", color=colors[0]),
+            fill="tozeroy",
+            fillcolor=f"rgba({int(colors[0][1:3], 16)}, {int(colors[0][3:5], 16)}, {int(colors[0][5:7], 16)}, 0.10)",
+            hovertemplate=f"<b>{tool_name}</b><br>%{{x|%b %Y}}: %{{y:,}}<extra></extra>",
+        )
+    )
+
+    # Add top 10 tools average line for comparison
+    agg_df = (
+        all_downloads_df.groupby("date")
+        .apply(
+            lambda x: x.sort_values("downloads").tail(10).downloads.mean(),
+            include_groups=False,
+        )
+        .reset_index(name="downloads")
+    )
+
+    fig.add_trace(
+        go.Scatter(
+            x=agg_df["date"],
+            y=agg_df["downloads"],
+            mode="lines",
+            name="Top10 tools average",
+            line=dict(color=colors[5], width=2.5, dash="dash"),
+            hovertemplate="<b>Top10 tools average</b><br>%{x|%b %Y}: %{y:,.0f}<extra></extra>",
+        )
+    )
+
+    fig.update_layout(
+        template="plotly_white",
+        paper_bgcolor="white",
+        plot_bgcolor="white",
+        height=380,
+        margin=dict(l=10, r=10, t=50, b=40),
+        font=dict(family="Inter, sans-serif"),
+        xaxis=dict(
+            title="Month",
+            type="date",
+            gridcolor="rgba(0,0,0,0.07)",
+            zerolinecolor="rgba(0,0,0,0.1)",
+        ),
+        yaxis=dict(
+            title="Monthly Downloads",
+            gridcolor="rgba(0,0,0,0.07)",
+            zerolinecolor="rgba(0,0,0,0.1)",
+            tickformat=",",
+        ),
+        hovermode="x unified",
+        showlegend=True,
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+    )
+    container.plotly_chart(
+        fig, use_container_width=True, config={"displayModeBar": False}
+    )
+
+
+def show_package_metrics(
+    tool_df: pd.DataFrame, container: Any, delta_display_mode: str = "Absolute"
+) -> None:
+    """Display detailed package download metrics with MoM and YoY comparisons.
+
+    Shows package name, repository/package manager links, and download metrics including
+    the latest month downloads with previous month comparison (MoM), and year-over-year
+    comparison (YoY) for the selected package.
+
+    Args:
+        tool_df: Long-format downloads DataFrame filtered for the selected tool with
+            columns: date, downloads, display_name, html_url, pypi_package_url, etc.
+        all_downloads_df: Long-format downloads DataFrame for all tools (currently unused
+            but kept for consistency).
+        tool_name: Display name of the selected tool.
+        container: Streamlit container to render the metrics into.
+        delta_display_mode: Format for displaying deltas, either "Absolute" for numeric
+            difference or "Percentage" for percentage change. Defaults to "Absolute".
+    """
+    container.subheader("📊 Package Sources and Download Metrics")
+
+    # Display package info and links
+
+    # Get package URLs from first row (they're the same for all rows of the same tool)
+    first_row = tool_df.iloc[0]
+    links_html = ""
+
+    # Repository link
+    url = first_row.get("html_url")
+    if pd.notna(url):
+        url = str(url)
+        if "github.com" in url:
+            icon = "https://github.com/favicon.ico"
+            host = "GitHub"
+        elif "gitlab" in url:
+            icon = "https://gitlab.com/assets/favicon-72a2cad5025aa931d6ea56c3201d1f18e68a8cd39788c7c80d5b2b82aa5143ef.png"
+            host = "GitLab"
+        else:
+            icon, host = None, "Repository"
+
+        links_html += (
+            f'<a href="{url}" target="_blank" style="text-decoration:none; color:inherit; margin-right:12px;">'
+            + (
+                f'<img src="{icon}" width="13" style="vertical-align:middle; margin-right:4px; border-radius:2px">'
+                if icon
+                else ""
+            )
+            + f"{host}</a>"
+        )
+
+    # PyPI link
+    pypi_url = first_row.get("pypi_package_url")
+    if pd.notna(pypi_url):
+        links_html += (
+            f'<a href="{pypi_url}" target="_blank" style="text-decoration:none; color:inherit; margin-right:12px;">'
+            f'<img src="https://pypi.org/static/images/logo-small.0e0855d0.svg" width="13" '
+            f'style="vertical-align:middle; margin-right:4px;">'
+            f"PyPI</a>"
+        )
+
+    # Anaconda link
+    anaconda_url = first_row.get("anaconda_package_url")
+    if pd.notna(anaconda_url):
+        links_html += (
+            f'<a href="{anaconda_url}" target="_blank" style="text-decoration:none; color:inherit; margin-right:12px;">'
+            f'<img src="https://www.anaconda.com/favicon.ico" width="13" '
+            f'style="vertical-align:middle; margin-right:4px;">'
+            f"Anaconda</a>"
+        )
+
+    # JuliaHub link
+    juliahub_url = first_row.get("juliahub_package_url")
+    if pd.notna(juliahub_url):
+        links_html += (
+            f'<a href="{juliahub_url}" target="_blank" style="text-decoration:none; color:inherit; margin-right:12px;">'
+            f'<img src="https://juliahub.com/favicon.ico" width="13" '
+            f'style="vertical-align:middle; margin-right:4px;">'
+            f"JuliaHub</a>"
+        )
+
+    # Other sources (Maven, Cargo, etc.)
+    other_source = first_row.get("other_source")
+    if pd.notna(other_source):
+        other_source_str = str(other_source)
+        if "central.sonatype.com" in other_source_str:
+            links_html += (
+                f'<a href="{other_source_str}" target="_blank" style="text-decoration:none; color:inherit; margin-right:12px;">'
+                f'<img src="https://central.sonatype.com/favicon.ico" width="13" '
+                f'style="vertical-align:middle; margin-right:4px;">'
+                f"Maven</a>"
+            )
+        elif "crates.io" in other_source_str:
+            links_html += (
+                f'<a href="{other_source_str}" target="_blank" style="text-decoration:none; color:inherit; margin-right:12px;">'
+                f'<img src="https://crates.io/favicon.ico" width="13" '
+                f'style="vertical-align:middle; margin-right:4px;">'
+                f"Cargo</a>"
+            )
+
+    if links_html:
+        container.markdown(links_html, unsafe_allow_html=True)
+
+    container.markdown("")
+
+    all_months = sorted(tool_df["date"].unique())
+
+    # Get latest month and previous month (for MoM)
+    latest_month = all_months[-1]
+    prev_month = all_months[-2] if len(all_months) >= 2 else None
+
+    # ── YoY windows ──────────────────────────────────────────────────────────
+    # Recent 12 months: latest_month-11 → latest_month
+    recent_window_end = pd.Timestamp(latest_month)
+    recent_window_start = recent_window_end - pd.DateOffset(months=11)
+    # Previous 12 months: latest_month-23 → latest_month-12
+    prev_window_end = recent_window_start - pd.DateOffset(months=1)
+    prev_window_start = prev_window_end - pd.DateOffset(months=11)
+
+    recent_months = [
+        m
+        for m in all_months
+        if recent_window_start <= pd.Timestamp(m) <= recent_window_end
+    ]
+    prev_year_months = [
+        m for m in all_months if prev_window_start <= pd.Timestamp(m) <= prev_window_end
+    ]
+
+    # Get download totals for different periods
+    latest_total = int(tool_df[tool_df["date"] == latest_month]["downloads"].sum())
+
+    prev_total = (
+        int(tool_df[tool_df["date"] == prev_month]["downloads"].sum())
+        if prev_month is not None
+        else None
+    )
+
+    recent_year_total = (
+        int(tool_df[tool_df["date"].isin(recent_months)]["downloads"].sum())
+        if recent_months
+        else None
+    )
+
+    prev_year_total = (
+        int(tool_df[tool_df["date"].isin(prev_year_months)]["downloads"].sum())
+        if prev_year_months
+        else None
+    )
+
+    # Format labels
+    latest_label = latest_month.strftime("%b %Y")
+    prev_label = prev_month.strftime("%b %Y") if prev_month is not None else None
+    recent_window_label = (
+        f"{recent_window_start.strftime('%b %Y')} – {recent_window_end.strftime('%b %Y')}"
+        if recent_months
+        else None
+    )
+    prev_window_label = (
+        f"{prev_window_start.strftime('%b %Y')} – {prev_window_end.strftime('%b %Y')}"
+        if prev_year_months
+        else None
+    )
+
+    # Display metrics
+    col_metric1, col_metric2 = container.columns(2)
+
+    # Month-over-month comparison
+    with col_metric1:
+        if prev_total is not None and prev_total > 0:
+            diff_mom = latest_total - prev_total
+            if delta_display_mode == "Percentage":
+                delta_mom = f"{(diff_mom / prev_total) * 100:+.1f}%"
+            else:
+                delta_mom = f"{diff_mom:+,}"
+        else:
+            delta_mom = None
+        col_metric1.metric(
+            label=f"Latest month — {latest_label}",
+            value=f"{latest_total:,}",
+            delta=delta_mom,
+            delta_color="off"
+            if delta_mom is None and prev_total is not None
+            else "normal",
+            help=f"MoM: Difference with respect to the previous month: {prev_label}"
+            if prev_label
+            else None,
+        )
+
+    # Year-over-year comparison
+    with col_metric2:
+        if (
+            recent_year_total is not None
+            and prev_year_total is not None
+            and prev_year_total > 0
+        ):
+            diff_yoy = recent_year_total - prev_year_total
+            if delta_display_mode == "Percentage":
+                delta_yoy = f"{(diff_yoy / prev_year_total) * 100:+.1f}%"
+            else:
+                delta_yoy = f"{diff_yoy:+,}"
+            col_metric2.metric(
+                label="Last year",
+                value=f"{recent_year_total:,}",
+                delta=delta_yoy,
+                help=(
+                    f"YoY: {recent_window_label} vs {prev_window_label}"
+                    if recent_window_label and prev_window_label
+                    else None
+                ),
+            )
+        elif recent_year_total is not None:
+            col_metric2.metric(
+                label="Last year",
+                value=f"{recent_year_total:,}",
+                delta=None,
+                delta_color="off",
+                help=(
+                    f"YoY: {recent_window_label} (no previous data)"
+                    if recent_window_label
+                    else "No previous year data for comparison"
+                ),
+            )
+        else:
+            col_metric2.markdown(
+                '<div style="background: #f8f8f8; color: #999; padding: 8px; border-radius: 4px; text-align: center; font-size: 0.85rem;">'
+                "No YoY data"
+                "</div>",
+                unsafe_allow_html=True,
+            )
+
+
 def render_downloads_section(tool_url: str, tool_name: str, container: Any) -> None:
     """Render download trends.
 
@@ -1374,6 +1837,24 @@ def render_downloads_section(tool_url: str, tool_name: str, container: Any) -> N
         tool_name: Display name of the tool.
         container: Streamlit container to render the section into.
     """
+    df = load_downloads()
+    tool_id = get_tool_id_from_url(tool_url)
+
+    if not tool_id:
+        container.info("No download data available for this tool.")
+        return
+
+    tool_df = df[df["id"] == tool_id]
+
+    if tool_df.empty:
+        container.info("No download data available for this tool.")
+        return
+
+    # Get latest month and download count for header
+    all_months = sorted(tool_df["date"].unique())
+    latest_month = all_months[-1]
+    latest_downloads = int(tool_df[tool_df["date"] == latest_month]["downloads"].sum())
+
     # Add explanatory text
     container.markdown(
         """
@@ -1395,56 +1876,28 @@ def render_downloads_section(tool_url: str, tool_name: str, container: Any) -> N
             """
         )
 
-    df = load_downloads()
-    tool_id = get_tool_id_from_url(tool_url)
-
-    if not tool_id:
-        container.info("No download data available for this tool.")
-        return
-
-    tool_df = df[df["id"] == tool_id]
-
-    if tool_df.empty:
-        container.info("No download data available for this tool.")
-        return
-
-    trend_df = tool_df.sort_values("date")
-
-    # Show recent stats
-    container.markdown("### Recent Monthly Downloads")
-    if len(trend_df) >= 6:
-        recent = trend_df.tail(6)
-        cols = container.columns(3)
-        for idx, (_, row) in enumerate(recent.iterrows()):
-            with cols[idx % 3]:
-                st.metric(
-                    label=row["date"].strftime("%b %Y"),
-                    value=f"{int(row['downloads']):,}",
-                )
-
-    # Plot trends
-    container.markdown("### Download Trend")
-    fig = go.Figure()
-    fig.add_trace(
-        go.Scatter(
-            x=trend_df["date"],
-            y=trend_df["downloads"],
-            mode="lines+markers",
-            line=dict(color="#0173B2", width=2),
-            fill="tozeroy",
-            fillcolor="rgba(1, 115, 178, 0.1)",
-        )
+    # Render glowy header
+    header_template_downloads = _jinja_env.get_template("downloads_header.html.jinja")
+    header_html_downloads = header_template_downloads.render(
+        html_url=tool_url,
+        selected_tool=tool_name,
+        latest_downloads=f"{latest_downloads:,}",
+        latest_month=latest_month.strftime("%b %Y"),
     )
+    container.markdown(header_html_downloads, unsafe_allow_html=True)
 
-    fig.update_layout(
-        template="plotly_white",
-        height=350,
-        xaxis=dict(title="Month"),
-        yaxis=dict(title="Downloads", tickformat=","),
-        hovermode="x",
-        showlegend=False,
+    show_percentage = container.toggle(
+        "Show delta as percentage",
+        value=False,
+        help="Toggle to show MoM/YoY deltas as percentages instead of absolute numbers.",
     )
-    container.plotly_chart(fig, use_container_width=True)
+    delta_display_mode = "Percentage" if show_percentage else "Absolute"
+
+    # Show detailed package metrics
+    show_package_metrics(tool_df, container, delta_display_mode)
+
+    # Plot download trends with top 10 comparison
+    plot_download_trends(tool_df, df, tool_name, container, delta_display_mode)
 
 
 if __name__ == "__main__":

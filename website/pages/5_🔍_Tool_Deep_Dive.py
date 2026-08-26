@@ -6,6 +6,7 @@
 
 import re
 from pathlib import Path
+from typing import Any
 
 import jinja2
 import pandas as pd
@@ -112,7 +113,7 @@ def _reindex_to_daterange(
     df: pd.DataFrame, resample: str, tool_name: str
 ) -> pd.DataFrame:
     """Reindex dataframe to match the date range from the slider."""
-    date_range_key = f"date_range_slider_{tool_name}"
+    date_range_key = f"date_range_picker_{tool_name}"
     if date_range_key in st.session_state:
         start_date, end_date = st.session_state[date_range_key]
         return df.reindex(pd.date_range(start_date, end_date, freq=resample))
@@ -133,7 +134,9 @@ def get_tool_id_from_url(url: str) -> str | None:
 # ============================================================================
 
 
-def render_user_interaction_section(tool_url: str, tool_name: str, container):
+def render_user_interaction_section(
+    tool_url: str, tool_name: str, container: Any
+) -> None:
     """Render complete user interaction analysis."""
     # Add explanatory text
     container.markdown(
@@ -578,7 +581,7 @@ def exclude_bot_interactions(df: pd.DataFrame, hide_bots: bool = True) -> pd.Dat
 
 def detailed_org_contributions_breakdown(
     df: pd.DataFrame, user_classifications_df: pd.DataFrame
-):
+) -> None:
     """Display detailed breakdown of organizational contributions by type.
 
     Shows top 3 organizations with expandable statistics in columns.
@@ -778,7 +781,9 @@ def _get_engagement(df: pd.DataFrame, interaction: str) -> pd.Series:
     return engagement_inc_zero
 
 
-def resolution_histograms(df: pd.DataFrame, global_df: pd.DataFrame | None = None):
+def resolution_histograms(
+    df: pd.DataFrame, global_df: pd.DataFrame | None = None
+) -> None:
     """Create histograms showing time to merge PRs and time to close issues.
 
     Args:
@@ -823,7 +828,9 @@ def resolution_histograms(df: pd.DataFrame, global_df: pd.DataFrame | None = Non
         )
 
 
-def engagement_histograms(df: pd.DataFrame, global_df: pd.DataFrame | None = None):
+def engagement_histograms(
+    df: pd.DataFrame, global_df: pd.DataFrame | None = None
+) -> None:
     """Create histograms showing engagement levels for PRs and issues.
 
     Displays distribution of comments, reactions, and reviews before resolution.
@@ -888,7 +895,9 @@ def _prs_with_reviews_caption(df: pd.DataFrame) -> None:
         )
 
 
-def render_project_development_section(tool_url: str, tool_name: str, container):
+def render_project_development_section(
+    tool_url: str, tool_name: str, container: Any
+) -> None:
     """Render complete project development metrics."""
     # Add explanatory text
     container.markdown(
@@ -1169,7 +1178,7 @@ def build_tool_detail_table(
     return template.render(rows=rows)
 
 
-def render_ossf_section(tool_url: str, tool_name: str, container):
+def render_ossf_section(tool_url: str, tool_name: str, container: Any) -> None:
     """Render OSSF security scores."""
     # Add explanatory text
     container.markdown(
@@ -1209,7 +1218,7 @@ def render_ossf_section(tool_url: str, tool_name: str, container):
 # ============================================================================
 
 
-def render_downloads_section(tool_url: str, tool_name: str, container):
+def render_downloads_section(tool_url: str, tool_name: str, container: Any) -> None:
     """Render download trends."""
     # Add explanatory text
     container.markdown(

@@ -348,30 +348,35 @@ def add_scoring(cols: list[str]) -> float:
         value=util.get_state("score_toggle", False),
         key="score_toggle",
     )
-    selectbox_cols = st.columns(len(cols))
-    selectbox_cols[0].selectbox(
-        "Metric scaling method",
-        ("rank", "min-max"),
-        help="""Select the method by which metrics should be scaled to bring them to a similar range.
-        `rank` uses the absolute rank of a tool for each metric.
-        `min-max` uses [min-max normalisation](https://en.wikipedia.org/wiki/Feature_scaling#Rescaling_(min-max_normalization)).
-        """,
-        key="scoring_method",
-    )
-    score_cols = st.columns(len(cols))
-    for i, score_col in enumerate(score_cols):
-        col_name = cols[i]
-        number = score_col.number_input(
-            label=col_name,
-            min_value=0.0,
-            max_value=1.0,
-            value=0.5,
-            step=0.1,
-            format="%0.01f",
-            key=f"scoring_{col_name}",
-        )
 
-    return number
+    # Only show scoring controls when toggle is enabled
+    if util.get_state("score_toggle", False):
+        selectbox_cols = st.columns(len(cols))
+        selectbox_cols[0].selectbox(
+            "Metric scaling method",
+            ("rank", "min-max"),
+            help="""Select the method by which metrics should be scaled to bring them to a similar range.
+            `rank` uses the absolute rank of a tool for each metric.
+            `min-max` uses [min-max normalisation](https://en.wikipedia.org/wiki/Feature_scaling#Rescaling_(min-max_normalization)).
+            """,
+            key="scoring_method",
+        )
+        score_cols = st.columns(len(cols))
+        for i, score_col in enumerate(score_cols):
+            col_name = cols[i]
+            number = score_col.number_input(
+                label=col_name,
+                min_value=0.0,
+                max_value=1.0,
+                value=0.5,
+                step=0.1,
+                format="%0.01f",
+                key=f"scoring_{col_name}",
+            )
+
+        return number
+
+    return None
 
 
 def update_score_col(df: pd.DataFrame) -> pd.Series:

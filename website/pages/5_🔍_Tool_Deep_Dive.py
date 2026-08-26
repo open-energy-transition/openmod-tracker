@@ -55,19 +55,35 @@ _jinja_env = jinja2.Environment(
 
 @st.cache_data
 def load_tools_mapping() -> pd.DataFrame:
-    """Load tools mapping data."""
+    """Load filtered data on the tools.
+
+    Returns:
+        pd.DataFrame: DataFrame containing the filtered data of the tools.
+    """
     return pd.read_csv(inventory_dir / "filtered.csv", index_col="id")
 
 
 @st.cache_data
 def load_user_classifications() -> pd.DataFrame:
-    """Load user classification data."""
+    """Load user classification data.
+
+    Returns:
+        pd.DataFrame: DataFrame containing user classifications including username,
+            company, location, and classification columns.
+    """
     return pd.read_csv(user_stats_dir / "user_classifications.csv")
 
 
 @st.cache_data
 def load_repo_interactions() -> pd.DataFrame:
-    """Load repository interactions data."""
+    """Load repository interactions data.
+
+    Parses date columns and removes rows with missing username or repo values.
+
+    Returns:
+        pd.DataFrame: DataFrame containing repository interactions with parsed dates
+            for created, closed, and merged columns, and duplicates removed.
+    """
     df = pd.read_csv(
         user_stats_dir / "repo_interactions.csv",
         parse_dates=["created", "closed", "merged"],
@@ -77,7 +93,13 @@ def load_repo_interactions() -> pd.DataFrame:
 
 @st.cache_data
 def load_ossf_scores() -> tuple[pd.DataFrame, pd.DataFrame]:
-    """Load OSSF Scorecard data."""
+    """Load OSSF Scorecard data.
+
+    Returns:
+        tuple[pd.DataFrame, pd.DataFrame]: A tuple containing:
+            - scores: DataFrame with OSSF security scores indexed by tool ID
+            - reasons: DataFrame with explanations for scores indexed by tool ID
+    """
     scores = pd.read_csv(inventory_dir / "scores.csv", index_col="id")
     reasons = pd.read_csv(inventory_dir / "reasons.csv", index_col="id")
     return scores, reasons
@@ -85,7 +107,13 @@ def load_ossf_scores() -> tuple[pd.DataFrame, pd.DataFrame]:
 
 @st.cache_data
 def load_downloads() -> pd.DataFrame:
-    """Load package downloads data."""
+    """Load and reshape the package downloads CSV into long format.
+
+    Returns:
+        pd.DataFrame: Long-format DataFrame with columns: id, display_name, html_url,
+            pypi_package_url, anaconda_package_url, juliahub_package_url,
+            other_source, date, downloads.
+    """
     raw = pd.read_csv(user_stats_dir / "package_downloads.csv")
     date_cols = [c for c in raw.columns if re.match(r"^\d{4}-\d{2}$", c)]
     raw["display_name"] = raw["pypi_package_name"].fillna(raw["id"])
@@ -112,7 +140,17 @@ def load_downloads() -> pd.DataFrame:
 def _reindex_to_daterange(
     df: pd.DataFrame, resample: str, tool_name: str
 ) -> pd.DataFrame:
-    """Reindex dataframe to match the date range from the slider."""
+    """Reindex dataframe to match the date range from the picker.
+
+    Args:
+        df: DataFrame with DatetimeIndex to reindex.
+        resample: Resampling frequency string (e.g., '1D', '1W', '1ME').
+        tool_name: Tool name used to construct the session state key.
+
+    Returns:
+        pd.DataFrame: Reindexed DataFrame with date range from session state,
+            or original DataFrame if date range is not in session state.
+    """
     date_range_key = f"date_range_picker_{tool_name}"
     if date_range_key in st.session_state:
         start_date, end_date = st.session_state[date_range_key]
@@ -121,7 +159,14 @@ def _reindex_to_daterange(
 
 
 def get_tool_id_from_url(url: str) -> str | None:
-    """Get tool ID from URL."""
+    """Get tool ID from URL.
+
+    Args:
+        url: Tool repository URL to look up.
+
+    Returns:
+        str | None: Tool ID if found in the mapping, None otherwise.
+    """
     tools_df = load_tools_mapping()
     match = tools_df[tools_df.url == url]
     if not match.empty:
@@ -134,10 +179,16 @@ def get_tool_id_from_url(url: str) -> str | None:
 # ============================================================================
 
 
-def render_user_interaction_section(
-    tool_url: str, tool_name: str, container: Any
-) -> None:
-    """Render complete user interaction analysis."""
+def render_user_interaction_section(tool_url: str, container: Any) -> None:
+    """Render complete user interaction analysis.
+
+    Displays user types, top organizations, geographic distribution, and interaction
+    patterns for a specific tool repository.
+
+    Args:
+        tool_url: GitHub or GitLab URL of the tool repository.
+        container: Streamlit container to render the section into.
+    """
     # Add explanatory text
     container.markdown(
         """
@@ -207,11 +258,13 @@ def render_user_interaction_section(
         return
 
     # Render glowy header
-    header_template = _jinja_env.get_template("user_interaction_header.html.jinja")
-    header_html = header_template.render(
-        html_url=tool_url, selected_tool=tool_name, total_users=len(filtered_df)
+    header_template_user_interaction = _jinja_env.get_template(
+        "user_interaction_header.html.jinja"
     )
-    container.markdown(header_html, unsafe_allow_html=True)
+    header_html_user_interaction = header_template_user_interaction.render(
+        html_url=url_of_tool, selected_tool=name_of_tool, total_users=len(filtered_df)
+    )
+    container.markdown(header_html_user_interaction, unsafe_allow_html=True)
 
     # User classification bar chart
     container.markdown("### User Types Across All Repositories")
@@ -328,12 +381,15 @@ def render_user_interaction_section(
 def date_filter(df: pd.DataFrame, date_range: tuple[str, str]) -> pd.DataFrame:
     """Filter DataFrame by date range.
 
+    Filters rows where created, closed, or merged dates fall within the specified range.
+    Missing values in closed/merged columns are filled with the created date.
+
     Args:
-        df: DataFrame to filter.
-        date_range: Start and end dates (YYYY-MM-DD) for filtering.
+        df: DataFrame to filter containing 'created', 'closed', and 'merged' columns.
+        date_range: Tuple of (start_date, end_date) in YYYY-MM-DD format for filtering.
 
     Returns:
-        Filtered DataFrame.
+        pd.DataFrame: Filtered DataFrame containing only rows within the date range.
     """
     for dt_col in ["created", "closed", "merged"]:
         df = df[df[dt_col].fillna(df.created).between(*date_range)]
@@ -344,13 +400,17 @@ def date_filter(df: pd.DataFrame, date_range: tuple[str, str]) -> pd.DataFrame:
 def get_totals(df: pd.DataFrame, date_col: str, resample: str) -> pd.DataFrame:
     """Calculate counts of interactions over time.
 
+    Groups interactions by type and date, then resamples to the specified frequency.
+    Renames interaction columns to user-friendly names.
+
     Args:
-        df: DataFrame containing interaction data.
+        df: DataFrame containing interaction data with 'interaction' column.
         date_col: Name of the date column to use for resampling.
         resample: Resampling frequency string (e.g., '1D', '1W', '1ME').
 
     Returns:
-        DataFrame with interaction counts over time.
+        pd.DataFrame: DataFrame with interaction counts over time, columns renamed
+            to 'Total Forks', 'Total Stars', 'Total Issues', 'Total PRs', 'Total Commits'.
     """
     totals_df = (
         df.groupby(["interaction", date_col])
@@ -380,6 +440,8 @@ def _plot_timeseries(
 ) -> go.Figure:
     """Create a timeseries plot for interaction metrics.
 
+    Configures hover mode, legend position, and disables drag interactions.
+
     Args:
         df: DataFrame containing interaction data with Date, Count, and Interaction columns.
         color_map: Dictionary mapping interaction types to colors.
@@ -388,7 +450,7 @@ def _plot_timeseries(
         plot_type: Type of plot to create ('bar' or 'line'). Defaults to 'bar'.
 
     Returns:
-        Plotly Figure object.
+        go.Figure: Configured Plotly Figure object with timeseries visualization.
     """
     plotter = getattr(px, plot_type)
     fig = plotter(
@@ -419,17 +481,21 @@ def plot_totals_metrics(
     cumulative: bool = True,
     tool_name: str = "",
 ) -> go.Figure:
-    """Create cumulative metrics timeline chart.
+    """Create cumulative or periodic metrics timeline chart.
+
+    Aggregates forks, commits, stars, issues, and PRs over time at the specified
+    resolution. Applies date range filtering from session state if available.
 
     Args:
-        df: DataFrame containing interaction data.
+        df: DataFrame containing interaction data with 'interaction', 'subtype',
+            and 'created' columns.
         resolution: Time resolution for resampling ('Daily', 'Weekly', or 'Monthly').
         color_map: Dictionary mapping metric names to colors.
         cumulative: Whether to show cumulative counts. Defaults to True.
         tool_name: Tool name for accessing session state. Defaults to "".
 
     Returns:
-        Plotly Figure showing cumulative repository metrics over time.
+        go.Figure: Plotly Figure showing repository metrics over time.
     """
     resample = f"1{RESOLUTION_CONVERTER[resolution]}"
     totals_df = get_totals(
@@ -472,14 +538,18 @@ def plot_open_metrics(
 ) -> go.Figure:
     """Create open issues and PRs timeline chart.
 
+    Calculates net open issues/PRs (created minus closed) and includes new comments
+    and reviews. Applies date range filtering from session state if available.
+
     Args:
-        df: DataFrame containing interaction data.
+        df: DataFrame containing interaction data with 'interaction', 'subtype',
+            'created', 'closed', and 'merged' columns.
         resolution: Time resolution for resampling ('Daily', 'Weekly', or 'Monthly').
         color_map: Dictionary mapping metric names to colors.
-        tool_name: Tool name for accessing session state. Defaults to "".
+        tool_name: Tool name for accessing session state date range. Defaults to "".
 
     Returns:
-        Plotly Figure showing open issues and PRs over time.
+        go.Figure: Plotly Figure showing open issues, PRs, and engagement over time.
     """
     resample = f"1{RESOLUTION_CONVERTER[resolution]}"
     _df = df.loc[
@@ -546,12 +616,16 @@ def plot_open_metrics(
 def exclude_bot_interactions(df: pd.DataFrame, hide_bots: bool = True) -> pd.DataFrame:
     """Filter out interactions by bots.
 
+    Removes rows where username matches common bot patterns including dependabot,
+    actions, renovate, codecov, and other automated services.
+
     Args:
-        df: DataFrame containing user interaction data.
+        df: DataFrame containing user interaction data with 'username' column.
         hide_bots: Whether to filter out bot interactions. Defaults to True.
 
     Returns:
-        Filtered DataFrame containing interactions matching the criteria.
+        pd.DataFrame: Filtered DataFrame with bot interactions removed if hide_bots
+            is True, otherwise returns the original DataFrame unchanged.
     """
     bot_patterns = [
         "-bot",
@@ -584,11 +658,14 @@ def detailed_org_contributions_breakdown(
 ) -> None:
     """Display detailed breakdown of organizational contributions by type.
 
-    Shows top 3 organizations with expandable statistics in columns.
+    Shows top 3 organizations with expandable statistics in columns. Displays
+    metrics for issues opened, PRs opened, commits, and feedback given.
 
     Args:
-        df (pd.DataFrame): DataFrame containing user interaction data (already filtered).
-        user_classifications_df (pd.DataFrame): DataFrame containing username to company mappings.
+        df: DataFrame containing user interaction data (already filtered) with
+            'interaction', 'subtype', and 'username' columns.
+        user_classifications_df: DataFrame containing username to company mappings
+            with 'username' and 'company' columns.
     """
     st.subheader("Top 3 Contributing Organizations")
 
@@ -667,12 +744,12 @@ def _render_stat(label: str, value: int, total: int) -> str:
     """Render an org contribution as a markdown string with percentage.
 
     Args:
-        label (str): label for the metric.
-        value (int): value for the metric.
-        total (int): total value for calculating percentage.
+        label: Label for the metric.
+        value: Value for the metric.
+        total: Total value for calculating percentage.
 
     Returns:
-        str: formatted markdown string with value and percentage.
+        str: Formatted markdown string showing "label: value / total (percentage%)".
     """
     pct = (value / total * 100) if total > 0 else 0
     return f"**{label}:** {int(value):,} / {int(total):,} ({int(pct)}%)"
@@ -681,13 +758,17 @@ def _render_stat(label: str, value: int, total: int) -> str:
 def get_complete_time(df: pd.DataFrame, interaction: str, time_col: str) -> pd.Series:
     """Calculate time to completion for PRs or issues.
 
+    Computes the duration between creation and completion (merge or close) in days.
+    Only includes items that have been completed (non-null completion date).
+
     Args:
-        df: DataFrame containing interaction data.
+        df: DataFrame containing interaction data with 'interaction', 'subtype',
+            'created', and completion date columns.
         interaction: Type of interaction ('pr' or 'issue').
         time_col: Name of the completion date column ('merged' or 'closed').
 
     Returns:
-        Series containing completion times in days.
+        pd.Series: Series containing completion times in days (float values).
     """
     # Calculate time to merge for PRs
     data = df.loc[(df.interaction == interaction) & (df["subtype"] == "author")].dropna(
@@ -702,14 +783,17 @@ def plot_histogram(
 ) -> go.Figure:
     """Create a histogram with median lines.
 
+    Displays distribution with vertical lines showing the tool's median (dashed black)
+    and optionally the global median across all tools (dotted grey).
+
     Args:
         df: Series containing data to plot.
-        global_median: Median value for all tools, or None.
+        global_median: Median value for all tools, or None to omit global comparison.
         title: Title for the histogram.
         label: Label for the x-axis.
 
     Returns:
-        Plotly Figure object configured with histogram and median lines.
+        go.Figure: Plotly Figure object configured with histogram and median lines.
     """
     fig = px.histogram(
         df.to_frame("count"),
@@ -758,12 +842,17 @@ def plot_histogram(
 def _get_engagement(df: pd.DataFrame, interaction: str) -> pd.Series:
     """Calculate engagement metrics for PRs or issues.
 
+    Counts comments, reactions, and reviews per item. Items with no engagement
+    are included with a count of 0.
+
     Args:
-        df: DataFrame containing interaction data.
+        df: DataFrame containing interaction data with 'interaction', 'subtype',
+            'number', and 'repo' columns.
         interaction: Type of interaction ('pr' or 'issue').
 
     Returns:
-        Series containing engagement counts (comments, reactions, reviews) per item.
+        pd.Series: Series indexed by (number, repo) containing engagement counts,
+            including zeros for items with no engagement.
     """
     engagement = (
         df.loc[
@@ -786,8 +875,12 @@ def resolution_histograms(
 ) -> None:
     """Create histograms showing time to merge PRs and time to close issues.
 
+    Displays side-by-side histograms with median lines. Includes global median
+    for comparison if global_df is provided.
+
     Args:
-        df: Filtered interactions data for selected tools.
+        df: Filtered interactions data for selected tools with 'interaction',
+            'created', 'closed', and 'merged' columns.
         global_df: Unfiltered interactions data for all tools. Defaults to None.
     """
     resolved_at = {"issue": "closed", "pr": "merged"}
@@ -834,10 +927,13 @@ def engagement_histograms(
     """Create histograms showing engagement levels for PRs and issues.
 
     Displays distribution of comments, reactions, and reviews before resolution.
+    Shows side-by-side histograms with median lines and global comparison.
 
     Args:
-        df: Filtered interactions data for selected tools.
-        global_df: Unfiltered interactions data for all tools. Defaults to None.
+        df: Filtered interactions data for selected tools with 'interaction',
+            'subtype', 'number', and 'repo' columns.
+        global_df: Unfiltered interactions data for all tools for median comparison.
+            Defaults to None.
     """
     titles = {"pr": "Pull Request Engagement", "issue": "Issue Engagement"}
     labels = {
@@ -879,7 +975,12 @@ def engagement_histograms(
 
 
 def _prs_with_reviews_caption(df: pd.DataFrame) -> None:
-    """Calculate and display percentage of PRs reviewed before merge."""
+    """Calculate and display percentage of PRs reviewed before merge.
+
+    Args:
+        df: DataFrame containing PR interaction data with 'interaction', 'subtype',
+            'repo', 'number', 'closed', and 'merged' columns.
+    """
     df_pr = df.loc[(df.interaction == "pr")]
     cols = ["repo", "number"]
     is_reviewed = df_pr.loc[df_pr.subtype == "review", cols].drop_duplicates()
@@ -898,7 +999,16 @@ def _prs_with_reviews_caption(df: pd.DataFrame) -> None:
 def render_project_development_section(
     tool_url: str, tool_name: str, container: Any
 ) -> None:
-    """Render complete project development metrics."""
+    """Render complete project development metrics.
+
+    Displays repository timelines, top contributors, organizational breakdown,
+    and resolution/engagement histograms with interactive filters.
+
+    Args:
+        tool_url: GitHub or GitLab URL of the tool repository.
+        tool_name: Display name of the tool.
+        container: Streamlit container to render the section into.
+    """
     # Add explanatory text
     container.markdown(
         """
@@ -931,14 +1041,16 @@ def render_project_development_section(
     total_stars = len(filtered_df[filtered_df.interaction == "stargazer"])
 
     # Render glowy header
-    header_template = _jinja_env.get_template("project_dev_header.html.jinja")
-    header_html = header_template.render(
+    header_template_project_development = _jinja_env.get_template(
+        "project_dev_header.html.jinja"
+    )
+    header_html_project_development = header_template_project_development.render(
         html_url=tool_url,
         selected_tool=tool_name,
         total_commits=total_commits,
         total_stars=total_stars,
     )
-    container.markdown(header_html, unsafe_allow_html=True)
+    container.markdown(header_html_project_development, unsafe_allow_html=True)
 
     # Repository metrics over time
     container.markdown("### Repository Metrics Over Time")
@@ -1094,7 +1206,16 @@ def render_project_development_section(
 
 
 def score_to_gradient(score_str: str) -> str:
-    """Converts a score string (e.g. '7') to a CSS style string with a color gradient."""
+    """Converts a score string to a CSS style string with a color gradient.
+
+    Scores >= 8 use green gradient, >= 5 yellow, < 5 red. Invalid scores use grey.
+
+    Args:
+        score_str: String representation of score (e.g., '7', '?', 'N/A').
+
+    Returns:
+        str: CSS style string with background gradient and text color.
+    """
     if str(score_str).strip() in ("?", "N/A", ""):
         return "background: #f0f0f0; color: #888;"
     try:
@@ -1112,7 +1233,22 @@ def score_to_gradient(score_str: str) -> str:
 def build_tool_detail_table(
     tool_id: str, scores: pd.DataFrame, reasons: pd.DataFrame
 ) -> str:
-    """Builds an HTML table showing detailed scores and reasons for a specific tool."""
+    """Builds an HTML table showing detailed scores and reasons for a specific tool.
+
+    Creates a formatted table with color-coded scores and explanatory text for each
+    OSSF Scorecard check, linking to official documentation.
+
+    Args:
+        tool_id: Tool identifier to look up in the DataFrames.
+        scores: DataFrame containing OSSF scores indexed by tool ID.
+        reasons: DataFrame containing score explanations indexed by tool ID.
+
+    Returns:
+        str: Rendered HTML string for the detailed score table.
+
+    Raises:
+        ValueError: If tool_id has duplicate rows in scores or reasons DataFrames.
+    """
     check_cols = [
         c for c in scores.columns if c not in ("html_url", "aggregated_score")
     ]
@@ -1179,7 +1315,16 @@ def build_tool_detail_table(
 
 
 def render_ossf_section(tool_url: str, tool_name: str, container: Any) -> None:
-    """Render OSSF security scores."""
+    """Render OSSF security scores.
+
+    Displays OpenSSF Scorecard results with color-coded scores and detailed
+    explanations for each security check.
+
+    Args:
+        tool_url: GitHub or GitLab URL of the tool repository.
+        tool_name: Display name of the tool.
+        container: Streamlit container to render the section into.
+    """
     # Add explanatory text
     container.markdown(
         """
@@ -1203,11 +1348,11 @@ def render_ossf_section(tool_url: str, tool_name: str, container: Any) -> None:
     agg_style = score_to_gradient(agg)
     html_url = score_row.get("html_url", "#")
 
-    header_template = _jinja_env.get_template("ossf_tool_header.html.jinja")
-    header_html = header_template.render(
+    header_template_ossf = _jinja_env.get_template("ossf_tool_header.html.jinja")
+    header_html_ossf = header_template_ossf.render(
         html_url=html_url, selected_tool=tool_name, agg_style=agg_style, agg=agg
     )
-    container.markdown(header_html, unsafe_allow_html=True)
+    container.markdown(header_html_ossf, unsafe_allow_html=True)
 
     html_content = build_tool_detail_table(tool_id, scores, reasons)
     components.html(html_content, height=800, scrolling=True)
@@ -1219,7 +1364,16 @@ def render_ossf_section(tool_url: str, tool_name: str, container: Any) -> None:
 
 
 def render_downloads_section(tool_url: str, tool_name: str, container: Any) -> None:
-    """Render download trends."""
+    """Render download trends.
+
+    Displays monthly PyPI and Conda package download statistics with recent metrics
+    and a time series visualization.
+
+    Args:
+        tool_url: GitHub or GitLab URL of the tool repository.
+        tool_name: Display name of the tool.
+        container: Streamlit container to render the section into.
+    """
     # Add explanatory text
     container.markdown(
         """
@@ -1317,33 +1471,35 @@ if __name__ == "__main__":
         st.stop()
 
     # Display single tool analysis
-    tool_name = selected_names[0]
-    tool_url = selected_urls[0]
+    name_of_tool = selected_names[0]
+    url_of_tool = selected_urls[0]
 
     # Render glowy page header
     header_template = _jinja_env.get_template("tool_deep_dive_header.html.jinja")
-    header_html = header_template.render(html_url=tool_url, selected_tool=tool_name)
+    header_html = header_template.render(
+        html_url=url_of_tool, selected_tool=name_of_tool
+    )
     st.markdown(header_html, unsafe_allow_html=True)
     st.markdown("---")
 
     # User Interactions
     with st.expander("👤 Tool User Interaction Analysis", expanded=True):
-        render_user_interaction_section(tool_url, tool_name, st.container())
+        render_user_interaction_section(url_of_tool, st.container())
 
     st.markdown("---")
 
     # Development Metrics
     with st.expander("📊 Project Development Metrics", expanded=True):
-        render_project_development_section(tool_url, tool_name, st.container())
+        render_project_development_section(url_of_tool, name_of_tool, st.container())
 
     st.markdown("---")
 
     # OSSF Scores
     with st.expander("🔐 OpenSSF Security Scores", expanded=True):
-        render_ossf_section(tool_url, tool_name, st.container())
+        render_ossf_section(url_of_tool, name_of_tool, st.container())
 
     st.markdown("---")
 
     # Downloads
     with st.expander("📦 Package Download Trends", expanded=True):
-        render_downloads_section(tool_url, tool_name, st.container())
+        render_downloads_section(url_of_tool, name_of_tool, st.container())

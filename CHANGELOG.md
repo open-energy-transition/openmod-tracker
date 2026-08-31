@@ -28,6 +28,7 @@ and this project adheres to [Calendar Versioning](https://calver.org/).
 ## 2026-08-31
 
 ### Fixed
+- Failing PyPI logo.
 - Fix failing CI
 
 ## 2026-07-31

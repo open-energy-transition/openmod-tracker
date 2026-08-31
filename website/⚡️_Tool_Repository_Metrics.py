@@ -932,7 +932,11 @@ def main(df: pd.DataFrame):
         except ValueError as error:
             if "not registered" not in str(error):
                 raise
-            search_result = st.text_input("Find a tool by name", value="", key="search_box")
+            search_result = st.text_input(
+                "Find a tool by name",
+                value=util.get_state("search_box", ""),
+                key="search_box_fallback",
+            )
         search_result = search_result or ""
     filters.append(df["name_with_url"].str.lower().str.contains(search_result.lower()))
 

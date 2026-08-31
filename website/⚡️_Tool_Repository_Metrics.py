@@ -927,7 +927,13 @@ def main(df: pd.DataFrame):
     # Display options
     col1, col2 = st.columns([3, 2])
     with col2:
-        search_result = st_keyup("Find a tool by name", value="", key="search_box")
+        try:
+            search_result = st_keyup("Find a tool by name", value="", key="search_box")
+        except ValueError as error:
+            if "not registered" not in str(error):
+                raise
+            search_result = st.text_input("Find a tool by name", value="", key="search_box")
+        search_result = search_result or ""
     filters.append(df["name_with_url"].str.lower().str.contains(search_result.lower()))
 
     filter_series = pd.concat(filters, axis=1).all(axis=1)

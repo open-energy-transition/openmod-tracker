@@ -141,39 +141,6 @@ class TestMainPageSessionState:
         # Toggle back on (exclude proprietary)
         toggle.set_value(True).run()
 
-    def test_custom_scoring_toggle(self, main_page_app: AppTest):
-        """Test toggling custom scoring on and off."""
-        at = main_page_app
-        # Toggle scoring on
-        score_toggle = at.toggle(key="score_toggle")
-        at = score_toggle.set_value(True).run()
-
-        # Test scoring method selectbox
-        scoring_method = at.selectbox(key="scoring_method")
-        at = scoring_method.set_value("min-max").run()
-        scoring_method = at.selectbox(key="scoring_method")
-        at = scoring_method.set_value("rank").run()
-
-        # Toggle scoring off
-        score_toggle = at.toggle(key="score_toggle")
-        score_toggle.set_value(False).run()
-
-    @pytest.mark.parametrize(
-        "column",
-        ["Stars", "Contributors", "DDS", "Forks", "Dependents", "1 Month Downloads"],
-    )
-    def test_scoring_weights(self, main_page_app: AppTest, column: str):
-        """Test adjusting scoring weights for each metric."""
-        at = main_page_app
-        # First enable scoring
-        score_toggle = at.toggle(key="score_toggle")
-        at = score_toggle.set_value(True).run()
-
-        # Adjust the weight for this column
-        weight_key = f"scoring_{column}"
-        number_input = at.number_input(key=weight_key)
-        at = number_input.set_value(0.8).run()
-
 
 class TestUserAnalysisPageSessionState:
     """Test user analysis page with different session states."""

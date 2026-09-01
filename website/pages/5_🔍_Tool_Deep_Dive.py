@@ -345,15 +345,6 @@ def render_user_interaction_section(tool_url: str, container: Any) -> None:
         container.info("No user interaction data available for this tool.")
         return
 
-    # Render glowy header
-    header_template_user_interaction = _jinja_env.get_template(
-        "user_interaction_header.html.jinja"
-    )
-    header_html_user_interaction = header_template_user_interaction.render(
-        html_url=url_of_tool, selected_tool=name_of_tool, total_users=len(filtered_df)
-    )
-    container.markdown(header_html_user_interaction, unsafe_allow_html=True)
-
     # User classification bar chart
     container.markdown("### User Types Across All Repositories")
     class_counts = filtered_df.classification.value_counts()
@@ -1124,22 +1115,6 @@ def render_project_development_section(
         container.info("No development metrics available for this tool.")
         return
 
-    # Calculate stats for header
-    total_commits = len(filtered_df[filtered_df.interaction == "commit"])
-    total_stars = len(filtered_df[filtered_df.interaction == "stargazer"])
-
-    # Render glowy header
-    header_template_project_development = _jinja_env.get_template(
-        "project_dev_header.html.jinja"
-    )
-    header_html_project_development = header_template_project_development.render(
-        html_url=tool_url,
-        selected_tool=tool_name,
-        total_commits=total_commits,
-        total_stars=total_stars,
-    )
-    container.markdown(header_html_project_development, unsafe_allow_html=True)
-
     # Repository metrics over time
     container.markdown("### Repository Metrics Over Time")
     container.markdown(
@@ -1430,17 +1405,6 @@ def render_ossf_section(tool_url: str, tool_name: str, container: Any) -> None:
     if not tool_id or tool_id not in scores.index:
         container.info("No OSSF score data available for this tool.")
         return
-
-    score_row = scores.loc[tool_id]
-    agg = score_row.get("aggregated_score", "?")
-    agg_style = score_to_gradient(agg)
-    html_url = score_row.get("html_url", "#")
-
-    header_template_ossf = _jinja_env.get_template("ossf_tool_header.html.jinja")
-    header_html_ossf = header_template_ossf.render(
-        html_url=html_url, selected_tool=tool_name, agg_style=agg_style, agg=agg
-    )
-    container.markdown(header_html_ossf, unsafe_allow_html=True)
 
     html_content = build_tool_detail_table(tool_id, scores, reasons)
     components.html(html_content, height=800, scrolling=True)
@@ -1850,11 +1814,6 @@ def render_downloads_section(tool_url: str, tool_name: str, container: Any) -> N
         container.info("No download data available for this tool.")
         return
 
-    # Get latest month and download count for header
-    all_months = sorted(tool_df["date"].unique())
-    latest_month = all_months[-1]
-    latest_downloads = int(tool_df[tool_df["date"] == latest_month]["downloads"].sum())
-
     # Add explanatory text
     container.markdown(
         """
@@ -1875,16 +1834,6 @@ def render_downloads_section(tool_url: str, tool_name: str, container: Any) -> N
             - **No current month.** The current month is not shown as the complete data is not yet available.
             """
         )
-
-    # Render glowy header
-    header_template_downloads = _jinja_env.get_template("downloads_header.html.jinja")
-    header_html_downloads = header_template_downloads.render(
-        html_url=tool_url,
-        selected_tool=tool_name,
-        latest_downloads=f"{latest_downloads:,}",
-        latest_month=latest_month.strftime("%b %Y"),
-    )
-    container.markdown(header_html_downloads, unsafe_allow_html=True)
 
     show_percentage = container.toggle(
         "Show delta as percentage",
@@ -1965,24 +1914,22 @@ if __name__ == "__main__":
     st.markdown(header_html, unsafe_allow_html=True)
     st.markdown("---")
 
-    # User Interactions
-    with st.expander("👤 Tool User Interaction Analysis", expanded=True):
+    # Create horizontal tabs for different analyses
+    tab1, tab2, tab3, tab4 = st.tabs([
+        "👤 User Interactions",
+        "📊 Development Metrics",
+        "🔐 Security Scores",
+        "📦 Download Trends"
+    ])
+
+    with tab1:
         render_user_interaction_section(url_of_tool, st.container())
 
-    st.markdown("---")
-
-    # Development Metrics
-    with st.expander("📊 Project Development Metrics", expanded=True):
+    with tab2:
         render_project_development_section(url_of_tool, name_of_tool, st.container())
 
-    st.markdown("---")
-
-    # OSSF Scores
-    with st.expander("🔐 OpenSSF Security Scores", expanded=True):
+    with tab3:
         render_ossf_section(url_of_tool, name_of_tool, st.container())
 
-    st.markdown("---")
-
-    # Downloads
-    with st.expander("📦 Package Download Trends", expanded=True):
+    with tab4:
         render_downloads_section(url_of_tool, name_of_tool, st.container())

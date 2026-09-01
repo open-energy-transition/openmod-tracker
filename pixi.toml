@@ -105,7 +105,7 @@ memray = ">=1.19.1"
 pytest-memray = ">=1.8.0"
 
 [feature.app.dependencies]
-streamlit = "<1.50.0"
+streamlit = ">=1.50.0"
 streamlit-keyup = ">=0.3.0"
 plotly = ">=6.1.2"
 markdown = ">=3.8.2"

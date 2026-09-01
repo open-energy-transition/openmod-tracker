@@ -1915,12 +1915,14 @@ if __name__ == "__main__":
     st.markdown("---")
 
     # Create horizontal tabs for different analyses
-    tab1, tab2, tab3, tab4 = st.tabs([
-        "👤 User Interactions",
-        "📊 Development Metrics",
-        "🔐 Security Scores",
-        "📦 Download Trends"
-    ])
+    tab1, tab2, tab3, tab4 = st.tabs(
+        [
+            "👤 User Interactions",
+            "📊 Development Metrics",
+            "🔐 Security Scores",
+            "📦 Download Trends",
+        ]
+    )
 
     with tab1:
         render_user_interaction_section(url_of_tool, st.container())

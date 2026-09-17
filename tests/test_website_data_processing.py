@@ -43,13 +43,9 @@ util = load_module_from_file(WEBSITE_DIR / "util.py", "util")
 main_page = load_module_from_file(
     WEBSITE_DIR / "⚡️_Tool_Repository_Metrics.py", "main_page"
 )
-user_analysis = load_module_from_file(
-    WEBSITE_DIR / "pages" / "1_👤_Deep_Dive_-_User_Interaction_Analysis.py",
-    "user_analysis",
-)
-dev_metrics = load_module_from_file(
-    WEBSITE_DIR / "pages" / "2_📊_Deep_Dive_-_Project_Development_Metrics.py",
-    "dev_metrics",
+tool_deep_dive = load_module_from_file(
+    WEBSITE_DIR / "pages" / "🔍_Tool_Deep_Dive.py",
+    "tool_deep_dive",
 )
 
 
@@ -462,7 +458,7 @@ class TestMainPageFunctions:
         assert len(result) == bins
 
 
-# ===== Tests for User Interaction Analysis page =====
+# ===== Tests for User Interaction Analysis (from unified Tool Deep Dive page) =====
 
 
 class TestUserAnalysisFunctions:
@@ -471,42 +467,19 @@ class TestUserAnalysisFunctions:
     @pytest.fixture(scope="class")
     def user_classifications_df(self):
         """Load user classifications CSV (class-level fixture)."""
-        return pd.read_csv(USER_STATS_DIR / "user_classifications.csv")
-
-    @pytest.fixture(scope="class")
-    def user_vis_table(self):
-        """Create user analysis vis table (class-level fixture)."""
-        return user_analysis.create_vis_table(USER_STATS_DIR)
-
-    def test_create_vis_table_structure(self, user_vis_table):
-        """Test create_vis_table returns DataFrame with expected columns."""
-        assert isinstance(user_vis_table, pd.DataFrame)
-        assert "classification" in user_vis_table.columns
-
-    def test_map_repo_to_tool_structure(self, user_classifications_df):
-        """Test map_repo_to_tool returns list of dicts."""
-        result = user_analysis.map_repo_to_tool(user_classifications_df, "repos")
-
-        assert isinstance(result, list)
-        assert all(isinstance(item, dict) for item in result)
-        assert all("repo" in item and "name" in item for item in result)
+        return tool_deep_dive.load_user_classifications()
 
 
-# ===== Tests for Project Development Metrics page =====
+# ===== Tests for Project Development Metrics (from unified Tool Deep Dive page) =====
 
 
 class TestDevMetricsFunctions:
     """Tests for project development metrics functions."""
 
     @pytest.fixture(scope="class")
-    def dev_vis_table(self):
-        """Create dev metrics vis table (class-level fixture)."""
-        return dev_metrics.create_vis_table(USER_STATS_DIR / "repo_interactions.csv")
-
-    @pytest.fixture(scope="class")
     def repo_interactions_csv(self):
         """Load user interactions CSV (class-level fixture)."""
-        return pd.read_csv(USER_STATS_DIR / "repo_interactions.csv")
+        return tool_deep_dive.load_repo_interactions()
 
     @pytest.fixture
     def sample_interactions_df(self):
@@ -538,26 +511,18 @@ class TestDevMetricsFunctions:
             }
         )
 
-    def test_create_vis_table_structure(self, dev_vis_table):
-        """Test create_vis_table returns DataFrame with expected columns."""
-        assert isinstance(dev_vis_table, pd.DataFrame)
-        assert "username" in dev_vis_table.columns
-        assert "repo" in dev_vis_table.columns
-        assert "interaction" in dev_vis_table.columns
-        assert pd.api.types.is_datetime64_any_dtype(dev_vis_table["created"])
+    def test_load_repo_interactions_structure(self, repo_interactions_csv):
+        """Test load_repo_interactions returns DataFrame with expected columns."""
+        assert isinstance(repo_interactions_csv, pd.DataFrame)
+        assert "username" in repo_interactions_csv.columns
+        assert "repo" in repo_interactions_csv.columns
+        assert "interaction" in repo_interactions_csv.columns
+        assert pd.api.types.is_datetime64_any_dtype(repo_interactions_csv["created"])
 
-    def test_create_vis_table_no_missing_critical_fields(self, dev_vis_table):
-        """Test that create_vis_table drops rows missing username or repo."""
-        assert dev_vis_table["username"].notna().all()
-        assert dev_vis_table["repo"].notna().all()
-
-    def test_map_repo_to_tool_structure(self, repo_interactions_csv):
-        """Test map_repo_to_tool returns list of dicts."""
-        result = dev_metrics.map_repo_to_tool(repo_interactions_csv, "repo")
-
-        assert isinstance(result, list)
-        assert all(isinstance(item, dict) for item in result)
-        assert all("repo" in item and "name" in item for item in result)
+    def test_load_repo_interactions_no_missing_critical_fields(self, repo_interactions_csv):
+        """Test that load_repo_interactions drops rows missing username or repo."""
+        assert repo_interactions_csv["username"].notna().all()
+        assert repo_interactions_csv["repo"].notna().all()
 
     @pytest.mark.parametrize(
         ("hide_bots", "expected_min_count"),
@@ -566,48 +531,29 @@ class TestDevMetricsFunctions:
             (False, 5),  # Should keep all 5 rows
         ],
     )
-    def test_filter_interactions_bot_handling(
+    def test_exclude_bot_interactions_bot_handling(
         self, sample_interactions_df, hide_bots, expected_min_count
     ):
-        """Test filter_interactions bot handling with hide_bots parameter."""
-        result = dev_metrics.filter_interactions(
-            sample_interactions_df, [], None, hide_bots=hide_bots
+        """Test exclude_bot_interactions bot handling with hide_bots parameter."""
+        result = tool_deep_dive.exclude_bot_interactions(
+            sample_interactions_df, hide_bots=hide_bots
         )
 
         if hide_bots:
             # When hiding bots, check that bot patterns are filtered
             df_with_bot = sample_interactions_df.copy()
             df_with_bot.loc[3, "username"] = "action-bot"
-            result_filtered = dev_metrics.filter_interactions(
-                df_with_bot, [], None, hide_bots=True
+            result_filtered = tool_deep_dive.exclude_bot_interactions(
+                df_with_bot, hide_bots=True
             )
             assert "action-bot" not in result_filtered["username"].values
         else:
             # When not hiding bots, all rows should be kept
             assert len(result) >= expected_min_count
 
-    def test_filter_interactions_filters_tools(self, sample_interactions_df):
-        """Test filter_interactions filters by selected tools."""
-        repo_map = [{"repo": "org1/tool1", "name": "Tool1"}]
-
-        result = dev_metrics.filter_interactions(
-            sample_interactions_df, repo_map, ["Tool1"], hide_bots=False
-        )
-
-        assert len(result) == 3  # Only org1/tool1 interactions
-        assert all(result["repo"] == "org1/tool1")
-
-    def test_filter_interactions_no_tool_filter(self, sample_interactions_df):
-        """Test filter_interactions with no tool filter (selected_tools=None)."""
-        result = dev_metrics.filter_interactions(
-            sample_interactions_df, [], None, hide_bots=False
-        )
-
-        assert len(result) == 5  # All interactions
-
     def test_date_filter_basic(self, sample_interactions_df):
         """Test date_filter filters by date range."""
-        result = dev_metrics.date_filter(
+        result = tool_deep_dive.date_filter(
             sample_interactions_df, ("2024-01-02", "2024-01-04")
         )
 
@@ -633,7 +579,7 @@ class TestDevMetricsFunctions:
         # Create a scenario where all dates are in the specified range
         df.loc[4, "created"] = pd.Timestamp("2024-01-05")
 
-        result = dev_metrics.date_filter(df, ("2024-01-04", "2024-01-05"))
+        result = tool_deep_dive.date_filter(df, ("2024-01-04", "2024-01-05"))
 
         # Should include rows where all date fields (using created as fallback) are in range
         assert len(result) >= 1
@@ -643,7 +589,7 @@ class TestDevMetricsFunctions:
     @pytest.mark.parametrize("resample", ["1D", "1W"])
     def test_get_totals(self, sample_interactions_df, resample):
         """Test get_totals with different resampling frequencies."""
-        result = dev_metrics.get_totals(sample_interactions_df, "created", resample)
+        result = tool_deep_dive.get_totals(sample_interactions_df, "created", resample)
 
         assert isinstance(result, pd.DataFrame)
         assert "Total Issues" in result.columns
@@ -658,7 +604,7 @@ class TestDevMetricsFunctions:
         self, sample_interactions_df, interaction, time_col, expected_count
     ):
         """Test get_complete_time for different interactions and time columns."""
-        result = dev_metrics.get_complete_time(
+        result = tool_deep_dive.get_complete_time(
             sample_interactions_df, interaction, time_col
         )
 
@@ -671,14 +617,14 @@ class TestDevMetricsFunctions:
         df.loc[4, "interaction"] = "pr"
         df.loc[4, "merged"] = pd.Timestamp("2024-01-10")
 
-        result = dev_metrics.get_complete_time(df, "pr", "merged")
+        result = tool_deep_dive.get_complete_time(df, "pr", "merged")
 
         # Should only have 1 result (author), not comment
         assert len(result) == 1
 
     def test_get_engagement_structure(self, sample_interactions_df):
         """Test _get_engagement returns Series with engagement counts."""
-        result = dev_metrics._get_engagement(sample_interactions_df, "issue")
+        result = tool_deep_dive._get_engagement(sample_interactions_df, "issue")
 
         assert isinstance(result, pd.Series)
         # Index should be (number, repo) MultiIndex with named levels
@@ -686,7 +632,7 @@ class TestDevMetricsFunctions:
 
     def test_get_engagement_includes_zeros(self, sample_interactions_df):
         """Test _get_engagement includes zero engagement for items without comments."""
-        result = dev_metrics._get_engagement(sample_interactions_df, "issue")
+        result = tool_deep_dive._get_engagement(sample_interactions_df, "issue")
 
         # Should have entries for all unique issue numbers
         assert len(result) >= 1
@@ -708,7 +654,7 @@ class TestDevMetricsFunctions:
         )
         df = pd.concat([sample_interactions_df, new_row], ignore_index=True)
 
-        result = dev_metrics._get_engagement(df, "issue")
+        result = tool_deep_dive._get_engagement(df, "issue")
 
         # Issue 1 in org2/tool2 should have engagement count of 2 (comment + reaction)
         assert result.loc[(1, "org2/tool2")] == 2.0

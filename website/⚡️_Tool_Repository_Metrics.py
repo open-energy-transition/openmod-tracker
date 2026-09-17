@@ -948,14 +948,19 @@ def main(df: pd.DataFrame):
         message = create_filter_message()
         st.metric(f"Tools in view{message}", f"{len(df_filtered)} / {len(df)}")
 
-    # Restore selection if there's a persisted selection and the table widget doesn't have state yet
+    # Restore selection if there's a persisted selection
+    # This needs to happen after every filter change to maintain selection when the tool is still visible
     persisted_selection = util.get_state("persisted_tool_selection", None)
-    if persisted_selection and "tool_selection_table" not in st.session_state:
+    if persisted_selection:
         # Find the row in current filtered view
         matching_rows = df_filtered[df_filtered["name_with_url"] == persisted_selection]
         if not matching_rows.empty:
+            # Tool is still in filtered view - update selection to new row index
             row_index = df_filtered.index.get_loc(matching_rows.index[0])
             st.session_state.tool_selection_table = {"selection": {"rows": [row_index]}}
+        elif "tool_selection_table" in st.session_state:
+            # Tool was filtered out - clear the widget selection
+            st.session_state.tool_selection_table = {"selection": {"rows": []}}
 
     max_interactions = df["Interactions"].dropna().apply(lambda x: x.max()).max()
     col_config = {

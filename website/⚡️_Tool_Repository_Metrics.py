@@ -786,43 +786,44 @@ def preamble(latest_changes: str, n_tools: int, data_processing_text: str):
                If that's the case, [raise an issue on our project homepage](https://github.com/open-energy-transition/openmod-tracker/issues/new).
             """
         )
+
+
+def key_takeaways():
+    """Key takeaways section to show before the table."""
+    with st.expander("Key Takeaways from the Data", icon="💡"):
+        st.markdown(
+            """
+            - **Adoption Signals Matter**: High download counts, active contributors, and ongoing issue resolutions suggest healthy, well-maintained projects.
+              However, source code activity alone can be misleading — some highly starred projects have stalled development and some with limited source code development are in heavy use in supporting planning decisions.
+            - **Sustainability Risks**: Projects with fewer than 10 contributors face a higher risk of abandonment.
+              A committed and broad contributor base can be hard to come by and may need to be cultivated with financial support rather than relying on it to grow naturally.
+            - **Usability Gaps**: Some projects do not have builds of their tools indexed online (e.g., on PyPI or conda-forge), which may indicate poor release management and hinder long-term usability.
+            - **Interoperability Potential**: Many tools serve niche roles and may only be suitable for supporting decision-making as part of a tool suite.
+              This requires tools to be interoperable, using common nomenclature and data structures.
+            """
+        )
+
+    with st.expander("Beyond Data: The Need for Qualitative Assessments", icon="🔍"):
+        st.markdown(
+            """
+            While data helps filter out the most interesting tools, deeper investigation is needed to ensure a tool is the right fit.
+            Some key qualitative factors to consider:
+
+            - **Documentation Quality**: Are installation and usage guides clear and up to date?
+            - **Community Support**: Is there an active forum, mailing list, or issue tracker?
+            - **Use Cases**: Has the tool been applied in real-world projects similar to your needs?
+            - **Licensing & Governance**: Is it permissively licensed (e.g., MIT) or does it enforce restrictions (e.g., GPL)?
+            - **Collaboration Potential**: Can multiple stakeholders contribute effectively?
+
+            **By combining live data tracking with structured qualitative evaluation**, the energy community can reduce wasted investments and ensure the best tools remain available for researchers, grid operators, project developers, investors and policymakers alike.
+
+            **Have you found this platform useful, or want to see it grow in any specific way?** Share your thoughts and suggestions on our [project homepage](https://github.com/open-energy-transition/openmod-tracker/issues)!
+            """
+        )
+
     st.markdown(
-        f"""
+        """
         ## Open Energy Modelling Tools - Key Metrics
-
-        **Last Update**: {latest_changes}
-        """
-    )
-
-
-def conclusion():
-    """Text to show after the app table."""
-    st.markdown(
-        """
-        ## Key Takeaways from the Data
-
-        - **Adoption Signals Matter**: High download counts, active contributors, and ongoing issue resolutions suggest healthy, well-maintained projects.
-          However, source code activity alone can be misleading — some highly starred projects have stalled development and some with limited source code development are in heavy use in supporting planning decisions.
-        - **Sustainability Risks**: Projects with fewer than 10 contributors face a higher risk of abandonment.
-          A committed and broad contributor base can be hard to come by and may need to be cultivated with financial support rather than relying on it to grow naturally.
-        - **Usability Gaps**: Some projects do not have builds of their tools indexed online (e.g., on PyPI or conda-forge), which may indicate poor release management and hinder long-term usability.
-        - **Interoperability Potential**: Many tools serve niche roles and may only be suitable for supporting decision-making as part of a tool suite.
-          This requires tools to be interoperable, using common nomenclature and data structures.
-
-        ## Beyond Data: The Need for Qualitative Assessments
-
-        While data helps filter out the most interesting tools, deeper investigation is needed to ensure a tool is the right fit.
-        Some key qualitative factors to consider:
-
-        - **Documentation Quality**: Are installation and usage guides clear and up to date?
-        - **Community Support**: Is there an active forum, mailing list, or issue tracker?
-        - **Use Cases**: Has the tool been applied in real-world projects similar to your needs?
-        - **Licensing & Governance**: Is it permissively licensed (e.g., MIT) or does it enforce restrictions (e.g., GPL)?
-        - **Collaboration Potential**: Can multiple stakeholders contribute effectively?
-
-        **By combining live data tracking with structured qualitative evaluation**, the energy community can reduce wasted investments and ensure the best tools remain available for researchers, grid operators, project developers, investors and policymakers alike.
-
-        **Have you found this platform useful, or want to see it grow in any specific way?** Share your thoughts and suggestions on our [project homepage](https://github.com/open-energy-transition/openmod-tracker/issues)!
         """
     )
 
@@ -947,6 +948,20 @@ def main(df: pd.DataFrame):
         message = create_filter_message()
         st.metric(f"Tools in view{message}", f"{len(df_filtered)} / {len(df)}")
 
+    # Restore selection if there's a persisted selection
+    # This needs to happen after every filter change to maintain selection when the tool is still visible
+    persisted_selection = util.get_state("persisted_tool_selection", None)
+    if persisted_selection:
+        # Find the row in current filtered view
+        matching_rows = df_filtered[df_filtered["name_with_url"] == persisted_selection]
+        if not matching_rows.empty:
+            # Tool is still in filtered view - update selection to new row index
+            row_index = df_filtered.index.get_loc(matching_rows.index[0])
+            st.session_state.tool_selection_table = {"selection": {"rows": [row_index]}}
+        elif "tool_selection_table" in st.session_state:
+            # Tool was filtered out - clear the widget selection
+            st.session_state.tool_selection_table = {"selection": {"rows": []}}
+
     max_interactions = df["Interactions"].dropna().apply(lambda x: x.max()).max()
     col_config = {
         "name_with_url": st.column_config.LinkColumn(
@@ -972,27 +987,94 @@ def main(df: pd.DataFrame):
     assert not cols_missing_config, (
         f"Missing column configuration for {cols_missing_config}"
     )
-    # Display the table
+    # Display the table with row selection
     if len(df_filtered) > 0:
+        # Process selection state from the widget BEFORE rendering anything
+        # This ensures the message is always in sync with the current selection
+        widget_state = util.get_state("tool_selection_table", {})
+        selected_rows = widget_state.get("selection", {}).get("rows", [])
+
+        if selected_rows:
+            # Only allow 1 selection
+            if len(selected_rows) > 1:
+                st.error("❌ Too many tools selected! Please select only one tool.")
+                selected_rows = selected_rows[:1]
+
+            # Extract tool info from current selection
+            selected_tools = df_filtered.iloc[selected_rows]
+            names = []
+            urls = []
+            for name_url in selected_tools["name_with_url"]:
+                parts = name_url.split("#")
+                if len(parts) == 2:
+                    urls.append(parts[0])
+                    names.append(parts[1])
+
+            # Update session state
+            util.set_state("selected_tool_names", names)
+            util.set_state("selected_tool_urls", urls)
+            util.set_state(
+                "persisted_tool_selection", selected_tools["name_with_url"].iloc[0]
+            )
+        else:
+            # No selection - clear state
+            util.set_state("selected_tool_names", [])
+            util.set_state("selected_tool_urls", [])
+            util.set_state("persisted_tool_selection", None)
+
+        # Now display status message based on updated session state
+        current_names = util.get_state("selected_tool_names", [])
+        if current_names:
+            st.success(f"✅ **{current_names[0]}** selected for deep-dive")
+        else:
+            st.info("💡 Please select one tool to analyse in the Tool Deep Dive page")
+
+        # Hide the "select all" checkbox using JavaScript
+        st.html(
+            """
+            <script>
+                // Remove select-all checkbox from dataframe
+                setTimeout(function() {
+                    const iframe = parent.document.querySelector('iframe[title="streamlit_agraph.st_agraph"]') || parent.document;
+                    const checkboxes = iframe.querySelectorAll('thead input[type="checkbox"]');
+                    checkboxes.forEach(cb => {
+                        if (cb.parentElement && cb.parentElement.tagName === 'TH') {
+                            cb.style.display = 'none';
+                            cb.style.visibility = 'hidden';
+                        }
+                    });
+                }, 100);
+
+                // Also try on parent document
+                setTimeout(function() {
+                    const checkboxes = parent.document.querySelectorAll('[data-testid="stDataFrame"] thead input[type="checkbox"]');
+                    checkboxes.forEach(cb => cb.remove());
+                }, 100);
+            </script>
+            <style>
+                /* Fallback CSS approach */
+                div[data-testid="stDataFrame"] thead input[type="checkbox"],
+                thead th:first-of-type input[type="checkbox"] {
+                    display: none !important;
+                    visibility: hidden !important;
+                }
+            </style>
+            """
+        )
         st.dataframe(
             df_filtered,
             width="stretch",
             hide_index=True,
             column_config=col_config,
             column_order=col_config.keys(),
+            on_select="rerun",
+            selection_mode="single-row",
+            key="tool_selection_table",
         )
     else:
         st.warning(
             "No data matches the current filter criteria. Try adjusting your filters."
         )
-    st.subheader("📊 Score tools your way")
-    st.markdown(
-        """
-        You can create your own tool scores by combining the metrics that matter most to you.
-        First, toggle the scoring column.
-        Then, adjust the weights applied to each numeric metric to fit your preferences."""
-    )
-    add_scoring(numeric_cols)
 
     reset_button = st.sidebar.button("🔄 Reset All Filters")
     reset_mode = reset(reset_button)
@@ -1030,6 +1112,8 @@ if __name__ == "__main__":
         readme_path, "Our data processing approach"
     )
     preamble(latest_changes, len(df_vis), data_processing_approach_string)
+    st.markdown(f"**Last Update**: {latest_changes}")
+    st.markdown("---")
+    key_takeaways()
     main(df_vis.copy())
-    conclusion()
     footer()

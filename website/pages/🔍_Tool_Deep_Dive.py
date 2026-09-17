@@ -13,7 +13,6 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
-import streamlit.components.v1 as components
 import util
 
 # Configuration
@@ -367,7 +366,7 @@ def render_user_interaction_section(tool_url: str, container: Any) -> None:
         plot_bgcolor="white",
         margin=dict(l=10, r=10, t=50, b=40),
     )
-    container.plotly_chart(fig, use_container_width=True, config=FIG_CONFIG)
+    container.plotly_chart(fig, width="stretch", config=FIG_CONFIG)
 
     # Top organizations
     container.markdown("### Top Organizations Engaging with Repository")
@@ -391,7 +390,7 @@ def render_user_interaction_section(tool_url: str, container: Any) -> None:
             plot_bgcolor="white",
             margin=dict(l=10, r=10, t=50, b=40),
         )
-        container.plotly_chart(fig, use_container_width=True, config=FIG_CONFIG)
+        container.plotly_chart(fig, width="stretch", config=FIG_CONFIG)
     else:
         container.info("No organization data available.")
 
@@ -417,7 +416,7 @@ def render_user_interaction_section(tool_url: str, container: Any) -> None:
             plot_bgcolor="white",
             margin=dict(l=10, r=10, t=50, b=40),
         )
-        container.plotly_chart(fig, use_container_width=True, config=FIG_CONFIG)
+        container.plotly_chart(fig, width="stretch", config=FIG_CONFIG)
 
         # Geographic map
         container.markdown("### Geographic Map")
@@ -448,7 +447,7 @@ def render_user_interaction_section(tool_url: str, container: Any) -> None:
             plot_bgcolor="rgba(0,0,0,0)",  # Transparent plot area
         )
         container.plotly_chart(
-            fig, use_container_width=True, config=FIG_CONFIG, key="country_map"
+            fig, width="stretch", config=FIG_CONFIG, key="country_map"
         )
 
 
@@ -1198,7 +1197,7 @@ def render_project_development_section(
         tool_name=tool_name,
     )
     container.plotly_chart(
-        fig_cumulative, use_container_width=True, key=f"cumulative_metrics_{tool_name}"
+        fig_cumulative, width="stretch", key=f"cumulative_metrics_{tool_name}"
     )
 
     # Create open metrics chart (pass FULL data, plotting function handles date range display)
@@ -1213,7 +1212,7 @@ def render_project_development_section(
     )
     container.plotly_chart(
         fig_open,
-        use_container_width=True,
+        width="stretch",
         key=f"open_metrics_{tool_name}",
         config=FIG_CONFIG,
     )
@@ -1407,7 +1406,7 @@ def render_ossf_section(tool_url: str, tool_name: str, container: Any) -> None:
         return
 
     html_content = build_tool_detail_table(tool_id, scores, reasons)
-    components.html(html_content, height=800, scrolling=True)
+    st.iframe(html_content, height=800)
 
 
 # ============================================================================
@@ -1556,7 +1555,7 @@ def plot_download_trends(
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
     )
     container.plotly_chart(
-        fig, use_container_width=True, config={"displayModeBar": False}
+        fig, width="stretch", config={"displayModeBar": False}
     )
 
 

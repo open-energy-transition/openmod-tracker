@@ -502,7 +502,7 @@ def show_all_packages_list(
                 if pd.notna(pypi_url):
                     links_html += (
                         f'<a href="{pypi_url}" target="_blank" style="text-decoration:none; color:inherit; margin-right:12px;">'
-                        f'<img src="https://pypi.org/static/images/logo-small.8998e9d1.svg" width="13" '
+                        f'<img src="https://pypi.org/static/images/logo-small.0e0855d0.svg" width="13" '
                         f'style="vertical-align:middle; margin-right:4px;">'
                         f"PyPI</a>"
                     )

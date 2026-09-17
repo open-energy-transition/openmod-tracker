@@ -44,8 +44,7 @@ main_page = load_module_from_file(
     WEBSITE_DIR / "⚡️_Tool_Repository_Metrics.py", "main_page"
 )
 tool_deep_dive = load_module_from_file(
-    WEBSITE_DIR / "pages" / "🔍_Tool_Deep_Dive.py",
-    "tool_deep_dive",
+    WEBSITE_DIR / "pages" / "🔍_Tool_Deep_Dive.py", "tool_deep_dive"
 )
 
 
@@ -519,7 +518,9 @@ class TestDevMetricsFunctions:
         assert "interaction" in repo_interactions_csv.columns
         assert pd.api.types.is_datetime64_any_dtype(repo_interactions_csv["created"])
 
-    def test_load_repo_interactions_no_missing_critical_fields(self, repo_interactions_csv):
+    def test_load_repo_interactions_no_missing_critical_fields(
+        self, repo_interactions_csv
+    ):
         """Test that load_repo_interactions drops rows missing username or repo."""
         assert repo_interactions_csv["username"].notna().all()
         assert repo_interactions_csv["repo"].notna().all()

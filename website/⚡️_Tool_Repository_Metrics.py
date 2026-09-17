@@ -957,7 +957,6 @@ def main(df: pd.DataFrame):
             row_index = df_filtered.index.get_loc(matching_rows.index[0])
             st.session_state.tool_selection_table = {"selection": {"rows": [row_index]}}
 
-
     max_interactions = df["Interactions"].dropna().apply(lambda x: x.max()).max()
     col_config = {
         "name_with_url": st.column_config.LinkColumn(
@@ -1009,7 +1008,9 @@ def main(df: pd.DataFrame):
             # Update session state
             util.set_state("selected_tool_names", names)
             util.set_state("selected_tool_urls", urls)
-            util.set_state("persisted_tool_selection", selected_tools["name_with_url"].iloc[0])
+            util.set_state(
+                "persisted_tool_selection", selected_tools["name_with_url"].iloc[0]
+            )
         else:
             # No selection - clear state
             util.set_state("selected_tool_names", [])

@@ -1211,10 +1211,7 @@ def render_project_development_section(
         tool_name=tool_name,
     )
     container.plotly_chart(
-        fig_open,
-        width="stretch",
-        key=f"open_metrics_{tool_name}",
-        config=FIG_CONFIG,
+        fig_open, width="stretch", key=f"open_metrics_{tool_name}", config=FIG_CONFIG
     )
 
     # Top contributors - apply date filter for this section
@@ -1554,9 +1551,7 @@ def plot_download_trends(
         showlegend=True,
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
     )
-    container.plotly_chart(
-        fig, width="stretch", config={"displayModeBar": False}
-    )
+    container.plotly_chart(fig, width="stretch", config={"displayModeBar": False})
 
 
 def show_package_metrics(

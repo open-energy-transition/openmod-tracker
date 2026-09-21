@@ -28,6 +28,9 @@ and this project adheres to [Calendar Versioning](https://calver.org/).
 ## 2026-08-31
 
 ### Fixed
+
+- GitHub commit history pagination cache, which was storing cursors containing the branch head SHA and so went stale as soon as new commits were pushed (#243).
+  Only the item index is now cached and the cursor is rebuilt from the current head SHA on each run.
 - Failing PyPI logo.
 - Fix failing CI
 

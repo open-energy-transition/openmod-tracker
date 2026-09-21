@@ -287,6 +287,7 @@ class GitHubRepositoryCollectorGH:
                     defaultBranchRef {
                       target {
                         ... on Commit {
+                          oid
                           history(first: 100, after: $cursor) {
                             totalCount
                             pageInfo {
@@ -323,33 +324,27 @@ class GitHubRepositoryCollectorGH:
         else:
             return author_data.get("login", None)
 
+    def _fetch_page(
+        self, query_name: str, owner: str, name: str, cursor: str | None, page: int
+    ) -> dict:
+        """Execute one page of a paginated query."""
+        LOGGER.warning(f"Fetching {query_name} - Page: {page} - Cursor: {cursor}")
+        variables = {"owner": owner, "name": name, "cursor": cursor}
+        return self.client.execute_query(self.queries[query_name], variables)
+
     def _paginate_query(self, query_name: str, repo: str) -> list[dict]:
-        """Execute a query with pagination support."""
+        """Execute a query with pagination support, resuming from the cached cursor."""
         all_data = []
         owner, name = repo.strip("/").split("/")
         cache_key = f"{owner}.{name}.{query_name}"
-        cursor = PAGINATION_CACHE.get(cache_key, None)
+        cached_cursor = cursor = PAGINATION_CACHE.get(cache_key, None)
         page = 1
 
         while True:
-            LOGGER.warning(f"Fetching {query_name} - Page: {page} - Cursor: {cursor}")
-
-            variables = {"owner": owner, "name": name, "cursor": cursor}
-
-            data = self.client.execute_query(self.queries[query_name], variables)
+            data = self._fetch_page(query_name, owner, name, cursor, page)
             if not data:
                 break
-            # Extract the relevant data based on query type
-            if query_name == "commits":
-                # Special handling for commits nested structure
-                default_branch = data["repository"].get("defaultBranchRef")
-                if default_branch is None:
-                    LOGGER.warning(f"No default branch found for {repo}")
-                    break
-                items = default_branch["target"]["history"]
-            else:
-                items = data["repository"][query_name]
-
+            items = data["repository"][query_name]
             if query_name == "stargazers":
                 all_data.extend(items["edges"])
             else:
@@ -357,12 +352,93 @@ class GitHubRepositoryCollectorGH:
 
             if not items["pageInfo"]["hasNextPage"]:
                 break
-            cursor = items["pageInfo"]["endCursor"]
-            PAGINATION_CACHE[cache_key] = cursor
+            cursor = PAGINATION_CACHE[cache_key] = items["pageInfo"]["endCursor"]
             page += 1
-        if page > 1:
+        if cursor != cached_cursor:
             util.dump_yaml("pagination_cache_gh", PAGINATION_CACHE)
         LOGGER.warning(f"Fetched {len(all_data)} {query_name} items")
+        return all_data
+
+    @staticmethod
+    def _commit_cursor_index(cursor: str) -> int:
+        """Get the zero-based item index from a commit history cursor (``<head SHA> <index>``)."""
+        return int(cursor.split(" ")[1])
+
+    def _load_commit_checkpoint(self, cache_key: str) -> dict | None:
+        """Load the cached commit checkpoint, upgrading a legacy full-cursor cache entry."""
+        checkpoint = PAGINATION_CACHE.get(cache_key)
+        if isinstance(checkpoint, str):
+            return {"offset": self._commit_cursor_index(checkpoint), "total": None}
+        return checkpoint
+
+    @staticmethod
+    def _commit_checkpoint_range(checkpoint: dict, total: int) -> tuple[int, int]:
+        """Map a commit checkpoint onto the current history.
+
+        History is newest-first, so commits pushed since the checkpoint was taken shift the
+        already-fetched range further down the history.
+
+        Args:
+            checkpoint (dict): Cached ``offset`` (index of last fetched commit) and ``total``.
+            total (int): Total number of commits in the history now.
+
+        Returns:
+            tuple[int, int]: Number of commits pushed since the checkpoint was taken and the
+                index at which the already-fetched range now ends.
+        """
+        if checkpoint["total"] is None:
+            new_commits = 0
+        else:
+            new_commits = max(total - checkpoint["total"], 0)
+        return new_commits, new_commits + checkpoint["offset"]
+
+    def _paginate_commits(self, repo: str) -> list[dict]:
+        """Execute the commit history query with pagination support.
+
+        Commit cursors are ``<branch head SHA> <item index>`` pairs, which go stale as soon as the branch head moves,
+        so we cache the item index (alongside the total commit count at that point) and rebuild the cursor from the current head SHA.
+        History is newest-first, so each run starts at the head to pick up newly pushed commits before skipping over the range that previous runs already fetched.
+        """
+        all_data = []
+        owner, name = repo.strip("/").split("/")
+        cache_key = f"{owner}.{name}.commits"
+        checkpoint = self._load_commit_checkpoint(cache_key)
+        cached_entry = PAGINATION_CACHE.get(cache_key, None)
+        new_commits, checkpoint_index = 0, -1
+        cursor = None
+        page = 1
+
+        while True:
+            data = self._fetch_page("commits", owner, name, cursor, page)
+            if not data:
+                break
+            default_branch = data["repository"].get("defaultBranchRef")
+            if default_branch is None:
+                LOGGER.warning(f"No default branch found for {repo}")
+                break
+            items = default_branch["target"]["history"]
+            all_data.extend(items["nodes"])
+
+            total = items["totalCount"]
+            if checkpoint is not None and page == 1:
+                new_commits, checkpoint_index = self._commit_checkpoint_range(
+                    checkpoint, total
+                )
+            if not items["pageInfo"]["hasNextPage"]:
+                index = total - 1
+            else:
+                index = self._commit_cursor_index(items["pageInfo"]["endCursor"])
+                if new_commits - 1 <= index < checkpoint_index:
+                    index = checkpoint_index
+            if index >= checkpoint_index:
+                PAGINATION_CACHE[cache_key] = {"total": total, "offset": index}
+            if index >= total - 1:
+                break
+            cursor = f"{default_branch['target']['oid']} {index}"
+            page += 1
+        if PAGINATION_CACHE.get(cache_key, None) != cached_entry:
+            util.dump_yaml("pagination_cache_gh", PAGINATION_CACHE)
+        LOGGER.warning(f"Fetched {len(all_data)} commits items")
         return all_data
 
     def _parse_issue_data(self, issue_data: dict) -> list[dict]:
@@ -520,7 +596,7 @@ class GitHubRepositoryCollectorGH:
         # Fetch commits (optional - can be expensive for large repos)
         # Uncomment the lines below to collect commit statistics
         # Note: This query only fetches commits from the default branch
-        commits_data = self._paginate_query("commits", repo)
+        commits_data = self._paginate_commits(repo)
         for commit_data in commits_data:
             results.append(self._parse_commit_data(commit_data, is_default_branch=True))
 

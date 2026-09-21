@@ -727,8 +727,6 @@ class GitHubRepositoryCollectorGH:
         for fork_data in forks_data:
             results.append(self._parse_fork_data(fork_data))
 
-        # Fetch commits (optional - can be expensive for large repos)
-        # Uncomment the lines below to collect commit statistics
         # Note: This query only fetches commits from the default branch
         commits_data = self._paginate_commits(repo)
         for commit_data in commits_data:

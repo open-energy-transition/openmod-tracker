@@ -124,9 +124,9 @@ def _verify_rtd(slug: str, url: str) -> bool:
         kwargs = {}
     try:
         url_status = requests.get(RTD_URL.format(slug=slug)).status_code
-    except requests.exceptions.SSLError:
+    except (requests.exceptions.SSLError, requests.exceptions.ConnectionError):
         LOGGER.warning(
-            f"SSL error when checking {slug}.readthedocs.io. Skipping RTD check for this slug."
+            f"Error when checking {slug}.readthedocs.io. Skipping RTD check for this slug."
         )
         return False
 

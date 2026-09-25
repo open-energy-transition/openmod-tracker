@@ -1,0 +1,24 @@
+{# SPDX-FileCopyrightText: openmod-tracker contributors #}
+{# SPDX-License-Identifier: MIT #}
+
+{#
+  Variables expected:
+    html_url      – URL of the tool's repository
+    selected_tool – display name / id of the tool
+#}
+<div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+            padding:20px; border-radius:12px; margin-bottom:24px;
+            background:linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            box-shadow:0 4px 12px rgba(0,0,0,0.08);">
+    <span style="font-size:0.85rem; font-weight:600; color:#666;
+                 font-family:'Inter',sans-serif; text-transform:uppercase;
+                 letter-spacing:0.08em;">
+        Tool:
+    </span>
+    <a href="{{ html_url }}" target="_blank"
+       style="font-size:1.5rem; font-weight:700; color:#5c6bc0;
+              text-decoration:none; font-family:'Inter',sans-serif;
+              display:flex; align-items:center; gap:8px;">
+        🔧 {{ selected_tool }}
+    </a>
+</div>

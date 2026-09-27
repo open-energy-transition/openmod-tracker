@@ -11,6 +11,7 @@ pagination, and error handling.
 """
 
 import logging
+from datetime import date
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -32,6 +33,30 @@ COLS = [
     "merged",
     "repo",
 ]
+
+
+def get_latest_date_of_named_stargazers(
+    interactions: pd.DataFrame, host_repo: str
+) -> date | None:
+    """Get the date of the most recent star already collected for a repository.
+
+    GitHub no longer exposes individual stargazers, only per-day star counts.
+    So, previously collected stars cannot be matched against newly fetched ones.
+    The date of the latest collected star is therefore what tells the collector where to resume without double-counting.
+
+    Args:
+        interactions (pd.DataFrame): Previously collected interactions across all repositories.
+        host_repo (str): Host-prefixed repository path, e.g. ``gh:owner/name``.
+
+    Returns:
+        date | None: Date of the latest collected star, or None if none have been collected.
+    """
+    stars = interactions[
+        (interactions["repo"] == host_repo)
+        & (interactions["interaction"] == "stargazer")
+    ]
+    latest = pd.to_datetime(stars["created"], errors="coerce").max()
+    return None if pd.isna(latest) else latest.date()
 
 
 def get_repo_and_host(url: str) -> str | None:
@@ -97,7 +122,10 @@ def cli(stats_file: Path, out_path: Path):
 
         # Route to appropriate collector
         if host == "gh":
-            df = github_collector.collect_repo_data(repo_path)
+            df = github_collector.collect_repo_data(
+                repo_path,
+                get_latest_date_of_named_stargazers(existing_interactions, host_repo),
+            )
         elif host == "gl":
             df = gitlab_collector.collect_repo_data(repo_path)
         else:

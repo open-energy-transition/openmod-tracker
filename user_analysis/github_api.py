@@ -7,11 +7,14 @@
 
 from __future__ import annotations
 
+import base64
+import binascii
 import logging
 import os
+import re
 import time
 from dataclasses import dataclass
-from datetime import UTC, datetime
+from datetime import UTC, date, datetime, timedelta
 from typing import Any
 
 import pandas as pd
@@ -25,6 +28,16 @@ load_dotenv()
 LOGGER = logging.getLogger(__name__)
 
 PAGINATION_CACHE = util.read_yaml("pagination_cache_gh", exists=False)
+
+#: REST API version providing the anonymous star history endpoint.
+REST_API_VERSION = "2026-03-10"
+#: Star history is returned in weekly buckets, newest first, capped at 30 weeks per page and 100 pages.
+STAR_HISTORY_PER_PAGE = 30
+STAR_HISTORY_MAX_PAGES = 100
+#: Placeholder for stars collected from the star history endpoint, which reports counts without any user identity.
+ANONYMOUS_USERNAME = "anonymous"
+#: The ``starredAt`` timestamp embedded in a legacy (GraphQL) stargazer pagination cursor.
+LEGACY_STAR_CURSOR_DATE = re.compile(rb"(\d{4}-\d{2}-\d{2})T\d{2}:\d{2}:\d{2}Z")
 
 
 @dataclass
@@ -53,6 +66,7 @@ class GitHubClientGH:
                 Defaults to None.
         """
         self.base_url = "https://api.github.com/graphql"
+        self.rest_url = "https://api.github.com"
 
         self.headers = {"Content-Type": "application/json"}
         token = token or os.environ.get("GITHUB_TOKEN")
@@ -101,6 +115,34 @@ class GitHubClientGH:
                 time.sleep(wait_time)
 
         return data["data"]
+
+    def execute_rest_query(
+        self, path: str, params: dict[str, Any] | None = None
+    ) -> Any:
+        """Execute a REST API ``GET`` with error handling.
+
+        Args:
+            path (str): API path relative to the REST root, e.g. ``repos/owner/name/stargazers/history``.
+            params (dict[str, Any] | None, optional): Query string parameters. Defaults to None.
+
+        Returns:
+            Any: The decoded JSON body, or None if the request failed.
+        """
+        response = self.session.get(
+            f"{self.rest_url}/{path.lstrip('/')}",
+            params=params,
+            headers={
+                "Accept": "application/vnd.github+json",
+                "X-GitHub-Api-Version": REST_API_VERSION,
+            },
+            timeout=30,
+        )
+        try:
+            response.raise_for_status()
+        except requests.RequestException:
+            LOGGER.error(f"REST request to {path} failed: {response.text}")
+            return None
+        return response.json()
 
     def get_rate_limit_info(self) -> tuple[int, int, int]:
         """Get the current GitHub REST API rate limit status for the core resource.
@@ -231,31 +273,6 @@ class GitHubRepositoryCollectorGH:
                   }
                 }
             """,
-            "stargazers": """
-                query RepositoryStargazers($owner: String!, $name: String!, $cursor: String) {
-                  repository(owner: $owner, name: $name) {
-                    stargazers(first: 100, after: $cursor, orderBy: {field: STARRED_AT, direction: ASC}) {
-                      totalCount
-                      pageInfo {
-                        hasNextPage
-                        endCursor
-                      }
-                      edges {
-                        starredAt
-                        node {
-                          login
-                        }
-                      }
-                    }
-                  }
-                  rateLimit {
-                    limit
-                    cost
-                    remaining
-                    resetAt
-                  }
-                }
-            """,
             "forks": """
                 query RepositoryForks($owner: String!, $name: String!, $cursor: String) {
                   repository(owner: $owner, name: $name) {
@@ -345,10 +362,7 @@ class GitHubRepositoryCollectorGH:
             if not data:
                 break
             items = data["repository"][query_name]
-            if query_name == "stargazers":
-                all_data.extend(items["edges"])
-            else:
-                all_data.extend(items["nodes"])
+            all_data.extend(items["nodes"])
 
             if not items["pageInfo"]["hasNextPage"]:
                 break
@@ -441,6 +455,108 @@ class GitHubRepositoryCollectorGH:
         LOGGER.warning(f"Fetched {len(all_data)} commits items")
         return all_data
 
+    @staticmethod
+    def _legacy_star_cursor_date(cursor: str) -> date | None:
+        """Recover the last collected ``starredAt`` date from a legacy GraphQL stargazer cursor."""
+        try:
+            decoded = base64.b64decode(cursor + "=" * (-len(cursor) % 4))
+        except (binascii.Error, ValueError):
+            return None
+        match = LEGACY_STAR_CURSOR_DATE.search(decoded)
+        return None if match is None else date.fromisoformat(match.group(1).decode())
+
+    def _star_checkpoint(self, repo: str, stop_date: date | None) -> date | None:
+        """Get the date through which stars have already been collected for a repository.
+
+        Args:
+            repo (str): Repository path (``owner/name``).
+            stop_date (date | None):
+                Date of the most recent star already collected, taken from previously collected interactions.
+
+        Returns:
+            date | None:
+                The caller's date if given.
+                Otherwise, the date embedded in a legacy GraphQL stargazer cursor left in the pagination cache by earlier (named stargazer) runs.
+                None if neither is available.
+        """
+        if stop_date is not None:
+            return stop_date
+        owner, name = repo.strip("/").split("/")
+        cached = PAGINATION_CACHE.get(f"{owner}.{name}.stargazers", None)
+        return (
+            self._legacy_star_cursor_date(cached) if isinstance(cached, str) else None
+        )
+
+    @staticmethod
+    def _star_history_days(weeks: list[dict]) -> dict[date, int]:
+        """Flatten weekly star history buckets into per-day star counts, dropping days with no stars."""
+        days = {}
+        for week in weeks:
+            week_start = datetime.fromtimestamp(week["week"], UTC).date()
+            for offset, count in enumerate(week["days"]):
+                if count:
+                    days[week_start + timedelta(days=offset)] = count
+        return days
+
+    def _paginate_stars(self, repo: str, stop_date: date | None = None) -> list[dict]:
+        """Fetch star history with pagination support.
+
+        Named stargazer listings are unavailable as of July 2026.
+        We instead use a separate endpoint which reports *counts* of stars per day.
+        It has no user identity of any kind, so each star becomes one identity-less record.
+
+        Stargazer history is now returned newest-first in weekly buckets.
+        So, pagination walks backwards towards repository creation and stops as soon as it reaches a week already covered by ``stop_date``.
+        Only days that have finished are collected, so that stars added later today are not missed.
+
+        Args:
+            repo (str): Repository path (``owner/name``).
+            stop_date (date | None, optional):
+                Date of the most recent star already collected.
+                Days up to and including this date are skipped.
+                Defaults to None, in which case the full history is collected.
+
+        Returns:
+            list[dict]: One ``{"date": ..., "index": ...}`` record per star, oldest first.
+        """
+        owner, name = repo.strip("/").split("/")
+        checkpoint = self._star_checkpoint(repo, stop_date)
+        # A day is only fully collectable once it is over.
+        through = datetime.now(UTC).date() - timedelta(days=1)
+        days: dict[date, int] = {}
+
+        for page in range(1, STAR_HISTORY_MAX_PAGES + 1):
+            LOGGER.warning(f"Fetching stargazers - Page: {page}")
+            weeks = self.client.execute_rest_query(
+                f"repos/{owner}/{name}/stargazers/history",
+                {"per_page": STAR_HISTORY_PER_PAGE, "page": page},
+            )
+            if not weeks:
+                break
+            days.update(
+                {
+                    day: count
+                    for day, count in self._star_history_days(weeks).items()
+                    if day <= through and (checkpoint is None or day > checkpoint)
+                }
+            )
+            # Buckets are newest-first, so the final one bounds how far back this page reaches.
+            oldest_day = datetime.fromtimestamp(weeks[-1]["week"], UTC).date()
+            if checkpoint is not None and oldest_day <= checkpoint:
+                break
+        else:
+            LOGGER.warning(
+                f"Star history for {repo} reached the {STAR_HISTORY_MAX_PAGES} page pagination limit"
+            )
+
+        all_data = [
+            {"date": day, "index": index}
+            for day, count in sorted(days.items())
+            for index in range(count)
+        ]
+        LOGGER.warning(f"Fetched {len(all_data)} stargazers items")
+        return all_data
+
     def _parse_issue_data(self, issue_data: dict) -> list[dict]:
         """Parse issues to get created/closed timestamps and the usernames associated with the author, comments, and reactions."""
         results = []
@@ -529,10 +645,17 @@ class GitHubRepositoryCollectorGH:
         return results
 
     def _parse_star_data(self, star_data: dict) -> dict:
+        """Parse a single star from the anonymous star history.
+
+        Stars carry no user identity, so each gets a placeholder username and its index within the day,
+        which keeps otherwise-identical stars from the same day distinguishable when interactions are
+        de-duplicated downstream.
+        """
         return {
             "interaction": "stargazer",
-            "username": self._parse_author(star_data.get("node")),
-            "created": star_data["starredAt"],
+            "username": ANONYMOUS_USERNAME,
+            "number": star_data["index"],
+            "created": star_data["date"],
         }
 
     def _parse_fork_data(self, fork_data: dict) -> dict:
@@ -567,8 +690,19 @@ class GitHubRepositoryCollectorGH:
             "created": commit_data["committedDate"],
         }
 
-    def collect_repo_data(self, repo: str) -> pd.DataFrame:
-        """Analyze a GitHub repository and return comprehensive activity data."""
+    def collect_repo_data(
+        self, repo: str, latest_date_of_named_stargazers: date | None = None
+    ) -> pd.DataFrame:
+        """Analyze a GitHub repository and return comprehensive activity data.
+
+        Args:
+            repo (str): Repository path (``owner/name``).
+            latest_date_of_named_stargazers (date | None, optional):
+                Date of the most recent star already collected for this repository.
+                Stars are fetched from an endpoint that reports daily counts rather than individual events,
+                so this is needed to avoid re-collecting (and thereby double-counting) days already covered.
+                Defaults to None, in which case the full star history is collected.
+        """
         LOGGER.warning(f"Starting analysis of {repo}")
 
         results = []
@@ -584,7 +718,7 @@ class GitHubRepositoryCollectorGH:
             results.extend(self._parse_pr_data(pr_data))
 
         # Fetch stargazers
-        stars_data = self._paginate_query("stargazers", repo)
+        stars_data = self._paginate_stars(repo, latest_date_of_named_stargazers)
         for star_data in stars_data:
             results.append(self._parse_star_data(star_data))
 
@@ -593,8 +727,6 @@ class GitHubRepositoryCollectorGH:
         for fork_data in forks_data:
             results.append(self._parse_fork_data(fork_data))
 
-        # Fetch commits (optional - can be expensive for large repos)
-        # Uncomment the lines below to collect commit statistics
         # Note: This query only fetches commits from the default branch
         commits_data = self._paginate_commits(repo)
         for commit_data in commits_data:
@@ -607,7 +739,9 @@ class GitHubRepositoryCollectorGH:
         for ts_col in ["created", "closed", "merged"]:
             if ts_col not in results_df:
                 continue
-            results_df[ts_col] = pd.to_datetime(results_df[ts_col]).dt.tz_localize(None)
+            results_df[ts_col] = pd.to_datetime(
+                results_df[ts_col], utc=True
+            ).dt.tz_localize(None)
         if "number" in results_df:
             results_df["number"] = results_df["number"].astype("Int16")
         return results_df

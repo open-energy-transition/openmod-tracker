@@ -739,7 +739,9 @@ class GitHubRepositoryCollectorGH:
         for ts_col in ["created", "closed", "merged"]:
             if ts_col not in results_df:
                 continue
-            results_df[ts_col] = pd.to_datetime(results_df[ts_col]).dt.tz_localize(None)
+            results_df[ts_col] = pd.to_datetime(
+                results_df[ts_col], utc=True
+            ).dt.tz_localize(None)
         if "number" in results_df:
             results_df["number"] = results_df["number"].astype("Int16")
         return results_df

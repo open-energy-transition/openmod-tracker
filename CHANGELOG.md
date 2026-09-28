@@ -25,7 +25,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Calendar Versioning](https://calver.org/).
 
-## 2026-08-31
+## 2026-09-28
 
 ### Changed
 
@@ -39,8 +39,15 @@ and this project adheres to [Calendar Versioning](https://calver.org/).
 
 - GitHub commit history pagination cache, which was storing cursors containing the branch head SHA and so went stale as soon as new commits were pushed (#243).
   Only the item index is now cached and the cursor is rebuilt from the current head SHA on each run.
+- CI issues by updating streamlit version.
+- Score getter to fill with cached scores on failure
+  (caused by directories with the same name but different cases not being differentiated on on MacOS).
+
+## 2026-08-31
+
+### Fixed
+
 - Failing PyPI logo.
-- Fix failing CI
 
 ## 2026-07-31
 

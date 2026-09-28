@@ -8,7 +8,7 @@ anymod_jl,https://github.com/leonardgoeke/anymod.jl,AnyMOD.jl,"lf-energy-landsca
 aristopy,https://git.tu-berlin.de/etus/public/aristopy,aristopy,pre-compiled,
 asam,https://github.com/ancillaryservicesacquisitionmodel/asam,ASAM,openmod,
 asset_level_transition_risk_in_the_global_coal__oil__and_gas_supply_chains,https://github.com/lkruitwagen/global-fossil-fuel-supply-chain,"Asset-level Transition Risk in the Global Coal, Oil, and Gas Supply Chains",lf-energy-landscape,
-assetra,https://github.com/ijbd/assetra,assetra,pre-compiled,resource-adequacy
+assetra,https://github.com/ijbd/assetra,ASSETRA,"opensustain-tech,pre-compiled",resource-adequacy
 assume,https://github.com/assume-framework/assume,ASSUME,openmod,
 backbone,https://gitlab.vtt.fi/backbone/backbone,Backbone,"g-pst,lf-energy-landscape,openmod,opensustain-tech,pre-compiled","capacity-expansion,production-cost"
 balmorel,https://github.com/balmorelcommunity/balmorel,Balmorel,"lf-energy-landscape,openmod,opensustain-tech,pre-compiled",
@@ -74,6 +74,7 @@ flexplan_jl,https://github.com/electa-git/flexplan.jl,FlexPlan.jl,"opensustain-t
 flixopt,https://github.com/flixopt/flixopt,flixOpt,"opensustain-tech,pre-compiled",capacity-expansion
 fluxopt,https://github.com/fluxopt/fluxopt,fluxopt,opensustain-tech,
 friendlysam,https://github.com/sp-etx/friendlysam,friendlysam,pre-compiled,
+gboml,https://gitlab.uliege.be/smart_grids/public/gboml,gboml,pre-compiled,
 gear_scoup,https://github.com/natlabrockies/gear-scoup,Gear-SCouP,lf-energy-landscape,
 gelectrical,https://github.com/manuvarkey/gelectrical,GElectrical,opensustain-tech,
 genesys_mod,https://github.com/genesys-mod,GENeSYS-MOD,openmod,
@@ -95,7 +96,6 @@ hope,https://github.com/hope-model-project/hope,HOPE,pre-compiled,
 hopp,https://github.com/natlabrockies/hopp,HOPP,pre-compiled,"capacity-expansion,production-cost"
 hybrid,https://github.com/idaholab/hybrid,HYBRID,"opensustain-tech,pre-compiled",
 hybridbosse,https://github.com/natlabrockies/hybridbosse,HybridBOSSE,lf-energy-landscape,
-hydesign_git,https://gitlab.windenergy.dtu.dk/topfarm/hydesign,hydesign.git,pre-compiled,
 hydrogenmod_jl,https://github.com/lukasbarner/hydrogenmod.jl,HydrOGEnMod.jl,pre-compiled,
 idea,https://gitlab.com/sesit/idea,idea,pre-compiled,
 iesopt_jl,https://github.com/ait-energy/iesopt.jl,IESopt.jl,"opensustain-tech,pre-compiled",
@@ -110,7 +110,7 @@ leelo,https://github.com/simjunky/leelo,Leelo,pre-compiled,
 lego,https://github.com/iee-tugraz/lego,LEGO,pre-compiled,
 macroenergy_jl,https://github.com/macroenergy/macroenergy.jl,MacroEnergy.jl,pre-compiled,
 mafrit,https://github.com/natlabrockies/mafrit,MAFRIT,lf-energy-landscape,
-match_model,https://github.com/pencleanenergy/match-model,MATCH-model,pre-compiled,
+match_model,https://github.com/westlightenergy/match-model,MATCH-model,pre-compiled,
 matpower,https://github.com/matpower/matpower,matpower,"lf-energy-landscape,opensustain-tech,pre-compiled","power-flow,production-cost"
 medea,https://github.com/inwe-boku/medea,Medea,openmod,
 mesmo,https://github.com/mesmo-dev/mesmo,MESMO,"opensustain-tech,pre-compiled",
@@ -188,7 +188,7 @@ reise_jl,https://github.com/breakthrough-energy/reise.jl,REISE.jl,"lf-energy-lan
 remix,https://gitlab.com/dlr-ve/esy/remix/framework,REMix,"g-pst,pre-compiled,lf-energy-landscape,opensustain-tech","capacity-expansion,production-cost"
 renpass,https://github.com/fraukewiese/renpass,Renpass,"openmod,pre-compiled",
 reopt_jl,https://github.com/natlabrockies/reopt.jl,REopt.jl,pre-compiled,capacity-expansion
-resie,https://github.com/quasi-software/resie,ReSiE,"lf-energy-landscape,pre-compiled",
+resie,https://github.com/quasi-software/resiequasi.jl,ReSiE,"lf-energy-landscape,pre-compiled",
 resolve,https://github.com/e3-/resolve,resolve,"opensustain-tech,pre-compiled",
 revub,https://github.com/vub-hydr/revub,REVUB,lf-energy-landscape,
 rheia,https://github.com/rheia-framework/rheia,RHEIA,openmod,
@@ -220,7 +220,7 @@ switch,https://github.com/switch-model/switch,"Switch,switch-model","g-pst,lf-en
 temoa,https://github.com/temoaproject/temoa,Temoa,"lf-energy-landscape,openmod,opensustain-tech,pre-compiled",capacity-expansion
 tesp,https://github.com/pnnl/tesp,tesp,pre-compiled,
 times_model,https://github.com/etsap-times/times_model,"TIMES_model,TIMES","openmod,opensustain-tech",
-toop,https://github.com/eliagroup/toop,ToOp,lf-energy-landscape,power-flow
+toop,https://github.com/eliagroup/toop,ToOp,"lf-energy-landscape,opensustain-tech",power-flow
 transactive_energy_service_system,https://github.com/slacgismo/tess,Transactive Energy Service System,"lf-energy-landscape,opensustain-tech",
 transient_lib,https://github.com/transient-official/transient-lib,transient-lib,pre-compiled,
 tulipaenergymodel_jl,https://github.com/tulipaenergy/tulipaenergymodel.jl,Tulipa Energy Model,"opensustain-tech,pre-compiled",capacity-expansion

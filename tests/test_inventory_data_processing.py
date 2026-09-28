@@ -423,6 +423,75 @@ class TestGetScores:
         with patch.dict(os.environ, {token_name: token_value}, clear=True):
             assert get_scores.check_auth_token(TEST_URL_GITLAB) is expected_result
 
+    @pytest.fixture
+    def cached_scorecards(self, tmp_path: Path) -> tuple[pd.DataFrame, pd.DataFrame]:
+        """Scores and reasons CSVs as written by a previous run."""
+        scores_path = tmp_path / "scores.csv"
+        reasons_path = tmp_path / "reasons.csv"
+        scores_path.write_text(
+            "id,html_url,aggregated_score,CI-Tests,Fuzzing,Packaging\n"
+            f"pypsa,{TEST_URL_GITHUB},5.2,10,N/A,?\n"
+        )
+        reasons_path.write_text(
+            "id,html_url,Reason CI-Tests,Reason Fuzzing,Reason Packaging\n"
+            f"pypsa,{TEST_URL_GITHUB},All tested,N/A,No packaging found\n"
+        )
+        return (
+            get_scores.get_scorecard_from_csv(scores_path),
+            get_scores.get_scorecard_from_csv(reasons_path),
+        )
+
+    def test_get_scorecard_from_cache(self, cached_scorecards) -> None:
+        """Should rebuild checks from cached rows, dropping checks that were never run."""
+        aggregate_score, checks_df = get_scores.get_scorecard_from_cache(
+            "pypsa", *cached_scorecards
+        )
+        expected = pd.DataFrame(
+            {
+                "name": ["CI-Tests", "Packaging"],
+                "score": ["10", "?"],
+                "reason": ["All tested", "No packaging found"],
+            }
+        )
+        assert aggregate_score == "5.2"
+        pd.testing.assert_frame_equal(checks_df.reset_index(drop=True), expected)
+
+    @pytest.mark.parametrize("use_cache", [True, False])
+    def test_get_scorecard_from_cache_missing(
+        self, cached_scorecards, use_cache: bool
+    ) -> None:
+        """Should return None if the tool or the cache itself is missing."""
+        caches = cached_scorecards if use_cache else (None, None)
+        tool = "not_a_tool" if use_cache else "pypsa"
+        assert get_scores.get_scorecard_from_cache(tool, *caches) is None
+
+    def test_get_scorecard_data_falls_back_to_cache(self, cached_scorecards) -> None:
+        """Should use cached data when the API fails and the CLI gives no results."""
+        with (
+            patch.object(get_scores, "get_scorecard_from_api", return_value=None),
+            patch.object(get_scores, "get_scorecard_from_cli", return_value=""),
+        ):
+            result = get_scores._get_scorecard_data(
+                TEST_URL_GITHUB, "pypsa", *cached_scorecards
+            )
+        assert result is not None
+        score_row, reason_row = get_scores._append_scorecard_rows(
+            "pypsa", TEST_URL_GITHUB, *result
+        )
+        assert score_row == {
+            "id": "pypsa",
+            "html_url": TEST_URL_GITHUB,
+            "aggregated_score": "5.2",
+            "CI-Tests": "10",
+            "Packaging": "?",
+        }
+        assert reason_row == {
+            "id": "pypsa",
+            "html_url": TEST_URL_GITHUB,
+            "Reason CI-Tests": "All tested",
+            "Reason Packaging": "No packaging found",
+        }
+
 
 class TestGetDownloadData:
     """Test suite for get_download_data functions."""

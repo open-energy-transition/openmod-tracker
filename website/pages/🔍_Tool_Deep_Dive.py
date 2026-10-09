@@ -1884,22 +1884,6 @@ if __name__ == "__main__":
             st.session_state.get("session_counter", 0) + 1
         )
 
-    # DEBUG: Show session state info
-    filter_keys = [
-        k
-        for k in st.session_state.keys()
-        if k.startswith(("slider_", "multiselect_", "exclude_"))
-    ]
-    all_keys = list(st.session_state.keys())
-    backup = st.session_state.get("filter_state_backup", {})
-
-    with st.expander("🐛 Debug: Filter State", expanded=False):
-        st.caption(f"Filters from main page: {len(backup)}")
-        if backup:
-            st.caption("✅ Main page filters are preserved")
-        else:
-            st.caption("No filters applied on main page")
-
     # Add custom CSS for plot shadows
     st.markdown(
         """
@@ -1957,23 +1941,22 @@ if __name__ == "__main__":
     else:
         default_index = 0
 
-    # Show dropdown if there are tools available
+    # Show dropdown in sidebar if there are tools available
     if tool_names:
-        st.markdown("### 🔧 Select a tool to analyze")
-        st.caption(
-            f"Choose from {len(tool_names)} tool{'s' if len(tool_names) != 1 else ''}"
+        st.sidebar.header("Tool Selection", divider=True)
+        st.sidebar.markdown(
+            f"**{len(tool_names)} tool{'s' if len(tool_names) != 1 else ''}** available"
             + (
-                " (filtered by main page criteria)"
+                "\n\n_(filtered by main page)_"
                 if len(tool_names) < len(load_tools_mapping())
                 else ""
             )
         )
-        selected_tool_name = st.selectbox(
-            "Tool",
+        selected_tool_name = st.sidebar.selectbox(
+            "Select a tool to analyze:",
             options=tool_names,
             index=default_index,
             key="tool_selector_dropdown",
-            label_visibility="collapsed",
             on_change=on_tool_dropdown_change,
         )
 
@@ -1996,11 +1979,9 @@ if __name__ == "__main__":
             # Update state
             util.set_state("selected_tool_names", [name_of_tool])
             util.set_state("selected_tool_urls", [url_of_tool])
-
-        st.markdown("---")
     elif not selected_names:
         st.info(
-            "👈 Please select tools from the main page table or apply filters to view tools here."
+            "👈 Please select a tool from the main page or use the sidebar dropdown."
         )
         st.markdown(
             """
@@ -2008,18 +1989,18 @@ if __name__ == "__main__":
 
             **Workflow 1**: Select from main page
             1. Go to the main **Tool Repository Metrics** page
-            2. Click on a row in the table
+            2. Click "Select" button next to a tool
             3. Return to this page to see the detailed analysis
 
             **Workflow 2**: Filter then select
             1. Go to the main **Tool Repository Metrics** page
             2. Use the sidebar filters to narrow down tools
-            3. Click on a row in the table
-            4. Return to this page - the dropdown will show only filtered tools
+            3. Click "Select" button next to a tool
+            4. Return to this page - the sidebar dropdown will show only filtered tools
 
             **Workflow 3**: Direct selection
-            1. Use the dropdown above to select any tool
-            2. The selection will sync with the main page table
+            1. Use the dropdown in the **sidebar** (←) to select any tool
+            2. The selection will sync with the main page
             """
         )
         st.stop()

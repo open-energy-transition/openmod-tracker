@@ -924,22 +924,6 @@ def main(df: pd.DataFrame):
     reset_mode = reset()
     st.sidebar.header("Table filters", divider=True)
 
-    # DEBUG: Count filters BEFORE creating widgets
-    filter_keys_before = [
-        k
-        for k in st.session_state.keys()
-        if k.startswith(("slider_", "multiselect_", "exclude_"))
-    ]
-
-    with st.sidebar.expander("🐛 Debug: Filter State", expanded=False):
-        backup = st.session_state.get("filter_state_backup", {})
-        st.caption(f"Active filters: {len(filter_keys_before)}")
-        st.caption(f"Backup: {len(backup)} keys")
-        if filter_keys_before:
-            st.caption("✅ Filters are active")
-        else:
-            st.caption("No filters applied")
-
     util.set_state("filters", {"toggle": [], "multiselect": [], "slider": []})
 
     col_config = {}
@@ -1078,89 +1062,73 @@ def main(df: pd.DataFrame):
     assert not cols_missing_config, (
         f"Missing column configuration for {cols_missing_config}"
     )
-    # Display the table with row selection
+    # Display table and selection dropdown
     if len(df_filtered) > 0:
-        # Process selection state from the widget BEFORE rendering anything
-        # This ensures the message is always in sync with the current selection
-        widget_state = util.get_state("tool_selection_table", {})
-        selected_rows = widget_state.get("selection", {}).get("rows", [])
-
-        if selected_rows:
-            # Only allow 1 selection
-            if len(selected_rows) > 1:
-                st.error("❌ Too many tools selected! Please select only one tool.")
-                selected_rows = selected_rows[:1]
-
-            # Extract tool info from current selection
-            selected_tools = df_filtered.iloc[selected_rows]
-            names = []
-            urls = []
-            for name_url in selected_tools["name_with_url"]:
-                parts = name_url.split("#")
-                if len(parts) == 2:
-                    urls.append(parts[0])
-                    names.append(parts[1])
-
-            # Update session state
-            util.set_state("selected_tool_names", names)
-            util.set_state("selected_tool_urls", urls)
-            util.set_state(
-                "persisted_tool_selection", selected_tools["name_with_url"].iloc[0]
-            )
-        else:
-            # No selection - clear state
-            util.set_state("selected_tool_names", [])
-            util.set_state("selected_tool_urls", [])
-            util.set_state("persisted_tool_selection", None)
-
-        # Now display status message based on updated session state
+        # Show banner based on stored state
         current_names = util.get_state("selected_tool_names", [])
+        current_selection = util.get_state("persisted_tool_selection", None)
+
         if current_names:
             st.success(f"✅ **{current_names[0]}** selected for deep-dive")
         else:
-            st.info("💡 Please select one tool to analyse in the Tool Deep Dive page")
+            st.info("💡 Use the dropdown below the table to select a tool for deep-dive analysis")
 
-        # Hide the "select all" checkbox using JavaScript
-        st.html(
-            """
-            <script>
-                // Remove select-all checkbox from dataframe
-                setTimeout(function() {
-                    const iframe = parent.document.querySelector('iframe[title="streamlit_agraph.st_agraph"]') || parent.document;
-                    const checkboxes = iframe.querySelectorAll('thead input[type="checkbox"]');
-                    checkboxes.forEach(cb => {
-                        if (cb.parentElement && cb.parentElement.tagName === 'TH') {
-                            cb.style.display = 'none';
-                            cb.style.visibility = 'hidden';
-                        }
-                    });
-                }, 100);
-
-                // Also try on parent document
-                setTimeout(function() {
-                    const checkboxes = parent.document.querySelectorAll('[data-testid="stDataFrame"] thead input[type="checkbox"]');
-                    checkboxes.forEach(cb => cb.remove());
-                }, 100);
-            </script>
-            <style>
-                /* Fallback CSS approach */
-                div[data-testid="stDataFrame"] thead input[type="checkbox"],
-                thead th:first-of-type input[type="checkbox"] {
-                    display: none !important;
-                    visibility: hidden !important;
-                }
-            </style>
-            """
-        )
+        # Display the full Streamlit dataframe with all columns
         st.dataframe(
             df_filtered,
             width="stretch",
             hide_index=True,
             column_config=col_config,
             column_order=col_config.keys(),
-            on_select="rerun",
-            selection_mode="single-row",
-            key="tool_selection_table",
+            key="tool_display_table",
+        )
+
+        st.markdown("---")
+
+        # Create dropdown for tool selection - only showing filtered tools
+        tool_options = ["(None)"]  # Option to deselect
+        tool_map = {}
+
+        for idx, row in df_filtered.iterrows():
+            name_with_url = row["name_with_url"]
+            parts = name_with_url.split("#")
+            if len(parts) == 2:
+                name = parts[1]
+                url = parts[0]
+            else:
+                name = name_with_url
+                url = name_with_url
+
+            tool_options.append(name)
+            tool_map[name] = (name_with_url, url)
+
+        # Find current selection index
+        default_idx = 0
+        if current_selection:
+            for name, (name_url, _) in tool_map.items():
+                if name_url == current_selection:
+                    default_idx = tool_options.index(name)
+                    break
+
+        # Dropdown selection with callback
+        def on_dropdown_change():
+            selected = st.session_state.tool_dropdown_selector
+            if selected != "(None)" and selected in tool_map:
+                name_with_url, url = tool_map[selected]
+                util.set_state("selected_tool_names", [selected])
+                util.set_state("selected_tool_urls", [url])
+                util.set_state("persisted_tool_selection", name_with_url)
+            elif selected == "(None)":
+                util.set_state("selected_tool_names", [])
+                util.set_state("selected_tool_urls", [])
+                util.set_state("persisted_tool_selection", None)
+
+        st.selectbox(
+            "**Select tool for deep-dive:**",
+            options=tool_options,
+            index=default_idx,
+            key="tool_dropdown_selector",
+            on_change=on_dropdown_change
         )
     else:
         st.warning(

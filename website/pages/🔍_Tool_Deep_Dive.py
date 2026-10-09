@@ -269,9 +269,18 @@ def on_tool_dropdown_change() -> None:
     if "tool_selector_dropdown" in st.session_state:
         selected_tool_name = st.session_state.tool_selector_dropdown
         filtered_tools = util.get_state("filtered_tools", [])
+
+        if not filtered_tools:
+            # If filtered_tools is empty, try to load all tools
+            tools_df = load_tools_mapping()
+            filtered_tools = [
+                {"name": name.split(",")[0] if "," in name else name, "url": url}
+                for name, url in zip(tools_df["name"], tools_df["url"])
+            ]
+
         tool_urls_map = {tool["name"]: tool["url"] for tool in filtered_tools}
 
-        if selected_tool_name in tool_urls_map:
+        if selected_tool_name and selected_tool_name in tool_urls_map:
             selected_tool_url = tool_urls_map[selected_tool_name]
             util.set_state("selected_tool_names", [selected_tool_name])
             util.set_state("selected_tool_urls", [selected_tool_url])
@@ -1866,6 +1875,25 @@ if __name__ == "__main__":
     st.set_page_config(page_title="Tool Deep Dive", page_icon="🔍", layout="wide")
     st.title("🔍 Tool Deep Dive")
 
+    # Track session continuity
+    if "session_initialized" not in st.session_state:
+        st.session_state["session_initialized"] = True
+        st.session_state["session_counter"] = 0
+    else:
+        st.session_state["session_counter"] = st.session_state.get("session_counter", 0) + 1
+
+    # DEBUG: Show session state info
+    filter_keys = [k for k in st.session_state.keys() if k.startswith(("slider_", "multiselect_", "exclude_"))]
+    all_keys = list(st.session_state.keys())
+    backup = st.session_state.get("filter_state_backup", {})
+
+    with st.expander("🐛 Debug: Filter State", expanded=False):
+        st.caption(f"Filters from main page: {len(backup)}")
+        if backup:
+            st.caption("✅ Main page filters are preserved")
+        else:
+            st.caption("No filters applied on main page")
+
     # Add custom CSS for plot shadows
     st.markdown(
         """
@@ -1943,11 +1971,20 @@ if __name__ == "__main__":
             on_change=on_tool_dropdown_change,
         )
 
-        # Get current selection from session state (updated by callback)
-        name_of_tool = util.get_state("selected_tool_names", [selected_tool_name])[0]
-        url_of_tool = util.get_state(
-            "selected_tool_urls", [tool_urls_map[selected_tool_name]]
-        )[0]
+        # Get current selection - use dropdown value as fallback
+        current_names = util.get_state("selected_tool_names", [])
+        current_urls = util.get_state("selected_tool_urls", [])
+
+        if current_names and current_urls and len(current_names) > 0 and len(current_urls) > 0:
+            name_of_tool = current_names[0]
+            url_of_tool = current_urls[0]
+        else:
+            # Fallback to the dropdown selection if state is empty
+            name_of_tool = selected_tool_name
+            url_of_tool = tool_urls_map[selected_tool_name]
+            # Update state
+            util.set_state("selected_tool_names", [name_of_tool])
+            util.set_state("selected_tool_urls", [url_of_tool])
 
         st.markdown("---")
     elif not selected_names:

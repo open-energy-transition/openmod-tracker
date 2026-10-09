@@ -8,6 +8,8 @@
 # OS-specific
 .DS_Store
 .idea
+.agents
+.claude
 
 # Editors
 *~

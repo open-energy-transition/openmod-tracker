@@ -343,14 +343,18 @@ def add_scoring(cols: list[str]) -> float:
     Returns:
         float: Column score weighting
     """
+    # Initialize on first run
+    if "score_toggle" not in st.session_state:
+        st.session_state["score_toggle"] = False
+
+    # DON'T pass value - let Streamlit read from session_state automatically via key
     st.toggle(
         "Add score column to table",
-        value=util.get_state("score_toggle", False),
         key="score_toggle",
     )
 
     # Only show scoring controls when toggle is enabled
-    if util.get_state("score_toggle", False):
+    if st.session_state.get("score_toggle", False):
         selectbox_cols = st.columns(len(cols))
         selectbox_cols[0].selectbox(
             "Metric scaling method",
@@ -434,9 +438,14 @@ def slider(
         default_range = (col.min().date(), col.max().date())
     else:
         default_range = (col.min(), col.max())
-    current_range = (
-        default_range if reset_mode else util.get_state(state_name, default_range)
-    )
+
+    # Initialize on first run or force reset
+    if reset_mode or state_name not in st.session_state:
+        st.session_state[state_name] = default_range
+
+    # Get current value for distribution plot
+    current_range = st.session_state[state_name]
+
     if col.dtype.kind == "M":
         slider_range = tuple(pd.Timestamp(i).timestamp() for i in current_range)
         col = col.apply(lambda x: x.timestamp())
@@ -446,11 +455,11 @@ def slider(
     if plot_dist:
         dist_plot(col, slider_range)
 
+    # DON'T pass value - let Streamlit read from session_state automatically via key
     selected_range = st.sidebar.slider(
         f"Range for {col.name}",
         min_value=default_range[0],
         max_value=default_range[1],
-        value=current_range,
         key=state_name,
     )
     if selected_range != default_range:
@@ -475,26 +484,37 @@ def multiselect(unique_values: list[str], col: str, reset_mode: bool) -> list[st
           We handle that directly in this method.
     """
     state_name = f"multiselect_{col}"
-    current_selected = (
-        unique_values if reset_mode else util.get_state(state_name, unique_values)
-    )
 
+    # Handle language-specific logic first
     if col.lower() == "language":
         exclude_proprietary = proprietary_language_toggle(reset_mode)
+        # Calculate what should be selected based on proprietary toggle
         if exclude_proprietary:
-            current_selected = sorted(
-                set(current_selected).difference(NOT_OPEN_SOURCE_LANGUAGES)
-            )
+            default_selected = sorted(set(unique_values).difference(NOT_OPEN_SOURCE_LANGUAGES))
         else:
-            current_selected = sorted(
-                set(current_selected)
-                | util.get_state("selected_proprietary").intersection(unique_values)
-            )
+            default_selected = unique_values
+    else:
+        default_selected = unique_values
 
+    # Initialize on first run or force reset
+    if reset_mode or state_name not in st.session_state:
+        st.session_state[state_name] = default_selected
+    else:
+        # For language column, adjust existing selection if proprietary toggle changed
+        if col.lower() == "language":
+            current = st.session_state[state_name]
+            if exclude_proprietary:
+                # Remove proprietary languages from selection
+                st.session_state[state_name] = sorted(set(current).difference(NOT_OPEN_SOURCE_LANGUAGES))
+            else:
+                # Add back any proprietary that were previously selected
+                previously_selected = st.session_state.get("selected_proprietary", set())
+                st.session_state[state_name] = sorted(set(current) | previously_selected.intersection(unique_values))
+
+    # DON'T pass default - let Streamlit read from session_state automatically via key
     selected_values = st.sidebar.multiselect(
         f"Select {col} values",
         options=unique_values,
-        default=current_selected,
         key=state_name,
     )
 
@@ -520,16 +540,27 @@ def reset(button_press: bool = False) -> bool:
     """
     # Reset filters button and logic
     if button_press:
-        # Set a flag to indicate we want to reset
-        util.set_state("reset_filters", True)
-        st.rerun()
+        # Clear all filter-related session state keys immediately
+        keys_to_clear = [
+            k for k in list(st.session_state.keys())
+            if k.startswith(("slider_", "multiselect_", "exclude_nan_", "exclude_proprietary", "score_toggle", "scoring_", "scoring_method"))
+        ]
+        # DEBUG: Log what we're deleting
+        st.session_state["last_reset_deleted"] = len(keys_to_clear)
+        for key in keys_to_clear:
+            del st.session_state[key]
+        # Also clear the search box and selected proprietary languages
+        if "search_box" in st.session_state:
+            st.session_state["search_box"] = ""
+        if "selected_proprietary" in st.session_state:
+            del st.session_state["selected_proprietary"]
+        # Clear the backup too
+        if "filter_state_backup" in st.session_state:
+            del st.session_state["filter_state_backup"]
+        # Return True so widgets know to use defaults
+        return True
 
-    # Check if we need to reset filters
-    reset_mode = util.get_state("reset_filters", False)
-    if reset_mode:
-        # Clear the reset flag
-        util.set_state("reset_filters", False)
-    return reset_mode
+    return False
 
 
 def header_and_missing_value_toggle(col: pd.Series, reset_mode: bool) -> bool:
@@ -547,9 +578,13 @@ def header_and_missing_value_toggle(col: pd.Series, reset_mode: bool) -> bool:
     missing_count = col.isnull().sum()
     state_name = f"exclude_nan_{name}"
     if missing_count > 0:
+        # Initialize on first run or force reset
+        if reset_mode or state_name not in st.session_state:
+            st.session_state[state_name] = False
+
+        # DON'T pass value - let Streamlit read from session_state automatically via key
         exclude_nan = st.sidebar.toggle(
             f"Exclude {missing_count} tools missing `{name}` data",
-            value=False if reset_mode else util.get_state(state_name, False),
             key=state_name,
         )
         if exclude_nan:
@@ -568,10 +603,15 @@ def proprietary_language_toggle(reset_mode: bool) -> bool:
     Returns:
         bool: True if there are NaN values and the missing value toggle is switched on.
     """
+    state_name = "exclude_proprietary"
+    # Initialize on first run or force reset
+    if reset_mode or state_name not in st.session_state:
+        st.session_state[state_name] = True
+
+    # DON'T pass value - let Streamlit read from session_state automatically via key
     exclude_proprietary = st.sidebar.toggle(
         "Exclude tools which can only run with access to proprietary software",
-        value=True if reset_mode else util.get_state("exclude_proprietary", True),
-        key="exclude_proprietary",
+        key=state_name,
     )
     util.init_state("selected_proprietary", set(NOT_OPEN_SOURCE_LANGUAGES))
     return exclude_proprietary
@@ -859,8 +899,26 @@ def main(df: pd.DataFrame):
     Args:
         df (pd.DataFrame): Table to display in app.
     """
+    # CRITICAL: Restore filter state from persistent storage on page load
+    if "filter_state_backup" in st.session_state and st.session_state["filter_state_backup"]:
+        for key, value in st.session_state["filter_state_backup"].items():
+            if key not in st.session_state:  # Only restore if widget hasn't set it yet
+                st.session_state[key] = value
+
     reset_mode = reset()
     st.sidebar.header("Table filters", divider=True)
+
+    # DEBUG: Count filters BEFORE creating widgets
+    filter_keys_before = [k for k in st.session_state.keys() if k.startswith(("slider_", "multiselect_", "exclude_"))]
+
+    with st.sidebar.expander("🐛 Debug: Filter State", expanded=False):
+        backup = st.session_state.get("filter_state_backup", {})
+        st.caption(f"Active filters: {len(filter_keys_before)}")
+        st.caption(f"Backup: {len(backup)} keys")
+        if filter_keys_before:
+            st.caption("✅ Filters are active")
+        else:
+            st.caption("No filters applied")
 
     util.set_state("filters", {"toggle": [], "multiselect": [], "slider": []})
 
@@ -1089,6 +1147,14 @@ def main(df: pd.DataFrame):
             "No data matches the current filter criteria. Try adjusting your filters."
         )
 
+    # CRITICAL: Backup all filter state to persistent storage
+    # This runs after all widgets are created, so we capture their current state
+    filter_state = {}
+    for key in st.session_state.keys():
+        if key.startswith(("slider_", "multiselect_", "exclude_", "score_toggle", "scoring_")):
+            filter_state[key] = st.session_state[key]
+    st.session_state["filter_state_backup"] = filter_state
+
     reset_button = st.sidebar.button("🔄 Reset All Filters")
     reset_mode = reset(reset_button)
 
@@ -1103,6 +1169,13 @@ if __name__ == "__main__":
     st.set_page_config(
         page_title="Tool Repository Metrics", page_icon="⚡️", layout="wide"
     )
+
+    # CRITICAL: Initialize a sentinel key to check if session state persists
+    if "session_initialized" not in st.session_state:
+        st.session_state["session_initialized"] = True
+        st.session_state["session_counter"] = 0
+    else:
+        st.session_state["session_counter"] = st.session_state.get("session_counter", 0) + 1
 
     st.title("Open Energy Modelling Tool Tracker")
     st.text(

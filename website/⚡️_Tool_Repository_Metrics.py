@@ -6,6 +6,7 @@
 """Create Streamlit web app to visualise tool inventory data."""
 
 import datetime
+import re
 from collections.abc import Callable, Iterable
 from pathlib import Path
 from typing import Literal
@@ -19,7 +20,6 @@ import plotly.graph_objects as go
 import streamlit as st
 import util
 from bs4 import BeautifulSoup
-from st_keyup import st_keyup
 
 OET_LOGO_FULL_NAME = "https://raw.githubusercontent.com/open-energy-transition/handbook/a8c0a9d55a543093008c7b58e7ed9efa6d9d633f/static/img/oet_standard_red_svg.svg"
 OET_LOGO_ABBREVIATED = "https://raw.githubusercontent.com/open-energy-transition/handbook/a8c0a9d55a543093008c7b58e7ed9efa6d9d633f/static/img/oet_standard_red_png.png"
@@ -343,14 +343,15 @@ def add_scoring(cols: list[str]) -> float:
     Returns:
         float: Column score weighting
     """
-    st.toggle(
-        "Add score column to table",
-        value=util.get_state("score_toggle", False),
-        key="score_toggle",
-    )
+    # Initialize on first run
+    if "score_toggle" not in st.session_state:
+        st.session_state["score_toggle"] = False
+
+    # DON'T pass value - let Streamlit read from session_state automatically via key
+    st.toggle("Add score column to table", key="score_toggle")
 
     # Only show scoring controls when toggle is enabled
-    if util.get_state("score_toggle", False):
+    if st.session_state.get("score_toggle", False):
         selectbox_cols = st.columns(len(cols))
         selectbox_cols[0].selectbox(
             "Metric scaling method",
@@ -396,6 +397,204 @@ def update_score_col(df: pd.DataFrame) -> pd.Series:
     return score
 
 
+def user_locations_map(
+    user_stats_df: pd.DataFrame, container: st.delta_generator.DeltaGenerator = st
+):
+    """Display world map showing geographic distribution of users.
+
+    Args:
+        user_stats_df: DataFrame containing user classification data.
+        container: Streamlit container for rendering. Defaults to st.
+    """
+    locations_count = user_stats_df.location.value_counts()
+
+    # Add a world map visualization
+    container.subheader("🌍 User Geographic Distribution")
+
+    fig = px.choropleth(
+        locations_count.rename_axis(index="country")
+        .to_frame("Number of Users")
+        .reset_index(),
+        locations="country",
+        locationmode="ISO-3",
+        color="Number of Users",
+        hover_name="country",
+        color_continuous_scale=px.colors.sequential.Viridis,
+        title="Users by location across all tools",
+    )
+    fig.update_layout(
+        geo=dict(
+            showframe=True,
+            showcoastlines=True,
+            projection_type="equirectangular",
+            landcolor="rgb(243, 243, 243)",  # Light gray land
+            oceancolor="rgb(220, 240, 255)",  # Light blue ocean
+            coastlinecolor="rgb(80, 80, 80)",  # Darker coast lines
+            countrycolor="rgb(150, 150, 150)",  # Gray country borders
+        ),
+        margin=dict(l=0, r=0, t=50, b=0),  # Tight margins
+        paper_bgcolor="rgba(0,0,0,0)",  # Transparent background
+        plot_bgcolor="rgba(0,0,0,0)",  # Transparent plot area
+    )
+    container.plotly_chart(fig, key="ecosystem_country_map", width="stretch")
+
+
+def load_downloads(filepath: Path) -> pd.DataFrame:
+    """Load and reshape the package downloads CSV into long format.
+
+    Parameters:
+        filepath: Path to package_downloads.csv.
+
+    Returns:
+        Long-format DataFrame with columns: id, display_name, html_url,
+        pypi_package_url, anaconda_package_url, juliahub_package_url,
+        other_source, date, downloads.
+    """
+    raw = pd.read_csv(filepath)
+
+    # Identify date columns (format YYYY-MM)
+    date_cols = [c for c in raw.columns if re.match(r"^\d{4}-\d{2}$", c)]
+
+    # Prefer pypi_package_name as display name, fall back to id
+    raw["display_name"] = raw["pypi_package_name"].fillna(raw["id"])
+
+    # Melt to long format and drop rows with no download count
+    long = raw.melt(
+        id_vars=[
+            "id",
+            "display_name",
+            "html_url",
+            "pypi_package_url",
+            "anaconda_package_url",
+            "juliahub_package_url",
+            "other_source",
+        ],
+        value_vars=date_cols,
+        var_name="date",
+        value_name="downloads",
+    )
+    long["date"] = pd.to_datetime(long["date"])
+    long = long.dropna(subset=["downloads"]).copy()
+    long["downloads"] = long["downloads"].astype(int)
+    return long
+
+
+def compute_download_metrics(df: pd.DataFrame) -> dict:
+    """Compute summary statistics for the metric widgets.
+
+    Parameters:
+        df: Long-format downloads DataFrame.
+
+    Returns:
+        Dict with latest_month, prev_month, totals, top tool name/count,
+        all_time_total, and tool count.
+    """
+    months = sorted(df["date"].unique())
+    last_full = months[-1]
+    prev_full = months[-2] if len(months) >= 2 else None
+
+    month_totals = df.groupby("date")["downloads"].sum()
+    latest_total = int(month_totals[last_full])
+    prev_total = int(month_totals[prev_full]) if prev_full is not None else None
+
+    top_series = df[df["date"] == last_full].groupby("display_name")["downloads"].sum()
+    top_tool = str(top_series.idxmax())
+    top_tool_dl = int(top_series.max())
+
+    first_month = months[0]
+
+    return {
+        "latest_month": last_full,
+        "prev_month": prev_full,
+        "latest_total": latest_total,
+        "prev_total": prev_total,
+        "top_tool": top_tool,
+        "top_tool_downloads": top_tool_dl,
+        "all_time_total": int(df["downloads"].sum()),
+        "tools_count": int(df["display_name"].nunique()),
+        "first_month": first_month,
+    }
+
+
+def show_download_metrics(metrics: dict) -> None:
+    """Render st.metric widgets in a four-column row.
+
+    Parameters:
+        metrics: Dict produced by compute_download_metrics().
+    """
+    st.subheader("📦 Package Download Statistics")
+
+    latest_label = metrics["latest_month"].strftime("%b %Y")
+    prev_label = (
+        metrics["prev_month"].strftime("%b %Y") if metrics["prev_month"] else None
+    )
+
+    delta_str = None
+    if metrics["prev_total"] is not None and metrics["prev_total"] > 0:
+        diff = metrics["latest_total"] - metrics["prev_total"]
+        delta_str = f"{diff:+,}  vs {prev_label}"
+
+    col1, col2, col3, col4 = st.columns(4)
+    col1.metric(
+        label=f"📥 Total Downloads — {latest_label}",
+        value=f"{metrics['latest_total']:,}",
+        delta=delta_str,
+    )
+    # Render top-tool with a smaller font so long names always fit
+    col2.markdown(
+        f"<div style='font-size:0.8rem; color:gray; margin-bottom:4px'>🏆 Top Tool — {latest_label}</div>"
+        f"<div style='font-size:1rem; font-weight:700; line-height:1.3; word-break:break-word'>{metrics['top_tool']}</div>"
+        f"<div style='font-size:0.85rem; color:gray; margin-top:4px'>{metrics['top_tool_downloads']:,} downloads</div>",
+        unsafe_allow_html=True,
+    )
+    col3.metric(label="📦 Tools with Download Data", value=str(metrics["tools_count"]))
+
+    date_range = f"from {metrics['first_month'].strftime('%b %Y')} to {metrics['latest_month'].strftime('%b %Y')}"
+    col4.metric(
+        label="🌐 All-Time Tracked Downloads",
+        value=f"{metrics['all_time_total']:,}",
+        help=f"Sum of all downloads {date_range}",
+    )
+
+
+def ecosystem_highlights(user_stats_dir: Path, tool_stats_dir: Path):
+    """Display ecosystem highlights section with user map and download stats.
+
+    Args:
+        user_stats_dir: Path to directory containing user analysis output files.
+        tool_stats_dir: Path to directory containing tool stats.
+    """
+    st.header("🌟 Ecosystem Highlights", divider=True)
+
+    # Load user classifications data
+    try:
+        user_classifications = user_stats_dir / "user_classifications.csv"
+        if user_classifications.exists():
+            user_df = pd.read_csv(user_classifications)
+            user_locations_map(user_df)
+        else:
+            st.info("User classification data not available")
+    except Exception as e:
+        st.warning(f"Could not load user classification data: {e}")
+
+    st.markdown("---")
+
+    # Load and display download metrics
+    try:
+        downloads_file = user_stats_dir / "package_downloads.csv"
+        if downloads_file.exists():
+            downloads_df = load_downloads(downloads_file)
+            if not downloads_df.empty:
+                metrics = compute_download_metrics(downloads_df)
+                show_download_metrics(metrics)
+            else:
+                st.info("No download data available")
+        else:
+            st.info("Download data file not found")
+    except Exception as e:
+        st.warning(f"Could not load download data: {e}")
+
+
 def normalise(
     df: pd.DataFrame, scaling_method: Literal["min-max", "rank"]
 ) -> pd.DataFrame:
@@ -434,9 +633,14 @@ def slider(
         default_range = (col.min().date(), col.max().date())
     else:
         default_range = (col.min(), col.max())
-    current_range = (
-        default_range if reset_mode else util.get_state(state_name, default_range)
-    )
+
+    # Initialize on first run or force reset
+    if reset_mode or state_name not in st.session_state:
+        st.session_state[state_name] = default_range
+
+    # Get current value for distribution plot
+    current_range = st.session_state[state_name]
+
     if col.dtype.kind == "M":
         slider_range = tuple(pd.Timestamp(i).timestamp() for i in current_range)
         col = col.apply(lambda x: x.timestamp())
@@ -446,11 +650,11 @@ def slider(
     if plot_dist:
         dist_plot(col, slider_range)
 
+    # DON'T pass value - let Streamlit read from session_state automatically via key
     selected_range = st.sidebar.slider(
         f"Range for {col.name}",
         min_value=default_range[0],
         max_value=default_range[1],
-        value=current_range,
         key=state_name,
     )
     if selected_range != default_range:
@@ -475,27 +679,44 @@ def multiselect(unique_values: list[str], col: str, reset_mode: bool) -> list[st
           We handle that directly in this method.
     """
     state_name = f"multiselect_{col}"
-    current_selected = (
-        unique_values if reset_mode else util.get_state(state_name, unique_values)
-    )
 
+    # Handle language-specific logic first
     if col.lower() == "language":
         exclude_proprietary = proprietary_language_toggle(reset_mode)
+        # Calculate what should be selected based on proprietary toggle
         if exclude_proprietary:
-            current_selected = sorted(
-                set(current_selected).difference(NOT_OPEN_SOURCE_LANGUAGES)
+            default_selected = sorted(
+                set(unique_values).difference(NOT_OPEN_SOURCE_LANGUAGES)
             )
         else:
-            current_selected = sorted(
-                set(current_selected)
-                | util.get_state("selected_proprietary").intersection(unique_values)
-            )
+            default_selected = unique_values
+    else:
+        default_selected = unique_values
 
+    # Initialize on first run or force reset
+    if reset_mode or state_name not in st.session_state:
+        st.session_state[state_name] = default_selected
+    else:
+        # For language column, adjust existing selection if proprietary toggle changed
+        if col.lower() == "language":
+            current = st.session_state[state_name]
+            if exclude_proprietary:
+                # Remove proprietary languages from selection
+                st.session_state[state_name] = sorted(
+                    set(current).difference(NOT_OPEN_SOURCE_LANGUAGES)
+                )
+            else:
+                # Add back any proprietary that were previously selected
+                previously_selected = st.session_state.get(
+                    "selected_proprietary", set()
+                )
+                st.session_state[state_name] = sorted(
+                    set(current) | previously_selected.intersection(unique_values)
+                )
+
+    # DON'T pass default - let Streamlit read from session_state automatically via key
     selected_values = st.sidebar.multiselect(
-        f"Select {col} values",
-        options=unique_values,
-        default=current_selected,
-        key=state_name,
+        f"Select {col} values", options=unique_values, key=state_name
     )
 
     if col.lower() == "language" and not util.get_state("exclude_proprietary"):
@@ -520,16 +741,38 @@ def reset(button_press: bool = False) -> bool:
     """
     # Reset filters button and logic
     if button_press:
-        # Set a flag to indicate we want to reset
-        util.set_state("reset_filters", True)
-        st.rerun()
+        # Clear all filter-related session state keys immediately
+        keys_to_clear = [
+            k
+            for k in list(st.session_state.keys())
+            if k.startswith(
+                (
+                    "slider_",
+                    "multiselect_",
+                    "exclude_nan_",
+                    "exclude_proprietary",
+                    "score_toggle",
+                    "scoring_",
+                    "scoring_method",
+                )
+            )
+        ]
+        # DEBUG: Log what we're deleting
+        st.session_state["last_reset_deleted"] = len(keys_to_clear)
+        for key in keys_to_clear:
+            del st.session_state[key]
+        # Also clear the search box and selected proprietary languages
+        if "search_box" in st.session_state:
+            st.session_state["search_box"] = ""
+        if "selected_proprietary" in st.session_state:
+            del st.session_state["selected_proprietary"]
+        # Clear the backup too
+        if "filter_state_backup" in st.session_state:
+            del st.session_state["filter_state_backup"]
+        # Return True so widgets know to use defaults
+        return True
 
-    # Check if we need to reset filters
-    reset_mode = util.get_state("reset_filters", False)
-    if reset_mode:
-        # Clear the reset flag
-        util.set_state("reset_filters", False)
-    return reset_mode
+    return False
 
 
 def header_and_missing_value_toggle(col: pd.Series, reset_mode: bool) -> bool:
@@ -547,10 +790,13 @@ def header_and_missing_value_toggle(col: pd.Series, reset_mode: bool) -> bool:
     missing_count = col.isnull().sum()
     state_name = f"exclude_nan_{name}"
     if missing_count > 0:
+        # Initialize on first run or force reset
+        if reset_mode or state_name not in st.session_state:
+            st.session_state[state_name] = False
+
+        # DON'T pass value - let Streamlit read from session_state automatically via key
         exclude_nan = st.sidebar.toggle(
-            f"Exclude {missing_count} tools missing `{name}` data",
-            value=False if reset_mode else util.get_state(state_name, False),
-            key=state_name,
+            f"Exclude {missing_count} tools missing `{name}` data", key=state_name
         )
         if exclude_nan:
             util.get_state("filters")["toggle"].append(name)
@@ -568,10 +814,15 @@ def proprietary_language_toggle(reset_mode: bool) -> bool:
     Returns:
         bool: True if there are NaN values and the missing value toggle is switched on.
     """
+    state_name = "exclude_proprietary"
+    # Initialize on first run or force reset
+    if reset_mode or state_name not in st.session_state:
+        st.session_state[state_name] = True
+
+    # DON'T pass value - let Streamlit read from session_state automatically via key
     exclude_proprietary = st.sidebar.toggle(
         "Exclude tools which can only run with access to proprietary software",
-        value=True if reset_mode else util.get_state("exclude_proprietary", True),
-        key="exclude_proprietary",
+        key=state_name,
     )
     util.init_state("selected_proprietary", set(NOT_OPEN_SOURCE_LANGUAGES))
     return exclude_proprietary
@@ -786,43 +1037,44 @@ def preamble(latest_changes: str, n_tools: int, data_processing_text: str):
                If that's the case, [raise an issue on our project homepage](https://github.com/open-energy-transition/openmod-tracker/issues/new).
             """
         )
+
+
+def key_takeaways():
+    """Key takeaways section to show before the table."""
+    with st.expander("Key Takeaways from the Data", icon="💡"):
+        st.markdown(
+            """
+            - **Adoption Signals Matter**: High download counts, active contributors, and ongoing issue resolutions suggest healthy, well-maintained projects.
+              However, source code activity alone can be misleading — some highly starred projects have stalled development and some with limited source code development are in heavy use in supporting planning decisions.
+            - **Sustainability Risks**: Projects with fewer than 10 contributors face a higher risk of abandonment.
+              A committed and broad contributor base can be hard to come by and may need to be cultivated with financial support rather than relying on it to grow naturally.
+            - **Usability Gaps**: Some projects do not have builds of their tools indexed online (e.g., on PyPI or conda-forge), which may indicate poor release management and hinder long-term usability.
+            - **Interoperability Potential**: Many tools serve niche roles and may only be suitable for supporting decision-making as part of a tool suite.
+              This requires tools to be interoperable, using common nomenclature and data structures.
+            """
+        )
+
+    with st.expander("Beyond Data: The Need for Qualitative Assessments", icon="🔍"):
+        st.markdown(
+            """
+            While data helps filter out the most interesting tools, deeper investigation is needed to ensure a tool is the right fit.
+            Some key qualitative factors to consider:
+
+            - **Documentation Quality**: Are installation and usage guides clear and up to date?
+            - **Community Support**: Is there an active forum, mailing list, or issue tracker?
+            - **Use Cases**: Has the tool been applied in real-world projects similar to your needs?
+            - **Licensing & Governance**: Is it permissively licensed (e.g., MIT) or does it enforce restrictions (e.g., GPL)?
+            - **Collaboration Potential**: Can multiple stakeholders contribute effectively?
+
+            **By combining live data tracking with structured qualitative evaluation**, the energy community can reduce wasted investments and ensure the best tools remain available for researchers, grid operators, project developers, investors and policymakers alike.
+
+            **Have you found this platform useful, or want to see it grow in any specific way?** Share your thoughts and suggestions on our [project homepage](https://github.com/open-energy-transition/openmod-tracker/issues)!
+            """
+        )
+
     st.markdown(
-        f"""
+        """
         ## Open Energy Modelling Tools - Key Metrics
-
-        **Last Update**: {latest_changes}
-        """
-    )
-
-
-def conclusion():
-    """Text to show after the app table."""
-    st.markdown(
-        """
-        ## Key Takeaways from the Data
-
-        - **Adoption Signals Matter**: High download counts, active contributors, and ongoing issue resolutions suggest healthy, well-maintained projects.
-          However, source code activity alone can be misleading — some highly starred projects have stalled development and some with limited source code development are in heavy use in supporting planning decisions.
-        - **Sustainability Risks**: Projects with fewer than 10 contributors face a higher risk of abandonment.
-          A committed and broad contributor base can be hard to come by and may need to be cultivated with financial support rather than relying on it to grow naturally.
-        - **Usability Gaps**: Some projects do not have builds of their tools indexed online (e.g., on PyPI or conda-forge), which may indicate poor release management and hinder long-term usability.
-        - **Interoperability Potential**: Many tools serve niche roles and may only be suitable for supporting decision-making as part of a tool suite.
-          This requires tools to be interoperable, using common nomenclature and data structures.
-
-        ## Beyond Data: The Need for Qualitative Assessments
-
-        While data helps filter out the most interesting tools, deeper investigation is needed to ensure a tool is the right fit.
-        Some key qualitative factors to consider:
-
-        - **Documentation Quality**: Are installation and usage guides clear and up to date?
-        - **Community Support**: Is there an active forum, mailing list, or issue tracker?
-        - **Use Cases**: Has the tool been applied in real-world projects similar to your needs?
-        - **Licensing & Governance**: Is it permissively licensed (e.g., MIT) or does it enforce restrictions (e.g., GPL)?
-        - **Collaboration Potential**: Can multiple stakeholders contribute effectively?
-
-        **By combining live data tracking with structured qualitative evaluation**, the energy community can reduce wasted investments and ensure the best tools remain available for researchers, grid operators, project developers, investors and policymakers alike.
-
-        **Have you found this platform useful, or want to see it grow in any specific way?** Share your thoughts and suggestions on our [project homepage](https://github.com/open-energy-transition/openmod-tracker/issues)!
         """
     )
 
@@ -858,6 +1110,15 @@ def main(df: pd.DataFrame):
     Args:
         df (pd.DataFrame): Table to display in app.
     """
+    # CRITICAL: Restore filter state from persistent storage on page load
+    if (
+        "filter_state_backup" in st.session_state
+        and st.session_state["filter_state_backup"]
+    ):
+        for key, value in st.session_state["filter_state_backup"].items():
+            if key not in st.session_state:  # Only restore if widget hasn't set it yet
+                st.session_state[key] = value
+
     reset_mode = reset()
     st.sidebar.header("Table filters", divider=True)
 
@@ -926,26 +1187,90 @@ def main(df: pd.DataFrame):
         score_col_config = None
     # Display options
     col1, col2 = st.columns([3, 2])
-    with col2:
-        try:
-            search_result = st_keyup("Find a tool by name", value="", key="search_box")
-        except ValueError as error:
-            if "not registered" not in str(error):
-                raise
-            search_result = st.text_input(
-                "Find a tool by name",
-                value=util.get_state("search_box", ""),
-                key="search_box_fallback",
-            )
-        search_result = search_result or ""
-    filters.append(df["name_with_url"].str.lower().str.contains(search_result.lower()))
 
     filter_series = pd.concat(filters, axis=1).all(axis=1)
     df_filtered = df[filter_series].sort_values(DEFAULT_ORDER, ascending=False)
 
+    # Store filtered tools for deep dive dropdown (Workflow 2 & 3)
+    filtered_tool_data = (
+        df_filtered["name_with_url"]
+        .apply(
+            lambda x: {
+                "name": x.split("#")[1] if "#" in x else x,
+                "url": x.split("#")[0] if "#" in x else x,
+            }
+        )
+        .tolist()
+    )
+    util.set_state("filtered_tools", filtered_tool_data)
+
     with col1:
         message = create_filter_message()
         st.metric(f"Tools in view{message}", f"{len(df_filtered)} / {len(df)}")
+
+    with col2:
+        # Create dropdown for tool selection in place of search box
+        if len(df_filtered) > 0:
+            current_selection = util.get_state("persisted_tool_selection", None)
+
+            tool_options = ["(None)"]  # Option to deselect
+            tool_map = {}
+
+            for idx, row in df_filtered.iterrows():
+                name_with_url = row["name_with_url"]
+                parts = name_with_url.split("#")
+                if len(parts) == 2:
+                    name = parts[1]
+                    url = parts[0]
+                else:
+                    name = name_with_url
+                    url = name_with_url
+
+                tool_options.append(name)
+                tool_map[name] = (name_with_url, url)
+
+            # Find current selection index
+            default_idx = 0
+            if current_selection:
+                for name, (name_url, _) in tool_map.items():
+                    if name_url == current_selection:
+                        default_idx = tool_options.index(name)
+                        break
+
+            # Dropdown selection with callback
+            def on_dropdown_change():
+                selected = st.session_state.tool_dropdown_selector
+                if selected != "(None)" and selected in tool_map:
+                    name_with_url, url = tool_map[selected]
+                    util.set_state("selected_tool_names", [selected])
+                    util.set_state("selected_tool_urls", [url])
+                    util.set_state("persisted_tool_selection", name_with_url)
+                elif selected == "(None)":
+                    util.set_state("selected_tool_names", [])
+                    util.set_state("selected_tool_urls", [])
+                    util.set_state("persisted_tool_selection", None)
+
+            st.selectbox(
+                "Select tool for deep-dive",
+                options=tool_options,
+                index=default_idx,
+                key="tool_dropdown_selector",
+                on_change=on_dropdown_change,
+            )
+
+    # Restore selection if there's a persisted selection
+    # This needs to happen after every filter change to maintain selection when the tool is still visible
+    persisted_selection = util.get_state("persisted_tool_selection", None)
+    if persisted_selection:
+        # Find the row in current filtered view
+        matching_rows = df_filtered[df_filtered["name_with_url"] == persisted_selection]
+        if not matching_rows.empty:
+            # Tool is still in filtered view - update selection to new row index
+            row_index = df_filtered.index.get_loc(matching_rows.index[0])
+            st.session_state.tool_selection_table = {"selection": {"rows": [row_index]}}
+        elif "tool_selection_table" in st.session_state:
+            # Tool was filtered out - clear the widget selection
+            st.session_state.tool_selection_table = {"selection": {"rows": []}}
 
     max_interactions = df["Interactions"].dropna().apply(lambda x: x.max()).max()
     col_config = {
@@ -972,27 +1297,41 @@ def main(df: pd.DataFrame):
     assert not cols_missing_config, (
         f"Missing column configuration for {cols_missing_config}"
     )
-    # Display the table
+    # Display banner and table
     if len(df_filtered) > 0:
+        # Show banner based on stored state
+        current_names = util.get_state("selected_tool_names", [])
+
+        if current_names:
+            st.success(f"✅ **{current_names[0]}** selected for deep-dive")
+        else:
+            st.info(
+                "💡 Use the dropdown menu above to select a tool for deep-dive analysis"
+            )
+
+        # Display the full Streamlit dataframe with all columns
         st.dataframe(
             df_filtered,
             width="stretch",
             hide_index=True,
             column_config=col_config,
             column_order=col_config.keys(),
+            key="tool_display_table",
         )
     else:
         st.warning(
             "No data matches the current filter criteria. Try adjusting your filters."
         )
-    st.subheader("📊 Score tools your way")
-    st.markdown(
-        """
-        You can create your own tool scores by combining the metrics that matter most to you.
-        First, toggle the scoring column.
-        Then, adjust the weights applied to each numeric metric to fit your preferences."""
-    )
-    add_scoring(numeric_cols)
+
+    # CRITICAL: Backup all filter state to persistent storage
+    # This runs after all widgets are created, so we capture their current state
+    filter_state = {}
+    for key in st.session_state.keys():
+        if key.startswith(
+            ("slider_", "multiselect_", "exclude_", "score_toggle", "scoring_")
+        ):
+            filter_state[key] = st.session_state[key]
+    st.session_state["filter_state_backup"] = filter_state
 
     reset_button = st.sidebar.button("🔄 Reset All Filters")
     reset_mode = reset(reset_button)
@@ -1008,6 +1347,15 @@ if __name__ == "__main__":
     st.set_page_config(
         page_title="Tool Repository Metrics", page_icon="⚡️", layout="wide"
     )
+
+    # CRITICAL: Initialize a sentinel key to check if session state persists
+    if "session_initialized" not in st.session_state:
+        st.session_state["session_initialized"] = True
+        st.session_state["session_counter"] = 0
+    else:
+        st.session_state["session_counter"] = (
+            st.session_state.get("session_counter", 0) + 1
+        )
 
     st.title("Open Energy Modelling Tool Tracker")
     st.text(
@@ -1030,6 +1378,11 @@ if __name__ == "__main__":
         readme_path, "Our data processing approach"
     )
     preamble(latest_changes, len(df_vis), data_processing_approach_string)
+    st.markdown(f"**Last Update**: {latest_changes}")
+    st.markdown("---")
+    key_takeaways()
+    st.markdown("---")
+    ecosystem_highlights(user_stats_dir, tool_stats_dir)
+    st.markdown("---")
     main(df_vis.copy())
-    conclusion()
     footer()

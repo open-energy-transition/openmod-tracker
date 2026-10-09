@@ -1071,7 +1071,9 @@ def main(df: pd.DataFrame):
         if current_names:
             st.success(f"✅ **{current_names[0]}** selected for deep-dive")
         else:
-            st.info("💡 Use the dropdown below the table to select a tool for deep-dive analysis")
+            st.info(
+                "💡 Use the dropdown below the table to select a tool for deep-dive analysis"
+            )
 
         # Display the full Streamlit dataframe with all columns
         st.dataframe(
@@ -1128,7 +1130,7 @@ def main(df: pd.DataFrame):
             options=tool_options,
             index=default_idx,
             key="tool_dropdown_selector",
-            on_change=on_dropdown_change
+            on_change=on_dropdown_change,
         )
     else:
         st.warning(

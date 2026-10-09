@@ -72,15 +72,15 @@ class GitLabClientGL:
         self.session.headers.update(headers)
         self.rate = GitLabRateLimit()
 
-    def _request(self, method: str, path: str, **kwargs) -> requests.Response:
+    def _request(self, method: str, path: str, **kwargs) -> dict:
         url = f"{self.base_url}/{path.lstrip('/')}"
         try:
             resp = self.session.request(method, url, timeout=120, **kwargs)
             resp.raise_for_status()
+            return resp.json()
         except Exception as e:
             LOGGER.error(f"GitLab API request error: {e}")
-            pass
-        return resp
+            return {}
 
     def _paginate(
         self, path: str, params: dict[str, Any] | None = None
@@ -92,8 +92,7 @@ class GitLabClientGL:
         while True:
             page += 1
             params["page"] = page
-            resp = self._request("GET", path, params=params)
-            items = resp.json()
+            items = self._request("GET", path, params=params)
             if not isinstance(items, list) or not items:
                 break
             yield from items
@@ -114,9 +113,7 @@ class GitLabClientGL:
 
     def get_project(self, full_path: str) -> dict[str, Any]:
         """Retrieve a project record by its full path (namespace/project)."""
-        return self._request(
-            "GET", f"projects/{self.encode_project_path(full_path)}"
-        ).json()
+        return self._request("GET", f"projects/{self.encode_project_path(full_path)}")
 
     def list_issues(self, full_path: str) -> Iterable[dict[str, Any]]:
         """Iterate issues for a project (ascending by creation time)."""
@@ -167,14 +164,14 @@ class GitLabClientGL:
 
     def find_user_by_username(self, username: str) -> dict[str, Any] | None:
         """Find a user by username (returns the first matching user or None)."""
-        resp = self._request("GET", "users", params={"username": username}).json()
-        if isinstance(resp, list) and resp:
-            return self.get_user(resp[0]["id"])
+        items = self._request("GET", "users", params={"username": username})
+        if isinstance(items, list) and items:
+            return self.get_user(items[0]["id"])
         return None
 
     def get_user(self, user_id: int) -> dict[str, Any]:
         """Get a user by numeric ID."""
-        return self._request("GET", f"users/{user_id}").json()
+        return self._request("GET", f"users/{user_id}")
 
 
 class GitLabRepositoryCollectorGL:

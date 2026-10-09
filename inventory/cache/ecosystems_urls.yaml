@@ -206,6 +206,7 @@ https://github.com/pypsa/pypsa: https://repos.ecosyste.ms/api/v1/hosts/GitHub/re
 https://github.com/pypsa/whobs-server: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/PyPSA%2Fwhobs-server
 https://github.com/quasi-software: not-found
 https://github.com/quasi-software/resie: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/QuaSi-Software%2Fresie
+https://github.com/quasi-software/resiequasi.jl: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/QuaSi-Software%2FResieQuasi.jl
 https://github.com/quintel/etengine: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/quintel%2Fetengine
 https://github.com/quintel/etmodel: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/quintel%2Fetmodel
 https://github.com/quintel/pyetm: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/quintel%2Fpyetm
@@ -259,6 +260,7 @@ https://github.com/uu-er/adopt-net0: https://repos.ecosyste.ms/api/v1/hosts/GitH
 https://github.com/villasframework: not-found
 https://github.com/villasframework/node: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/VILLASframework%2Fnode
 https://github.com/vub-hydr/revub: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/VUB-HYDR%2FREVUB
+https://github.com/westlightenergy/match-model: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/westlightenergy%2FMATCH-model
 https://github.com/yabata/ficus: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/yabata%2Fficus
 https://github.com/yanzhaochang/psatools-python: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/yanzhaochang%2FPSATools-Python
 https://github.com/youngfaithful/capacityexpansion.jl: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/YoungFaithful%2FCapacityExpansion.jl

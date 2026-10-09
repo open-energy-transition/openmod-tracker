@@ -302,11 +302,57 @@ def get_scorecard_from_csv(csv_path: Path) -> pd.DataFrame | None:
         The scorecard DataFrame if found, None otherwise.
     """
     if csv_path.exists():
-        score_card = pd.read_csv(csv_path, index_col="id")
+        # Read everything as-is so cached values (e.g. "N/A", "?", "10") are written back unchanged.
+        score_card = pd.read_csv(
+            csv_path, index_col="id", dtype=str, keep_default_na=False
+        )
         return score_card
     else:
         LOGGER.warning(f"CSV file not found at {csv_path}")
         return None
+
+
+def get_scorecard_from_cache(
+    tool_name: str,
+    cache_scores_df: pd.DataFrame | None,
+    cache_reasons_df: pd.DataFrame | None,
+) -> tuple[str, pd.DataFrame] | None:
+    """Rebuild scorecard data for a tool from previously saved scores and reasons.
+
+    Parameters
+    ------------
+    tool_name : str
+        Identifier of the tool/repository.
+    cache_scores_df : pd.DataFrame | None
+        Existing scores, indexed by tool name, with one column per check.
+    cache_reasons_df : pd.DataFrame | None
+        Existing reasons, indexed by tool name, with one 'Reason <check>' column per check.
+
+    Returns:
+    --------
+    tuple[str, pd.DataFrame] | None
+        A tuple of (aggregated_score, checks_df) matching the API/CLI output format,
+        or None if the tool is not in both caches.
+    """
+    if cache_scores_df is None or cache_reasons_df is None:
+        return None
+    if (
+        tool_name not in cache_scores_df.index
+        or tool_name not in cache_reasons_df.index
+    ):
+        return None
+
+    scores = cache_scores_df.loc[tool_name].drop(["html_url", "aggregated_score"])
+    reasons = cache_reasons_df.loc[tool_name]
+    rows = [
+        {"name": name, "score": score, "reason": reasons.get(f"Reason {name}", "N/A")}
+        for name, score in scores.items()
+    ]
+    # Checks that were never run for this tool are stored as "N/A" in both files;
+    # dropping them here gives the same "N/A" fill when the output is written.
+    checks_df = pd.DataFrame(rows, columns=["name", "score", "reason"])
+    checks_df = checks_df[(checks_df.score != "N/A") | (checks_df.reason != "N/A")]
+    return cache_scores_df.at[tool_name, "aggregated_score"], checks_df
 
 
 def process_repositories(
@@ -388,8 +434,8 @@ def process_repositories(
 def _get_scorecard_data(
     url: str,
     tool_name: str,
-    cache_scores_df: pd.DataFrame,
-    cache_reasons_df: pd.DataFrame,
+    cache_scores_df: pd.DataFrame | None,
+    cache_reasons_df: pd.DataFrame | None,
 ) -> tuple[float, pd.DataFrame] | None:
     """Retrieve scorecard data using fallback strategy (API → CLI → CSV).
 
@@ -422,13 +468,18 @@ def _get_scorecard_data(
     result = get_scorecard_from_cli(url)
     if result:
         aggregate_score, checks_df = parse_scorecard_output(result)
-        return aggregate_score, checks_df
+        # The CLI can exit cleanly without producing any results (e.g. if it skipped the repo).
+        if not checks_df.empty:
+            return aggregate_score, checks_df
 
     # Try CSV fallback
     LOGGER.warning(f"CLI failed, falling back to CSV for: {url}")
-    if tool_name in cache_scores_df.index and tool_name in cache_reasons_df.index:
+    cache_result = get_scorecard_from_cache(
+        tool_name, cache_scores_df, cache_reasons_df
+    )
+    if cache_result is not None:
         LOGGER.info(f"Loaded scorecard from CSV for: {url}")
-        return None
+        return cache_result
 
     LOGGER.error(f"No CSV fallback available for: {url}")
     return None

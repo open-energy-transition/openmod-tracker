@@ -25,11 +25,35 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Calendar Versioning](https://calver.org/).
 
+## Unreleased
+
+### Added
+
+- New tools: xeona, NOSTES, ATLAS
+
+## 2026-09-28
+
+### Changed
+
+- Stars are now collected from the anonymous GitHub star history endpoint (`/repos/{owner}/{repo}/stargazers/history`).
+  GitHub has restricted the stargazer _listing_ endpoints (REST `/stargazers` and the GraphQL `stargazers` connection) to repository admins and collaborators, and they return silently empty for everyone else, so star counts had stopped updating for almost every tool in the inventory.
+  The replacement endpoint reports star _counts_ per day with no user identity of any kind, so newly collected stars are recorded against a placeholder `anonymous` username and are excluded from the user interaction analysis.
+  Stargazers collected before this change keep their usernames.
+  (#268)
+
+### Fixed
+
+- GitHub commit history pagination cache, which was storing cursors containing the branch head SHA and so went stale as soon as new commits were pushed (#243).
+  Only the item index is now cached and the cursor is rebuilt from the current head SHA on each run.
+- CI issues by updating streamlit version.
+- Score getter to fill with cached scores on failure
+  (caused by directories with the same name but different cases not being differentiated on on MacOS).
+
 ## 2026-08-31
 
 ### Fixed
+
 - Failing PyPI logo.
-- Fix failing CI
 
 ## 2026-07-31
 

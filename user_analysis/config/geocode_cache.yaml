@@ -84,6 +84,7 @@ Abuja, Nigeria: Niger
 Adelaide, Australia: Australia
 Adelaide, South Australia: Australia
 Aethens.eth: null
+Ahmedabad: India
 Ahmedabad, Gujarat: India
 Aichi / Japan: Japan
 Ajjur, Palestine: null
@@ -541,6 +542,7 @@ Copenhagen: Denmark
 'Copenhagen ': Denmark
 Copenhagen (DK): Denmark
 Copenhagen, Denmark: Denmark
+Cordoba, Argentina: Argentina
 Cork: Ireland
 Cork, Ireland: Ireland
 Cornelio Procopio: Brazil
@@ -1176,6 +1178,7 @@ La Vita Nuova: France
 Lacey, WA, USA: United States
 Lagos, Nigeria: Niger
 Lagos, Nigeria.: Niger
+'Lahore pakistan ': Pakistan
 Lahore, PK: Pakistan
 Lahore, Pakistan: Pakistan
 Lahore, Punjab, Pakistan: Pakistan
@@ -1423,6 +1426,7 @@ Mosbach, Germany: Germany
 Moscow: Russia
 Moscow, Russia: Russia
 Moscow, Russia, Eurasia, Earth;: null
+Mount Vernon, Indiana 47620: United States
 Mount Vernon, NY: United States
 Mountain View, CA: United States
 Mountain View, CA, USA: United States
@@ -1775,6 +1779,7 @@ Rainau, Germany: Germany
 Raleigh: United States
 Raleigh, NC: United States
 Raleigh, North Carolina: United States
+Ramseur, NC: United States
 Ranchi: India
 Reading, PA: United States
 Reading, UK: United Kingdom
@@ -1875,6 +1880,7 @@ San Diego: United States
 San Diego, CA: United States
 San Diego, California: United States
 San Francisco: United States
+'San Francisco ': United States
 San Francisco Bay Area: United States
 San Francisco Bay Area, California: United States
 San Francisco, CA: United States
@@ -1925,6 +1931,7 @@ Schweinfurt, Germany: Germany
 Scotland: United Kingdom
 Scotland, UK: United Kingdom
 Seattle: United States
+Seattle WA: United States
 Seattle, USA: United States
 Seattle, WA: United States
 Seattle, Washington: United States
@@ -2064,6 +2071,7 @@ Stuttgart / Berlin, Germany: Germany
 Stuttgart | Germany: Germany
 Stuttgart, DE: Germany
 Stuttgart, Germany: Germany
+Styria: Austria
 SuZhou: China
 SuZhou , China: China
 Suffolk, United Kingdom: United Kingdom
@@ -2315,6 +2323,7 @@ WRO / POL: null
 WX: United States
 Wageningen, Netherlands: Netherlands
 Wakefield: United Kingdom
+Walla Walla Washington, USA, Earth, Milky way, <Universe>: null
 Warangal, Telengana, India 506004: India
 Warsaw: Poland
 Warsaw, Poland: Poland
@@ -2447,6 +2456,7 @@ achillea research: null
 acsdesk: null
 acta: Netherlands
 actemium: Slovakia
+active inference institute: null
 active shadow llc: null
 actregtech: null
 actually maybe: null
@@ -2499,6 +2509,7 @@ alt. paradigms: null
 altair: Brazil
 altotech global: null
 alvyss: null
+amaravati: India
 amazon: Brazil
 amazon robotics: United States
 amazon.com: United States
@@ -2800,6 +2811,7 @@ christmas island: Christmas Island
 chung-ang university (cau): South Korea
 chuzhou university: China
 cibb, university of coimbra: null
+cicero center for international climate research: null
 cidorf engenharia: null
 ciemat: Spain
 cinemo gmbh: null
@@ -2834,6 +2846,7 @@ codee-com citiususc: null
 codeground club(codeground.club): null
 codelayerhq: null
 coder nostra gmbh: null
+codereclaimers, llc: null
 coes sinac: null
 cofactor as: null
 cofounder & cto mammouth.ai: null
@@ -3410,6 +3423,7 @@ harbin engineering university: China
 harmony re: Canada
 harvard seas: null
 harvard university: United States
+haulogy: null
 haut conseil pour le climat: null
 havo: Finland
 haw hamburg: Germany
@@ -3522,6 +3536,7 @@ iit comillas: null
 iit delhi, iit bombay, iit madras: null
 iit kharagpur india: India
 iit, madras: India
+iit-comillas: null
 iit-energysystemmodels: null
 iiunam: null
 illumirate: null
@@ -3582,6 +3597,7 @@ insert robot ltd: null
 insper instituto de ensino e pesquisa: null
 instabase: null
 institut de planetologie et d'astrophysique de grenoble (ipag): null
+institut louis bachelier: null
 institute for energy studies: null
 institute for energy technology: Norway
 institute for essential services reform: null
@@ -3683,6 +3699,7 @@ keti: Armenia
 kevala: United Kingdom
 kevalaanalytics: null
 khelone technologies: null
+kickstage: null
 kim jaechul graduate school of artificial intelligence, kaist: null
 king abdullah university of science and technology: Saudi Arabia
 kist: Germany
@@ -3769,6 +3786,7 @@ localsolver: null
 logicpp: null
 london: United Kingdom
 london school of economics (lse): null
+loo-ai: null
 loony-tech: null
 los alamos national lab: null
 los alamos national laboratory: United States
@@ -3996,6 +4014,7 @@ nhs england: United Kingdom
 nick hartjes: null
 nies: Greece
 nikhef/utrecht university: null
+nirma university: India
 niroo research institute: null
 nirvanatech: null
 nitw: India
@@ -4008,6 +4027,7 @@ nmbu: Norway
 'no': Norway
 no affiliation: Nepal
 nobori ltd.: null
+noisegrasp: null
 nokia: Belgium
 nokia bell labs: Italy
 noma: United States
@@ -4050,6 +4070,7 @@ number 139,fengling 2nd road changsha hunan CHN 410205: null
 numerical algorithms group: null
 nus: Italy
 nvidia: United States
+nwtc: United States
 nyc: United States
 nyu: United States
 nyu tandon school of engineering: United States
@@ -4139,6 +4160,7 @@ paradigma solutions: null
 paradoxus: Brazil
 paris: France
 parsiaafzar: null
+parul university: India
 pas automation | innovate for impact: null
 pasteur-isi: France
 patiala: India
@@ -4276,6 +4298,7 @@ queen mary university of london: United Kingdom
 quintel: Romania
 quintel intelligence: null
 quintel intelligence b.v: null
+ra-solutions: Haiti
 rabobank: United Kingdom
 radboud universiteit: Netherlands
 radboud university: Netherlands
@@ -4403,6 +4426,7 @@ scott logic: United Kingdom
 scriptor: Germany
 scut: Italy
 sdu: Pakistan
+secret: Australia
 securedevice a/s: null
 sede-x: Brazil
 seekr: Brazil
@@ -4423,6 +4447,7 @@ senso: France
 seqeralabs: null
 serena energy: Italy
 serlo-org: null
+servicetrade: null
 sesco llc: null
 seu: China
 sevencooks-gmbh-co-kg: null
@@ -4637,6 +4662,7 @@ tadodotcom: null
 taiwan: Taiwan, Province of China
 talan uk: United Kingdom
 talentica: null
+tan-software: Iraq
 taqtiqa llc: null
 tar heel dev studio: null
 taramicro: null
@@ -4670,6 +4696,7 @@ tel aviv university: Israel
 tel-aviv university: Israel
 telecom paristech: France
 telegram me: null
+telekom: Germany
 telus: Canada
 temoaproject: null
 tencent: Thailand
@@ -4711,7 +4738,9 @@ the university of alabama in huntsville: null
 the university of britishh columbia: null
 the university of chicago: United States
 the university of hong kong: China
+the university of manchester: United Kingdom
 the university of melbourne: Australia
+the university of pennsylvania: United States
 the university of shanghai electric power university: null
 the university of sydney: Australia
 the university of texas at arlington: United States
@@ -4770,6 +4799,7 @@ tu ilmenau: Germany
 tu munchen: Germany
 tu wien: Austria
 tu/e: Netherlands
+tucker inc.82: United States
 tudelft: India
 tuhh: Germany
 tuhh ics: null
@@ -4787,6 +4817,7 @@ uc merced: United States
 uc3m: Spain
 ucas: China
 'ucas -> ict -> ': null
+ucl rdr: null
 ucla: United States
 uclouvain: Belgium
 uclouvain, enabel: null
@@ -4838,6 +4869,7 @@ universidad del magdalena: Colombia
 universidad nacional de colombia: Colombia
 universidad nacional de cordoba: Argentina
 universidad nacional mayor de san marcos: Peru
+universidad politecnica de cataluna: Spain
 universidad politecnica de gimialcon: null
 universidad politecnica de madrid: Spain
 universidad rey juan carlos: Spain
@@ -5075,6 +5107,7 @@ vietnam petroleum institute: null
 virginia commonwealth university: United States
 virginia tech: United States
 visage technology: null
+vit-ap: India
 vito: Bosnia and Herzegovina
 vnodesign: null
 volkswagen-ag-sdc-hannover: null
@@ -5163,6 +5196,7 @@ xi'an university of technology: China
 xinjiang university: China
 xjtu & casia: null
 xnebula: null
+xoralgo, inc: null
 xs insight: null
 xvertersolutions: null
 xy group ltd: Thailand
@@ -5197,6 +5231,7 @@ zup innovation itau: null
 zurich university of applied sciences (zhaw): null
 ~/Developer: Ukraine
 "\xC5s, Norway": Norway
+"\xCEle-de-France, France": France
 "\u0130stanbul": Turkey
 "\u0130zmir": Turkey
 "\u0627\u0644\u0638\u0647\u0631\u0627\u0646": Saudi Arabia
@@ -5211,6 +5246,7 @@ zurich university of applied sciences (zhaw): null
 "\u4E0A\u6D77\u5E02\u95F5\u884C\u533A\u4E1C\u5DDD\u8DEF800\u53F7": null
 "\u4E2D\u56FD": China
 "\u4E2D\u56FD\u5B89\u5FBD": China
+"\u4E2D\u56FD\u5E7F\u4E1C\u6DF1\u5733": China
 "\u4E2D\u56FD\u6C5F\u82CF\u7701\u8FDE\u4E91\u6E2F\u5E02": China
 "\u4E2D\u56FD\u9752\u5C9B": China
 "\u4E2D\u56FD\uFF0C\u5357\u4EAC": China

@@ -10,7 +10,7 @@ from pathlib import Path
 
 import click
 import pandas as pd
-from github_api import GitHubClientGH, get_user_details_gh
+from github_api import ANONYMOUS_USERNAME, GitHubClientGH, get_user_details_gh
 from gitlab_api import GitLabClientGL, get_user_details_gl
 from tqdm import tqdm
 
@@ -71,6 +71,8 @@ def cli(repo_interactions: Path, outdir: Path, refresh_cache: bool):
     gl_client = GitLabClientGL()
 
     users_df = pd.read_csv(repo_interactions)
+    # Stars are only available as anonymous daily counts, so their placeholder username has no details to fetch.
+    users_df = users_df[users_df.username != ANONYMOUS_USERNAME]
 
     # Filter out any users for which we're removed the repo they are interacting with + any orgs that now disappear.
     # This ensures we don't have user/org details for users who no longer interact with any repos in our dataset.

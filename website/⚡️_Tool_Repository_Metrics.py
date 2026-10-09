@@ -944,6 +944,19 @@ def main(df: pd.DataFrame):
     filter_series = pd.concat(filters, axis=1).all(axis=1)
     df_filtered = df[filter_series].sort_values(DEFAULT_ORDER, ascending=False)
 
+    # Store filtered tools for deep dive dropdown (Workflow 2 & 3)
+    filtered_tool_data = (
+        df_filtered["name_with_url"]
+        .apply(
+            lambda x: {
+                "name": x.split("#")[1] if "#" in x else x,
+                "url": x.split("#")[0] if "#" in x else x,
+            }
+        )
+        .tolist()
+    )
+    util.set_state("filtered_tools", filtered_tool_data)
+
     with col1:
         message = create_filter_message()
         st.metric(f"Tools in view{message}", f"{len(df_filtered)} / {len(df)}")

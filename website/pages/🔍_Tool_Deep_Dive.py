@@ -261,6 +261,25 @@ def get_tool_id_from_url(url: str) -> str | None:
     return None
 
 
+def on_tool_dropdown_change() -> None:
+    """Callback function to handle tool dropdown selection change.
+
+    Updates session state to sync with main page table selection.
+    """
+    if "tool_selector_dropdown" in st.session_state:
+        selected_tool_name = st.session_state.tool_selector_dropdown
+        filtered_tools = util.get_state("filtered_tools", [])
+        tool_urls_map = {tool["name"]: tool["url"] for tool in filtered_tools}
+
+        if selected_tool_name in tool_urls_map:
+            selected_tool_url = tool_urls_map[selected_tool_name]
+            util.set_state("selected_tool_names", [selected_tool_name])
+            util.set_state("selected_tool_urls", [selected_tool_url])
+            # Update persisted selection for main page table sync
+            name_with_url = f"{selected_tool_url}#{selected_tool_name}"
+            util.set_state("persisted_tool_selection", name_with_url)
+
+
 # ============================================================================
 # User Interaction Analysis
 # ============================================================================
@@ -1877,28 +1896,89 @@ if __name__ == "__main__":
         unsafe_allow_html=True,
     )
 
+    # Get filtered tools from main page (Workflow 2)
+    filtered_tools = util.get_state("filtered_tools", [])
+
+    # If no filtered tools available, load all tools
+    if not filtered_tools:
+        tools_df = load_tools_mapping()
+        # Extract first name from comma-separated names (consistent with main page)
+        filtered_tools = [
+            {"name": name.split(",")[0] if "," in name else name, "url": url}
+            for name, url in zip(tools_df["name"], tools_df["url"])
+        ]
+        util.set_state("filtered_tools", filtered_tools)
+
     # Get selected tools from session state
     selected_names = util.get_state("selected_tool_names", [])
     selected_urls = util.get_state("selected_tool_urls", [])
 
-    if not selected_names:
+    # Create dropdown for tool selection (Workflow 3)
+    tool_names = [tool["name"] for tool in filtered_tools]
+    tool_urls_map = {tool["name"]: tool["url"] for tool in filtered_tools}
+
+    # Determine default index for dropdown
+    if selected_names and selected_names[0] in tool_names:
+        default_index = tool_names.index(selected_names[0])
+    else:
+        default_index = 0
+
+    # Show dropdown if there are tools available
+    if tool_names:
+        st.markdown("### 🔧 Select a tool to analyze")
+        st.caption(
+            f"Choose from {len(tool_names)} tool{'s' if len(tool_names) != 1 else ''}"
+            + (
+                " (filtered by main page criteria)"
+                if len(tool_names) < len(load_tools_mapping())
+                else ""
+            )
+        )
+        selected_tool_name = st.selectbox(
+            "Tool",
+            options=tool_names,
+            index=default_index,
+            key="tool_selector_dropdown",
+            label_visibility="collapsed",
+            on_change=on_tool_dropdown_change,
+        )
+
+        # Get current selection from session state (updated by callback)
+        name_of_tool = util.get_state("selected_tool_names", [selected_tool_name])[0]
+        url_of_tool = util.get_state(
+            "selected_tool_urls", [tool_urls_map[selected_tool_name]]
+        )[0]
+
+        st.markdown("---")
+    elif not selected_names:
         st.info(
-            "👈 Please select tools from the main page table to view detailed analysis here."
+            "👈 Please select tools from the main page table or apply filters to view tools here."
         )
         st.markdown(
             """
             ### How to use this page:
+
+            **Workflow 1**: Select from main page
             1. Go to the main **Tool Repository Metrics** page
-            2. Use the filters to find tools of interest
-            3. Select one tool by clicking on a row in the table
-            4. Return to this page to see the detailed analysis
+            2. Click on a row in the table
+            3. Return to this page to see the detailed analysis
+
+            **Workflow 2**: Filter then select
+            1. Go to the main **Tool Repository Metrics** page
+            2. Use the sidebar filters to narrow down tools
+            3. Click on a row in the table
+            4. Return to this page - the dropdown will show only filtered tools
+
+            **Workflow 3**: Direct selection
+            1. Use the dropdown above to select any tool
+            2. The selection will sync with the main page table
             """
         )
         st.stop()
-
-    # Display single tool analysis
-    name_of_tool = selected_names[0]
-    url_of_tool = selected_urls[0]
+    else:
+        # Fallback to previously selected tool if dropdown is empty but selection exists
+        name_of_tool = selected_names[0]
+        url_of_tool = selected_urls[0]
 
     # Render glowy page header
     header_template = _jinja_env.get_template("tool_deep_dive_header.html.jinja")

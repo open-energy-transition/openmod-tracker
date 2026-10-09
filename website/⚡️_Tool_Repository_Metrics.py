@@ -348,10 +348,7 @@ def add_scoring(cols: list[str]) -> float:
         st.session_state["score_toggle"] = False
 
     # DON'T pass value - let Streamlit read from session_state automatically via key
-    st.toggle(
-        "Add score column to table",
-        key="score_toggle",
-    )
+    st.toggle("Add score column to table", key="score_toggle")
 
     # Only show scoring controls when toggle is enabled
     if st.session_state.get("score_toggle", False):
@@ -490,7 +487,9 @@ def multiselect(unique_values: list[str], col: str, reset_mode: bool) -> list[st
         exclude_proprietary = proprietary_language_toggle(reset_mode)
         # Calculate what should be selected based on proprietary toggle
         if exclude_proprietary:
-            default_selected = sorted(set(unique_values).difference(NOT_OPEN_SOURCE_LANGUAGES))
+            default_selected = sorted(
+                set(unique_values).difference(NOT_OPEN_SOURCE_LANGUAGES)
+            )
         else:
             default_selected = unique_values
     else:
@@ -505,17 +504,21 @@ def multiselect(unique_values: list[str], col: str, reset_mode: bool) -> list[st
             current = st.session_state[state_name]
             if exclude_proprietary:
                 # Remove proprietary languages from selection
-                st.session_state[state_name] = sorted(set(current).difference(NOT_OPEN_SOURCE_LANGUAGES))
+                st.session_state[state_name] = sorted(
+                    set(current).difference(NOT_OPEN_SOURCE_LANGUAGES)
+                )
             else:
                 # Add back any proprietary that were previously selected
-                previously_selected = st.session_state.get("selected_proprietary", set())
-                st.session_state[state_name] = sorted(set(current) | previously_selected.intersection(unique_values))
+                previously_selected = st.session_state.get(
+                    "selected_proprietary", set()
+                )
+                st.session_state[state_name] = sorted(
+                    set(current) | previously_selected.intersection(unique_values)
+                )
 
     # DON'T pass default - let Streamlit read from session_state automatically via key
     selected_values = st.sidebar.multiselect(
-        f"Select {col} values",
-        options=unique_values,
-        key=state_name,
+        f"Select {col} values", options=unique_values, key=state_name
     )
 
     if col.lower() == "language" and not util.get_state("exclude_proprietary"):
@@ -542,8 +545,19 @@ def reset(button_press: bool = False) -> bool:
     if button_press:
         # Clear all filter-related session state keys immediately
         keys_to_clear = [
-            k for k in list(st.session_state.keys())
-            if k.startswith(("slider_", "multiselect_", "exclude_nan_", "exclude_proprietary", "score_toggle", "scoring_", "scoring_method"))
+            k
+            for k in list(st.session_state.keys())
+            if k.startswith(
+                (
+                    "slider_",
+                    "multiselect_",
+                    "exclude_nan_",
+                    "exclude_proprietary",
+                    "score_toggle",
+                    "scoring_",
+                    "scoring_method",
+                )
+            )
         ]
         # DEBUG: Log what we're deleting
         st.session_state["last_reset_deleted"] = len(keys_to_clear)
@@ -584,8 +598,7 @@ def header_and_missing_value_toggle(col: pd.Series, reset_mode: bool) -> bool:
 
         # DON'T pass value - let Streamlit read from session_state automatically via key
         exclude_nan = st.sidebar.toggle(
-            f"Exclude {missing_count} tools missing `{name}` data",
-            key=state_name,
+            f"Exclude {missing_count} tools missing `{name}` data", key=state_name
         )
         if exclude_nan:
             util.get_state("filters")["toggle"].append(name)
@@ -900,7 +913,10 @@ def main(df: pd.DataFrame):
         df (pd.DataFrame): Table to display in app.
     """
     # CRITICAL: Restore filter state from persistent storage on page load
-    if "filter_state_backup" in st.session_state and st.session_state["filter_state_backup"]:
+    if (
+        "filter_state_backup" in st.session_state
+        and st.session_state["filter_state_backup"]
+    ):
         for key, value in st.session_state["filter_state_backup"].items():
             if key not in st.session_state:  # Only restore if widget hasn't set it yet
                 st.session_state[key] = value
@@ -909,7 +925,11 @@ def main(df: pd.DataFrame):
     st.sidebar.header("Table filters", divider=True)
 
     # DEBUG: Count filters BEFORE creating widgets
-    filter_keys_before = [k for k in st.session_state.keys() if k.startswith(("slider_", "multiselect_", "exclude_"))]
+    filter_keys_before = [
+        k
+        for k in st.session_state.keys()
+        if k.startswith(("slider_", "multiselect_", "exclude_"))
+    ]
 
     with st.sidebar.expander("🐛 Debug: Filter State", expanded=False):
         backup = st.session_state.get("filter_state_backup", {})
@@ -1151,7 +1171,9 @@ def main(df: pd.DataFrame):
     # This runs after all widgets are created, so we capture their current state
     filter_state = {}
     for key in st.session_state.keys():
-        if key.startswith(("slider_", "multiselect_", "exclude_", "score_toggle", "scoring_")):
+        if key.startswith(
+            ("slider_", "multiselect_", "exclude_", "score_toggle", "scoring_")
+        ):
             filter_state[key] = st.session_state[key]
     st.session_state["filter_state_backup"] = filter_state
 
@@ -1175,7 +1197,9 @@ if __name__ == "__main__":
         st.session_state["session_initialized"] = True
         st.session_state["session_counter"] = 0
     else:
-        st.session_state["session_counter"] = st.session_state.get("session_counter", 0) + 1
+        st.session_state["session_counter"] = (
+            st.session_state.get("session_counter", 0) + 1
+        )
 
     st.title("Open Energy Modelling Tool Tracker")
     st.text(

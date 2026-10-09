@@ -1880,10 +1880,16 @@ if __name__ == "__main__":
         st.session_state["session_initialized"] = True
         st.session_state["session_counter"] = 0
     else:
-        st.session_state["session_counter"] = st.session_state.get("session_counter", 0) + 1
+        st.session_state["session_counter"] = (
+            st.session_state.get("session_counter", 0) + 1
+        )
 
     # DEBUG: Show session state info
-    filter_keys = [k for k in st.session_state.keys() if k.startswith(("slider_", "multiselect_", "exclude_"))]
+    filter_keys = [
+        k
+        for k in st.session_state.keys()
+        if k.startswith(("slider_", "multiselect_", "exclude_"))
+    ]
     all_keys = list(st.session_state.keys())
     backup = st.session_state.get("filter_state_backup", {})
 
@@ -1975,7 +1981,12 @@ if __name__ == "__main__":
         current_names = util.get_state("selected_tool_names", [])
         current_urls = util.get_state("selected_tool_urls", [])
 
-        if current_names and current_urls and len(current_names) > 0 and len(current_urls) > 0:
+        if (
+            current_names
+            and current_urls
+            and len(current_names) > 0
+            and len(current_urls) > 0
+        ):
             name_of_tool = current_names[0]
             url_of_tool = current_urls[0]
         else:

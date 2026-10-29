@@ -769,6 +769,8 @@ def reset(button_press: bool = False) -> bool:
         # Clear the backup too
         if "filter_state_backup" in st.session_state:
             del st.session_state["filter_state_backup"]
+        # Clear the filter flag when resetting filters
+        util.set_state("selection_cleared_by_filter", False)
         # Return True so widgets know to use defaults
         return True
 
@@ -1231,7 +1233,13 @@ def main(df: pd.DataFrame):
 
             # Find current selection index
             default_idx = 0
-            if current_selection:
+            # Check if selection was cleared by filter
+            selection_cleared = util.get_state("selection_cleared_by_filter", False)
+            if selection_cleared:
+                # Keep dropdown at "(None)" when tool was filtered out
+                default_idx = 0
+            elif current_selection:
+                # Try to find the current selection in the filtered list
                 for name, (name_url, _) in tool_map.items():
                     if name_url == current_selection:
                         default_idx = tool_options.index(name)
@@ -1245,10 +1253,14 @@ def main(df: pd.DataFrame):
                     util.set_state("selected_tool_names", [selected])
                     util.set_state("selected_tool_urls", [url])
                     util.set_state("persisted_tool_selection", name_with_url)
+                    # Clear the filter flag since user made an explicit selection
+                    util.set_state("selection_cleared_by_filter", False)
                 elif selected == "(None)":
                     util.set_state("selected_tool_names", [])
                     util.set_state("selected_tool_urls", [])
                     util.set_state("persisted_tool_selection", None)
+                    # This is a manual deselection, not a filter clear
+                    util.set_state("selection_cleared_by_filter", False)
 
             st.selectbox(
                 "Select tool for deep-dive",
@@ -1268,9 +1280,15 @@ def main(df: pd.DataFrame):
             # Tool is still in filtered view - update selection to new row index
             row_index = df_filtered.index.get_loc(matching_rows.index[0])
             st.session_state.tool_selection_table = {"selection": {"rows": [row_index]}}
-        elif "tool_selection_table" in st.session_state:
-            # Tool was filtered out - clear the widget selection
-            st.session_state.tool_selection_table = {"selection": {"rows": []}}
+        else:
+            # Tool was filtered out - clear all selection state
+            if "tool_selection_table" in st.session_state:
+                st.session_state.tool_selection_table = {"selection": {"rows": []}}
+            util.set_state("selected_tool_names", [])
+            util.set_state("selected_tool_urls", [])
+            util.set_state("persisted_tool_selection", None)
+            # Set a flag to indicate this was an explicit clear (not just "no selection yet")
+            util.set_state("selection_cleared_by_filter", True)
 
     max_interactions = df["Interactions"].dropna().apply(lambda x: x.max()).max()
     col_config = {

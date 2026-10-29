@@ -287,6 +287,8 @@ def on_tool_dropdown_change() -> None:
             # Update persisted selection for main page table sync
             name_with_url = f"{selected_tool_url}#{selected_tool_name}"
             util.set_state("persisted_tool_selection", name_with_url)
+            # Clear the filter flag since user made an explicit selection
+            util.set_state("selection_cleared_by_filter", False)
 
 
 # ============================================================================
@@ -1963,6 +1965,7 @@ if __name__ == "__main__":
         # Get current selection - use dropdown value as fallback
         current_names = util.get_state("selected_tool_names", [])
         current_urls = util.get_state("selected_tool_urls", [])
+        selection_cleared = util.get_state("selection_cleared_by_filter", False)
 
         if (
             current_names
@@ -1972,6 +1975,13 @@ if __name__ == "__main__":
         ):
             name_of_tool = current_names[0]
             url_of_tool = current_urls[0]
+        elif selection_cleared:
+            # Tool was filtered out - don't auto-select, show message instead
+            st.info(
+                "🔍 The previously selected tool has been filtered out on the main page. "
+                "Please adjust filters or select a different tool."
+            )
+            st.stop()
         else:
             # Fallback to the dropdown selection if state is empty
             name_of_tool = selected_tool_name

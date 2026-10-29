@@ -1081,6 +1081,30 @@ def key_takeaways():
     )
 
 
+def on_dropdown_change():
+    """Callback function for tool dropdown selection.
+
+    Handles tool selection from the dropdown and updates session state accordingly.
+    Retrieves tool_map from session state to map tool names to URLs.
+    """
+    selected = st.session_state.tool_dropdown_selector
+    tool_map = util.get_state("tool_map", {})
+
+    if selected != "(None)" and selected in tool_map:
+        name_with_url, url = tool_map[selected]
+        util.set_state("selected_tool_names", [selected])
+        util.set_state("selected_tool_urls", [url])
+        util.set_state("persisted_tool_selection", name_with_url)
+        # Clear the filter flag since user made an explicit selection
+        util.set_state("selection_cleared_by_filter", False)
+    elif selected == "(None)":
+        util.set_state("selected_tool_names", [])
+        util.set_state("selected_tool_urls", [])
+        util.set_state("persisted_tool_selection", None)
+        # This is a manual deselection, not a filter clear
+        util.set_state("selection_cleared_by_filter", False)
+
+
 def footer():
     """Footer content for the Streamlit app."""
     st.divider()
@@ -1245,23 +1269,10 @@ def main(df: pd.DataFrame):
                         default_idx = tool_options.index(name)
                         break
 
-            # Dropdown selection with callback
-            def on_dropdown_change():
-                selected = st.session_state.tool_dropdown_selector
-                if selected != "(None)" and selected in tool_map:
-                    name_with_url, url = tool_map[selected]
-                    util.set_state("selected_tool_names", [selected])
-                    util.set_state("selected_tool_urls", [url])
-                    util.set_state("persisted_tool_selection", name_with_url)
-                    # Clear the filter flag since user made an explicit selection
-                    util.set_state("selection_cleared_by_filter", False)
-                elif selected == "(None)":
-                    util.set_state("selected_tool_names", [])
-                    util.set_state("selected_tool_urls", [])
-                    util.set_state("persisted_tool_selection", None)
-                    # This is a manual deselection, not a filter clear
-                    util.set_state("selection_cleared_by_filter", False)
+            # Store tool_map in session state for the callback to access
+            util.set_state("tool_map", tool_map)
 
+            # Dropdown selection with callback
             st.selectbox(
                 "Select tool for deep-dive",
                 options=tool_options,

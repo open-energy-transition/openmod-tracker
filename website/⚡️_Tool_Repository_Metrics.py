@@ -1407,9 +1407,8 @@ if __name__ == "__main__":
         readme_path, "Our data processing approach"
     )
     preamble(latest_changes, len(df_vis), data_processing_approach_string)
-    st.markdown(f"**Last Update**: {latest_changes}")
-    st.markdown("---")
     key_takeaways()
+    st.markdown(f"**Last Update**: {latest_changes}")
     st.markdown("---")
     ecosystem_highlights(user_stats_dir, tool_stats_dir)
     st.markdown("---")

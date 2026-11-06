@@ -268,6 +268,14 @@ def on_tool_dropdown_change() -> None:
     """
     if "tool_selector_dropdown" in st.session_state:
         selected_tool_name = st.session_state.tool_selector_dropdown
+
+        # If None is selected (placeholder), clear the selection
+        if selected_tool_name is None:
+            util.set_state("selected_tool_names", [])
+            util.set_state("selected_tool_urls", [])
+            util.set_state("persisted_tool_selection", None)
+            return
+
         filtered_tools = util.get_state("filtered_tools", [])
 
         if not filtered_tools:
@@ -2076,16 +2084,19 @@ if __name__ == "__main__":
     # Get selected tools from session state
     selected_names = util.get_state("selected_tool_names", [])
     selected_urls = util.get_state("selected_tool_urls", [])
+    selection_cleared = util.get_state("selection_cleared_by_filter", False)
 
     # Create dropdown for tool selection (Workflow 3)
     tool_names = [tool["name"] for tool in filtered_tools]
     tool_urls_map = {tool["name"]: tool["url"] for tool in filtered_tools}
 
-    # Determine default index for dropdown
-    if selected_names and selected_names[0] in tool_names:
-        default_index = tool_names.index(selected_names[0])
-    else:
-        default_index = 0
+    # Check if user has made a selection (from main page or previous dropdown interaction)
+    has_selection = (
+        selected_names
+        and selected_urls
+        and len(selected_names) > 0
+        and len(selected_urls) > 0
+    )
 
     # Show dropdown in sidebar if there are tools available
     if tool_names:
@@ -2098,41 +2109,70 @@ if __name__ == "__main__":
                 else ""
             )
         )
-        selected_tool_name = st.sidebar.selectbox(
-            "Select a tool to analyze:",
-            options=tool_names,
-            index=default_index,
-            key="tool_selector_dropdown",
-            on_change=on_tool_dropdown_change,
-        )
 
-        # Get current selection - use dropdown value as fallback
-        current_names = util.get_state("selected_tool_names", [])
-        current_urls = util.get_state("selected_tool_urls", [])
-        selection_cleared = util.get_state("selection_cleared_by_filter", False)
+        # Only show dropdown with a default if there's an existing selection
+        if has_selection:
+            if selected_names[0] in tool_names:
+                default_index = tool_names.index(selected_names[0])
+            else:
+                default_index = 0
 
-        if (
-            current_names
-            and current_urls
-            and len(current_names) > 0
-            and len(current_urls) > 0
-        ):
-            name_of_tool = current_names[0]
-            url_of_tool = current_urls[0]
-        elif selection_cleared:
-            # Tool was filtered out - don't auto-select, show message instead
-            st.info(
-                "🔍 The previously selected tool has been filtered out on the main page. "
-                "Please adjust filters or select a different tool."
+            selected_tool_name = st.sidebar.selectbox(
+                "Select a tool to analyze:",
+                options=tool_names,
+                index=default_index,
+                key="tool_selector_dropdown",
+                on_change=on_tool_dropdown_change,
             )
-            st.stop()
+
+            # Use selection from main page (will be updated if dropdown changes)
+            name_of_tool = selected_names[0]
+            url_of_tool = selected_urls[0]
         else:
-            # Fallback to the dropdown selection if state is empty
-            name_of_tool = selected_tool_name
-            url_of_tool = tool_urls_map[selected_tool_name]
-            # Update state
-            util.set_state("selected_tool_names", [name_of_tool])
-            util.set_state("selected_tool_urls", [url_of_tool])
+            # No selection - show dropdown with placeholder and don't default to index 0
+            selected_tool_name = st.sidebar.selectbox(
+                "Select a tool to analyze:",
+                options=[None] + tool_names,  # Add None as first option
+                format_func=lambda x: "-- Select a tool --" if x is None else x,
+                index=0,  # Default to None
+                key="tool_selector_dropdown",
+                on_change=on_tool_dropdown_change,
+            )
+
+            if selection_cleared:
+                # Tool was filtered out - show message
+                st.info(
+                    "🔍 The previously selected tool has been filtered out on the main page. "
+                    "Please adjust filters or select a different tool from the sidebar."
+                )
+                st.stop()
+            else:
+                # No selection yet - show prompt
+                st.sidebar.info("👆 Please select a tool to view its analysis")
+                st.info(
+                    "👈 No tool selected. Please select a tool from the sidebar dropdown or go back to the main page."
+                )
+                st.markdown(
+                    """
+                    ### How to use this page:
+
+                    **Workflow 1**: Select from main page
+                    1. Go to the main **Tool Repository Metrics** page
+                    2. Click "Select" button next to a tool
+                    3. Return to this page to see the detailed analysis
+
+                    **Workflow 2**: Filter then select
+                    1. Go to the main **Tool Repository Metrics** page
+                    2. Use the sidebar filters to narrow down tools
+                    3. Click "Select" button next to a tool
+                    4. Return to this page - the sidebar dropdown will show only filtered tools
+
+                    **Workflow 3**: Direct selection
+                    1. Use the dropdown in the **sidebar** (←) to select a tool
+                    2. The page will automatically update with the analysis
+                    """
+                )
+                st.stop()
     elif not selected_names:
         st.info(
             "👈 Please select a tool from the main page or use the sidebar dropdown."

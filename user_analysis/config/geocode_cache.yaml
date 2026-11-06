@@ -30,6 +30,7 @@ $PYTHONPATH: null
 1037#Luoyu Rd., Wuhan, China: null
 '111': United States
 127.0.0.1: null
+16 Richmond St, Glasgow: United Kingdom
 17923 Jingshi Road, Jinan, China: China
 221b limited: China
 24.7 design: Philippines
@@ -58,6 +59,7 @@ $PYTHONPATH: null
 "50\xB0 48' N 7\xB0 22' O": null
 60hertz: null
 6synct consulting: null
+"7C place du d\xF4me, Puteaux": France
 866 Yuhangtang Road, Hangzhou 310058: China
 "88 Colin P Kelly Jr St, San Francisco, CA 94107\u060C \u0627\u0644\u0648\u0644\u0627\u064A\u0627\u062A \u0627\u0644\u0645\u062A\u062D\u062F\u0629-\u0627\u0644\u0648\u0644\u0627\u064A\u0627\u062A \u0627\u0644\u0645\u062A\u062D\u062F\u0629 \u0627\u0644\u0627\u0645\u0631\u0643\u064A\u0629": null
 89407 Dillingen, Bavaria, Germany: Germany
@@ -78,14 +80,18 @@ Aalborg, Denmark: Denmark
 Aalten, The Netherlands: Netherlands
 Aarau: Switzerland
 Aarhus, Denmark: Denmark
+"Abidjan, C\xF4te d'Ivoire / Niamey, Niger": null
 Abu Dhabi: United Arab Emirates
 Abu Dhabi, UAE: United Arab Emirates
 Abuja, Nigeria: Niger
+Accra: Ghana
+Accra, Ghana: Ghana
 Adelaide, Australia: Australia
 Adelaide, South Australia: Australia
 Aethens.eth: null
 Ahmedabad: India
 Ahmedabad, Gujarat: India
+Ahmedabad, India: India
 Aichi / Japan: Japan
 Ajjur, Palestine: null
 Al Jubail, Saudi Arabia: Saudi Arabia
@@ -170,6 +176,7 @@ Augsburg: Germany
 Augsburg, Germany: Germany
 Austin: United States
 Austin, TX: United States
+Austin, TX, USA: United States
 Austin, Texas: United States
 Austin, Tx: United States
 Austin, USA: United States
@@ -209,6 +216,7 @@ Bangalore , India: India
 Bangalore, IN: India
 Bangalore, India: India
 Bangalore, Karnataka: India
+Bangalore,India: India
 Bangkok: Thailand
 Bangkok, Thailand: Thailand
 Bangladesh: Bangladesh
@@ -403,6 +411,7 @@ CHN: China
 CL, Stgo: Chile
 CN: China
 CO: Colombia
+COIMBATORE: India
 COLOMBIA: Colombia
 CPH: Denmark
 Cabo San Lucas: Mexico
@@ -604,6 +613,7 @@ Delft, Netherlands / Berlin, Germany: Germany
 Delft, The Netherlands: Netherlands
 Delft, the Netherlands: Netherlands
 Delhi: India
+Delhi , India: India
 Delhi, DL, India: India
 Delhi, India: India
 Delhi-NCR: India
@@ -676,6 +686,7 @@ Earth, world citizen: null
 Earth?: United States
 East Falmouth, MA USA: United States
 East Lansing, MI: United States
+Eastern Cape , Port Elizabeth: South Africa
 Eastern Time Zone: Australia
 Eau Claire Wisconsin 54703: United States
 Ecuador: Ecuador
@@ -733,6 +744,7 @@ FL: United States
 Fairbanks, Alaska: United States
 Fairfax, CA: United States
 Fairfax, VA: United States
+Falun, Sweden: Sweden
 Fargo, North Dakota: United States
 Fayetteville, AR: United States
 Fayetteville, Arkansas, USA: United States
@@ -876,6 +888,7 @@ Greater Chicago Area: null
 Greater Houston Area: null
 Greater Los Angeles: United States
 Greater Minneapolis-St. Paul Area: null
+Greater Noida , UP: India
 Greece: Greece
 Greenland: Greenland
 Greensboro: United States
@@ -1009,11 +1022,13 @@ Houston, Texas: United States
 Hsinchu: Taiwan
 'Hua Bei Dian Li Da Xue ': China
 Hua Bei Dian Li Da Xue (north china electric power university): China
+Hubei, China: China
 Hunan Changsha: China
 Hungary: Hungary
 "Hurum, S\xE6tre": Norway
 Hyderabad: India
 Hyderabad, India: India
+Hyderabad, Telangana: India
 "H\xE0 N\u1ED9i": Vietnam
 IIASA: Ecuador
 IIT Kanpur, UP: India
@@ -1076,6 +1091,7 @@ Ithaca, NY USA: United States
 Ithaca, New York: United States
 Ithaca, New York.: United States
 Izmir, Turkey: Turkey
+"Izmir,T\xDCRK\u0130YE": Turkey
 "I\xE7ara - Santa Catarina - Brasil": Brazil
 Jacksonville, Florida: United States
 Jaipur, India: India
@@ -1099,6 +1115,7 @@ Jinan, China: China
 Jinan, Shandong, China: China
 Jinan,China: China
 Jinju, Gyeonsangnamdo, Korea: null
+Jodhpur: India
 Joeyray's Bar, Mar Sara: null
 Johannesburg: South Africa
 Johannesburg, South Africa: South Africa
@@ -1113,6 +1130,8 @@ Jupiter, FL: United States
 Kaiserserslautern, Osijek: null
 Kaiserslautern, Germany: Germany
 Kalispell, MT: United States
+Kampala: Uganda
+Kano, Nigeria.: Nigeria
 Kanpur: India
 Kansas City: United States
 Kaohsiung, Taiwan: Taiwan, Province of China
@@ -1230,6 +1249,7 @@ Lima, Peru: Peru
 Lima,Peru: Peru
 "Lima-Per\xFA": Brazil
 Limassol, Cyprus: Cyprus
+Limerick, Ireland: Ireland
 Limpio: Paraguay
 Lincolnshire, United Kingdom: United Kingdom
 Linkebeek, Belgium: Belgium
@@ -1292,6 +1312,7 @@ Lugano: Switzerland
 Lugano, Switzerland: Switzerland
 'Lugano, Switzerland ': Switzerland
 Lugo, Galicia, Spain: Spain
+Luna: Spain
 Lund: Sweden
 "Luojiashan Road, Wuchang District \xB7 Wuhan City, Hubei Province \xB7 P. R. China.": China
 Luxembourg: Luxembourg
@@ -1318,6 +1339,7 @@ Made in California: United States
 Madison, WI: United States
 Madison, WI, USA: United States
 Madras: India
+Madras, India: India
 Madrid: Spain
 'Madrid Spain ': Spain
 "Madrid, Espa\xF1a": Spain
@@ -1536,6 +1558,7 @@ New York, NY: United States
 New York, NY, USA: United States
 New York, New York: United States
 New Zealand: New Zealand
+'New Zealand ': New Zealand
 New hydraulic building, 224A: null
 New-York, United States: United States
 'Newark, Delaware ': United States
@@ -1599,6 +1622,7 @@ Nyeri Kenya: Kenya
 "N\xFCrburgring": Germany
 "N\xFCrnberg, Germany": Germany
 OR, USA: United States
+ORSAY, FRANCE: France
 Oak Ridge: United States
 Oak Ridge, TN: United States
 Oakland: United States
@@ -1643,6 +1667,7 @@ Otakaari 1F: Finland
 Ottawa: Canada
 Ottawa, CA: Canada
 Ottawa, ON: Canada
+Ottawa, ON, CA: Canada
 Ottawa, ON, Canada: Canada
 Ottawa, Ontario: Canada
 Ourinhos: Brazil
@@ -1701,6 +1726,7 @@ Phoenix AZ: United States
 Phoenix, AZ: United States
 Phoenix, AZ, USA: United States
 Pilsen (CZ): Czechia
+Pisa: Italy
 Pisa, Italy: Italy
 Pittsburgh: United States
 Pittsburgh Area: United States
@@ -1723,6 +1749,7 @@ Polimi: Italy
 Polska: Poland
 Polytechnic Institute of Milan, Cremona: null
 Polyu: China
+'Pondicherry ': India
 Pontiac, IL, USA: United States
 "Pontificia Universidad Cat\xF3lica de Chile": Chile
 Porsgrunn, Norway: Norway
@@ -1740,6 +1767,7 @@ Portugal: Portugal
 Potlatch, Idaho: United States
 Potsdam: Germany
 Potsdam, Germany: Germany
+"Pozna\u0144": Poland
 Prague: Czechia
 Prague, CZ: Czechia
 Prague, Czech Republic: Czechia
@@ -1757,6 +1785,10 @@ Puerto Rico: Puerto Rico
 Pullman, Washington: United States
 Pune: India
 Pune, India: India
+Pune, Maharashtra: India
+Pune, Maharashtra India: India
+Pune, Maharashtra, India.: India
+Pune,India: India
 Punnai Nager,  Nager coil-4: null
 Purulia, West Bengal: India
 QC, Canada: Canada
@@ -1769,6 +1801,7 @@ Qingdao, China: China
 Qingpu, Shanghai, China: China
 Quebec: Canada
 Quebec City: Canada
+Queens, New York: United States
 Queensland, Australia: Australia
 Quetta, Pakistan: Pakistan
 Quezon City, Metro Manila, Philippines: Philippines
@@ -2015,6 +2048,7 @@ Somewhere in the world: null
 Somewhere near: null
 Somewhere near an OXXO: null
 Somewhere on Earth (usually): null
+Sonipat,Haryana,Delhi NCR: null
 SooChow: China
 Soquel, CA. USA: United States
 South Africa: South Africa
@@ -2064,6 +2098,7 @@ Stony Brook, NY: United States
 Stony Brook, New York: United States
 Storrs, CT, USA: United States
 Stralsund/Germany: Germany
+Strasbourg: France
 'Stratford ': United Kingdom
 Stuttgart: Germany
 Stuttgart (Germany): Germany
@@ -2123,6 +2158,7 @@ Taipei: Taiwan
 Taipei City, Taiwan: Taiwan, Province of China
 Taipei, Taiwan: Taiwan, Province of China
 Taiwan: Taiwan, Province of China
+Tallinn: Estonia
 Tallinn, Estonia: Estonia
 Tamil Nadu: India
 Tasikmalaya: Indonesia
@@ -2174,6 +2210,7 @@ Tokyo: Japan
 Tokyo, Japan: Japan
 Tokyo, Japn: null
 Tokyo,Japan: Japan
+Tokyo/Japan: Japan
 Torino: Italy
 Torino, Italia: Italy
 Torino, Italy: Italy
@@ -2191,6 +2228,7 @@ Trinidad, Trinidad and Tobago: Trinidad and Tobago
 "Troms\xF8, Norway": Norway
 Trondheim: Norway
 'Trondheim ': Norway
+Trondheim, NO: Norway
 Trondheim, Norway: Norway
 Troy: United States
 Troy, NY: United States
@@ -2620,6 +2658,7 @@ balaengineers: null
 baltic-rcc: null
 balticfinance: null
 banco caja social: Colombia
+'bangalore ': India
 bangkok: Thailand
 bani: Iran
 banpu: China
@@ -2674,6 +2713,7 @@ bj: Benin
 bjtu school of electrical engineering.: null
 bkw ag: Switzerland
 bkw-netintel: null
+black bird agency: null
 blacklight analytics: null
 blankslatecode: null
 blinq: Netherlands
@@ -2795,6 +2835,7 @@ china: China
 china guiyang: China
 china southern power grid company limited: null
 china three geroges university: null
+china university of geosciences, wuhan: China
 china university of mining and technology: China
 china university of mining and technology,beijing: China
 china, beijing: China
@@ -2856,6 +2897,7 @@ coherentcat: null
 colorado school of mines: United States
 colorado state university: United States
 columbia sipa: null
+columbia university: United States
 comed: Ukraine
 comillas pontifical university: null
 commsignia: null
@@ -2904,6 +2946,7 @@ csust: null
 cto beyobie: null
 cto procurement sciences: null
 ctu in prague - uceeb & fme: null
+cu boulder: United States
 cubicl gmbh: null
 cuhk: China
 cup_beijing: China
@@ -2913,6 +2956,7 @@ cvs health: United States
 cwp global: null
 cycle group: Canada
 cycorld: null
+cydonia mensae: null
 da nang: Vietnam
 daedaline: null
 dai hoc ngan hang tp.hcm: Vietnam
@@ -3018,6 +3062,7 @@ dresden university of technology: Germany
 drive powerline, inc.: null
 drl/mas: null
 drw: Australia
+dscsist: null
 dsd renewables: null
 dspace: Germany
 dti tecnologia: Brazil
@@ -3040,6 +3085,7 @@ e4sma: null
 e4sma srl: null
 ea systems dresden gmbh: null
 eag: Austria
+eapd-drb: null
 earth: United States
 earth sciences new zealand & university of otago: null
 earth-mover: Bhutan
@@ -3070,11 +3116,13 @@ edo: Nigeria
 edp renewables: United States
 edrives & oth regensburg: null
 edverb learning private limited: null
+eesti energia: Estonia
 effibem: null
 ege university: Turkey
 eiee: null
 eindhoven university of technology: Netherlands
 eindhoven university of technology (tu/e): null
+einride: Sweden
 ekimia: France
 ekotrope: Russia
 ekra it .ltd: null
@@ -3367,6 +3415,7 @@ godmodelabs: null
 godotengine, w4games: null
 goldman sachs: India
 golioth: null
+goml: null
 google: United States
 gore creek energy llc: null
 government of canada: Canada
@@ -3464,6 +3513,7 @@ hochschule darmstadt: Germany
 hochschule fur technik, wirtschaft und kultur leipzig (fh): null
 hochschule zittau/gorlitz: Germany
 hochschulebremen: null
+hogskolan dalarna / dalarna university: Sweden
 hohai university: China
 home: United States
 home alone: Tanzania
@@ -3508,6 +3558,7 @@ hun-ren centre for energy research: null
 hunan university: China
 hust: Ukraine
 hybrid greentech: United States
+hyderabad: India
 hydro-quebec: Canada
 i.r.n.i infrared-reactive: null
 ialp (conicet-unlp), fcaglp: null
@@ -3530,10 +3581,12 @@ ifo institute and lmu munich: null
 igniteutech: null
 igs: Germany
 ihp gmbh: Germany
+iiitdm jabalpur: null
 iit bhu: India
 iit bombay: India
 iit comillas: null
 iit delhi, iit bombay, iit madras: null
+iit jodhpur: India
 iit kharagpur india: India
 iit, madras: India
 iit-comillas: null
@@ -3568,6 +3621,7 @@ indian institute of technology kanpur: India
 indian institute of technology kanpur (iitk), kanpur: null
 indian institute of technology madras: India
 indian institute of technology roorkee: India
+indian institute of technology, bombay: India
 indian institute of technology, kanpur: India
 indian school of business: India
 indibit-eu: null
@@ -3578,6 +3632,7 @@ indra: Estonia
 industrial info: Uganda
 inet-complexity: null
 infineon: Germany
+infinigrid: null
 infinitibit: null
 inform gmbh: Germany
 informedtechnologies: null
@@ -3679,6 +3734,7 @@ juridoc: null
 kaist: South Korea
 kaizu denki co.,ltd.: null
 kalavasta: null
+kanpur: India
 kapsarc grabhouse: null
 karachi: Pakistan
 karlsruhe institut of technology (kit): Germany
@@ -3726,6 +3782,7 @@ ku leuven - fwo: null
 ku leuven - vito: null
 ku leuven / energyville: null
 ku leuven | etch (energyville): null
+kubeedge: null
 kudawale, dapoli, pune: null
 kuehne + nagel: Ukraine
 kunming university of science and technology: China
@@ -3812,6 +3869,7 @@ mae, princeton university: null
 magazinkrisso abv.bg: null
 magna: Canada
 magnolia-fi: United States
+maharashtra: India
 maison-de-la-simulation: France
 makers s. r. o.: United States
 makieorg: null
@@ -3882,6 +3940,7 @@ mines saint etienne: France
 mississippi state university: United States
 mistral ai: Argentina
 mitei: Romania
+mkhr: India
 ml6team: null
 mmrcl, mh, india: null
 mnc: Portugal
@@ -3946,6 +4005,7 @@ nanyang technological university, singapore: Singapore
 nasa: United States
 nasa glenn research center: United States
 nasa johnson space center (jets ii - amentum): null
+nashik ,maharashtra: India
 nashrenewables: null
 nation of celestial space: null
 national and kapodistrian university of athens: null
@@ -3985,6 +4045,7 @@ nebius, ex-northern data, ex-hzdr: null
 need a job :(: null
 nef: Italy
 nellcorp: null
+nelson mandela university: South Africa
 neon genesis: United States
 net zero atlantic: null
 netapp: India
@@ -4022,6 +4083,7 @@ nj2c energie: null
 njit: United States
 njupt ee: null
 nlesc: null
+nlp group: null
 nlr: India
 nmbu: Norway
 'no': Norway
@@ -4080,6 +4142,7 @@ oaktree capital management: null
 oblik.online: null
 obs co.,ltd: null
 ocaml tc39: null
+octonexuspower, aberdeen: null
 octopus deploy: null
 octopus-energy: Germany
 odtu (orta dogu teknik universitesi): Turkey
@@ -4119,6 +4182,7 @@ openai: United States
 opencheme: null
 opendilab: null
 opendoor: United Kingdom
+openelements: null
 openpath security: null
 opensuse: null
 opf: Germany
@@ -4137,6 +4201,7 @@ oregon state univerisity: null
 oregon state university: United States
 orgatex gmbh: Germany
 orkestra energy: null
+orocorp technologies pvt ltd: null
 orpiva ai: null
 ors consulting: null
 ostrom: United States
@@ -4148,12 +4213,14 @@ outdooractive: Germany
 ova electrical engineering p.s.a.: null
 ovh: France
 p-1 ai: Lithuania
+p-to-q scanapi spark-lab-global kyutefox: null
 pace: United States
 pacific northwest national lab: null
 pacific northwest national laboratory: United States
 package maintainer archlinuxcn & nixos | tech support one-among-us: null
 paderborn university: Germany
 pak-austria fachhochschule: null
+pamilanga limited: null
 pamukkale university: Turkey
 panubo: null
 paradigma solutions: null
@@ -4194,6 +4261,7 @@ phytov: null
 pieas: Pakistan
 pieterkuppens.net: null
 pik: United States
+pimpri chinchwad university: India
 pitt: United States
 pittsburgh pa: United States
 pjm interconnection: null
@@ -4263,6 +4331,7 @@ provincial electricity authority: Thailand
 proximal energy: null
 psf: United States
 psi: Pakistan
+psit kanpur: null
 psr: Portugal
 psrenergy: null
 psrenergy and lampspuc: null
@@ -4351,6 +4420,7 @@ revolutionizedev: null
 revstech: null
 rewe digital: Bulgaria
 rheinisch westfalische technische hochschule aachen: Germany
+rhett.ai: United States
 rhiza research: null
 rhythm energy: null
 ric energy: Cambodia
@@ -4656,6 +4726,7 @@ sysu: China
 sytex: null
 sz: Eswatini
 t: Germany
+t&m frarms: null
 t8t: null
 tac gmbh: Germany
 tadodotcom: null
@@ -4856,6 +4927,7 @@ unify software & solutions gmbh & co. kg: null
 union of concerned scientists: null
 uniqa it services: Austria
 united diversity: Indonesia
+united nations: Philippines
 united states environmental protection agency: United States
 unitedhealth group: United States
 universe: Denmark
@@ -4905,6 +4977,7 @@ universite paris saclay: France
 universiteit gent: Belgium
 universiti teknologi petronas: Malaysia
 university at buffalo: United States
+university bayreuth: Germany
 university college cork + capspire: null
 university college london: United Kingdom
 university college london, university of london: United Kingdom
@@ -4971,6 +5044,7 @@ university of leipzig: Germany
 university of lethbridge: Canada
 university of leuven: null
 university of liege: Belgium
+university of limerick: Ireland
 university of liverpool: United Kingdom
 university of ljubljana: Slovenia
 university of luxembourg: Luxembourg
@@ -5107,6 +5181,7 @@ vietnam petroleum institute: null
 virginia commonwealth university: United States
 virginia tech: United States
 visage technology: null
+vit: Bulgaria
 vit-ap: India
 vito: Bosnia and Herzegovina
 vnodesign: null
@@ -5229,6 +5304,7 @@ ztelco: null
 zu Hause: Brazil
 zup innovation itau: null
 zurich university of applied sciences (zhaw): null
+zuse institute berlin: Germany
 ~/Developer: Ukraine
 "\xC5s, Norway": Norway
 "\xCEle-de-France, France": France

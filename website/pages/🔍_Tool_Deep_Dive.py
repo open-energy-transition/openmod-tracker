@@ -230,9 +230,9 @@ def show_metrics(metrics: dict, delta_display_mode: str = "Absolute") -> None:
     )
     # Render top-tool with a smaller font so long names always fit
     col2.markdown(
-        f"<div style='font-size:0.8rem; color:gray; margin-bottom:4px'>🏆 Top Tool — {latest_label}</div>"
+        f"<div style='font-size:0.8rem; opacity:0.6; margin-bottom:4px'>🏆 Top Tool — {latest_label}</div>"
         f"<div style='font-size:1rem; font-weight:700; line-height:1.3; word-break:break-word'>{metrics['top_tool']}</div>"
-        f"<div style='font-size:0.85rem; color:gray; margin-top:4px'>{metrics['top_tool_downloads']:,} downloads</div>",
+        f"<div style='font-size:0.85rem; opacity:0.6; margin-top:4px'>{metrics['top_tool_downloads']:,} downloads</div>",
         unsafe_allow_html=True,
     )
     col3.metric(label="📦 Tools with Download Data", value=str(metrics["tools_count"]))
@@ -390,10 +390,7 @@ def render_user_interaction_section(tool_url: str, container: Any) -> None:
         height=300,
         showlegend=False,
         yaxis={"title": "User Type"},
-        xaxis={"title": "Number of Users", "gridcolor": "rgba(0,0,0,0.07)"},
-        template="plotly_white",
-        paper_bgcolor="white",
-        plot_bgcolor="white",
+        xaxis={"title": "Number of Users"},
         margin=dict(l=10, r=10, t=50, b=40),
     )
     container.plotly_chart(fig, width="stretch", config=FIG_CONFIG)
@@ -413,11 +410,8 @@ def render_user_interaction_section(tool_url: str, container: Any) -> None:
         fig.update_traces(texttemplate="%{text}", textposition="outside")
         fig.update_layout(
             yaxis={"title": "Organization"},
-            xaxis={"title": "Number of Users", "gridcolor": "rgba(0,0,0,0.07)"},
+            xaxis={"title": "Number of Users"},
             height=350,
-            template="plotly_white",
-            paper_bgcolor="white",
-            plot_bgcolor="white",
             margin=dict(l=10, r=10, t=50, b=40),
         )
         container.plotly_chart(fig, width="stretch", config=FIG_CONFIG)
@@ -439,11 +433,8 @@ def render_user_interaction_section(tool_url: str, container: Any) -> None:
         fig.update_traces(texttemplate="%{text}", textposition="outside")
         fig.update_layout(
             yaxis={"title": "Location"},
-            xaxis={"title": "Number of Users", "gridcolor": "rgba(0,0,0,0.07)"},
+            xaxis={"title": "Number of Users"},
             height=350,
-            template="plotly_white",
-            paper_bgcolor="white",
-            plot_bgcolor="white",
             margin=dict(l=10, r=10, t=50, b=40),
         )
         container.plotly_chart(fig, width="stretch", config=FIG_CONFIG)
@@ -451,6 +442,24 @@ def render_user_interaction_section(tool_url: str, container: Any) -> None:
         # Geographic map
         container.markdown("### Geographic Map")
         locations_count = filtered_df.location.value_counts()
+
+        # Detect theme for map colors
+        try:
+            is_dark = st.get_option("theme.base") == "dark"
+        except Exception:
+            is_dark = False
+
+        if is_dark:
+            land_color = "rgb(30, 30, 35)"
+            ocean_color = "rgb(14, 17, 23)"
+            coastline_color = "rgb(100, 100, 100)"
+            country_color = "rgb(80, 80, 80)"
+        else:
+            land_color = "rgb(243, 243, 243)"
+            ocean_color = "rgb(220, 240, 255)"
+            coastline_color = "rgb(80, 80, 80)"
+            country_color = "rgb(150, 150, 150)"
+
         fig = px.choropleth(
             locations_count.rename_axis(index="country")
             .to_frame("Number of Users")
@@ -467,14 +476,14 @@ def render_user_interaction_section(tool_url: str, container: Any) -> None:
                 showframe=True,
                 showcoastlines=True,
                 projection_type="equirectangular",
-                landcolor="rgb(243, 243, 243)",  # Light gray land
-                oceancolor="rgb(220, 240, 255)",  # Light blue ocean
-                coastlinecolor="rgb(80, 80, 80)",  # Darker coast lines
-                countrycolor="rgb(150, 150, 150)",  # Gray country borders
+                landcolor=land_color,
+                oceancolor=ocean_color,
+                coastlinecolor=coastline_color,
+                countrycolor=country_color,
             ),
-            margin=dict(l=0, r=0, t=50, b=0),  # Tight margins
-            paper_bgcolor="rgba(0,0,0,0)",  # Transparent background
-            plot_bgcolor="rgba(0,0,0,0)",  # Transparent plot area
+            margin=dict(l=0, r=0, t=50, b=0),
+            paper_bgcolor="rgba(0,0,0,0)",
+            plot_bgcolor="rgba(0,0,0,0)",
         )
         container.plotly_chart(
             fig, width="stretch", config=FIG_CONFIG, key="country_map"
@@ -815,14 +824,19 @@ def detailed_org_contributions_breakdown(
     )
 
     st.html(
-        f"""
+        """
         <style>
-            div [data-testid=stExpander] details summary{{
-                background-color: {px.colors.sequential.Peach[0]};
-            }}
-            div [data-testid=stExpander] details summary p{{
+            div [data-testid=stExpander] details summary p{
                 font-size: 1rem;
-            }}
+            }
+            /* Light mode: peach background */
+            [data-theme="light"] div [data-testid=stExpander] details summary{
+                background-color: #fddcc5;
+            }
+            /* Dark mode: subtle darker background */
+            [data-theme="dark"] div [data-testid=stExpander] details summary{
+                background-color: rgba(253, 220, 197, 0.15);
+            }
         </style>
         """
     )
@@ -1447,6 +1461,8 @@ def plot_download_trends(
     tool_name: str,
     container: Any,
     delta_display_mode: str = "Absolute",
+    frequency: str = "Monthly",
+    cumulative: bool = False,
 ) -> None:
     """Plot download trends for selected tool with top 10 tools average comparison.
 
@@ -1464,8 +1480,21 @@ def plot_download_trends(
         delta_display_mode: Format for displaying month-over-month deltas, either
             "Absolute" for numeric difference or "Percentage" for percentage change.
             Defaults to "Absolute".
+        frequency: Time frequency for aggregation ("Monthly" or "Annual"). Defaults to "Monthly".
+        cumulative: Whether to show cumulative totals. Defaults to False.
     """
-    container.subheader("📈 Download Trends Over Time")
+    # Determine title based on selection
+    n_tools = tool_df["display_name"].nunique()
+    total_tools = all_downloads_df["display_name"].nunique()
+
+    if n_tools == 1:
+        title = f"📈 Download trends for {tool_name}"
+    elif n_tools == total_tools:
+        title = "📈 Download trends for all tools"
+    else:
+        title = f"📈 Download trends for {n_tools} chosen tools"
+
+    container.subheader(title)
 
     # Colorblind-friendly palette (Okabe-Ito palette)
     colors = [
@@ -1476,6 +1505,52 @@ def plot_download_trends(
         "#CA9161",  # Brown
         "#949494",  # Grey (for average)
     ]
+
+    # ── Prepare data with frequency aggregation ───────────────────────────────
+    trend_df = tool_df.sort_values("date").copy()
+
+    if frequency == "Annual":
+        # Aggregate to annual
+        trend_df["year"] = trend_df["date"].dt.year
+        trend_df = (
+            trend_df.groupby(["year", "display_name"])["downloads"]
+            .sum()
+            .reset_index()
+        )
+        trend_df["date"] = pd.to_datetime(trend_df["year"].astype(str) + "-01-01")
+
+        # Also aggregate comparison data
+        agg_df_temp = all_downloads_df.copy()
+        agg_df_temp["year"] = agg_df_temp["date"].dt.year
+        agg_df = (
+            agg_df_temp.groupby(["year", "display_name"])["downloads"]
+            .sum()
+            .reset_index()
+            .groupby("year")
+            .apply(
+                lambda x: x.nlargest(10, "downloads")["downloads"].mean(),
+                include_groups=False,
+            )
+            .reset_index(name="downloads")
+        )
+        agg_df["date"] = pd.to_datetime(agg_df["year"].astype(str) + "-01-01")
+    else:
+        # Monthly - prepare comparison data
+        agg_df = (
+            all_downloads_df.groupby("date")
+            .apply(
+                lambda x: x.sort_values("downloads").tail(10).downloads.mean(),
+                include_groups=False,
+            )
+            .reset_index(name="downloads")
+        )
+
+    # Apply cumulative if needed
+    if cumulative:
+        trend_df = trend_df.sort_values("date")
+        trend_df["downloads"] = trend_df.groupby("display_name")["downloads"].cumsum()
+        agg_df = agg_df.sort_values("date")
+        agg_df["downloads"] = agg_df["downloads"].cumsum()
 
     # ── Last-3-full-months metrics ────────────────────────────────────────────
     all_months = sorted(tool_df["date"].unique())
@@ -1518,35 +1593,35 @@ def plot_download_trends(
 
     container.markdown("")
 
-    # ── Chart with light background ───────────────────────────────────────────
+    # ── Chart with theme-aware background ──────────────────────────────────────
     fig = go.Figure()
 
-    # Show selected tool line
-    trend_df = tool_df.sort_values("date")
-    fig.add_trace(
-        go.Scatter(
-            x=trend_df["date"],
-            y=trend_df["downloads"],
-            mode="lines+markers",
-            name=tool_name,
-            line=dict(color=colors[0], width=2.5),
-            marker=dict(size=7, symbol="circle", color=colors[0]),
-            fill="tozeroy",
-            fillcolor=f"rgba({int(colors[0][1:3], 16)}, {int(colors[0][3:5], 16)}, {int(colors[0][5:7], 16)}, 0.10)",
-            hovertemplate=f"<b>{tool_name}</b><br>%{{x|%b %Y}}: %{{y:,}}<extra></extra>",
+    # Show selected tool line(s)
+    unique_tools = trend_df["display_name"].unique()
+    for idx, tool in enumerate(unique_tools):
+        tool_data = trend_df[trend_df["display_name"] == tool].sort_values("date")
+        color_idx = idx % len(colors)
+        tool_color = colors[color_idx]
+
+        fig.add_trace(
+            go.Scatter(
+                x=tool_data["date"],
+                y=tool_data["downloads"],
+                mode="lines+markers",
+                name=tool,
+                line=dict(color=tool_color, width=2.5),
+                marker=dict(size=7, symbol="circle", color=tool_color),
+                fill="tozeroy" if len(unique_tools) == 1 else None,
+                fillcolor=(
+                    f"rgba({int(tool_color[1:3], 16)}, {int(tool_color[3:5], 16)}, {int(tool_color[5:7], 16)}, 0.10)"
+                    if len(unique_tools) == 1
+                    else None
+                ),
+                hovertemplate=f"<b>{tool}</b><br>%{{x|%b %Y}}: %{{y:,}}<extra></extra>",
+            )
         )
-    )
 
     # Add top 10 tools average line for comparison
-    agg_df = (
-        all_downloads_df.groupby("date")
-        .apply(
-            lambda x: x.sort_values("downloads").tail(10).downloads.mean(),
-            include_groups=False,
-        )
-        .reset_index(name="downloads")
-    )
-
     fig.add_trace(
         go.Scatter(
             x=agg_df["date"],
@@ -1559,22 +1634,15 @@ def plot_download_trends(
     )
 
     fig.update_layout(
-        template="plotly_white",
-        paper_bgcolor="white",
-        plot_bgcolor="white",
         height=380,
         margin=dict(l=10, r=10, t=50, b=40),
         font=dict(family="Inter, sans-serif"),
         xaxis=dict(
-            title="Month",
+            title="Year" if frequency == "Annual" else "Month",
             type="date",
-            gridcolor="rgba(0,0,0,0.07)",
-            zerolinecolor="rgba(0,0,0,0.1)",
         ),
         yaxis=dict(
-            title="Monthly Downloads",
-            gridcolor="rgba(0,0,0,0.07)",
-            zerolinecolor="rgba(0,0,0,0.1)",
+            title=f"{'Cumulative ' if cumulative else ''}{frequency} Downloads",
             tickformat=",",
         ),
         hovermode="x unified",
@@ -1807,7 +1875,7 @@ def show_package_metrics(
             )
         else:
             col_metric2.markdown(
-                '<div style="background: #f8f8f8; color: #999; padding: 8px; border-radius: 4px; text-align: center; font-size: 0.85rem;">'
+                '<div style="opacity: 0.5; padding: 8px; border-radius: 4px; text-align: center; font-size: 0.85rem; border: 1px dashed currentColor;">'
                 "No YoY data"
                 "</div>",
                 unsafe_allow_html=True,
@@ -1826,16 +1894,12 @@ def render_downloads_section(tool_url: str, tool_name: str, container: Any) -> N
         container: Streamlit container to render the section into.
     """
     df = load_downloads()
-    tool_id = get_tool_id_from_url(tool_url)
 
-    if not tool_id:
-        container.info("No download data available for this tool.")
-        return
+    # Get all available tools with download data
+    available_tools = sorted(df["display_name"].unique().tolist())
 
-    tool_df = df[df["id"] == tool_id]
-
-    if tool_df.empty:
-        container.info("No download data available for this tool.")
+    if not available_tools:
+        container.info("No download data available.")
         return
 
     # Add explanatory text
@@ -1859,6 +1923,31 @@ def render_downloads_section(tool_url: str, tool_name: str, container: Any) -> N
             """
         )
 
+    # Tool selection dropdown for filtering download trends
+    selected_tools = container.multiselect(
+        "Filter tools to display in download trends:",
+        options=available_tools,
+        default=[],
+        placeholder="All tools selected",
+        key=f"download_tools_filter_{tool_name}",
+        help="Select specific tools to display in the chart. Leave empty to show all tools.",
+    )
+
+    # Determine which tools to show
+    if selected_tools:
+        filtered_df = df[df["display_name"].isin(selected_tools)]
+        display_name_for_chart = (
+            selected_tools[0] if len(selected_tools) == 1 else f"{len(selected_tools)} tools"
+        )
+    else:
+        # Show all tools
+        filtered_df = df
+        display_name_for_chart = "all tools"
+
+    if filtered_df.empty:
+        container.info("No download data available for the selected tool(s).")
+        return
+
     show_percentage = container.toggle(
         "Show delta as percentage",
         value=False,
@@ -1866,11 +1955,50 @@ def render_downloads_section(tool_url: str, tool_name: str, container: Any) -> N
     )
     delta_display_mode = "Percentage" if show_percentage else "Absolute"
 
-    # Show detailed package metrics
-    show_package_metrics(tool_df, container, delta_display_mode)
+    # Show detailed package metrics only if single tool selected
+    if len(selected_tools) == 1:
+        tool_df_single = filtered_df
+        show_package_metrics(tool_df_single, container, delta_display_mode)
+    elif not selected_tools:
+        # Show metrics for the originally selected tool from the page
+        tool_id = get_tool_id_from_url(tool_url)
+        if tool_id:
+            tool_df_single = df[df["id"] == tool_id]
+            if not tool_df_single.empty:
+                show_package_metrics(tool_df_single, container, delta_display_mode)
+
+    # Add frequency and cumulative controls for the trend chart
+    container.markdown("---")
+    col_freq, col_cum = container.columns(2)
+
+    with col_freq:
+        frequency = st.radio(
+            "Frequency",
+            options=["Monthly", "Annual"],
+            index=0,
+            key=f"download_frequency_{tool_name}",
+            horizontal=True,
+            help="View downloads by month or aggregated by year",
+        )
+
+    with col_cum:
+        cumulative = st.toggle(
+            "Show cumulative",
+            value=False,
+            key=f"download_cumulative_{tool_name}",
+            help="When enabled, shows running total accumulated over time",
+        )
 
     # Plot download trends with top 10 comparison
-    plot_download_trends(tool_df, df, tool_name, container, delta_display_mode)
+    plot_download_trends(
+        filtered_df,
+        df,
+        display_name_for_chart,
+        container,
+        delta_display_mode,
+        frequency,
+        cumulative,
+    )
 
 
 if __name__ == "__main__":
@@ -1886,7 +2014,7 @@ if __name__ == "__main__":
             st.session_state.get("session_counter", 0) + 1
         )
 
-    # Add custom CSS for plot shadows
+    # Add custom CSS for plot shadows and dark mode support
     st.markdown(
         """
         <style>
@@ -1894,16 +2022,35 @@ if __name__ == "__main__":
         div[data-testid="stPlotlyChart"] > div {
             border-radius: 12px;
             box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            padding: 8px;
+        }
+
+        /* Light mode specific styles */
+        [data-theme="light"] div[data-testid="stPlotlyChart"] > div {
             background: #ffffff;
             border: 1px solid #e5e7eb;
-            padding: 8px;
+        }
+
+        /* Dark mode specific styles */
+        [data-theme="dark"] div[data-testid="stPlotlyChart"] > div {
+            background: #0e1117;
+            border: 1px solid #262730;
         }
 
         /* Add shadow effect to maps */
         .stDeckGlJsonChart, iframe[title*="streamlit_folium"] {
             border-radius: 12px;
             box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        }
+
+        [data-theme="light"] .stDeckGlJsonChart,
+        [data-theme="light"] iframe[title*="streamlit_folium"] {
             border: 1px solid #e5e7eb;
+        }
+
+        [data-theme="dark"] .stDeckGlJsonChart,
+        [data-theme="dark"] iframe[title*="streamlit_folium"] {
+            border: 1px solid #262730;
         }
 
         /* Add shadow effect to images (avatars) */

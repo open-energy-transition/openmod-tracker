@@ -1678,6 +1678,9 @@ def show_package_metrics(
 
     # Display package info and links
 
+    # Icon style with light background for all icons (works in both light and dark mode)
+    icon_style = "vertical-align:middle; margin-right:4px; background:rgba(255,255,255,0.95); padding:2px; border-radius:3px;"
+
     # Get package URLs from first row (they're the same for all rows of the same tool)
     first_row = tool_df.iloc[0]
     links_html = ""
@@ -1697,11 +1700,7 @@ def show_package_metrics(
 
         links_html += (
             f'<a href="{url}" target="_blank" style="text-decoration:none; color:inherit; margin-right:12px;">'
-            + (
-                f'<img src="{icon}" width="13" style="vertical-align:middle; margin-right:4px; border-radius:2px">'
-                if icon
-                else ""
-            )
+            + (f'<img src="{icon}" width="13" style="{icon_style}">' if icon else "")
             + f"{host}</a>"
         )
 
@@ -1711,7 +1710,7 @@ def show_package_metrics(
         links_html += (
             f'<a href="{pypi_url}" target="_blank" style="text-decoration:none; color:inherit; margin-right:12px;">'
             f'<img src="https://pypi.org/static/images/logo-small.0e0855d0.svg" width="13" '
-            f'style="vertical-align:middle; margin-right:4px;">'
+            f'style="{icon_style}">'
             f"PyPI</a>"
         )
 
@@ -1721,7 +1720,7 @@ def show_package_metrics(
         links_html += (
             f'<a href="{anaconda_url}" target="_blank" style="text-decoration:none; color:inherit; margin-right:12px;">'
             f'<img src="https://www.anaconda.com/favicon.ico" width="13" '
-            f'style="vertical-align:middle; margin-right:4px;">'
+            f'style="{icon_style}">'
             f"Anaconda</a>"
         )
 
@@ -1731,7 +1730,7 @@ def show_package_metrics(
         links_html += (
             f'<a href="{juliahub_url}" target="_blank" style="text-decoration:none; color:inherit; margin-right:12px;">'
             f'<img src="https://juliahub.com/favicon.ico" width="13" '
-            f'style="vertical-align:middle; margin-right:4px;">'
+            f'style="{icon_style}">'
             f"JuliaHub</a>"
         )
 
@@ -1743,14 +1742,14 @@ def show_package_metrics(
             links_html += (
                 f'<a href="{other_source_str}" target="_blank" style="text-decoration:none; color:inherit; margin-right:12px;">'
                 f'<img src="https://central.sonatype.com/favicon.ico" width="13" '
-                f'style="vertical-align:middle; margin-right:4px;">'
+                f'style="{icon_style}">'
                 f"Maven</a>"
             )
         elif "crates.io" in other_source_str:
             links_html += (
                 f'<a href="{other_source_str}" target="_blank" style="text-decoration:none; color:inherit; margin-right:12px;">'
                 f'<img src="https://crates.io/favicon.ico" width="13" '
-                f'style="vertical-align:middle; margin-right:4px;">'
+                f'style="{icon_style}">'
                 f"Cargo</a>"
             )
 
@@ -1926,31 +1925,18 @@ def render_downloads_section(tool_url: str, tool_name: str, container: Any) -> N
             """
         )
 
-    # Tool selection dropdown for filtering download trends
-    selected_tools = container.multiselect(
-        "Filter tools to display in download trends:",
-        options=available_tools,
-        default=[],
-        placeholder="All tools selected",
-        key=f"download_tools_filter_{tool_name}",
-        help="Select specific tools to display in the chart. Leave empty to show all tools.",
-    )
+    # Use the selected tool from sidebar (tool_url and tool_name are passed from main selection)
+    tool_id = get_tool_id_from_url(tool_url)
 
-    # Determine which tools to show
-    if selected_tools:
-        filtered_df = df[df["display_name"].isin(selected_tools)]
-        display_name_for_chart = (
-            selected_tools[0]
-            if len(selected_tools) == 1
-            else f"{len(selected_tools)} tools"
-        )
-    else:
-        # Show all tools
-        filtered_df = df
-        display_name_for_chart = "all tools"
+    if not tool_id:
+        container.info("No download data available for this tool.")
+        return
+
+    # Filter to show only the selected tool
+    filtered_df = df[df["id"] == tool_id]
 
     if filtered_df.empty:
-        container.info("No download data available for the selected tool(s).")
+        container.info("No download data available for this tool.")
         return
 
     show_percentage = container.toggle(
@@ -1960,17 +1946,8 @@ def render_downloads_section(tool_url: str, tool_name: str, container: Any) -> N
     )
     delta_display_mode = "Percentage" if show_percentage else "Absolute"
 
-    # Show detailed package metrics only if single tool selected
-    if len(selected_tools) == 1:
-        tool_df_single = filtered_df
-        show_package_metrics(tool_df_single, container, delta_display_mode)
-    elif not selected_tools:
-        # Show metrics for the originally selected tool from the page
-        tool_id = get_tool_id_from_url(tool_url)
-        if tool_id:
-            tool_df_single = df[df["id"] == tool_id]
-            if not tool_df_single.empty:
-                show_package_metrics(tool_df_single, container, delta_display_mode)
+    # Show detailed package metrics for the selected tool
+    show_package_metrics(filtered_df, container, delta_display_mode)
 
     # Add frequency and cumulative controls for the trend chart
     container.markdown("---")
@@ -1996,13 +1973,7 @@ def render_downloads_section(tool_url: str, tool_name: str, container: Any) -> N
 
     # Plot download trends with top 10 comparison
     plot_download_trends(
-        filtered_df,
-        df,
-        display_name_for_chart,
-        container,
-        delta_display_mode,
-        frequency,
-        cumulative,
+        filtered_df, df, tool_name, container, delta_display_mode, frequency, cumulative
     )
 
 
@@ -2062,6 +2033,13 @@ if __name__ == "__main__":
         div[data-testid="stImage"] {
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        /* Package source logos - add white background for visibility */
+        .stMarkdown a img {
+            background: rgba(255, 255, 255, 0.95) !important;
+            padding: 2px !important;
+            border-radius: 3px !important;
         }
         </style>
         """,

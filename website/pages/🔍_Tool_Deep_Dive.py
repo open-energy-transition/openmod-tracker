@@ -1714,14 +1714,14 @@ def show_package_metrics(
             f"PyPI</a>"
         )
 
-    # Anaconda link
+    # Anaconda/Conda link
     anaconda_url = first_row.get("anaconda_package_url")
     if pd.notna(anaconda_url):
         links_html += (
             f'<a href="{anaconda_url}" target="_blank" style="text-decoration:none; color:inherit; margin-right:12px;">'
-            f'<img src="https://www.anaconda.com/favicon.ico" width="13" '
+            f'<img src="https://conda.io/en/latest/_static/conda_logo.svg" width="13" '
             f'style="{icon_style}">'
-            f"Anaconda</a>"
+            f"Conda</a>"
         )
 
     # JuliaHub link

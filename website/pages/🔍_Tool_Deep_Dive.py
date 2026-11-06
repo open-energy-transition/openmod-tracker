@@ -1513,9 +1513,7 @@ def plot_download_trends(
         # Aggregate to annual
         trend_df["year"] = trend_df["date"].dt.year
         trend_df = (
-            trend_df.groupby(["year", "display_name"])["downloads"]
-            .sum()
-            .reset_index()
+            trend_df.groupby(["year", "display_name"])["downloads"].sum().reset_index()
         )
         trend_df["date"] = pd.to_datetime(trend_df["year"].astype(str) + "-01-01")
 
@@ -1637,10 +1635,7 @@ def plot_download_trends(
         height=380,
         margin=dict(l=10, r=10, t=50, b=40),
         font=dict(family="Inter, sans-serif"),
-        xaxis=dict(
-            title="Year" if frequency == "Annual" else "Month",
-            type="date",
-        ),
+        xaxis=dict(title="Year" if frequency == "Annual" else "Month", type="date"),
         yaxis=dict(
             title=f"{'Cumulative ' if cumulative else ''}{frequency} Downloads",
             tickformat=",",
@@ -1937,7 +1932,9 @@ def render_downloads_section(tool_url: str, tool_name: str, container: Any) -> N
     if selected_tools:
         filtered_df = df[df["display_name"].isin(selected_tools)]
         display_name_for_chart = (
-            selected_tools[0] if len(selected_tools) == 1 else f"{len(selected_tools)} tools"
+            selected_tools[0]
+            if len(selected_tools) == 1
+            else f"{len(selected_tools)} tools"
         )
     else:
         # Show all tools

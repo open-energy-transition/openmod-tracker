@@ -6,6 +6,7 @@ https://git.ozlabs.org/?p=nemo: not-found
 https://git.rwth-aachen.de/acs/public/simulation/distaixframework/distaix: https://repos.ecosyste.ms/api/v1/hosts/git.rwth-aachen.de/repositories/acs%2Fpublic%2Fsimulation%2FDistAIXFramework%2Fdistaix
 https://git.rwth-aachen.de/acs/public/simulation/pycity_scheduling: https://repos.ecosyste.ms/api/v1/hosts/git.rwth-aachen.de/repositories/acs%2Fpublic%2Fsimulation%2Fpycity_scheduling
 https://git.rwth-aachen.de/acs/public/simulation/ssmd: https://repos.ecosyste.ms/api/v1/hosts/git.rwth-aachen.de/repositories/acs%2Fpublic%2Fsimulation%2Fssmd
+https://git.tu-berlin.de/enclim/public/aristopy: https://repos.ecosyste.ms/api/v1/hosts/git.tu-berlin.de/repositories/enclim%2Fpublic%2Faristopy
 https://git.tu-berlin.de/etus/public/aristopy: https://repos.ecosyste.ms/api/v1/hosts/git.tu-berlin.de/repositories/etus%2Fpublic%2Faristopy
 https://git.tu-berlin.de/genesysmod/genesys-mod-public: https://repos.ecosyste.ms/api/v1/hosts/git.tu-berlin.de/repositories/genesysmod%2Fgenesys-mod-public
 https://git.tu-berlin.de/users/sign_in: not-found
@@ -54,6 +55,7 @@ https://github.com/dynawo/dynawo: https://repos.ecosyste.ms/api/v1/hosts/GitHub/
 https://github.com/e2niee/pandapower: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/e2nIEE%2Fpandapower
 https://github.com/e3-/resolve: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/e3-%2Fresolve
 https://github.com/e4st-dev/e4st.jl: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/e4st-dev%2FE4ST.jl
+https://github.com/eapd-drb/muiogo: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/EAPD-DRB%2FMUIOGO
 https://github.com/eiagov/bluesky: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/EIAgov%2FBlueSky
 https://github.com/electa-git/flexplan.jl: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/Electa-Git%2FFlexPlan.jl
 https://github.com/eliagroup/toop: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/eliagroup%2FToOp
@@ -105,6 +107,7 @@ https://github.com/gridfm/gridfm-graphkit: https://repos.ecosyste.ms/api/v1/host
 https://github.com/gridoptics/gridpack: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/GridOPTICS%2FGridPACK
 https://github.com/highres-model/highres-europe: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/highRES-model%2FhighRES-Europe
 https://github.com/hope-model-project/hope: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/HOPE-Model-Project%2FHOPE
+https://github.com/hope-model-project/hope.jl: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/HOPE-Model-Project%2FHOPE.jl
 https://github.com/idaholab/heron: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/idaholab%2FHERON
 https://github.com/idaholab/hybrid: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/idaholab%2FHYBRID
 https://github.com/ie3-institute/powersystemdatamodel: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/ie3-institute%2FPowerSystemDataModel
@@ -121,6 +124,7 @@ https://github.com/inwe-boku/medea: https://repos.ecosyste.ms/api/v1/hosts/GitHu
 https://github.com/ipese/reho: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/IPESE%2FREHO
 https://github.com/irena-flextool/flextool: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/irena-flextool%2Fflextool
 https://github.com/irpsim/irpopt: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/IRPsim%2FIRPopt
+https://github.com/jakobharz/nostes: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/JakobHarz%2FNOSTES
 https://github.com/juliaenergy/joulia.jl: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/JuliaEnergy%2FJoulia.jl
 https://github.com/juliaenergy/powerdynamics.jl: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/JuliaEnergy%2FPowerDynamics.jl
 https://github.com/kamal0013/pownet: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/Critical-Infrastructure-Systems-Lab%2FPowNet
@@ -187,6 +191,7 @@ https://github.com/openego/edisgo: https://repos.ecosyste.ms/api/v1/hosts/GitHub
 https://github.com/openego/ego: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/openego%2FeGo
 https://github.com/openipsl/openipsl: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/OpenIPSL%2FOpenIPSL
 https://github.com/optimal2050/energyrt: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/optimal2050%2FenergyRt
+https://github.com/osemosys/muio: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/OSeMOSYS%2FMUIO
 https://github.com/osemosys/osemosys: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/OSeMOSYS%2FOSeMOSYS
 https://github.com/pencleanenergy/match-model: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/pencleanenergy%2FMATCH-model
 https://github.com/philipphaertel/emprise: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/philipphaertel%2FEMPRISE
@@ -219,8 +224,10 @@ https://github.com/rheia-framework/rheia: https://repos.ecosyste.ms/api/v1/hosts
 https://github.com/richard-weinhold/pomato: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/richard-weinhold%2Fpomato
 https://github.com/rl-institut/multi-vector-simulator: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/rl-institut%2Fmulti-vector-simulator
 https://github.com/robbiemorrison/deeco: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/robbiemorrison%2Fdeeco
+https://github.com/robbiemorrison/xeona: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/robbiemorrison%2Fxeona
 https://github.com/romulus97/capow_py36: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/romulus97%2FCAPOW_PY36
 https://github.com/roseautechnologies/roseau_load_flow: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/RoseauTechnologies%2FRoseau_Load_Flow
+https://github.com/rte-france/atlas: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/rte-france%2FATLAS
 https://github.com/rte-france/grid2op: null
 https://github.com/rwl/pypower: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/rwl%2FPYPOWER
 https://github.com/sanpen/gridcal: https://repos.ecosyste.ms/api/v1/hosts/GitHub/repositories/SanPen%2FGridCal

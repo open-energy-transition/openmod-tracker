@@ -5,11 +5,12 @@ amiris,https://gitlab.com/dlr-ve/esy/amiris/amiris,AMIRIS,"lf-energy-landscape,o
 andes,https://github.com/curent/andes,ANDES,"lf-energy-landscape,opensustain-tech",power-flow
 antares_simulator,https://github.com/antaressimulatorteam/antares_simulator,Antares Simulator,"lf-energy-landscape,opensustain-tech,pre-compiled","production-cost,resource-adequacy"
 anymod_jl,https://github.com/leonardgoeke/anymod.jl,AnyMOD.jl,"lf-energy-landscape,opensustain-tech,pre-compiled",
-aristopy,https://git.tu-berlin.de/etus/public/aristopy,aristopy,pre-compiled,
+aristopy,https://git.tu-berlin.de/enclim/public/aristopy,aristopy,pre-compiled,
 asam,https://github.com/ancillaryservicesacquisitionmodel/asam,ASAM,openmod,
 asset_level_transition_risk_in_the_global_coal__oil__and_gas_supply_chains,https://github.com/lkruitwagen/global-fossil-fuel-supply-chain,"Asset-level Transition Risk in the Global Coal, Oil, and Gas Supply Chains",lf-energy-landscape,
 assetra,https://github.com/ijbd/assetra,ASSETRA,"opensustain-tech,pre-compiled",resource-adequacy
 assume,https://github.com/assume-framework/assume,ASSUME,openmod,
+atlas,https://github.com/rte-france/atlas,ATLAS,pre-compiled,
 backbone,https://gitlab.vtt.fi/backbone/backbone,Backbone,"g-pst,lf-energy-landscape,openmod,opensustain-tech,pre-compiled","capacity-expansion,production-cost"
 balmorel,https://github.com/balmorelcommunity/balmorel,Balmorel,"lf-energy-landscape,openmod,opensustain-tech,pre-compiled",
 bewhere_model,https://github.com/caaficus/bewhere-model,BeWhere-model,pre-compiled,
@@ -92,10 +93,11 @@ hamlet,https://github.com/tum-ens/hamlet,HAMLET,pre-compiled,
 heat4future,https://gitlab.com/c4dht/strategic-heat-planning-project,Heat4Future,openmod,
 heron,https://github.com/idaholab/heron,HERON,pre-compiled,
 highres_europe,https://github.com/highres-model/highres-europe,highRES-Europe,pre-compiled,
-hope,https://github.com/hope-model-project/hope,HOPE,pre-compiled,
+hope,https://github.com/hope-model-project/hope.jl,HOPE,pre-compiled,
 hopp,https://github.com/natlabrockies/hopp,HOPP,pre-compiled,"capacity-expansion,production-cost"
 hybrid,https://github.com/idaholab/hybrid,HYBRID,"opensustain-tech,pre-compiled",
 hybridbosse,https://github.com/natlabrockies/hybridbosse,HybridBOSSE,lf-energy-landscape,
+hydesign_git,https://gitlab.windenergy.dtu.dk/topfarm/hydesign,hydesign.git,pre-compiled,
 hydrogenmod_jl,https://github.com/lukasbarner/hydrogenmod.jl,HydrOGEnMod.jl,pre-compiled,
 idea,https://gitlab.com/sesit/idea,idea,pre-compiled,
 iesopt_jl,https://github.com/ait-energy/iesopt.jl,IESopt.jl,"opensustain-tech,pre-compiled",
@@ -122,12 +124,15 @@ minigrid_jcc,https://github.com/autarky-power/minigrid-jcc,Minigrid-JCC,pre-comp
 minpower,https://github.com/adamgreenhall/minpower,Minpower,"lf-energy-landscape,opensustain-tech,pre-compiled",capacity-expansion
 mosaik,https://gitlab.com/mosaik/mosaik,"mosaik,Mosaik","openmod,opensustain-tech",
 most,https://github.com/matpower/most,most,pre-compiled,
+muio,https://github.com/osemosys/muio,MUIO,opensustain-tech,
+muiogo,https://github.com/eapd-drb/muiogo,MUIOGO,opensustain-tech,
 multi_vector_simulator,https://github.com/rl-institut/multi-vector-simulator,MVS,"lf-energy-landscape,opensustain-tech,pre-compiled",
 muse2,https://github.com/energysystemsmodellinglab/muse2,MUSE2,opensustain-tech,
 muse_os,https://github.com/energysystemsmodellinglab/muse_os,MUSE_OS,opensustain-tech,
 nemo,https://github.com/bje-/nemo,NEMO,"lf-energy-landscape,pre-compiled",
 nemomod_jl,https://github.com/sei-international/nemomod.jl,"NemoMod.jl,NEMO (SEI)","openmod,opensustain-tech,pre-compiled",
 nempy,https://github.com/unsw-ceem/nempy,Nempy,"lf-energy-landscape,pre-compiled",production-cost
+nostes,https://github.com/jakobharz/nostes,NOSTES,pre-compiled,
 oemof_solph,https://github.com/oemof/oemof-solph,oemof-solph,"lf-energy-landscape,opensustain-tech,pre-compiled","capacity-expansion,production-cost"
 oemof_thermal,https://github.com/oemof/oemof-thermal,oemof-thermal,"lf-energy-landscape,opensustain-tech",
 omegalpes,https://gricad-gitlab.univ-grenoble-alpes.fr/omegalpes/omegalpes,OMEGAlpes,"lf-energy-landscape,openmod,opensustain-tech,pre-compiled",
@@ -144,7 +149,7 @@ opensduc,https://github.com/iit-energysystemmodels/opensduc,openSDUC,pre-compile
 opentepes,https://github.com/iit-energysystemmodels/opentepes,"openTEPES,OpenTEPES","lf-energy-landscape,openmod,opensustain-tech,pre-compiled",
 opentumflex,https://github.com/tum-ewk/opentumflex,OpenTUMFlex,"openmod,pre-compiled",
 optihood,https://github.com/spf-ost/optihood,optihood,pre-compiled,
-osemosys,https://github.com/osemosys/osemosys,OSeMOSYS,"lf-energy-landscape,openmod,opensustain-tech,pre-compiled",capacity-expansion
+osemosys,https://github.com/osemosys/osemosys,OSeMOSYS,"lf-energy-landscape,opensustain-tech,pre-compiled",capacity-expansion
 osier,https://github.com/arfc/osier,osier,opensustain-tech,
 pandapower,https://github.com/e2niee/pandapower,"pandapower,Pandapower","g-pst,lf-energy-landscape,openmod,opensustain-tech,pre-compiled",power-flow
 paraemt_public,https://github.com/natlabrockies/paraemt_public,ParaEMT_public,pre-compiled,
@@ -231,4 +236,5 @@ usensys,https://github.com/usensys/usensys,USENSYS,openmod,
 veragrid,https://github.com/sanpen/veragrid,"VeraGrid,GridCal","lf-energy-landscape,openmod,opensustain-tech,pre-compiled",power-flow
 villasframework,https://github.com/villasframework/node,VILLASframework,"lf-energy-landscape,pre-compiled",
 wpgnn_and_playgen,https://github.com/natlabrockies/wpgnn,WPGNN and PLayGen,lf-energy-landscape,
+xeona,https://github.com/robbiemorrison/xeona,xeona,pre-compiled,
 zen_garden,https://github.com/zen-universe/zen-garden,ZEN-garden,pre-compiled,capacity-expansion
